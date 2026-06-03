@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>虚拟线程与 Project Loom · 编程语言与范式</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:编程语言与范式" data-pagefind-meta="slug:languages-and-paradigms">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">编程语言与范式</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item active" href="../../../languages-and-paradigms/index.html" aria-current="page" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../languages-and-paradigms/index.html">编程语言与范式</a><a class="back-to-hubs" href="../../../languages-and-paradigms/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../languages-and-paradigms/java-language/index.html">Java 语言进阶 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="languages-and-paradigms"><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:java-language/java-core-fundamentals"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/java-language/java-core-fundamentals/index.html">Java 核心基础 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/java-language/java-core-fundamentals/type-system-and-generics.html">Java 类型系统与泛型</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/java-language/java-core-fundamentals/collections-framework.html">Java 集合框架</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/java-language/java-core-fundamentals/exception-handling-patterns.html">Java 异常处理模式</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/java-language/java-core-fundamentals/records-sealed-pattern-matching.html">Record、Sealed 类与模式匹配</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:java-language/jvm-internals"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/java-language/jvm-internals/index.html">JVM 内部机制 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/java-language/jvm-internals/class-loading-mechanism.html">Java 类加载机制</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/java-language/jvm-internals/jit-compilation.html">JIT 编译</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/java-language/jvm-internals/garbage-collection-algorithms.html">垃圾回收算法</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/java-language/jvm-internals/memory-model-and-jmm.html">Java 内存模型与 JMM</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:java-language/concurrency-in-depth" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/java-language/concurrency-in-depth/index.html">并发编程深入 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/java-language/concurrency-in-depth/java-util-concurrent.html">java.util.concurrent 核心组件</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/java-language/concurrency-in-depth/locks-and-synchronizers.html">锁与同步器</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/java-language/concurrency-in-depth/completable-future-reactive.html">CompletableFuture 与响应式编程</a></li><li class="leaf"><a class="leaf-title active" href="../../../languages-and-paradigms/java-language/concurrency-in-depth/virtual-threads-loom.html">虚拟线程与 Project Loom</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:java-language/modern-java-ecosystem"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/java-language/modern-java-ecosystem/index.html">现代 Java 生态 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/java-language/modern-java-ecosystem/module-system-jpms.html">Java 模块系统 JPMS</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/java-language/modern-java-ecosystem/stream-api-patterns.html">Stream API 进阶模式</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/java-language/modern-java-ecosystem/java-build-tools.html">Java 构建工具</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/java-language/modern-java-ecosystem/java-performance-tuning.html">Java 性能调优</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/java-language/modern-java-ecosystem/java-testing-frameworks.html">Java 测试框架</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part II · 系统级语言</span><span>Java 语言进阶 简介</span><span>并发编程深入 简介</span><span>虚拟线程与 Project Loom</span></nav>
+    <article class="content prose"><h1 id="虚拟线程与-project-loom">虚拟线程与 Project Loom</h1><h2 id="核心概念">核心概念</h2><p>虚拟线程（Virtual Threads）是 Java 21 正式引入的轻量级线程实现，属于 Project Loom 项目的核心成果。虚拟线程由 JVM 管理而非操作系统，创建和切换成本极低（约 1KB 栈空间 vs 平台线程的 1MB），使得&quot;一个请求一个线程&quot;的编程模型可以扩展到百万级并发。这从根本上改变了 Java 服务端的并发架构。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[Java 线程模型] --&gt; B[平台线程 Platform Thread]&#10;    A --&gt; C[虚拟线程 Virtual Thread]&#10;    B --&gt; D[1:1 映射 OS 线程]&#10;    B --&gt; E[~1MB 栈空间]&#10;    B --&gt; F[创建成本高]&#10;    C --&gt; G[M:N 调度到载体线程]&#10;    C --&gt; H[~1KB 初始栈]&#10;    C --&gt; I[创建成本极低]&#10;    G --&gt; J[ForkJoinPool 载体线程池]"></pre><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>平台线程</th>
+<th>虚拟线程</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>栈空间</td>
+<td>~1MB</td>
+<td>~1KB（动态增长）</td>
+<td>虚拟线程节省 1000x 内存</td>
+</tr>
+<tr>
+<td>创建成本</td>
+<td>~1ms</td>
+<td>~1μs</td>
+<td>虚拟线程快 1000x</td>
+</tr>
+<tr>
+<td>最大数量</td>
+<td>数千（受 OS 限制）</td>
+<td>数百万</td>
+<td>打破线程数瓶颈</td>
+</tr>
+<tr>
+<td>调度</td>
+<td>OS 内核调度</td>
+<td>JVM 用户态调度</td>
+<td>无内核态切换开销</td>
+</tr>
+<tr>
+<td>阻塞影响</td>
+<td>占用 OS 线程</td>
+<td>自动让出载体线程</td>
+<td>IO 阻塞不浪费资源</td>
+</tr>
+<tr>
+<td>线程池</td>
+<td>必须（资源昂贵）</td>
+<td>无需（直接创建）</td>
+<td>简化编程模型</td>
+</tr>
+</tbody></table>
+<h2 id="虚拟线程的使用方式">虚拟线程的使用方式</h2><p>Java 21 提供了多种创建和使用虚拟线程的 API：</p>
+<div class="code-block-wrapper" data-lang="java" data-code="// 方式1：Thread.startVirtualThread
+Thread vt = Thread.startVirtualThread(() -&gt; {
+    System.out.println(&quot;Running on: &quot; + Thread.currentThread());
+});
+
+// 方式2：Thread.ofVirtual() 构建器
+Thread vt2 = Thread.ofVirtual()
+    .name(&quot;vt-&quot;, 0)
+    .start(() -&gt; processRequest());
+
+// 方式3：虚拟线程执行器（最推荐的方式）
+try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+    for (int i = 0; i &lt; 100_000; i++) {
+        executor.submit(() -&gt; {
+            Thread.sleep(Duration.ofSeconds(1));
+            return fetchFromDatabase();
+        });
+    }
+}
+
+// 方式4：StructuredTaskScope（Java 21 Preview）
+try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+    Subtask&lt;User&gt; userTask = scope.fork(() -&gt; findUser(id));
+    Subtask&lt;List&lt;Order&gt;&gt; ordersTask = scope.fork(() -&gt; findOrders(id));
+    scope.join().throwIfFailed();
+    return new UserProfile(userTask.get(), ordersTask.get());
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 方式1：Thread.startVirtualThread</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">Thread vt </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Thread.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">startVirtualThread</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="color:#D73A49;--shiki-dark:#F97583">-></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    System.out.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">println</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"Running on: "</span><span style="color:#D73A49;--shiki-dark:#F97583"> +</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Thread.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">currentThread</span><span style="color:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 方式2：Thread.ofVirtual() 构建器</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">Thread vt2 </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Thread.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">ofVirtual</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    .</span><span style="color:#6F42C1;--shiki-dark:#B392F0">name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"vt-"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    .</span><span style="color:#6F42C1;--shiki-dark:#B392F0">start</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="color:#D73A49;--shiki-dark:#F97583">-></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> processRequest</span><span style="color:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 方式3：虚拟线程执行器（最推荐的方式）</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">try</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">var</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> executor </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Executors.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">newVirtualThreadPerTaskExecutor</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">int</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; i </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 100_000</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; i</span><span style="color:#D73A49;--shiki-dark:#F97583">++</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        executor.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">submit</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="color:#D73A49;--shiki-dark:#F97583">-></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            Thread.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">sleep</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(Duration.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">ofSeconds</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">));</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            return</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> fetchFromDatabase</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        });</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 方式4：StructuredTaskScope（Java 21 Preview）</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">try</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">var</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> scope </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> StructuredTaskScope.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">ShutdownOnFailure</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()) {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    Subtask&#x3C;</span><span style="color:#D73A49;--shiki-dark:#F97583">User</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> userTask </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> scope.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">fork</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="color:#D73A49;--shiki-dark:#F97583">-></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> findUser</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(id));</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    Subtask&#x3C;List&#x3C;</span><span style="color:#D73A49;--shiki-dark:#F97583">Order</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>> ordersTask </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> scope.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">fork</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="color:#D73A49;--shiki-dark:#F97583">-></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> findOrders</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(id));</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    scope.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">join</span><span style="color:#24292E;--shiki-dark:#E1E4E8">().</span><span style="color:#6F42C1;--shiki-dark:#B392F0">throwIfFailed</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> UserProfile</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(userTask.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">get</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(), ordersTask.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">get</span><span style="color:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><p><strong>关键原则</strong>：虚拟线程不需要池化——它们的创建成本极低，每个任务直接创建一个虚拟线程即可。</p>
+<h2 id="虚拟线程调度原理">虚拟线程调度原理</h2><p>虚拟线程采用 M:N 调度模型——M 个虚拟线程映射到 N 个平台线程（载体线程，carrier threads）。当虚拟线程执行阻塞操作时，JVM 自动将其从载体线程上卸载（unmount），载体线程可以继续运行其他虚拟线程。</p>
+<div class="code-block-wrapper" data-lang="java" data-code="// 阻塞操作的行为变化：
+// 平台线程：Thread.sleep → OS 线程挂起 → 浪费一个 OS 线程
+// 虚拟线程：Thread.sleep → 从载体线程卸载 → 载体线程服务其他虚拟线程
+
+// 以下操作都会触发虚拟线程的卸载：
+Thread.sleep(duration);         // 定时等待
+socket.read();                  // 网络 IO
+channel.read(buffer);           // NIO 通道
+Lock.lock();                    // j.u.c 锁（非 synchronized）
+BlockingQueue.take();           // 阻塞队列"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 阻塞操作的行为变化：</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 平台线程：Thread.sleep → OS 线程挂起 → 浪费一个 OS 线程</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 虚拟线程：Thread.sleep → 从载体线程卸载 → 载体线程服务其他虚拟线程</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 以下操作都会触发虚拟线程的卸载：</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">Thread.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">sleep</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(duration);         </span><span style="color:#6A737D;--shiki-dark:#6A737D">// 定时等待</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">socket.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">read</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();                  </span><span style="color:#6A737D;--shiki-dark:#6A737D">// 网络 IO</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">channel.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">read</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(buffer);           </span><span style="color:#6A737D;--shiki-dark:#6A737D">// NIO 通道</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">Lock.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">lock</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();                    </span><span style="color:#6A737D;--shiki-dark:#6A737D">// j.u.c 锁（非 synchronized）</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">BlockingQueue.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">take</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();           </span><span style="color:#6A737D;--shiki-dark:#6A737D">// 阻塞队列</span></span></code></pre></div><pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    A[虚拟线程 V1] --&gt;|运行| B[载体线程 C1]&#10;    C[虚拟线程 V2] --&gt;|阻塞IO| D[卸载挂起]&#10;    E[虚拟线程 V3] --&gt;|等待调度| F[调度队列]&#10;    D --&gt;|IO完成| F&#10;    F --&gt;|调度| B"></pre><p><strong>固定（Pinning）问题</strong>：在以下情况下，虚拟线程无法从载体线程卸载，会&quot;固定&quot;载体线程：</p>
+<div class="code-block-wrapper" data-lang="java" data-code="// 情况1：synchronized 块中执行阻塞操作
+synchronized (lock) {
+    Thread.sleep(1000);  // 固定！虚拟线程无法卸载
+}
+
+// 解决方案：使用 ReentrantLock 替代 synchronized
+ReentrantLock lock = new ReentrantLock();
+lock.lock();
+try {
+    Thread.sleep(1000);  // 正常卸载
+} finally {
+    lock.unlock();
+}
+
+// 情况2：native 方法或 JNI 调用中的阻塞
+// 这种情况无法避免，需要注意
+
+// 监测固定
+// -Djdk.tracePinnedThreads=short
+// -Djdk.tracePinnedThreads=full"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 情况1：synchronized 块中执行阻塞操作</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">synchronized</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (lock) {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    Thread.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">sleep</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1000</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);  </span><span style="color:#6A737D;--shiki-dark:#6A737D">// 固定！虚拟线程无法卸载</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 解决方案：使用 ReentrantLock 替代 synchronized</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">ReentrantLock lock </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ReentrantLock</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">lock.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">lock</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">try</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    Thread.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">sleep</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1000</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);  </span><span style="color:#6A737D;--shiki-dark:#6A737D">// 正常卸载</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">} </span><span style="color:#D73A49;--shiki-dark:#F97583">finally</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    lock.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">unlock</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 情况2：native 方法或 JNI 调用中的阻塞</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 这种情况无法避免，需要注意</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 监测固定</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// -Djdk.tracePinnedThreads=short</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// -Djdk.tracePinnedThreads=full</span></span></code></pre></div><table>
+<thead>
+<tr>
+<th>阻塞操作</th>
+<th>虚拟线程行为</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Thread.sleep</td>
+<td>正常卸载</td>
+<td>推荐</td>
+</tr>
+<tr>
+<td>Socket/Channel IO</td>
+<td>正常卸载</td>
+<td>推荐</td>
+</tr>
+<tr>
+<td>ReentrantLock</td>
+<td>正常卸载</td>
+<td>推荐替代 synchronized</td>
+</tr>
+<tr>
+<td>synchronized + 阻塞</td>
+<td>固定载体线程</td>
+<td>避免</td>
+</tr>
+<tr>
+<td>native/JNI 阻塞</td>
+<td>固定载体线程</td>
+<td>无法避免</td>
+</tr>
+<tr>
+<td>纯 CPU 计算</td>
+<td>不卸载</td>
+<td>计算密集型不适合虚拟线程</td>
+</tr>
+</tbody></table>
+<h2 id="结构化并发">结构化并发</h2><p>结构化并发（Structured Concurrency, Java 21 Preview）将并发任务的生命周期绑定到代码结构中，确保子任务在父作用域结束前完成或取消，消除了线程泄漏和悬挂任务问题。</p>
+<div class="code-block-wrapper" data-lang="java" data-code="// ShutdownOnFailure：任一失败则取消所有
+Response handle(Request request) throws Exception {
+    try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+        Subtask&lt;User&gt; user = scope.fork(() -&gt; fetchUser(request.userId()));
+        Subtask&lt;Inventory&gt; inv = scope.fork(() -&gt; checkInventory(request.itemId()));
+        Subtask&lt;BigDecimal&gt; price = scope.fork(() -&gt; getPrice(request.itemId()));
+
+        scope.join().throwIfFailed();
+
+        return new Response(user.get(), inv.get(), price.get());
+    }
+}
+
+// ShutdownOnSuccess：首个成功即返回
+&lt;T&gt; T race(List&lt;Callable&lt;T&gt;&gt; tasks) throws Exception {
+    try (var scope = new StructuredTaskScope.ShutdownOnSuccess&lt;T&gt;()) {
+        for (var task : tasks) {
+            scope.fork(task);
+        }
+        scope.join();
+        return scope.result();
+    }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// ShutdownOnFailure：任一失败则取消所有</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">Response </span><span style="color:#6F42C1;--shiki-dark:#B392F0">handle</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(Request request) throws Exception {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    try</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">var</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> scope </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> StructuredTaskScope.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">ShutdownOnFailure</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()) {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        Subtask&#x3C;</span><span style="color:#D73A49;--shiki-dark:#F97583">User</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> user </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> scope.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">fork</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="color:#D73A49;--shiki-dark:#F97583">-></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> fetchUser</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(request.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">userId</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()));</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        Subtask&#x3C;</span><span style="color:#D73A49;--shiki-dark:#F97583">Inventory</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> inv </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> scope.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">fork</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="color:#D73A49;--shiki-dark:#F97583">-></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> checkInventory</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(request.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">itemId</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()));</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        Subtask&#x3C;</span><span style="color:#D73A49;--shiki-dark:#F97583">BigDecimal</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> price </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> scope.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">fork</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="color:#D73A49;--shiki-dark:#F97583">-></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> getPrice</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(request.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">itemId</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()));</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        scope.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">join</span><span style="color:#24292E;--shiki-dark:#E1E4E8">().</span><span style="color:#6F42C1;--shiki-dark:#B392F0">throwIfFailed</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Response</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(user.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">get</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(), inv.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">get</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(), price.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">get</span><span style="color:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// ShutdownOnSuccess：首个成功即返回</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">T</span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> T </span><span style="color:#6F42C1;--shiki-dark:#B392F0">race</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(List</span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">Callable</span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">T</span><span style="color:#D73A49;--shiki-dark:#F97583">>></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> tasks) throws Exception {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    try</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">var</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> scope </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> StructuredTaskScope.ShutdownOnSuccess&#x3C;</span><span style="color:#D73A49;--shiki-dark:#F97583">T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>()) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">var</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> task </span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> tasks) {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            scope.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">fork</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(task);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        scope.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">join</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> scope.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">result</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><p><strong>结构化并发 vs CompletableFuture</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>CompletableFuture</th>
+<th>StructuredTaskScope</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>取消传播</td>
+<td>手动</td>
+<td>自动（作用域结束时）</td>
+</tr>
+<tr>
+<td>异常处理</td>
+<td>exceptionally/handle</td>
+<td>结构化（try-catch）</td>
+</tr>
+<tr>
+<td>线程泄漏</td>
+<td>可能</td>
+<td>不可能</td>
+</tr>
+<tr>
+<td>可观测性</td>
+<td>较差</td>
+<td>天然树状结构</td>
+</tr>
+<tr>
+<td>调试</td>
+<td>回调链难跟踪</td>
+<td>栈帧清晰</td>
+</tr>
+</tbody></table>
+<h2 id="迁移指南与最佳实践">迁移指南与最佳实践</h2><div class="code-block-wrapper" data-lang="java" data-code="// 迁移前：线程池 + 异步回调
+ExecutorService pool = Executors.newFixedThreadPool(200);
+Future&lt;Result&gt; future = pool.submit(() -&gt; blockingCall());
+Result result = future.get();  // 阻塞等待
+
+// 迁移后：虚拟线程 + 同步代码
+try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+    Future&lt;Result&gt; future = executor.submit(() -&gt; blockingCall());
+    Result result = future.get();  // 虚拟线程中的阻塞不浪费资源
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 迁移前：线程池 + 异步回调</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">ExecutorService pool </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Executors.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">newFixedThreadPool</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">200</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">Future&#x3C;</span><span style="color:#D73A49;--shiki-dark:#F97583">Result</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> future </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> pool.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">submit</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="color:#D73A49;--shiki-dark:#F97583">-></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> blockingCall</span><span style="color:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">Result result </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> future.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">get</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();  </span><span style="color:#6A737D;--shiki-dark:#6A737D">// 阻塞等待</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 迁移后：虚拟线程 + 同步代码</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">try</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">var</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> executor </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Executors.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">newVirtualThreadPerTaskExecutor</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()) {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    Future&#x3C;</span><span style="color:#D73A49;--shiki-dark:#F97583">Result</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> future </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> executor.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">submit</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="color:#D73A49;--shiki-dark:#F97583">-></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> blockingCall</span><span style="color:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    Result result </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> future.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">get</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();  </span><span style="color:#6A737D;--shiki-dark:#6A737D">// 虚拟线程中的阻塞不浪费资源</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><p><strong>何时使用虚拟线程</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>IO 密集型服务</td>
+<td>强烈推荐</td>
+<td>阻塞 IO 自动卸载</td>
+</tr>
+<tr>
+<td>HTTP 服务器</td>
+<td>强烈推荐</td>
+<td>每请求一线程</td>
+</tr>
+<tr>
+<td>数据库访问</td>
+<td>推荐</td>
+<td>JDBC 阻塞调用</td>
+</tr>
+<tr>
+<td>微服务间调用</td>
+<td>推荐</td>
+<td>网络等待</td>
+</tr>
+<tr>
+<td>CPU 密集型计算</td>
+<td>不推荐</td>
+<td>不会卸载，无收益</td>
+</tr>
+<tr>
+<td>GUI 事件循环</td>
+<td>不推荐</td>
+<td>有专用线程模型</td>
+</tr>
+</tbody></table>
+<p><strong>注意事项</strong>：</p>
+<ul>
+<li>不要池化虚拟线程——每个任务创建新的虚拟线程</li>
+<li>将 synchronized 替换为 ReentrantLock（避免固定）</li>
+<li>ThreadLocal 在虚拟线程中仍然可用，但百万线程时要注意内存开销</li>
+<li>使用 ScopedValue（Preview）替代 ThreadLocal 减少内存占用</li>
+</ul>
+<h2 id="小结">小结</h2><ul>
+<li>虚拟线程是 Java 21 引入的轻量级线程，创建成本约 1μs、栈空间约 1KB，可扩展到百万级</li>
+<li>M:N 调度模型将虚拟线程映射到少量载体线程，阻塞 IO 时自动卸载不浪费资源</li>
+<li>synchronized 内的阻塞操作会导致固定（Pinning），应替换为 ReentrantLock</li>
+<li>结构化并发将子任务生命周期绑定到作用域，自动处理取消和异常，消除线程泄漏</li>
+<li>虚拟线程最适合 IO 密集型场景（HTTP 服务、数据库访问、微服务调用），不适合 CPU 密集型</li>
+<li>不要池化虚拟线程，使用 Executors.newVirtualThreadPerTaskExecutor() 为每个任务创建新线程</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../languages-and-paradigms/java-language/concurrency-in-depth/completable-future-reactive.html"><span class="label">Previous</span>CompletableFuture 与响应式编程</a><a class="next" href="../../../languages-and-paradigms/java-language/modern-java-ecosystem/index.html"><span class="label">Next</span>现代 Java 生态 简介</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#虚拟线程的使用方式" data-outline-link="虚拟线程的使用方式">虚拟线程的使用方式</a></li><li class="depth-2"><a href="#虚拟线程调度原理" data-outline-link="虚拟线程调度原理">虚拟线程调度原理</a></li><li class="depth-2"><a href="#结构化并发" data-outline-link="结构化并发">结构化并发</a></li><li class="depth-2"><a href="#迁移指南与最佳实践" data-outline-link="迁移指南与最佳实践">迁移指南与最佳实践</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

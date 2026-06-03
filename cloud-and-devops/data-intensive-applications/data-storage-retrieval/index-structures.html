@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>索引结构与查询优化 · 云与 DevOps 工程</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:云与 DevOps 工程" data-pagefind-meta="slug:cloud-and-devops">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">云与 DevOps 工程</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item active" href="../../../cloud-and-devops/index.html" aria-current="page" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../cloud-and-devops/index.html">云与 DevOps 工程</a><a class="back-to-hubs" href="../../../cloud-and-devops/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../cloud-and-devops/data-intensive-applications/index.html">数据密集型应用设计 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="cloud-and-devops"><li class="chapter"><details class="folder-collapse" data-sb-key="cloud-and-devops:folder:data-intensive-applications/data-storage-retrieval" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cloud-and-devops/data-intensive-applications/data-storage-retrieval/index.html">数据存储与检索 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/data-storage-retrieval/storage-engine-comparison.html">存储引擎对比：LSM-Tree 与 B-Tree</a></li><li class="leaf"><a class="leaf-title active" href="../../../cloud-and-devops/data-intensive-applications/data-storage-retrieval/index-structures.html">索引结构与查询优化</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/data-storage-retrieval/columnar-storage.html">列式存储与 OLAP 优化</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cloud-and-devops:folder:data-intensive-applications/replication-and-partitioning"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cloud-and-devops/data-intensive-applications/replication-and-partitioning/index.html">复制与分区 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/replication-and-partitioning/replication-models.html">主从复制与多主复制</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/replication-and-partitioning/partitioning-strategies.html">分区策略与再平衡</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/replication-and-partitioning/consistency-and-consensus.html">复制一致性与共识算法</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cloud-and-devops:folder:data-intensive-applications/transactions-and-consistency"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cloud-and-devops/data-intensive-applications/transactions-and-consistency/index.html">事务与一致性 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/transactions-and-consistency/acid-vs-base.html">ACID 与 BASE：事务语义对比</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/transactions-and-consistency/distributed-transactions.html">分布式事务实现机制</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/transactions-and-consistency/consistency-models.html">分布式一致性模型</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cloud-and-devops:folder:data-intensive-applications/stream-and-batch-processing"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cloud-and-devops/data-intensive-applications/stream-and-batch-processing/index.html">流处理与批处理 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/stream-and-batch-processing/mapreduce-evolution.html">MapReduce 演进：从批处理到统一计算</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/stream-and-batch-processing/stream-processing-architecture.html">流处理架构与实时计算</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/stream-and-batch-processing/event-sourcing-cqrs.html">事件溯源与 CQRS 模式</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part VII · 数据与伸缩</span><span>数据密集型应用设计 简介</span><span>数据存储与检索 简介</span><span>索引结构与查询优化</span></nav>
+    <article class="content prose"><h1 id="索引结构与查询优化">索引结构与查询优化</h1><h2 id="概述">概述</h2><p>索引是数据库从海量数据中高效定位目标记录的关键机制。一个精心设计的索引可以将查询时间从线性扫描的 O(N) 降低到对数级别的 O(log N) 甚至常数级别的 O(1)。然而索引并非免费午餐——每个索引都会增加写入开销和存储空间占用，工程师必须在查询加速与写入性能之间做出权衡。</p>
+<p>本文从经典 B+ 树索引出发，系统介绍各类索引结构的设计原理、适用场景和性能特征，覆盖从 OLTP 到全文搜索再到向量检索的完整索引知识体系。</p>
+<h2 id="核心概念">核心概念</h2><h3 id="b-树索引">B+ 树索引</h3><p>B+ 树是关系型数据库最普遍的索引实现。与 B-Tree 不同，B+ 树将所有数据存储在叶节点，内部节点仅保存路由键：</p>
+<div class="code-block-wrapper" data-lang="text" data-code="内部节点: [key1 | ptr1 | key2 | ptr2 | ... | keyN | ptrN+1]
+叶节点:   [key1:val1 | key2:val2 | ... ] → next_leaf"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>内部节点: [key1 | ptr1 | key2 | ptr2 | ... | keyN | ptrN+1]</span></span>
+<span class="line"><span>叶节点:   [key1:val1 | key2:val2 | ... ] → next_leaf</span></span></code></pre></div><p><strong>索引类型矩阵：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>结构</th>
+<th>适用查询</th>
+<th>空间开销</th>
+<th>写入代价</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>主键索引 (Clustered)</td>
+<td>数据按主键物理排序</td>
+<td>主键查找、范围扫描</td>
+<td>无额外开销</td>
+<td>页分裂</td>
+</tr>
+<tr>
+<td>二级索引 (Non-clustered)</td>
+<td>独立 B+ 树指向主键</td>
+<td>非主键条件查询</td>
+<td>额外树空间</td>
+<td>双重写入</td>
+</tr>
+<tr>
+<td>复合索引</td>
+<td>多列组合的 B+ 树</td>
+<td>多条件组合查询</td>
+<td>列数 × 数据量</td>
+<td>高</td>
+</tr>
+<tr>
+<td>覆盖索引 (Covering)</td>
+<td>包含查询所需全部列</td>
+<td>避免回表</td>
+<td>高</td>
+<td>高</td>
+</tr>
+<tr>
+<td>前缀索引</td>
+<td>仅索引字符串前 N 字符</td>
+<td>模糊前缀匹配</td>
+<td>低</td>
+<td>低</td>
+</tr>
+</tbody></table>
+<h3 id="复合索引与最左前缀原则">复合索引与最左前缀原则</h3><p>复合索引按列顺序排序，遵循最左前缀匹配规则：</p>
+<div class="code-block-wrapper" data-lang="sql" data-code="-- 创建复合索引 (a, b, c)
+CREATE INDEX idx_abc ON orders(user_id, status, created_at);
+
+-- 可以使用索引的查询:
+SELECT * FROM orders WHERE user_id = 100;                    -- ✓ 使用 (a)
+SELECT * FROM orders WHERE user_id = 100 AND status = 'paid'; -- ✓ 使用 (a,b)
+SELECT * FROM orders WHERE user_id = 100 AND status = 'paid'
+  AND created_at &gt; '2026-01-01';                             -- ✓ 使用 (a,b,c)
+
+-- 无法使用索引的查询:
+SELECT * FROM orders WHERE status = 'paid';                  -- ✗ 跳过了 a
+SELECT * FROM orders WHERE created_at &gt; '2026-01-01';        -- ✗ 跳过了 a,b"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 创建复合索引 (a, b, c)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">CREATE</span><span style="color:#D73A49;--shiki-dark:#F97583"> INDEX</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> idx_abc</span><span style="color:#D73A49;--shiki-dark:#F97583"> ON</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders(user_id, </span><span style="color:#D73A49;--shiki-dark:#F97583">status</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, created_at);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 可以使用索引的查询:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders </span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> user_id </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 100</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;                    </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- ✓ 使用 (a)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders </span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> user_id </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 100</span><span style="color:#D73A49;--shiki-dark:#F97583"> AND</span><span style="color:#D73A49;--shiki-dark:#F97583"> status</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'paid'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- ✓ 使用 (a,b)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders </span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> user_id </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 100</span><span style="color:#D73A49;--shiki-dark:#F97583"> AND</span><span style="color:#D73A49;--shiki-dark:#F97583"> status</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'paid'</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  AND</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> created_at </span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '2026-01-01'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;                             </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- ✓ 使用 (a,b,c)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 无法使用索引的查询:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders </span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#D73A49;--shiki-dark:#F97583"> status</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'paid'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;                  </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- ✗ 跳过了 a</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders </span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> created_at </span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '2026-01-01'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;        </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- ✗ 跳过了 a,b</span></span></code></pre></div><h3 id="哈希索引">哈希索引</h3><p>哈希索引通过哈希函数将键映射到固定位置，实现 O(1) 的等值查找：</p>
+<div class="code-block-wrapper" data-lang="text" data-code="hash(key) → bucket_id → value
+
+优点: 等值查询极快
+缺点: 不支持范围查询、不支持排序、哈希冲突处理
+适用: 内存数据库 (Redis)、等值连接优化"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>hash(key) → bucket_id → value</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>优点: 等值查询极快</span></span>
+<span class="line"><span>缺点: 不支持范围查询、不支持排序、哈希冲突处理</span></span>
+<span class="line"><span>适用: 内存数据库 (Redis)、等值连接优化</span></span></code></pre></div><p><strong>主要实现：</strong></p>
+<ul>
+<li><strong>Bitcask</strong>（Riak 的存储引擎）：内存中维护哈希表，磁盘追加写</li>
+<li><strong>Memory-optimized tables</strong>（SQL Server In-Memory OLTP）</li>
+</ul>
+<h3 id="倒排索引">倒排索引</h3><p>倒排索引是全文搜索的基础数据结构，将&quot;词项→文档列表&quot;的映射关系持久化：</p>
+<div class="code-block-wrapper" data-lang="text" data-code="词典 (Term Dictionary):
+  &quot;distributed&quot; → [doc1, doc5, doc12, doc89]
+  &quot;systems&quot;     → [doc1, doc3, doc5, doc12]
+  &quot;database&quot;    → [doc2, doc5, doc7, doc12]
+
+查询 &quot;distributed AND systems&quot;:
+  交集 → [doc1, doc5, doc12]"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>词典 (Term Dictionary):</span></span>
+<span class="line"><span>  "distributed" → [doc1, doc5, doc12, doc89]</span></span>
+<span class="line"><span>  "systems"     → [doc1, doc3, doc5, doc12]</span></span>
+<span class="line"><span>  "database"    → [doc2, doc5, doc7, doc12]</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>查询 "distributed AND systems":</span></span>
+<span class="line"><span>  交集 → [doc1, doc5, doc12]</span></span></code></pre></div><p><strong>倒排索引的组件：</strong></p>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>功能</th>
+<th>技术实现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Term Dictionary</td>
+<td>词项到 Posting List 的映射</td>
+<td>FST (Finite State Transducer)</td>
+</tr>
+<tr>
+<td>Posting List</td>
+<td>包含词项的文档 ID 列表</td>
+<td>压缩整数列表 (VInt, PFor)</td>
+</tr>
+<tr>
+<td>Term Frequency</td>
+<td>词项在文档中的出现频率</td>
+<td>TF-IDF 评分</td>
+</tr>
+<tr>
+<td>Position</td>
+<td>词项在文档中的位置</td>
+<td>支持短语查询</td>
+</tr>
+<tr>
+<td>Norm</td>
+<td>文档长度归一化因子</td>
+<td>BM25 评分</td>
+</tr>
+</tbody></table>
+<h3 id="向量索引-ann-索引">向量索引（ANN 索引）</h3><p>随着 AI 应用的普及，向量索引成为 2024-2026 年最受关注的索引类型。向量索引解决的是高维空间中近似最近邻（ANN）搜索问题：</p>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>原理</th>
+<th>召回率</th>
+<th>构建时间</th>
+<th>查询延迟</th>
+<th>内存占用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>HNSW</td>
+<td>层次化导航小世界图</td>
+<td>高 (&gt;95%)</td>
+<td>高</td>
+<td>低</td>
+<td>高</td>
+</tr>
+<tr>
+<td>IVF-PQ</td>
+<td>倒排索引 + 乘积量化</td>
+<td>中-高</td>
+<td>中</td>
+<td>中</td>
+<td>低</td>
+</tr>
+<tr>
+<td>ScaNN</td>
+<td>Google 的 AH 量化</td>
+<td>高</td>
+<td>中</td>
+<td>极低</td>
+<td>中</td>
+</tr>
+<tr>
+<td>DiskANN</td>
+<td>磁盘友好的图索引</td>
+<td>高</td>
+<td>极高</td>
+<td>中</td>
+<td>低(磁盘)</td>
+</tr>
+<tr>
+<td>Flat (暴力)</td>
+<td>全量距离计算</td>
+<td>100%</td>
+<td>O(1)</td>
+<td>O(N)</td>
+<td>低</td>
+</tr>
+</tbody></table>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    A[&quot;Query Vector&quot;] --&gt; B[&quot;Entry Point Layer 2&quot;]&#10;    B --&gt; C[&quot;Greedy Search Layer 1&quot;]&#10;    C --&gt; D[&quot;Fine Search Layer 0&quot;]&#10;    D --&gt; E[&quot;Top-K Nearest Neighbors&quot;]"></pre><h3 id="空间索引">空间索引</h3><p>用于地理空间数据的高效查询：</p>
+<ul>
+<li><strong>R-Tree</strong>：将空间对象包围在最小边界矩形（MBR）中，构建层次结构</li>
+<li><strong>Geohash</strong>：将二维坐标编码为一维字符串，利用前缀匹配实现空间查询</li>
+<li><strong>S2 Geometry</strong>：Google 开发，将地球表面映射到 Hilbert 曲线上的单元格</li>
+</ul>
+<h2 id="实战指南">实战指南</h2><h3 id="索引设计方法论">索引设计方法论</h3><div class="code-block-wrapper" data-lang="sql" data-code="-- 步骤 1: 分析查询模式
+EXPLAIN ANALYZE SELECT * FROM orders
+WHERE user_id = 100 AND status = 'paid'
+ORDER BY created_at DESC LIMIT 20;
+
+-- 步骤 2: 识别选择性
+SELECT
+  COUNT(DISTINCT user_id) / COUNT(*) AS user_selectivity,
+  COUNT(DISTINCT status) / COUNT(*) AS status_selectivity
+FROM orders;
+-- user_selectivity: 0.85 (高选择性 → 适合放前面)
+-- status_selectivity: 0.0001 (低选择性 → 放后面)
+
+-- 步骤 3: 创建优化索引
+CREATE INDEX idx_orders_covering ON orders(user_id, status, created_at DESC)
+INCLUDE (order_amount, product_id);  -- 覆盖索引避免回表"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 步骤 1: 分析查询模式</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">EXPLAIN ANALYZE </span><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> user_id </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 100</span><span style="color:#D73A49;--shiki-dark:#F97583"> AND</span><span style="color:#D73A49;--shiki-dark:#F97583"> status</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'paid'</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> created_at </span><span style="color:#D73A49;--shiki-dark:#F97583">DESC</span><span style="color:#D73A49;--shiki-dark:#F97583"> LIMIT</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 20</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 步骤 2: 识别选择性</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">  COUNT</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">DISTINCT</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> user_id) </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> COUNT</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> user_selectivity,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">  COUNT</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">DISTINCT</span><span style="color:#D73A49;--shiki-dark:#F97583"> status</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> COUNT</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> status_selectivity</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders;</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- user_selectivity: 0.85 (高选择性 → 适合放前面)</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- status_selectivity: 0.0001 (低选择性 → 放后面)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 步骤 3: 创建优化索引</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">CREATE</span><span style="color:#D73A49;--shiki-dark:#F97583"> INDEX</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> idx_orders_covering</span><span style="color:#D73A49;--shiki-dark:#F97583"> ON</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders(user_id, </span><span style="color:#D73A49;--shiki-dark:#F97583">status</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, created_at </span><span style="color:#D73A49;--shiki-dark:#F97583">DESC</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">INCLUDE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (order_amount, product_id);  </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 覆盖索引避免回表</span></span></code></pre></div><h3 id="索引失效的常见场景">索引失效的常见场景</h3><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>原因</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>函数包裹列</td>
+<td><code>WHERE YEAR(created_at) = 2026</code></td>
+<td>使用范围条件替代</td>
+</tr>
+<tr>
+<td>隐式类型转换</td>
+<td><code>WHERE varchar_col = 123</code></td>
+<td>保持类型一致</td>
+</tr>
+<tr>
+<td>OR 条件</td>
+<td><code>WHERE a=1 OR b=2</code></td>
+<td>拆分为 UNION 或使用位图索引</td>
+</tr>
+<tr>
+<td>NOT IN / NOT EXISTS</td>
+<td>否定条件无法利用索引</td>
+<td>改写为 LEFT JOIN IS NULL</td>
+</tr>
+<tr>
+<td>LIKE &#39;%keyword%&#39;</td>
+<td>前缀通配符</td>
+<td>全文索引或倒排索引</td>
+</tr>
+<tr>
+<td>小表全表扫描更快</td>
+<td>优化器判断不值得走索引</td>
+<td>无需优化，是正确行为</td>
+</tr>
+</tbody></table>
+<h3 id="向量索引实战-构建语义搜索">向量索引实战：构建语义搜索</h3><div class="code-block-wrapper" data-lang="python" data-code="import numpy as np
+from hnswlib import Index
+
+# 构建 HNSW 索引
+dim = 768  # BERT embedding 维度
+num_elements = 1_000_000
+
+index = Index(space='cosine', dim=dim)
+index.init_index(
+    max_elements=num_elements,
+    ef_construction=200,  # 构建精度 (越高越慢但召回率更高)
+    M=16                  # 每个节点的最大连接数
+)
+
+# 插入向量
+vectors = np.random.randn(num_elements, dim).astype('float32')
+index.add_items(vectors, ids=np.arange(num_elements))
+
+# 查询
+index.set_ef(50)  # 查询时的搜索范围
+query = np.random.randn(1, dim).astype('float32')
+labels, distances = index.knn_query(query, k=10)"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> numpy </span><span style="color:#D73A49;--shiki-dark:#F97583">as</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> np</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> hnswlib </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Index</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 构建 HNSW 索引</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">dim </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 768</span><span style="color:#6A737D;--shiki-dark:#6A737D">  # BERT embedding 维度</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">num_elements </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1_000_000</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">index </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Index(</span><span style="color:#E36209;--shiki-dark:#FFAB70">space</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'cosine'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">dim</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">dim)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">index.init_index(</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    max_elements</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">num_elements,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    ef_construction</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">200</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,  </span><span style="color:#6A737D;--shiki-dark:#6A737D"># 构建精度 (越高越慢但召回率更高)</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    M</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">16</span><span style="color:#6A737D;--shiki-dark:#6A737D">                  # 每个节点的最大连接数</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 插入向量</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">vectors </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> np.random.randn(num_elements, dim).astype(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'float32'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">index.add_items(vectors, </span><span style="color:#E36209;--shiki-dark:#FFAB70">ids</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">np.arange(num_elements))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 查询</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">index.set_ef(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">50</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)  </span><span style="color:#6A737D;--shiki-dark:#6A737D"># 查询时的搜索范围</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">query </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> np.random.randn(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, dim).astype(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'float32'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">labels, distances </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> index.knn_query(query, </span><span style="color:#E36209;--shiki-dark:#FFAB70">k</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">10</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span></code></pre></div><h2 id="最佳实践">最佳实践</h2><h3 id="索引数量控制">索引数量控制</h3><ul>
+<li><strong>OLTP 系统</strong>：每张表 3-5 个索引为宜，过多索引严重影响写入</li>
+<li><strong>OLAP 系统</strong>：可以创建更多索引（含物化视图），写入频率低</li>
+<li><strong>混合负载</strong>：考虑读写分离，从库承载索引密集的读查询</li>
+</ul>
+<h3 id="索引维护策略">索引维护策略</h3><div class="code-block-wrapper" data-lang="sql" data-code="-- 定期检查索引使用情况 (PostgreSQL)
+SELECT
+  schemaname, tablename, indexname,
+  idx_scan,       -- 索引被使用的次数
+  idx_tup_read,   -- 通过索引读取的行数
+  pg_size_pretty(pg_relation_size(indexrelid)) AS index_size
+FROM pg_stat_user_indexes
+ORDER BY idx_scan ASC;  -- 未使用的索引排在前面
+
+-- 索引膨胀检查
+SELECT
+  pg_size_pretty(pg_relation_size(indexrelid)) AS size,
+  100 * (1 - avg_leaf_density / 90) AS bloat_pct
+FROM pgstatindex('idx_orders_user_id');"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 定期检查索引使用情况 (PostgreSQL)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  schemaname, tablename, indexname,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  idx_scan,       </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 索引被使用的次数</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  idx_tup_read,   </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 通过索引读取的行数</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  pg_size_pretty(pg_relation_size(indexrelid)) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> index_size</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> pg_stat_user_indexes</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> idx_scan </span><span style="color:#D73A49;--shiki-dark:#F97583">ASC</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;  </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 未使用的索引排在前面</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 索引膨胀检查</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  pg_size_pretty(pg_relation_size(indexrelid)) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#D73A49;--shiki-dark:#F97583"> size</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">  100</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#D73A49;--shiki-dark:#F97583"> -</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> avg_leaf_density </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 90</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> bloat_pct</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> pgstatindex(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'idx_orders_user_id'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span></code></pre></div><h3 id="复合索引列顺序原则">复合索引列顺序原则</h3><ol>
+<li><strong>等值条件列优先</strong>：精确匹配的列放前面</li>
+<li><strong>高选择性列优先</strong>：唯一值比例高的列靠前</li>
+<li><strong>范围条件列靠后</strong>：范围查询会中断后续列的索引使用</li>
+<li><strong>排序列最后</strong>：与 ORDER BY 一致可避免额外排序</li>
+</ol>
+<h2 id="工具与生态">工具与生态</h2><table>
+<thead>
+<tr>
+<th>工具/系统</th>
+<th>索引类型</th>
+<th>典型用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Elasticsearch</td>
+<td>倒排索引 + BKD Tree</td>
+<td>全文搜索、日志分析</td>
+</tr>
+<tr>
+<td>Milvus</td>
+<td>HNSW / IVF / DiskANN</td>
+<td>向量数据库</td>
+</tr>
+<tr>
+<td>Pinecone</td>
+<td>专有 ANN 索引</td>
+<td>托管向量搜索</td>
+</tr>
+<tr>
+<td>pgvector</td>
+<td>HNSW / IVFFlat</td>
+<td>PostgreSQL 向量扩展</td>
+</tr>
+<tr>
+<td>PostGIS</td>
+<td>R-Tree (GiST)</td>
+<td>地理空间查询</td>
+</tr>
+<tr>
+<td>Apache Lucene</td>
+<td>FST + 倒排</td>
+<td>搜索引擎内核</td>
+</tr>
+<tr>
+<td>Tantivy</td>
+<td>倒排索引</td>
+<td>Rust 生态搜索引擎</td>
+</tr>
+</tbody></table>
+<h2 id="总结">总结</h2><p>索引结构的选择应当由查询模式驱动。B+ 树索引适合 OLTP 场景的等值和范围查询；倒排索引是全文搜索的标准方案；向量索引解决了 AI 时代的语义相似性检索需求；空间索引则服务于地理位置应用。</p>
+<p>工程师需要建立&quot;索引成本意识&quot;——每个索引都有写入代价、存储代价和维护代价。最佳的索引策略不是&quot;为所有查询建索引&quot;，而是根据 80/20 法则，为最关键的查询路径建立最少但最有效的索引组合。在 2026 年的实践中，混合索引（如 PostgreSQL 同时使用 B+ 树、GIN、GiST 和 HNSW）已成为复杂应用的标准配置。</p>
+</article>
+    <nav class="pager"><a class="prev" href="../../../cloud-and-devops/data-intensive-applications/data-storage-retrieval/storage-engine-comparison.html"><span class="label">Previous</span>存储引擎对比：LSM-Tree 与 B-Tree</a><a class="next" href="../../../cloud-and-devops/data-intensive-applications/data-storage-retrieval/columnar-storage.html"><span class="label">Next</span>列式存储与 OLAP 优化</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#概述" data-outline-link="概述">概述</a></li><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-3"><a href="#b-树索引" data-outline-link="b-树索引">B+ 树索引</a></li><li class="depth-3"><a href="#复合索引与最左前缀原则" data-outline-link="复合索引与最左前缀原则">复合索引与最左前缀原则</a></li><li class="depth-3"><a href="#哈希索引" data-outline-link="哈希索引">哈希索引</a></li><li class="depth-3"><a href="#倒排索引" data-outline-link="倒排索引">倒排索引</a></li><li class="depth-3"><a href="#向量索引-ann-索引" data-outline-link="向量索引-ann-索引">向量索引（ANN 索引）</a></li><li class="depth-3"><a href="#空间索引" data-outline-link="空间索引">空间索引</a></li><li class="depth-2"><a href="#实战指南" data-outline-link="实战指南">实战指南</a></li><li class="depth-3"><a href="#索引设计方法论" data-outline-link="索引设计方法论">索引设计方法论</a></li><li class="depth-3"><a href="#索引失效的常见场景" data-outline-link="索引失效的常见场景">索引失效的常见场景</a></li><li class="depth-3"><a href="#向量索引实战-构建语义搜索" data-outline-link="向量索引实战-构建语义搜索">向量索引实战：构建语义搜索</a></li><li class="depth-2"><a href="#最佳实践" data-outline-link="最佳实践">最佳实践</a></li><li class="depth-3"><a href="#索引数量控制" data-outline-link="索引数量控制">索引数量控制</a></li><li class="depth-3"><a href="#索引维护策略" data-outline-link="索引维护策略">索引维护策略</a></li><li class="depth-3"><a href="#复合索引列顺序原则" data-outline-link="复合索引列顺序原则">复合索引列顺序原则</a></li><li class="depth-2"><a href="#工具与生态" data-outline-link="工具与生态">工具与生态</a></li><li class="depth-2"><a href="#总结" data-outline-link="总结">总结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

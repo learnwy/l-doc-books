@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>CLIP 与对比学习 · AI 系统深度剖析</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:AI 系统深度剖析" data-pagefind-meta="slug:ai-systems-deep-dive">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">AI 系统深度剖析</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item active" href="../../../ai-systems-deep-dive/index.html" aria-current="page" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../ai-systems-deep-dive/index.html">AI 系统深度剖析</a><a class="back-to-hubs" href="../../../ai-systems-deep-dive/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../ai-systems-deep-dive/multimodal-ai/index.html">多模态 AI 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="ai-systems-deep-dive"><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:multimodal-ai/multimodal-foundations"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/multimodal-ai/multimodal-foundations/index.html">多模态基础 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/multimodal-ai/multimodal-foundations/modality-and-representation.html">模态与表示学习</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/multimodal-ai/multimodal-foundations/cross-modal-alignment.html">跨模态对齐</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/multimodal-ai/multimodal-foundations/fusion-strategies.html">融合策略</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/multimodal-ai/multimodal-foundations/multimodal-pretraining.html">多模态预训练</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:multimodal-ai/vision-language-models" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/multimodal-ai/vision-language-models/index.html">视觉语言模型 简介</a></summary><ul><li class="leaf"><a class="leaf-title active" href="../../../ai-systems-deep-dive/multimodal-ai/vision-language-models/clip-and-contrastive.html">CLIP 与对比学习</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/multimodal-ai/vision-language-models/visual-question-answering.html">视觉问答</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/multimodal-ai/vision-language-models/image-captioning.html">图像描述生成</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/multimodal-ai/vision-language-models/gpt4v-gemini.html">GPT-4V 与 Gemini</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:multimodal-ai/audio-language-models"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/multimodal-ai/audio-language-models/index.html">音频语言模型 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/multimodal-ai/audio-language-models/audio-representation.html">音频表示学习</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/multimodal-ai/audio-language-models/speech-language-models.html">语音语言模型</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/multimodal-ai/audio-language-models/music-generation.html">音乐生成</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/multimodal-ai/audio-language-models/audio-visual-learning.html">音视频联合学习</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:multimodal-ai/generalist-models"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/multimodal-ai/generalist-models/index.html">通才模型 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/multimodal-ai/generalist-models/unified-architectures.html">统一架构</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/multimodal-ai/generalist-models/any-to-any-models.html">任意模态转换模型</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/multimodal-ai/generalist-models/embodied-multimodal.html">具身多模态智能</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/multimodal-ai/generalist-models/world-models.html">世界模型</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:multimodal-ai/multimodal-applications"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/multimodal-ai/multimodal-applications/index.html">多模态应用 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/multimodal-ai/multimodal-applications/multimodal-search.html">多模态检索</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/multimodal-ai/multimodal-applications/document-ai.html">文档智能</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/multimodal-ai/multimodal-applications/multimodal-agents.html">多模态智能体</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/multimodal-ai/multimodal-applications/creative-multimodal.html">创意多模态生成</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part III · 生成式与多模态 (Generative &amp; Multimodal)</span><span>多模态 AI 简介</span><span>视觉语言模型 简介</span><span>CLIP 与对比学习</span></nav>
+    <article class="content prose"><h1 id="clip-与对比学习">CLIP 与对比学习</h1><h2 id="核心概念">核心概念</h2><p>CLIP（Contrastive Language-Image Pre-training）是 OpenAI 于 2021 年发布的里程碑式多模态模型，它通过在 4 亿互联网图文对上进行对比学习训练，实现了图像与自然语言之间的高质量语义对齐。CLIP 不仅在零样本图像分类上媲美监督学习模型，更重要的是它开创了一种全新的视觉模型训练范式——用自然语言作为监督信号，将视觉理解从固定标签分类拓展为开放世界的语义理解。</p>
+<p>CLIP 的影响远超模型本身，它催生了整个多模态模型生态：Stable Diffusion 用 CLIP 文本编码器做条件生成，LLaVA 用 CLIP 视觉编码器做多模态大模型，DALL-E 用 CLIP 做图文评分。可以说，CLIP 是现代多模态 AI 的基石。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    A[图像] --&gt; B[图像编码器 ViT]&#10;    C[文本] --&gt; D[文本编码器 Transformer]&#10;    B --&gt; E[图像嵌入]&#10;    D --&gt; F[文本嵌入]&#10;    E --&gt; G{对比学习}&#10;    F --&gt; G&#10;    G --&gt; H[共享嵌入空间]&#10;    H --&gt; I[零样本分类]&#10;    H --&gt; J[图文检索]&#10;    H --&gt; K[条件生成]"></pre><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>CLIP</th>
+<th>传统视觉模型</th>
+<th>区别</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>监督信号</td>
+<td>自然语言描述</td>
+<td>固定标签</td>
+<td>开放 vs 封闭词汇</td>
+</tr>
+<tr>
+<td>训练数据</td>
+<td>4 亿互联网图文对</td>
+<td>~100万标注图像</td>
+<td>规模差 400 倍</td>
+</tr>
+<tr>
+<td>迁移方式</td>
+<td>零样本 / 线性探针</td>
+<td>全模型微调</td>
+<td>无需下游标注</td>
+</tr>
+<tr>
+<td>类别范围</td>
+<td>任意自然语言描述</td>
+<td>预定义类别集</td>
+<td>开放世界理解</td>
+</tr>
+<tr>
+<td>多模态能力</td>
+<td>天然图文对齐</td>
+<td>需额外训练</td>
+<td>一次训练多用途</td>
+</tr>
+</tbody></table>
+<h2 id="clip-双塔架构详解">CLIP 双塔架构详解</h2><p>CLIP 采用经典的双塔（Dual Encoder）架构：图像编码器和文本编码器分别将输入映射为固定维度的嵌入向量，通过投影层对齐到共享的嵌入空间中。</p>
+<p>图像编码器有两种选择：ResNet 系列（RN50、RN101、RN50x4 等）和 ViT 系列（ViT-B/32、ViT-B/16、ViT-L/14 等）。实验表明 ViT-L/14 在计算效率和性能之间取得了最佳平衡。ViT 将图像分割为 Patch，通过线性投影加位置编码后送入 Transformer 编码器，CLS Token 的输出经过投影层映射为最终的图像嵌入。</p>
+<p>文本编码器是一个标准的 Transformer，使用 BPE（Byte Pair Encoding）分词，最大序列长度 77 个 Token。文本的 [EOS] Token 经过投影层映射为文本嵌入。CLIP 的文本编码器虽然参数量不大，但通过对比学习获得了与大型语言模型相当的语义理解能力。</p>
+<div class="code-block-wrapper" data-lang="python" data-code="import torch
+import torch.nn as nn
+
+class CLIPModel(nn.Module):
+    def __init__(self, image_encoder, text_encoder, embed_dim):
+        super().__init__()
+        self.image_encoder = image_encoder
+        self.text_encoder = text_encoder
+        self.image_projection = nn.Linear(image_encoder.output_dim, embed_dim)
+        self.text_projection = nn.Linear(text_encoder.output_dim, embed_dim)
+        self.logit_scale = nn.Parameter(torch.ones([]) * torch.log(torch.tensor(1 / 0.07)))
+
+    def forward(self, images, texts):
+        image_features = self.image_projection(self.image_encoder(images))
+        text_features = self.text_projection(self.text_encoder(texts))
+        image_features = image_features / image_features.norm(dim=-1, keepdim=True)
+        text_features = text_features / text_features.norm(dim=-1, keepdim=True)
+        logit_scale = self.logit_scale.exp()
+        logits_per_image = logit_scale * image_features @ text_features.t()
+        return logits_per_image, logits_per_image.t()"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> torch</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> torch.nn </span><span style="color:#D73A49;--shiki-dark:#F97583">as</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> nn</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> CLIPModel</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">nn</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Module</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, image_encoder, text_encoder, embed_dim):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        super</span><span style="color:#24292E;--shiki-dark:#E1E4E8">().</span><span style="color:#005CC5;--shiki-dark:#79B8FF">__init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.image_encoder </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> image_encoder</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.text_encoder </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> text_encoder</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.image_projection </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> nn.Linear(image_encoder.output_dim, embed_dim)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.text_projection </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> nn.Linear(text_encoder.output_dim, embed_dim)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.logit_scale </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> nn.Parameter(torch.ones([]) </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> torch.log(torch.tensor(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#D73A49;--shiki-dark:#F97583"> /</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.07</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> forward</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, images, texts):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        image_features </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.image_projection(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.image_encoder(images))</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        text_features </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.text_projection(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.text_encoder(texts))</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        image_features </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> image_features </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> image_features.norm(</span><span style="color:#E36209;--shiki-dark:#FFAB70">dim</span><span style="color:#D73A49;--shiki-dark:#F97583">=-</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">keepdim</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">True</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        text_features </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> text_features </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> text_features.norm(</span><span style="color:#E36209;--shiki-dark:#FFAB70">dim</span><span style="color:#D73A49;--shiki-dark:#F97583">=-</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">keepdim</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">True</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        logit_scale </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.logit_scale.exp()</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        logits_per_image </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> logit_scale </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> image_features </span><span style="color:#D73A49;--shiki-dark:#F97583">@</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> text_features.t()</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> logits_per_image, logits_per_image.t()</span></span></code></pre></div><p>训练时，CLIP 使用对称的 InfoNCE 损失。在一个包含 N 个图文对的 Batch 中，产生 N 个正对和 N²-N 个负对。CLIP 使用了高达 32768 的 Batch 大小，在 256 块 V100 GPU 上训练了 12 天（约 400M 图文对的 32 个 Epoch）。大 Batch 是 CLIP 成功的关键——更多的负例意味着更强的对比信号。</p>
+<h2 id="零样本分类与-prompt-工程">零样本分类与 Prompt 工程</h2><p>CLIP 最引人注目的能力是零样本分类：无需在目标数据集上做任何训练或微调，即可对新图像进行分类。实现方式极为简洁——将每个类别名称包装成自然语言描述（Prompt Template），计算图像与所有类别描述的相似度，选择最高相似度对应的类别。</p>
+<div class="code-block-wrapper" data-lang="python" data-code="def zero_shot_classify(image, class_names, clip_model, tokenizer):
+    prompts = [f&quot;a photo of a {name}&quot; for name in class_names]
+    text_inputs = tokenizer(prompts)
+
+    image_features = clip_model.encode_image(image)
+    text_features = clip_model.encode_text(text_inputs)
+
+    image_features /= image_features.norm(dim=-1, keepdim=True)
+    text_features /= text_features.norm(dim=-1, keepdim=True)
+
+    similarity = (100.0 * image_features @ text_features.T).softmax(dim=-1)
+    return similarity.argmax(dim=-1)"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> zero_shot_classify</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(image, class_names, clip_model, tokenizer):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    prompts </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#D73A49;--shiki-dark:#F97583">f</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"a photo of a </span><span style="color:#005CC5;--shiki-dark:#79B8FF">{</span><span style="color:#24292E;--shiki-dark:#E1E4E8">name</span><span style="color:#005CC5;--shiki-dark:#79B8FF">}</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"</span><span style="color:#D73A49;--shiki-dark:#F97583"> for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> name </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> class_names]</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    text_inputs </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> tokenizer(prompts)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    image_features </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> clip_model.encode_image(image)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    text_features </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> clip_model.encode_text(text_inputs)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    image_features </span><span style="color:#D73A49;--shiki-dark:#F97583">/=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> image_features.norm(</span><span style="color:#E36209;--shiki-dark:#FFAB70">dim</span><span style="color:#D73A49;--shiki-dark:#F97583">=-</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">keepdim</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">True</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    text_features </span><span style="color:#D73A49;--shiki-dark:#F97583">/=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> text_features.norm(</span><span style="color:#E36209;--shiki-dark:#FFAB70">dim</span><span style="color:#D73A49;--shiki-dark:#F97583">=-</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">keepdim</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">True</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    similarity </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">100.0</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> image_features </span><span style="color:#D73A49;--shiki-dark:#F97583">@</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> text_features.T).softmax(</span><span style="color:#E36209;--shiki-dark:#FFAB70">dim</span><span style="color:#D73A49;--shiki-dark:#F97583">=-</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> similarity.argmax(</span><span style="color:#E36209;--shiki-dark:#FFAB70">dim</span><span style="color:#D73A49;--shiki-dark:#F97583">=-</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span></code></pre></div><p>Prompt 模板的选择对零样本分类性能影响巨大。CLIP 论文实验表明，简单的&quot;a photo of a {class}&quot;模板比直接使用类别名称提升了 1-5 个百分点。更复杂的集成策略使用多个模板（如&quot;a photo of a big {class}&quot;、&quot;a photo of a small {class}&quot;、&quot;a satellite photo of {class}&quot;等），对多个模板的文本嵌入取平均后再做分类，可以进一步提升 3-5 个百分点。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[输入图像] --&gt; B[CLIP 图像编码器]&#10;    B --&gt; C[图像嵌入向量]&#10;    D[类别1: a photo of a cat] --&gt; E[CLIP 文本编码器]&#10;    F[类别2: a photo of a dog] --&gt; E&#10;    G[类别N: a photo of a bird] --&gt; E&#10;    E --&gt; H[文本嵌入矩阵]&#10;    C --&gt; I{余弦相似度}&#10;    H --&gt; I&#10;    I --&gt; J[分类概率分布]&#10;    J --&gt; K[预测类别]"></pre><p>在 ImageNet 零样本分类中，CLIP ViT-L/14 达到了 76.2% 的 Top-1 准确率，接近 ResNet-50 的有监督训练性能。在某些分布偏移的数据集上（如 ImageNet-Sketch、ImageNet-R），CLIP 的鲁棒性甚至超过了专门微调的模型。</p>
+<h2 id="后-clip-时代的对比学习演进">后 CLIP 时代的对比学习演进</h2><p>CLIP 之后，一系列工作在数据、架构和训练策略上进行了优化。</p>
+<p>OpenCLIP 是 CLIP 的开源复现项目，证明了在 LAION-2B 等公开数据集上训练的模型可以达到甚至超过原始 CLIP 的性能。OpenCLIP 提供了丰富的模型变体（从 ViT-B/32 到 ViT-bigG/14），成为多模态研究的标准基础设施。</p>
+<p>EVA-CLIP 通过改进视觉编码器的预训练来提升 CLIP 性能。它先用 EVA 方法对 ViT 进行自监督预训练，再进行 CLIP 对比训练。这种两阶段策略使得视觉编码器拥有更好的初始化，最终在多项评测中超越了同等规模的原始 CLIP。</p>
+<p>SigLIP 的核心创新是将 Softmax 对比损失替换为 Sigmoid 损失。Softmax 损失假设每个图像在 Batch 中只与一个文本匹配，但实际数据中经常存在一图多描述的情况。Sigmoid 损失将每个图文对独立评估，更符合实际数据分布，且在实现上更简单（不需要跨 GPU 的 all-gather 操作）。</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>ImageNet 零样本</th>
+<th>COCO 检索 R@1</th>
+<th>训练数据</th>
+<th>关键改进</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CLIP ViT-L/14</td>
+<td>76.2%</td>
+<td>58.4%</td>
+<td>WIT-400M</td>
+<td>原始基线</td>
+</tr>
+<tr>
+<td>OpenCLIP ViT-G/14</td>
+<td>80.1%</td>
+<td>65.7%</td>
+<td>LAION-2B</td>
+<td>更大模型+数据</td>
+</tr>
+<tr>
+<td>EVA-CLIP</td>
+<td>82.0%</td>
+<td>68.4%</td>
+<td>Merged-2B</td>
+<td>改进视觉编码器</td>
+</tr>
+<tr>
+<td>SigLIP So400m</td>
+<td>83.1%</td>
+<td>70.2%</td>
+<td>WebLI</td>
+<td>Sigmoid 损失</td>
+</tr>
+</tbody></table>
+<h2 id="clip-在下游生态中的角色">CLIP 在下游生态中的角色</h2><p>CLIP 的影响力不仅限于检索和分类，它已成为整个多模态 AI 生态的基础组件。</p>
+<p>在文本到图像生成中，Stable Diffusion 使用 CLIP 文本编码器将文本 Prompt 编码为条件向量，通过交叉注意力注入到 U-Net 去噪过程中。DALL-E 2 则同时使用 CLIP 图像编码器和文本编码器，通过 Prior 模型将文本嵌入映射为图像嵌入，再由解码器生成图像。</p>
+<p>在多模态大模型中，LLaVA 系列使用 CLIP ViT 作为视觉编码器，通过简单的线性投影层将视觉特征送入大语言模型。InternVL 则在 CLIP 基础上进一步扩大视觉编码器规模至 6B 参数，获得了更强的视觉理解能力。</p>
+<p>CLIP 还被广泛用于评估指标。CLIPScore 计算生成图像与文本描述的 CLIP 相似度，已成为图像生成质量评估的标准指标。FID + CLIPScore 的组合提供了图像质量和语义一致性的双重度量。</p>
+<h2 id="小结">小结</h2><pre class="mermaid" data-diagram-type="mindmap" data-source="mindmap&#10;  root((CLIP 与对比学习))&#10;    架构设计&#10;      双塔编码器&#10;      ViT 图像编码&#10;      投影到共享空间&#10;    训练策略&#10;      InfoNCE 对比损失&#10;      超大 Batch 32768&#10;      可学习温度参数&#10;    零样本能力&#10;      Prompt Template&#10;      多模板集成&#10;      分布鲁棒性&#10;    后 CLIP 演进&#10;      OpenCLIP 开源&#10;      SigLIP Sigmoid损失&#10;      EVA-CLIP 改进初始化&#10;    生态影响&#10;      Stable Diffusion 条件&#10;      LLaVA 视觉编码&#10;      CLIPScore 评估"></pre><ul>
+<li>CLIP 通过在 4 亿图文对上进行对比学习训练，开创了用自然语言监督视觉模型的范式</li>
+<li>双塔架构将图像和文本分别编码后投影到共享空间，对称 InfoNCE 损失驱动对齐</li>
+<li>零样本分类通过 Prompt Template 实现，多模板集成可以显著提升性能</li>
+<li>后 CLIP 时代的改进包括 SigLIP 的 Sigmoid 损失、EVA-CLIP 的视觉编码器优化和更大规模训练</li>
+<li>CLIP 已成为多模态 AI 生态的基础组件，广泛应用于生成、理解和评估等场景</li>
+<li>从封闭标签分类到开放世界理解，CLIP 代表了视觉 AI 的范式转变</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../ai-systems-deep-dive/multimodal-ai/vision-language-models/index.html"><span class="label">Previous</span>视觉语言模型 简介</a><a class="next" href="../../../ai-systems-deep-dive/multimodal-ai/vision-language-models/visual-question-answering.html"><span class="label">Next</span>视觉问答</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#clip-双塔架构详解" data-outline-link="clip-双塔架构详解">CLIP 双塔架构详解</a></li><li class="depth-2"><a href="#零样本分类与-prompt-工程" data-outline-link="零样本分类与-prompt-工程">零样本分类与 Prompt 工程</a></li><li class="depth-2"><a href="#后-clip-时代的对比学习演进" data-outline-link="后-clip-时代的对比学习演进">后 CLIP 时代的对比学习演进</a></li><li class="depth-2"><a href="#clip-在下游生态中的角色" data-outline-link="clip-在下游生态中的角色">CLIP 在下游生态中的角色</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

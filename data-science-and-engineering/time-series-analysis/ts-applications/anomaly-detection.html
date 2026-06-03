@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>时间序列异常检测 · 数据科学与工程</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:数据科学与工程" data-pagefind-meta="slug:data-science-and-engineering">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">数据科学与工程</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item active" href="../../../data-science-and-engineering/index.html" aria-current="page" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../data-science-and-engineering/index.html">数据科学与工程</a><a class="back-to-hubs" href="../../../data-science-and-engineering/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../data-science-and-engineering/time-series-analysis/index.html">时间序列分析 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="data-science-and-engineering"><li class="chapter"><details class="folder-collapse" data-sb-key="data-science-and-engineering:folder:time-series-analysis/ts-fundamentals"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../data-science-and-engineering/time-series-analysis/ts-fundamentals/index.html">时间序列基础 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../data-science-and-engineering/time-series-analysis/ts-fundamentals/time-series-concepts.html">时间序列基本概念</a></li><li class="leaf"><a class="leaf-title" href="../../../data-science-and-engineering/time-series-analysis/ts-fundamentals/stationarity-decomposition.html">平稳性与时序分解</a></li><li class="leaf"><a class="leaf-title" href="../../../data-science-and-engineering/time-series-analysis/ts-fundamentals/autocorrelation-analysis.html">自相关分析</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="data-science-and-engineering:folder:time-series-analysis/ts-models"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../data-science-and-engineering/time-series-analysis/ts-models/index.html">时间序列模型 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../data-science-and-engineering/time-series-analysis/ts-models/arima-models.html">ARIMA 模型族</a></li><li class="leaf"><a class="leaf-title" href="../../../data-science-and-engineering/time-series-analysis/ts-models/exponential-smoothing.html">指数平滑与状态空间模型</a></li><li class="leaf"><a class="leaf-title" href="../../../data-science-and-engineering/time-series-analysis/ts-models/deep-learning-ts.html">深度学习时序模型</a></li><li class="leaf"><a class="leaf-title" href="../../../data-science-and-engineering/time-series-analysis/ts-models/ml-time-series.html">时间序列机器学习方法</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="data-science-and-engineering:folder:time-series-analysis/ts-forecasting"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../data-science-and-engineering/time-series-analysis/ts-forecasting/index.html">预测方法 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../data-science-and-engineering/time-series-analysis/ts-forecasting/forecast-evaluation.html">预测评估与模型选择</a></li><li class="leaf"><a class="leaf-title" href="../../../data-science-and-engineering/time-series-analysis/ts-forecasting/ensemble-forecasting.html">集成预测方法</a></li><li class="leaf"><a class="leaf-title" href="../../../data-science-and-engineering/time-series-analysis/ts-forecasting/forecast-evaluation.html">预测评估与验证</a></li><li class="leaf"><a class="leaf-title" href="../../../data-science-and-engineering/time-series-analysis/ts-forecasting/forecasting-framework.html">预测框架体系</a></li><li class="leaf"><a class="leaf-title" href="../../../data-science-and-engineering/time-series-analysis/ts-forecasting/multistep-hierarchical.html">多步预测与层级预测</a></li><li class="leaf"><a class="leaf-title" href="../../../data-science-and-engineering/time-series-analysis/ts-forecasting/forecasting-systems.html">预测系统工程</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="data-science-and-engineering:folder:time-series-analysis/ts-applications" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../data-science-and-engineering/time-series-analysis/ts-applications/index.html">应用场景 简介</a></summary><ul><li class="leaf"><a class="leaf-title active" href="../../../data-science-and-engineering/time-series-analysis/ts-applications/anomaly-detection.html">时间序列异常检测</a></li><li class="leaf"><a class="leaf-title" href="../../../data-science-and-engineering/time-series-analysis/ts-applications/changepoint-trend.html">变点检测与趋势分析</a></li><li class="leaf"><a class="leaf-title" href="../../../data-science-and-engineering/time-series-analysis/ts-applications/anomaly-detection-ts.html">时序异常检测</a></li><li class="leaf"><a class="leaf-title" href="../../../data-science-and-engineering/time-series-analysis/ts-applications/financial-ts.html">金融时间序列</a></li><li class="leaf"><a class="leaf-title" href="../../../data-science-and-engineering/time-series-analysis/ts-applications/demand-forecasting.html">需求预测</a></li><li class="leaf"><a class="leaf-title" href="../../../data-science-and-engineering/time-series-analysis/ts-applications/causal-inference-ts.html">时间序列因果推断</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part II · 特征工程与时序</span><span>时间序列分析 简介</span><span>应用场景 简介</span><span>时间序列异常检测</span></nav>
+    <article class="content prose"><h1 id="时间序列异常检测">时间序列异常检测</h1><h2 id="核心概念">核心概念</h2><p>时间序列异常检测（Time Series Anomaly Detection）是在时序数据中识别偏离正常模式的数据点或时间段的技术。异常可能指示设备故障、网络入侵、金融欺诈或系统性能退化等关键事件。与静态数据的异常检测不同，时序异常检测需要考虑数据的时序依赖性——一个在绝对值上完全正常的数据点如果出现在&quot;错误的时间&quot;也可能构成异常。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[时序异常类型] --&gt; B[点异常]&#10;    A --&gt; C[上下文异常]&#10;    A --&gt; D[模式异常]&#10;    B --&gt; B1[单个数据点偏离]&#10;    C --&gt; C1[在特定上下文中异常]&#10;    D --&gt; D1[子序列模式异常]&#10;    E[检测方法] --&gt; F[统计方法]&#10;    E --&gt; G[机器学习方法]&#10;    E --&gt; H[深度学习方法]&#10;    F --&gt; F1[3σ 规则]&#10;    F --&gt; F2[STL + 残差检测]&#10;    F --&gt; F3[ARIMA 预测偏差]&#10;    G --&gt; G1[Isolation Forest]&#10;    G --&gt; G2[LOF]&#10;    G --&gt; G3[One-Class SVM]&#10;    H --&gt; H1[LSTM AutoEncoder]&#10;    H --&gt; H2[Transformer 异常]"></pre><table>
+<thead>
+<tr>
+<th>异常类型</th>
+<th>定义</th>
+<th>检测难度</th>
+<th>典型示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>点异常</td>
+<td>单个时间点的值显著偏离预期</td>
+<td>低</td>
+<td>传感器读数突然跳变</td>
+</tr>
+<tr>
+<td>上下文异常</td>
+<td>值本身正常但在时间上下文中异常</td>
+<td>中</td>
+<td>夏天出现冬天的能耗模式</td>
+</tr>
+<tr>
+<td>模式异常</td>
+<td>一段时间内的模式偏离正常</td>
+<td>高</td>
+<td>心电图中的异常波形</td>
+</tr>
+<tr>
+<td>集体异常</td>
+<td>一组数据点共同构成异常</td>
+<td>高</td>
+<td>持续多天的异常流量模式</td>
+</tr>
+<tr>
+<td>水平偏移</td>
+<td>均值发生永久性变化</td>
+<td>中</td>
+<td>设备校准漂移</td>
+</tr>
+<tr>
+<td>趋势变化</td>
+<td>趋势方向或速率突变</td>
+<td>中</td>
+<td>用户增长率突然下降</td>
+</tr>
+</tbody></table>
+<p>理解异常的类型是选择检测方法的基础。点异常用统计阈值即可有效检测，上下文异常需要时序模型捕获预期值，模式异常需要序列相似度或深度学习方法。</p>
+<h2 id="统计方法">统计方法</h2><p>基于统计的异常检测方法利用时间序列的统计特性建立正常行为的模型，将显著偏离模型预期的数据点标记为异常。</p>
+<div class="code-block-wrapper" data-lang="python" data-code="import numpy as np
+import pandas as pd
+from scipy.stats import zscore
+
+def sigma_rule_detection(series, window=30, n_sigma=3):
+    rolling_mean = series.rolling(window=window, center=True).mean()
+    rolling_std = series.rolling(window=window, center=True).std()
+
+    upper_bound = rolling_mean + n_sigma * rolling_std
+    lower_bound = rolling_mean - n_sigma * rolling_std
+
+    anomalies = (series &gt; upper_bound) | (series &lt; lower_bound)
+
+    return pd.DataFrame({
+        'value': series,
+        'rolling_mean': rolling_mean,
+        'upper_bound': upper_bound,
+        'lower_bound': lower_bound,
+        'is_anomaly': anomalies,
+        'deviation': (series - rolling_mean) / rolling_std
+    })
+
+def stl_residual_detection(series, period=7, threshold=3):
+    from statsmodels.tsa.seasonal import STL
+
+    stl = STL(series, period=period, robust=True)
+    result = stl.fit()
+
+    residuals = result.resid
+    median_res = np.median(residuals.dropna())
+    mad = np.median(np.abs(residuals.dropna() - median_res))
+    modified_z = 0.6745 * (residuals - median_res) / (mad + 1e-8)
+
+    anomalies = np.abs(modified_z) &gt; threshold
+
+    return pd.DataFrame({
+        'value': series,
+        'trend': result.trend,
+        'seasonal': result.seasonal,
+        'residual': residuals,
+        'modified_z_score': modified_z,
+        'is_anomaly': anomalies
+    })
+
+def forecast_based_detection(series, train_size=None, threshold=3):
+    from statsmodels.tsa.holtwinters import ExponentialSmoothing
+
+    if train_size is None:
+        train_size = int(len(series) * 0.7)
+
+    model = ExponentialSmoothing(
+        series[:train_size], trend='add', seasonal='add',
+        seasonal_periods=7, damped_trend=True
+    ).fit(optimized=True)
+
+    fitted = model.fittedvalues
+    predicted = model.predict(start=train_size, end=len(series) - 1)
+    all_predicted = pd.concat([fitted, predicted])
+
+    residuals = series - all_predicted
+    std_res = residuals.std()
+    anomalies = np.abs(residuals) &gt; threshold * std_res
+
+    return pd.DataFrame({
+        'value': series,
+        'predicted': all_predicted,
+        'residual': residuals,
+        'is_anomaly': anomalies
+    })"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> numpy </span><span style="color:#D73A49;--shiki-dark:#F97583">as</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> np</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> pandas </span><span style="color:#D73A49;--shiki-dark:#F97583">as</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> pd</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> scipy.stats </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> zscore</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> sigma_rule_detection</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(series, window</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">30</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, n_sigma</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    rolling_mean </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> series.rolling(</span><span style="color:#E36209;--shiki-dark:#FFAB70">window</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">window, </span><span style="color:#E36209;--shiki-dark:#FFAB70">center</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">True</span><span style="color:#24292E;--shiki-dark:#E1E4E8">).mean()</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    rolling_std </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> series.rolling(</span><span style="color:#E36209;--shiki-dark:#FFAB70">window</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">window, </span><span style="color:#E36209;--shiki-dark:#FFAB70">center</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">True</span><span style="color:#24292E;--shiki-dark:#E1E4E8">).std()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    upper_bound </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> rolling_mean </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> n_sigma </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> rolling_std</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    lower_bound </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> rolling_mean </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> n_sigma </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> rolling_std</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    anomalies </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (series </span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> upper_bound) </span><span style="color:#D73A49;--shiki-dark:#F97583">|</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (series </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> lower_bound)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> pd.DataFrame({</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'value'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: series,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'rolling_mean'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: rolling_mean,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'upper_bound'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: upper_bound,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'lower_bound'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: lower_bound,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'is_anomaly'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: anomalies,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'deviation'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: (series </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> rolling_mean) </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> rolling_std</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    })</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> stl_residual_detection</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(series, period</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">7</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, threshold</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> statsmodels.tsa.seasonal </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> STL</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    stl </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> STL(series, </span><span style="color:#E36209;--shiki-dark:#FFAB70">period</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">period, </span><span style="color:#E36209;--shiki-dark:#FFAB70">robust</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">True</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    result </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> stl.fit()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    residuals </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> result.resid</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    median_res </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> np.median(residuals.dropna())</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    mad </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> np.median(np.abs(residuals.dropna() </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> median_res))</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    modified_z </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.6745</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (residuals </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> median_res) </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (mad </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1e-8</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    anomalies </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> np.abs(modified_z) </span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> threshold</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> pd.DataFrame({</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'value'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: series,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'trend'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: result.trend,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'seasonal'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: result.seasonal,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'residual'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: residuals,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'modified_z_score'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: modified_z,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'is_anomaly'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: anomalies</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    })</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> forecast_based_detection</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(series, train_size</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">None</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, threshold</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> statsmodels.tsa.holtwinters </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ExponentialSmoothing</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> train_size </span><span style="color:#D73A49;--shiki-dark:#F97583">is</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> None</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        train_size </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> int</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">len</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(series) </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.7</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    model </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ExponentialSmoothing(</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        series[:train_size], </span><span style="color:#E36209;--shiki-dark:#FFAB70">trend</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'add'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">seasonal</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'add'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        seasonal_periods</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">7</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">damped_trend</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">True</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    ).fit(</span><span style="color:#E36209;--shiki-dark:#FFAB70">optimized</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">True</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    fitted </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> model.fittedvalues</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    predicted </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> model.predict(</span><span style="color:#E36209;--shiki-dark:#FFAB70">start</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">train_size, </span><span style="color:#E36209;--shiki-dark:#FFAB70">end</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">len</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(series) </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    all_predicted </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> pd.concat([fitted, predicted])</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    residuals </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> series </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> all_predicted</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    std_res </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> residuals.std()</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    anomalies </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> np.abs(residuals) </span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> threshold </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> std_res</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> pd.DataFrame({</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'value'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: series,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'predicted'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: all_predicted,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'residual'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: residuals,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'is_anomaly'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: anomalies</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    })</span></span></code></pre></div><p>STL 分解 + 残差检测是最稳健的统计异常检测方法之一。STL 的 robust 模式使用迭代加权最小二乘拟合，自动降低异常点对分解结果的影响，使得残差更准确地反映异常偏差。Modified Z-score 使用中位数和 MAD（中位数绝对偏差）代替均值和标准差，对异常值本身的鲁棒性更好。</p>
+<table>
+<thead>
+<tr>
+<th>统计方法</th>
+<th>核心思想</th>
+<th>鲁棒性</th>
+<th>上下文感知</th>
+<th>计算成本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>3σ 规则</td>
+<td>偏离均值 3 倍标准差</td>
+<td>低</td>
+<td>滑动窗口</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>滑动 IQR</td>
+<td>超出四分位距 1.5 倍</td>
+<td>中</td>
+<td>滑动窗口</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>STL + 残差</td>
+<td>分解后检测残差异常</td>
+<td>高</td>
+<td>✅</td>
+<td>O(n log n)</td>
+</tr>
+<tr>
+<td>ARIMA 残差</td>
+<td>模型预测误差异常</td>
+<td>中</td>
+<td>✅</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>CUSUM</td>
+<td>累积和偏离检测</td>
+<td>中</td>
+<td>序列级</td>
+<td>O(n)</td>
+</tr>
+</tbody></table>
+<h2 id="机器学习方法">机器学习方法</h2><p>机器学习异常检测方法不依赖对数据分布的参数化假设，能够处理更复杂的异常模式。Isolation Forest 通过随机分割的方式隔离异常点——异常点因为&quot;与众不同&quot;所以更容易被隔离，需要的分割次数更少。</p>
+<div class="code-block-wrapper" data-lang="python" data-code="from sklearn.ensemble import IsolationForest
+from sklearn.neighbors import LocalOutlierFactor
+
+def isolation_forest_ts(series, window=10, contamination=0.05):
+    features = []
+    for i in range(window, len(series)):
+        window_data = series[i - window:i]
+        feat = [
+            window_data.mean(), window_data.std(),
+            window_data.min(), window_data.max(),
+            window_data.iloc[-1] - window_data.iloc[0],
+            window_data.diff().mean(),
+            series.iloc[i]
+        ]
+        features.append(feat)
+
+    X = np.array(features)
+
+    iso_forest = IsolationForest(
+        contamination=contamination,
+        n_estimators=200,
+        random_state=42
+    )
+    labels = iso_forest.fit_predict(X)
+    scores = iso_forest.decision_function(X)
+
+    result = pd.DataFrame({
+        'value': series.iloc[window:].values,
+        'anomaly_score': scores,
+        'is_anomaly': labels == -1
+    }, index=series.index[window:])
+
+    return result
+
+def lof_ts(series, window=10, n_neighbors=20, contamination=0.05):
+    features = []
+    for i in range(window, len(series)):
+        window_data = series[i - window:i]
+        feat = [
+            window_data.mean(), window_data.std(),
+            series.iloc[i],
+            series.iloc[i] - window_data.mean(),
+            (series.iloc[i] - window_data.mean()) / (window_data.std() + 1e-8)
+        ]
+        features.append(feat)
+
+    X = np.array(features)
+
+    lof = LocalOutlierFactor(
+        n_neighbors=n_neighbors,
+        contamination=contamination
+    )
+    labels = lof.fit_predict(X)
+    scores = lof.negative_outlier_factor_
+
+    return pd.DataFrame({
+        'value': series.iloc[window:].values,
+        'lof_score': scores,
+        'is_anomaly': labels == -1
+    }, index=series.index[window:])"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> sklearn.ensemble </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> IsolationForest</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> sklearn.neighbors </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> LocalOutlierFactor</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> isolation_forest_ts</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(series, window</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">10</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, contamination</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0.05</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    features </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> []</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> range</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(window, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">len</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(series)):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        window_data </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> series[i </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> window:i]</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        feat </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            window_data.mean(), window_data.std(),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            window_data.min(), window_data.max(),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            window_data.iloc[</span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> window_data.iloc[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            window_data.diff().mean(),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            series.iloc[i]</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        ]</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        features.append(feat)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    X </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> np.array(features)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    iso_forest </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> IsolationForest(</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        contamination</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">contamination,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        n_estimators</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">200</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        random_state</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">42</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    )</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    labels </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> iso_forest.fit_predict(X)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    scores </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> iso_forest.decision_function(X)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    result </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> pd.DataFrame({</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'value'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: series.iloc[window:].values,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'anomaly_score'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: scores,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'is_anomaly'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: labels </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#D73A49;--shiki-dark:#F97583"> -</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }, </span><span style="color:#E36209;--shiki-dark:#FFAB70">index</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">series.index[window:])</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> result</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> lof_ts</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(series, window</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">10</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, n_neighbors</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">20</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, contamination</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0.05</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    features </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> []</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> range</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(window, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">len</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(series)):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        window_data </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> series[i </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> window:i]</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        feat </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            window_data.mean(), window_data.std(),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            series.iloc[i],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            series.iloc[i] </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> window_data.mean(),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            (series.iloc[i] </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> window_data.mean()) </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (window_data.std() </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1e-8</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        ]</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        features.append(feat)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    X </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> np.array(features)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    lof </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> LocalOutlierFactor(</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        n_neighbors</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">n_neighbors,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        contamination</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">contamination</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    )</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    labels </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> lof.fit_predict(X)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    scores </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> lof.negative_outlier_factor_</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> pd.DataFrame({</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'value'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: series.iloc[window:].values,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'lof_score'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: scores,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'is_anomaly'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: labels </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#D73A49;--shiki-dark:#F97583"> -</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }, </span><span style="color:#E36209;--shiki-dark:#FFAB70">index</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">series.index[window:])</span></span></code></pre></div><p>时间序列数据输入 Isolation Forest 或 LOF 时，需要先进行特征化——将时间窗口内的统计量（均值、方差、趋势、当前值与窗口均值的偏差等）作为特征向量。这个特征化步骤将时序异常检测转化为标准的表格异常检测问题。</p>
+<h2 id="深度学习方法">深度学习方法</h2><p>深度学习异常检测方法通过在正常数据上训练模型来学习正常模式的表示，然后将重构误差或预测误差较大的数据点标记为异常。LSTM AutoEncoder 是时序异常检测中最流行的深度学习方法。</p>
+<div class="code-block-wrapper" data-lang="python" data-code="import torch
+import torch.nn as nn
+
+class LSTMAutoEncoder(nn.Module):
+    def __init__(self, input_dim=1, hidden_dim=64, latent_dim=16,
+                 num_layers=2, dropout=0.2):
+        super().__init__()
+        self.encoder = nn.LSTM(
+            input_dim, hidden_dim, num_layers,
+            batch_first=True, dropout=dropout
+        )
+        self.encoder_fc = nn.Linear(hidden_dim, latent_dim)
+
+        self.decoder_fc = nn.Linear(latent_dim, hidden_dim)
+        self.decoder = nn.LSTM(
+            hidden_dim, hidden_dim, num_layers,
+            batch_first=True, dropout=dropout
+        )
+        self.output_fc = nn.Linear(hidden_dim, input_dim)
+
+    def forward(self, x):
+        enc_out, _ = self.encoder(x)
+        latent = self.encoder_fc(enc_out[:, -1, :])
+
+        dec_input = self.decoder_fc(latent).unsqueeze(1).repeat(1, x.size(1), 1)
+        dec_out, _ = self.decoder(dec_input)
+        reconstruction = self.output_fc(dec_out)
+
+        return reconstruction, latent
+
+def detect_anomalies_autoencoder(model, data, threshold_percentile=95):
+    model.eval()
+    with torch.no_grad():
+        reconstruction, _ = model(data)
+
+    mse_per_sample = torch.mean((data - reconstruction) ** 2, dim=(1, 2))
+    threshold = torch.quantile(mse_per_sample, threshold_percentile / 100)
+    anomalies = mse_per_sample &gt; threshold
+
+    return {
+        'reconstruction_errors': mse_per_sample.numpy(),
+        'threshold': threshold.item(),
+        'anomalies': anomalies.numpy(),
+        'anomaly_rate': anomalies.float().mean().item()
+    }"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> torch</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> torch.nn </span><span style="color:#D73A49;--shiki-dark:#F97583">as</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> nn</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> LSTMAutoEncoder</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">nn</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Module</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, input_dim</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, hidden_dim</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">64</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, latent_dim</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">16</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                 num_layers</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, dropout</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0.2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        super</span><span style="color:#24292E;--shiki-dark:#E1E4E8">().</span><span style="color:#005CC5;--shiki-dark:#79B8FF">__init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.encoder </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> nn.LSTM(</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            input_dim, hidden_dim, num_layers,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">            batch_first</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">True</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">dropout</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">dropout</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        )</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.encoder_fc </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> nn.Linear(hidden_dim, latent_dim)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.decoder_fc </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> nn.Linear(latent_dim, hidden_dim)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.decoder </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> nn.LSTM(</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            hidden_dim, hidden_dim, num_layers,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">            batch_first</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">True</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">dropout</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">dropout</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        )</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.output_fc </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> nn.Linear(hidden_dim, input_dim)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> forward</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, x):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        enc_out, _ </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.encoder(x)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        latent </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.encoder_fc(enc_out[:, </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, :])</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        dec_input </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.decoder_fc(latent).unsqueeze(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">).repeat(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, x.size(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">), </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        dec_out, _ </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.decoder(dec_input)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        reconstruction </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.output_fc(dec_out)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> reconstruction, latent</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> detect_anomalies_autoencoder</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(model, data, threshold_percentile</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">95</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    model.eval()</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    with</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> torch.no_grad():</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        reconstruction, _ </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> model(data)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    mse_per_sample </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> torch.mean((data </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> reconstruction) </span><span style="color:#D73A49;--shiki-dark:#F97583">**</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">dim</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    threshold </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> torch.quantile(mse_per_sample, threshold_percentile </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 100</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    anomalies </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> mse_per_sample </span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> threshold</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'reconstruction_errors'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: mse_per_sample.numpy(),</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'threshold'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: threshold.item(),</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'anomalies'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: anomalies.numpy(),</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'anomaly_rate'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: anomalies.float().mean().item()</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span></code></pre></div><p>LSTM AutoEncoder 的核心思想是：编码器将输入序列压缩为低维隐表示，解码器从隐表示重构原始序列。在正常数据上训练后，正常模式能被准确重构（低重构误差），而异常模式由于与训练数据不同，无法被准确重构（高重构误差）。重构误差超过阈值的序列即被标记为异常。</p>
+<table>
+<thead>
+<tr>
+<th>深度学习方法</th>
+<th>架构</th>
+<th>学习目标</th>
+<th>异常评分</th>
+<th>优势</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LSTM AE</td>
+<td>LSTM 编解码器</td>
+<td>重构原始序列</td>
+<td>重构误差</td>
+<td>捕获时序依赖</td>
+</tr>
+<tr>
+<td>VAE</td>
+<td>变分自编码器</td>
+<td>重构 + KL 散度</td>
+<td>ELBO</td>
+<td>概率化异常度</td>
+</tr>
+<tr>
+<td>GAN</td>
+<td>生成对抗网络</td>
+<td>生成正常数据</td>
+<td>判别器得分</td>
+<td>无需标签</td>
+</tr>
+<tr>
+<td>Transformer</td>
+<td>注意力编解码器</td>
+<td>预测/重构</td>
+<td>预测误差</td>
+<td>长距离依赖</td>
+</tr>
+</tbody></table>
+<h2 id="在线异常检测">在线异常检测</h2><p>在线异常检测（Online Anomaly Detection）要求系统在数据流式到达时实时判断每个新数据点是否为异常，而不能等到所有数据收集完毕再做批量分析。这对算法的计算效率和增量更新能力提出了严格要求。</p>
+<div class="code-block-wrapper" data-lang="python" data-code="class OnlineAnomalyDetector:
+    def __init__(self, window_size=100, n_sigma=3, decay=0.01):
+        self.window_size = window_size
+        self.n_sigma = n_sigma
+        self.decay = decay
+        self.buffer = []
+        self.ewm_mean = None
+        self.ewm_var = None
+
+    def update(self, value):
+        self.buffer.append(value)
+        if len(self.buffer) &gt; self.window_size:
+            self.buffer.pop(0)
+
+        if self.ewm_mean is None:
+            self.ewm_mean = value
+            self.ewm_var = 0
+            return {'value': value, 'is_anomaly': False, 'score': 0}
+
+        alpha = self.decay
+        diff = value - self.ewm_mean
+        self.ewm_mean = (1 - alpha) * self.ewm_mean + alpha * value
+        self.ewm_var = (1 - alpha) * (self.ewm_var + alpha * diff ** 2)
+
+        ewm_std = np.sqrt(self.ewm_var) + 1e-8
+        z_score = abs(diff) / ewm_std
+        is_anomaly = z_score &gt; self.n_sigma
+
+        return {
+            'value': value,
+            'is_anomaly': is_anomaly,
+            'z_score': z_score,
+            'ewm_mean': self.ewm_mean,
+            'ewm_std': ewm_std
+        }"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> OnlineAnomalyDetector</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, window_size</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">100</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, n_sigma</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, decay</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0.01</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.window_size </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> window_size</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.n_sigma </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> n_sigma</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.decay </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> decay</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.buffer </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> []</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.ewm_mean </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> None</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.ewm_var </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> None</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> update</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, value):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.buffer.append(value)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> len</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.buffer) </span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.window_size:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.buffer.pop(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.ewm_mean </span><span style="color:#D73A49;--shiki-dark:#F97583">is</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> None</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.ewm_mean </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> value</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.ewm_var </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'value'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: value, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'is_anomaly'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">False</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'score'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        alpha </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.decay</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        diff </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> value </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.ewm_mean</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.ewm_mean </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#D73A49;--shiki-dark:#F97583"> -</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> alpha) </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.ewm_mean </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> alpha </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> value</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.ewm_var </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#D73A49;--shiki-dark:#F97583"> -</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> alpha) </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.ewm_var </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> alpha </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> diff </span><span style="color:#D73A49;--shiki-dark:#F97583">**</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        ewm_std </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> np.sqrt(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.ewm_var) </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1e-8</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        z_score </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> abs</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(diff) </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ewm_std</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        is_anomaly </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> z_score </span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.n_sigma</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            'value'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: value,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            'is_anomaly'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: is_anomaly,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            'z_score'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: z_score,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            'ewm_mean'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.ewm_mean,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            'ewm_std'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: ewm_std</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        }</span></span></code></pre></div><p>在线检测器需要平衡灵敏度和鲁棒性：过度灵敏会产生大量误报（False Positive），过度迟钝会遗漏真实异常（False Negative）。自适应阈值策略通过根据历史误报率动态调整告警阈值来优化这一权衡。</p>
+<h2 id="小结">小结</h2><ul>
+<li>时序异常分为点异常、上下文异常和模式异常三大类，不同类型需要不同的检测方法</li>
+<li>STL 分解 + 残差检测是最稳健的统计方法，Modified Z-score 对异常值鲁棒</li>
+<li>Isolation Forest 和 LOF 需要先将时序数据特征化为滑动窗口统计量</li>
+<li>LSTM AutoEncoder 通过重构误差检测异常，在正常数据上训练，异常模式产生高重构误差</li>
+<li>在线异常检测要求增量更新和实时判断，EWMA 是计算效率最高的在线方法</li>
+<li>异常检测的评估需要同时关注精确率和召回率，F1 分数是综合指标</li>
+<li>实践中推荐分层策略：统计方法快速初筛 → ML/DL 方法精确检测 → 人工审核确认</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../data-science-and-engineering/time-series-analysis/ts-applications/index.html"><span class="label">Previous</span>应用场景 简介</a><a class="next" href="../../../data-science-and-engineering/time-series-analysis/ts-applications/changepoint-trend.html"><span class="label">Next</span>变点检测与趋势分析</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#统计方法" data-outline-link="统计方法">统计方法</a></li><li class="depth-2"><a href="#机器学习方法" data-outline-link="机器学习方法">机器学习方法</a></li><li class="depth-2"><a href="#深度学习方法" data-outline-link="深度学习方法">深度学习方法</a></li><li class="depth-2"><a href="#在线异常检测" data-outline-link="在线异常检测">在线异常检测</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

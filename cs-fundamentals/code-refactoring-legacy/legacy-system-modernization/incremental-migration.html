@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>增量迁移实战：数据库、API 与微服务拆分 · 计算机科学基础</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:计算机科学基础" data-pagefind-meta="slug:cs-fundamentals">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">计算机科学基础</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item active" href="../../../cs-fundamentals/index.html" aria-current="page" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../cs-fundamentals/index.html">计算机科学基础</a><a class="back-to-hubs" href="../../../cs-fundamentals/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../cs-fundamentals/code-refactoring-legacy/index.html">代码重构与遗留系统 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="cs-fundamentals"><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:code-refactoring-legacy/refactoring-fundamentals"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/code-refactoring-legacy/refactoring-fundamentals/index.html">重构基础理论 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/code-refactoring-legacy/refactoring-fundamentals/refactoring-theory.html">重构基础理论与核心原则</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/code-refactoring-legacy/refactoring-fundamentals/code-smells.html">代码坏味道识别与分类</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/code-refactoring-legacy/refactoring-fundamentals/refactoring-safety-net.html">重构安全网：测试与持续集成保障</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:code-refactoring-legacy/refactoring-techniques"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/code-refactoring-legacy/refactoring-techniques/index.html">重构技巧实战 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/code-refactoring-legacy/refactoring-techniques/extract-and-inline.html">提取与内联：重构的基础操作</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/code-refactoring-legacy/refactoring-techniques/simplify-conditionals.html">简化条件逻辑与循环结构</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/code-refactoring-legacy/refactoring-techniques/object-restructuring.html">对象与继承结构重构</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:code-refactoring-legacy/legacy-system-modernization" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/code-refactoring-legacy/legacy-system-modernization/index.html">遗留系统现代化 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/code-refactoring-legacy/legacy-system-modernization/legacy-assessment.html">遗留系统评估策略与决策框架</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/code-refactoring-legacy/legacy-system-modernization/strangler-fig-pattern.html">Strangler Fig 模式：渐进式系统替换</a></li><li class="leaf"><a class="leaf-title active" href="../../../cs-fundamentals/code-refactoring-legacy/legacy-system-modernization/incremental-migration.html">增量迁移实战：数据库、API 与微服务拆分</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:code-refactoring-legacy/technical-debt-management"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/code-refactoring-legacy/technical-debt-management/index.html">技术债务管理 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/code-refactoring-legacy/technical-debt-management/debt-classification.html">技术债分类与量化方法</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/code-refactoring-legacy/technical-debt-management/repayment-strategy.html">技术债偿还策略与优先级决策</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/code-refactoring-legacy/technical-debt-management/refactoring-culture.html">团队重构文化与组织实践</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part II · 程序与算法 (Programs &amp; Algorithms)</span><span>代码重构与遗留系统 简介</span><span>遗留系统现代化 简介</span><span>增量迁移实战：数据库、API 与微服务拆分</span></nav>
+    <article class="content prose"><h1 id="增量迁移实战-数据库-api-与微服务拆分">增量迁移实战：数据库、API 与微服务拆分</h1><h2 id="增量迁移的工程原则">增量迁移的工程原则</h2><p>增量迁移是将 Strangler Fig 模式的宏观策略落实到具体技术层面的工程实践。它涉及三个最困难的技术领域：数据库迁移、API 层替换和单体到微服务的拆分。每个领域都有其特定的复杂性和成熟的解决方案。</p>
+<p>增量迁移的核心工程原则：</p>
+<ol>
+<li><strong>每一步都可回退</strong>：任何迁移步骤都不应造成不可逆转的状态变更</li>
+<li><strong>新旧并行期</strong>：新旧系统在一段时间内同时运行，通过对比验证正确性</li>
+<li><strong>数据先行</strong>：先解决数据层面的迁移和同步，再切换业务逻辑</li>
+<li><strong>渐进验证</strong>：从小规模验证开始，确认无误后逐步扩大范围</li>
+<li><strong>可观测性贯穿</strong>：迁移全程必须有充分的监控和告警</li>
+</ol>
+<h2 id="数据库迁移策略">数据库迁移策略</h2><p>数据库迁移是遗留系统改造中风险最高的环节——数据丢失或损坏是不可接受的，而数据库的结构变更往往影响系统的每一个角落。</p>
+<h3 id="expand-contract-模式">Expand-Contract 模式</h3><p>也称为&quot;Parallel Change&quot;模式，是数据库 schema 迁移的黄金标准方法：</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    subgraph &quot;Expand 阶段&quot;&#10;    A[添加新列/表] --&gt; B[新旧结构并存]&#10;    end&#10;    subgraph &quot;Migrate 阶段&quot;&#10;    B --&gt; C[数据回填到新结构]&#10;    C --&gt; D[代码切换到读写新结构]&#10;    end&#10;    subgraph &quot;Contract 阶段&quot;&#10;    D --&gt; E[确认旧结构不再使用]&#10;    E --&gt; F[删除旧列/表]&#10;    end"></pre><p><strong>Expand</strong>：添加新的数据结构而不删除旧的。此阶段完成后，新旧结构同时存在，旧代码继续正常工作。</p>
+<p><strong>Migrate</strong>：将数据从旧结构迁移到新结构。可以通过批处理脚本、触发器或双写机制实现。同时将应用代码逐步切换到使用新结构。</p>
+<p><strong>Contract</strong>：确认所有代码都已使用新结构后，安全删除旧结构。</p>
+<h3 id="双写策略-dual-write">双写策略（Dual Write）</h3><p>在新旧数据库并行期间，确保数据一致性的策略：</p>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>实现方式</th>
+<th>一致性保证</th>
+<th>复杂度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>同步双写</td>
+<td>应用层同时写两个库</td>
+<td>强一致（需分布式事务）</td>
+<td>高</td>
+</tr>
+<tr>
+<td>异步复制</td>
+<td>CDC 工具捕获变更同步</td>
+<td>最终一致</td>
+<td>中</td>
+</tr>
+<tr>
+<td>批量同步</td>
+<td>定时全量/增量同步</td>
+<td>延迟一致</td>
+<td>低</td>
+</tr>
+<tr>
+<td>写旧读新</td>
+<td>旧系统写入，新系统通过 CDC 同步后对外提供读</td>
+<td>最终一致</td>
+<td>中</td>
+</tr>
+</tbody></table>
+<p><strong>推荐方案</strong>：在大多数场景中，基于 CDC（Change Data Capture）的异步复制是最佳选择——它不侵入应用代码、延迟低（通常秒级）、且有成熟的工具支持（Debezium、AWS DMS、GCP Datastream）。</p>
+<h3 id="数据迁移验证">数据迁移验证</h3><p>数据迁移后必须进行严格验证：</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[迁移完成] --&gt; B[行数对比]&#10;    B --&gt; C[抽样校验]&#10;    C --&gt; D[全量哈希对比]&#10;    D --&gt; E{是否一致?}&#10;    E --&gt;|否| F[定位差异记录]&#10;    F --&gt; G[分析原因]&#10;    G --&gt; H[修复并重新验证]&#10;    E --&gt;|是| I[切换读流量到新库]"></pre><p>验证清单：</p>
+<ul>
+<li>记录总数是否匹配</li>
+<li>抽样记录的字段值是否一致</li>
+<li>外键关系是否完整</li>
+<li>NULL 值处理是否一致</li>
+<li>日期/时区转换是否正确</li>
+<li>字符编码是否正确</li>
+</ul>
+<h2 id="api-层渐进替换">API 层渐进替换</h2><h3 id="api-版本并行策略">API 版本并行策略</h3><p>在迁移 API 层时，新旧版本需要长期并行存在。API 版本管理的选项：</p>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>实现方式</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>URL 路径版本</td>
+<td><code>/v1/users</code> → <code>/v2/users</code></td>
+<td>直观、易于路由</td>
+<td>URL 膨胀</td>
+</tr>
+<tr>
+<td>Header 版本</td>
+<td><code>Accept: application/vnd.api+json;version=2</code></td>
+<td>URL 简洁</td>
+<td>不可见性</td>
+</tr>
+<tr>
+<td>Query 参数版本</td>
+<td><code>/users?version=2</code></td>
+<td>实现简单</td>
+<td>缓存键复杂</td>
+</tr>
+</tbody></table>
+<p><strong>推荐</strong>：对外 API 使用 URL 路径版本（可见性最高），内部服务间通信使用 Header 版本。</p>
+<h3 id="backend-for-frontend-bff-适配层">Backend for Frontend (BFF) 适配层</h3><p>当遗留系统的 API 契约与现代客户端需求严重不匹配时，BFF 层作为适配器：</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    Mobile[移动端] --&gt; BFF1[Mobile BFF]&#10;    Web[Web 前端] --&gt; BFF2[Web BFF]&#10;    BFF1 --&gt; Gateway[API Gateway]&#10;    BFF2 --&gt; Gateway&#10;    Gateway --&gt; New[新服务]&#10;    Gateway --&gt; Legacy[遗留 API]"></pre><p>BFF 的价值在于：客户端只与 BFF 通信，不需要知道后端是新系统还是旧系统。当某个功能从旧系统迁移到新系统时，只需修改 BFF 的内部路由，客户端完全无感。</p>
+<h3 id="契约测试保障">契约测试保障</h3><p>API 迁移过程中，契约测试（Contract Testing）确保新旧实现的行为一致：</p>
+<ol>
+<li>从旧 API 的实际流量中录制请求-响应对</li>
+<li>将这些请求-响应对转化为契约测试</li>
+<li>新 API 必须通过所有契约测试才能上线</li>
+<li>持续运行契约测试监控偏差</li>
+</ol>
+<p>工具选择：Pact、Spring Cloud Contract、Dredd、Schemathesis。</p>
+<h2 id="微服务拆分策略">微服务拆分策略</h2><h3 id="从单体中识别服务边界">从单体中识别服务边界</h3><p>服务拆分的关键是找到正确的边界。错误的边界会导致&quot;分布式单体&quot;——拥有微服务的运维复杂度，却没有微服务的独立性优势。</p>
+<p><strong>识别边界的方法</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>领域驱动设计</td>
+<td>按 Bounded Context 划分</td>
+<td>业务逻辑复杂的系统</td>
+</tr>
+<tr>
+<td>变更频率分析</td>
+<td>经常一起变更的代码归为一组</td>
+<td>Git 历史丰富的系统</td>
+</tr>
+<tr>
+<td>团队结构映射</td>
+<td>按 Conway 定律对齐团队边界</td>
+<td>组织结构清晰的企业</td>
+</tr>
+<tr>
+<td>数据归属分析</td>
+<td>按数据生命周期和所有权划分</td>
+<td>数据密集型系统</td>
+</tr>
+</tbody></table>
+<h3 id="拆分顺序决策">拆分顺序决策</h3><pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[单体系统] --&gt; B[识别候选服务]&#10;    B --&gt; C{哪个先拆?}&#10;    C --&gt; D[最独立的模块]&#10;    C --&gt; E[变更最频繁的模块]&#10;    C --&gt; F[团队最痛的模块]&#10;    D --&gt; G[验证拆分模式可行]&#10;    E --&gt; G&#10;    F --&gt; G&#10;    G --&gt; H[建立服务间通信机制]&#10;    H --&gt; I[逐一拆分剩余模块]"></pre><p><strong>推荐首先拆分的候选</strong>：</p>
+<ul>
+<li>数据依赖最少的边缘模块（如通知服务、文件服务）</li>
+<li>性能瓶颈模块（需要独立扩缩容的模块）</li>
+<li>变更频率与主系统严重不同步的模块</li>
+</ul>
+<h3 id="拆分过程中的数据分离">拆分过程中的数据分离</h3><p>微服务的核心原则之一是&quot;每个服务拥有自己的数据&quot;。但在从单体拆分时，数据通常共享在一个数据库中。数据分离的渐进步骤：</p>
+<div class="code-block-wrapper" data-lang="text" data-code="1. 代码分离（保持共享数据库）
+   - 将代码拆分为独立部署单元
+   - 但仍然访问同一个数据库
+
+2. Schema 逻辑隔离
+   - 在代码中约束每个服务只访问&quot;自己的&quot;表
+   - 通过 API 而非直接查表获取其他服务的数据
+
+3. 物理数据库分离
+   - 将每个服务的表迁移到独立数据库
+   - 建立服务间数据同步机制
+
+4. 数据所有权清晰化
+   - 每份数据有且只有一个所有者服务
+   - 其他服务通过 API 或事件获取数据视图"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>1. 代码分离（保持共享数据库）</span></span>
+<span class="line"><span>   - 将代码拆分为独立部署单元</span></span>
+<span class="line"><span>   - 但仍然访问同一个数据库</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>2. Schema 逻辑隔离</span></span>
+<span class="line"><span>   - 在代码中约束每个服务只访问"自己的"表</span></span>
+<span class="line"><span>   - 通过 API 而非直接查表获取其他服务的数据</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>3. 物理数据库分离</span></span>
+<span class="line"><span>   - 将每个服务的表迁移到独立数据库</span></span>
+<span class="line"><span>   - 建立服务间数据同步机制</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>4. 数据所有权清晰化</span></span>
+<span class="line"><span>   - 每份数据有且只有一个所有者服务</span></span>
+<span class="line"><span>   - 其他服务通过 API 或事件获取数据视图</span></span></code></pre></div><h3 id="服务间通信模式">服务间通信模式</h3><table>
+<thead>
+<tr>
+<th>模式</th>
+<th>特点</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>同步 REST/gRPC</td>
+<td>简单直接、实时响应</td>
+<td>查询操作、低延迟要求</td>
+</tr>
+<tr>
+<td>异步消息队列</td>
+<td>解耦、可靠、可重试</td>
+<td>命令操作、最终一致性可接受</td>
+</tr>
+<tr>
+<td>事件驱动</td>
+<td>松耦合、可扩展</td>
+<td>业务事件广播、跨服务编排</td>
+</tr>
+<tr>
+<td>SAGA 模式</td>
+<td>分布式事务替代方案</td>
+<td>跨服务的业务流程协调</td>
+</tr>
+</tbody></table>
+<h2 id="迁移过程中的可观测性">迁移过程中的可观测性</h2><h3 id="监控指标">监控指标</h3><p>增量迁移过程中需要重点监控的指标：</p>
+<table>
+<thead>
+<tr>
+<th>指标类别</th>
+<th>具体指标</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>正确性</td>
+<td>新旧系统响应差异率</td>
+<td>验证功能等价</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>P50/P99 延迟对比</td>
+<td>确保性能不退化</td>
+</tr>
+<tr>
+<td>可用性</td>
+<td>错误率、超时率</td>
+<td>确保服务稳定性</td>
+</tr>
+<tr>
+<td>数据</td>
+<td>数据同步延迟、不一致记录数</td>
+<td>验证数据完整性</td>
+</tr>
+<tr>
+<td>业务</td>
+<td>转化率、订单量等业务指标</td>
+<td>确保业务不受影响</td>
+</tr>
+</tbody></table>
+<h3 id="影子流量测试-shadow-traffic">影子流量测试（Shadow Traffic）</h3><p>在正式切换前，将生产流量同时发送到新系统（但不使用其响应），对比新旧系统的行为差异：</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    Client[客户端] --&gt; Router[路由层]&#10;    Router --&gt; Legacy[遗留系统]&#10;    Router -.-&gt; |影子流量| New[新系统]&#10;    Legacy --&gt; Client&#10;    New --&gt; Compare[结果对比器]&#10;    Legacy --&gt; Compare&#10;    Compare --&gt; Alert[差异告警]"></pre><p>影子流量测试的优势：使用真实生产数据和流量模式验证新系统，比任何模拟测试都更接近真实情况。但需注意副作用控制——影子流量不应触发实际的外部操作（如发送邮件、扣款）。</p>
+<h2 id="小结">小结</h2><p>增量迁移是将遗留系统现代化从战略愿景落实为工程实践的关键环节。数据库迁移通过 Expand-Contract 模式实现零停机 schema 演进，API 层通过版本并行和契约测试保证兼容性，微服务拆分通过渐进式数据分离避免&quot;分布式单体&quot;陷阱。贯穿始终的原则是：每一步都可回退、每一步都有验证、每一步都在可控范围内。2026 年的工具生态（CDC 工具、Service Mesh、API Gateway、可观测性平台）已经为增量迁移提供了成熟的基础设施，但正确的迁移顺序规划和严格的验证纪律仍然是人做出的关键决策。</p>
+</article>
+    <nav class="pager"><a class="prev" href="../../../cs-fundamentals/code-refactoring-legacy/legacy-system-modernization/strangler-fig-pattern.html"><span class="label">Previous</span>Strangler Fig 模式：渐进式系统替换</a><a class="next" href="../../../cs-fundamentals/code-refactoring-legacy/technical-debt-management/index.html"><span class="label">Next</span>技术债务管理 简介</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#增量迁移的工程原则" data-outline-link="增量迁移的工程原则">增量迁移的工程原则</a></li><li class="depth-2"><a href="#数据库迁移策略" data-outline-link="数据库迁移策略">数据库迁移策略</a></li><li class="depth-3"><a href="#expand-contract-模式" data-outline-link="expand-contract-模式">Expand-Contract 模式</a></li><li class="depth-3"><a href="#双写策略-dual-write" data-outline-link="双写策略-dual-write">双写策略（Dual Write）</a></li><li class="depth-3"><a href="#数据迁移验证" data-outline-link="数据迁移验证">数据迁移验证</a></li><li class="depth-2"><a href="#api-层渐进替换" data-outline-link="api-层渐进替换">API 层渐进替换</a></li><li class="depth-3"><a href="#api-版本并行策略" data-outline-link="api-版本并行策略">API 版本并行策略</a></li><li class="depth-3"><a href="#backend-for-frontend-bff-适配层" data-outline-link="backend-for-frontend-bff-适配层">Backend for Frontend (BFF) 适配层</a></li><li class="depth-3"><a href="#契约测试保障" data-outline-link="契约测试保障">契约测试保障</a></li><li class="depth-2"><a href="#微服务拆分策略" data-outline-link="微服务拆分策略">微服务拆分策略</a></li><li class="depth-3"><a href="#从单体中识别服务边界" data-outline-link="从单体中识别服务边界">从单体中识别服务边界</a></li><li class="depth-3"><a href="#拆分顺序决策" data-outline-link="拆分顺序决策">拆分顺序决策</a></li><li class="depth-3"><a href="#拆分过程中的数据分离" data-outline-link="拆分过程中的数据分离">拆分过程中的数据分离</a></li><li class="depth-3"><a href="#服务间通信模式" data-outline-link="服务间通信模式">服务间通信模式</a></li><li class="depth-2"><a href="#迁移过程中的可观测性" data-outline-link="迁移过程中的可观测性">迁移过程中的可观测性</a></li><li class="depth-3"><a href="#监控指标" data-outline-link="监控指标">监控指标</a></li><li class="depth-3"><a href="#影子流量测试-shadow-traffic" data-outline-link="影子流量测试-shadow-traffic">影子流量测试（Shadow Traffic）</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

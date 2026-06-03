@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ROS2 参数与生命周期 · 硬件、机器人与安全工程</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:硬件、机器人与安全工程" data-pagefind-meta="slug:hardware-and-systems">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">硬件、机器人与安全工程</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item active" href="../../../hardware-and-systems/index.html" aria-current="page" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../hardware-and-systems/index.html">硬件、机器人与安全工程</a><a class="back-to-hubs" href="../../../hardware-and-systems/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../hardware-and-systems/ros-and-middleware/index.html">ROS 与机器人中间件 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="hardware-and-systems"><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:ros-and-middleware/ros2-fundamentals" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-fundamentals/index.html">ROS2 基础 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-fundamentals/nodes-and-topics.html">ROS2 节点与话题</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-fundamentals/launch-and-params.html">ROS2 启动系统与参数管理</a></li><li class="leaf"><a class="leaf-title active" href="../../../hardware-and-systems/ros-and-middleware/ros2-fundamentals/parameters-and-lifecycle.html">ROS2 参数与生命周期</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-fundamentals/launch-system.html">ROS2 Launch 系统</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-fundamentals/services-and-actions.html">ROS2 服务与动作</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-fundamentals/tf2-transforms.html">ROS2 坐标变换（TF2）</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:ros-and-middleware/ros2-advanced"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-advanced/index.html">ROS2 进阶 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-advanced/component-architecture.html">ROS 2 组件架构</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-advanced/nav2-framework.html">Nav2 导航框架</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-advanced/moveit2-planning.html">MoveIt2 运动规划</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-advanced/qos-and-realtime.html">ROS2 QoS 与实时通信</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-advanced/qos-policies.html">ROS 2 QoS 策略</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-advanced/ros2-navigation-stack.html">ROS 2 导航栈</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:ros-and-middleware/communication-protocols"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/ros-and-middleware/communication-protocols/index.html">通信协议 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/communication-protocols/dds-realtime.html">DDS 与实时通信</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/communication-protocols/serial-can-bus.html">串口与 CAN 总线通信</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/communication-protocols/multi-robot-comm.html">多机器人通信架构</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:ros-and-middleware/simulation-tools"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/ros-and-middleware/simulation-tools/index.html">仿真工具 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/simulation-tools/gazebo-simulation.html">Gazebo 仿真环境</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/simulation-tools/urdf-modeling.html">URDF 与机器人建模</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/simulation-tools/digital-twin.html">数字孪生与 Sim-to-Real</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:ros-and-middleware/robot-simulation"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/ros-and-middleware/robot-simulation/index.html">机器人仿真 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/robot-simulation/gazebo-environment.html">Gazebo 仿真环境</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/robot-simulation/isaac-sim.html">NVIDIA Isaac Sim 机器人仿真</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/robot-simulation/digital-twin.html">数字孪生技术</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/robot-simulation/gazebo-fundamentals.html">Gazebo 仿真基础</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/robot-simulation/urdf-modeling.html">URDF 与机器人建模</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/robot-simulation/ros2-control.html">ros2_control 框架</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part II · 机器人与自动化</span><span>ROS 与机器人中间件 简介</span><span>ROS2 基础 简介</span><span>ROS2 参数与生命周期</span></nav>
+    <article class="content prose"><h1 id="ros2-参数与生命周期">ROS2 参数与生命周期</h1><h2 id="核心概念">核心概念</h2><p>ROS2 的参数系统（Parameters）和生命周期管理（Lifecycle）是构建可靠机器人系统的两大基础设施。参数系统提供了运行时配置的统一机制，支持动态修改、类型检查和参数回调；生命周期节点（Managed Node）定义了节点的状态转移协议，使系统能够以确定性的方式初始化、配置和关闭节点。</p>
+<p>参数系统取代了 ROS1 中的 <code>rosparam</code> 和 <code>dynamic_reconfigure</code>，提供了更统一、更安全的配置方案。生命周期节点解决了 ROS1 中节点启动顺序不可控的问题，特别适用于需要协调初始化的复杂系统。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    subgraph 参数系统&#10;        A[YAML 配置] --&gt; B[参数服务器]&#10;        C[命令行参数] --&gt; B&#10;        B --&gt; D[节点参数]&#10;        D --&gt; E[参数回调]&#10;    end&#10;    subgraph 生命周期&#10;        F[Unconfigured] --&gt;|configure| G[Inactive]&#10;        G --&gt;|activate| H[Active]&#10;        H --&gt;|deactivate| G&#10;        G --&gt;|cleanup| F&#10;        H --&gt;|shutdown| I[Finalized]&#10;    end"></pre><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>ROS1</th>
+<th>ROS2 参数</th>
+<th>ROS2 生命周期</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>参数类型</td>
+<td>动态/无类型</td>
+<td>强类型</td>
+<td>-</td>
+</tr>
+<tr>
+<td>运行时修改</td>
+<td>dynamic_reconfigure</td>
+<td>内建参数回调</td>
+<td>状态驱动</td>
+</tr>
+<tr>
+<td>参数验证</td>
+<td>手动</td>
+<td>自动类型检查 + 回调验证</td>
+<td>-</td>
+</tr>
+<tr>
+<td>节点状态管理</td>
+<td>无</td>
+<td>-</td>
+<td>4状态 + 7转移</td>
+</tr>
+<tr>
+<td>启动顺序</td>
+<td>不可控</td>
+<td>-</td>
+<td>可编排</td>
+</tr>
+<tr>
+<td>配置文件</td>
+<td>XML launch + YAML</td>
+<td>YAML</td>
+<td>-</td>
+</tr>
+</tbody></table>
+<h2 id="参数声明与管理">参数声明与管理</h2><p>ROS2 中的参数必须先声明再使用，这确保了参数的可发现性和类型安全。参数支持的类型包括 bool、int、double、string 以及对应的数组类型。声明时可以指定默认值、描述和取值范围约束。</p>
+<div class="code-block-wrapper" data-lang="python" data-code="import rclpy
+from rclpy.node import Node
+from rcl_interfaces.msg import ParameterDescriptor, FloatingPointRange, IntegerRange
+
+class ConfigurableController(Node):
+    def __init__(self):
+        super().__init__('configurable_controller')
+        self._declare_parameters()
+        self._setup_parameter_callback()
+
+    def _declare_parameters(self):
+        self.declare_parameter('control_frequency', 50.0,
+            ParameterDescriptor(
+                description='Control loop frequency in Hz',
+                floating_point_range=[FloatingPointRange(
+                    from_value=1.0, to_value=1000.0, step=1.0
+                )]
+            )
+        )
+
+        self.declare_parameter('max_velocity', 1.0,
+            ParameterDescriptor(description='Maximum linear velocity (m/s)')
+        )
+
+        self.declare_parameter('pid_gains.kp', 1.0)
+        self.declare_parameter('pid_gains.ki', 0.1)
+        self.declare_parameter('pid_gains.kd', 0.01)
+        self.declare_parameter('enabled', True)
+        self.declare_parameter('controller_type', 'pid')
+
+    def _setup_parameter_callback(self):
+        self.add_on_set_parameters_callback(self._on_parameter_change)
+
+    def _on_parameter_change(self, params):
+        from rcl_interfaces.msg import SetParametersResult
+        for param in params:
+            if param.name == 'max_velocity' and param.value &lt; 0:
+                return SetParametersResult(
+                    successful=False,
+                    reason='max_velocity must be non-negative'
+                )
+
+            if param.name == 'controller_type':
+                valid_types = ['pid', 'mpc', 'lqr']
+                if param.value not in valid_types:
+                    return SetParametersResult(
+                        successful=False,
+                        reason=f'controller_type must be one of {valid_types}'
+                    )
+
+        self.get_logger().info(f'Parameters updated: {[p.name for p in params]}')
+        return SetParametersResult(successful=True)
+
+    def get_config(self):
+        return {
+            'frequency': self.get_parameter('control_frequency').value,
+            'max_vel': self.get_parameter('max_velocity').value,
+            'kp': self.get_parameter('pid_gains.kp').value,
+            'ki': self.get_parameter('pid_gains.ki').value,
+            'kd': self.get_parameter('pid_gains.kd').value,
+            'enabled': self.get_parameter('enabled').value,
+            'type': self.get_parameter('controller_type').value,
+        }"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> rclpy</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> rclpy.node </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Node</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> rcl_interfaces.msg </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ParameterDescriptor, FloatingPointRange, IntegerRange</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ConfigurableController</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Node</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        super</span><span style="color:#24292E;--shiki-dark:#E1E4E8">().</span><span style="color:#005CC5;--shiki-dark:#79B8FF">__init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'configurable_controller'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._declare_parameters()</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._setup_parameter_callback()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> _declare_parameters</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.declare_parameter(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'control_frequency'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">50.0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            ParameterDescriptor(</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">                description</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Control loop frequency in Hz'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">                floating_point_range</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[FloatingPointRange(</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">                    from_value</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1.0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">to_value</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1000.0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">step</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1.0</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                )]</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            )</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.declare_parameter(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'max_velocity'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1.0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            ParameterDescriptor(</span><span style="color:#E36209;--shiki-dark:#FFAB70">description</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Maximum linear velocity (m/s)'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.declare_parameter(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'pid_gains.kp'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1.0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.declare_parameter(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'pid_gains.ki'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0.1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.declare_parameter(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'pid_gains.kd'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0.01</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.declare_parameter(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'enabled'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">True</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.declare_parameter(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'controller_type'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'pid'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> _setup_parameter_callback</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.add_on_set_parameters_callback(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._on_parameter_change)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> _on_parameter_change</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, params):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> rcl_interfaces.msg </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> SetParametersResult</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> param </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> params:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> param.name </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'max_velocity'</span><span style="color:#D73A49;--shiki-dark:#F97583"> and</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> param.value </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">                return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> SetParametersResult(</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">                    successful</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">False</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">                    reason</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'max_velocity must be non-negative'</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> param.name </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'controller_type'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                valid_types </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'pid'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'mpc'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'lqr'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">                if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> param.value </span><span style="color:#D73A49;--shiki-dark:#F97583">not</span><span style="color:#D73A49;--shiki-dark:#F97583"> in</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> valid_types:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">                    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> SetParametersResult(</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">                        successful</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">False</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">                        reason</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#D73A49;--shiki-dark:#F97583">f</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'controller_type must be one of </span><span style="color:#005CC5;--shiki-dark:#79B8FF">{</span><span style="color:#24292E;--shiki-dark:#E1E4E8">valid_types</span><span style="color:#005CC5;--shiki-dark:#79B8FF">}</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                    )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.get_logger().info(</span><span style="color:#D73A49;--shiki-dark:#F97583">f</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Parameters updated: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">{</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[p.name </span><span style="color:#D73A49;--shiki-dark:#F97583">for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> p </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> params]</span><span style="color:#005CC5;--shiki-dark:#79B8FF">}</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> SetParametersResult(</span><span style="color:#E36209;--shiki-dark:#FFAB70">successful</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">True</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> get_config</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            'frequency'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.get_parameter(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'control_frequency'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">).value,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            'max_vel'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.get_parameter(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'max_velocity'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">).value,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            'kp'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.get_parameter(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'pid_gains.kp'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">).value,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            'ki'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.get_parameter(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'pid_gains.ki'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">).value,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            'kd'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.get_parameter(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'pid_gains.kd'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">).value,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            'enabled'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.get_parameter(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'enabled'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">).value,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            'type'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.get_parameter(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'controller_type'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">).value,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        }</span></span></code></pre></div><p>YAML 配置文件是 ROS2 参数的主要外部来源。配置文件结构遵循 <code>&lt;node_name&gt;: ros__parameters:</code> 的格式。Launch 文件通过 <code>parameters</code> 参数将配置文件传递给节点。</p>
+<p>参数回调（Parameter Callback）是参数动态更新的核心机制。回调函数在参数被修改前调用，可以验证新值的合法性并选择接受或拒绝。这种机制使得在线调参（如调整 PID 增益）变得安全可控。</p>
+<h2 id="生命周期节点">生命周期节点</h2><p>生命周期节点（Lifecycle Node）定义了四种主要状态和七种转移，使节点的初始化和关闭过程可控、可编排。</p>
+<p>四种主要状态：Unconfigured（刚创建，未配置）、Inactive（已配置但未激活，不处理数据）、Active（正常运行）、Finalized（已终止）。</p>
+<div class="code-block-wrapper" data-lang="python" data-code="import rclpy
+from rclpy.lifecycle import LifecycleNode, TransitionCallbackReturn, LifecycleState
+from rclpy.lifecycle import Publisher as LifecyclePublisher
+
+class LifecycleSensorDriver(LifecycleNode):
+    def __init__(self):
+        super().__init__('sensor_driver')
+        self.sensor = None
+        self.publisher_ = None
+        self.timer_ = None
+
+    def on_configure(self, state: LifecycleState) -&gt; TransitionCallbackReturn:
+        self.get_logger().info('Configuring...')
+
+        self.declare_parameter('port', '/dev/ttyUSB0')
+        self.declare_parameter('baud_rate', 115200)
+        self.declare_parameter('publish_rate', 10.0)
+
+        port = self.get_parameter('port').value
+        baud = self.get_parameter('baud_rate').value
+
+        try:
+            self.sensor = self._init_sensor(port, baud)
+        except Exception as e:
+            self.get_logger().error(f'Failed to initialize sensor: {e}')
+            return TransitionCallbackReturn.FAILURE
+
+        from sensor_msgs.msg import Imu
+        self.publisher_ = self.create_lifecycle_publisher(Imu, 'imu/data', 10)
+
+        self.get_logger().info('Configuration complete')
+        return TransitionCallbackReturn.SUCCESS
+
+    def on_activate(self, state: LifecycleState) -&gt; TransitionCallbackReturn:
+        self.get_logger().info('Activating...')
+
+        rate = self.get_parameter('publish_rate').value
+        self.timer_ = self.create_timer(1.0 / rate, self._publish_data)
+
+        self.get_logger().info('Active and publishing')
+        return super().on_activate(state)
+
+    def on_deactivate(self, state: LifecycleState) -&gt; TransitionCallbackReturn:
+        self.get_logger().info('Deactivating...')
+
+        if self.timer_:
+            self.timer_.cancel()
+            self.timer_ = None
+
+        return super().on_deactivate(state)
+
+    def on_cleanup(self, state: LifecycleState) -&gt; TransitionCallbackReturn:
+        self.get_logger().info('Cleaning up...')
+
+        if self.sensor:
+            self.sensor = None
+        self.publisher_ = None
+
+        return TransitionCallbackReturn.SUCCESS
+
+    def on_shutdown(self, state: LifecycleState) -&gt; TransitionCallbackReturn:
+        self.get_logger().info('Shutting down...')
+        if self.sensor:
+            self.sensor = None
+        return TransitionCallbackReturn.SUCCESS
+
+    def _init_sensor(self, port, baud):
+        return {'port': port, 'baud': baud, 'connected': True}
+
+    def _publish_data(self):
+        if self.publisher_ and self.publisher_.is_activated:
+            from sensor_msgs.msg import Imu
+            msg = Imu()
+            self.publisher_.publish(msg)"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> rclpy</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> rclpy.lifecycle </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> LifecycleNode, TransitionCallbackReturn, LifecycleState</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> rclpy.lifecycle </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Publisher </span><span style="color:#D73A49;--shiki-dark:#F97583">as</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> LifecyclePublisher</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> LifecycleSensorDriver</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">LifecycleNode</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        super</span><span style="color:#24292E;--shiki-dark:#E1E4E8">().</span><span style="color:#005CC5;--shiki-dark:#79B8FF">__init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'sensor_driver'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.sensor </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> None</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.publisher_ </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> None</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.timer_ </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> None</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> on_configure</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, state: LifecycleState) -> TransitionCallbackReturn:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.get_logger().info(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Configuring...'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.declare_parameter(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'port'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'/dev/ttyUSB0'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.declare_parameter(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'baud_rate'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">115200</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.declare_parameter(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'publish_rate'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">10.0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        port </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.get_parameter(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'port'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">).value</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        baud </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.get_parameter(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'baud_rate'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">).value</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        try</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.sensor </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._init_sensor(port, baud)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        except</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> Exception</span><span style="color:#D73A49;--shiki-dark:#F97583"> as</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> e:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.get_logger().error(</span><span style="color:#D73A49;--shiki-dark:#F97583">f</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Failed to initialize sensor: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">{</span><span style="color:#24292E;--shiki-dark:#E1E4E8">e</span><span style="color:#005CC5;--shiki-dark:#79B8FF">}</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> TransitionCallbackReturn.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">FAILURE</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> sensor_msgs.msg </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Imu</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.publisher_ </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.create_lifecycle_publisher(Imu, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'imu/data'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">10</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.get_logger().info(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Configuration complete'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> TransitionCallbackReturn.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">SUCCESS</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> on_activate</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, state: LifecycleState) -> TransitionCallbackReturn:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.get_logger().info(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Activating...'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        rate </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.get_parameter(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'publish_rate'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">).value</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.timer_ </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.create_timer(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1.0</span><span style="color:#D73A49;--shiki-dark:#F97583"> /</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> rate, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._publish_data)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.get_logger().info(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Active and publishing'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> super</span><span style="color:#24292E;--shiki-dark:#E1E4E8">().on_activate(state)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> on_deactivate</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, state: LifecycleState) -> TransitionCallbackReturn:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.get_logger().info(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Deactivating...'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.timer_:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.timer_.cancel()</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.timer_ </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> None</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> super</span><span style="color:#24292E;--shiki-dark:#E1E4E8">().on_deactivate(state)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> on_cleanup</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, state: LifecycleState) -> TransitionCallbackReturn:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.get_logger().info(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Cleaning up...'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.sensor:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.sensor </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> None</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.publisher_ </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> None</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> TransitionCallbackReturn.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">SUCCESS</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> on_shutdown</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, state: LifecycleState) -> TransitionCallbackReturn:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.get_logger().info(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Shutting down...'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.sensor:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.sensor </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> None</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> TransitionCallbackReturn.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">SUCCESS</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> _init_sensor</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, port, baud):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'port'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: port, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'baud'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: baud, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'connected'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">True</span><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> _publish_data</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.publisher_ </span><span style="color:#D73A49;--shiki-dark:#F97583">and</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.publisher_.is_activated:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> sensor_msgs.msg </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Imu</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            msg </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Imu()</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.publisher_.publish(msg)</span></span></code></pre></div><p>生命周期节点的关键特性是生命周期发布者（Lifecycle Publisher）。与普通发布者不同，生命周期发布者只在节点处于 Active 状态时才实际发送消息，在 Inactive 状态下消息会被丢弃。这防止了未完全初始化的节点向系统发送错误数据。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A((Unconfigured)) --&gt;|on_configure 成功| B((Inactive))&#10;    A --&gt;|on_configure 失败| A&#10;    B --&gt;|on_activate 成功| C((Active))&#10;    B --&gt;|on_activate 失败| B&#10;    C --&gt;|on_deactivate| B&#10;    B --&gt;|on_cleanup| A&#10;    A --&gt;|on_shutdown| D((Finalized))&#10;    B --&gt;|on_shutdown| D&#10;    C --&gt;|on_shutdown| D&#10;    C --&gt;|on_error| A"></pre><h2 id="launch-系统与系统编排">Launch 系统与系统编排</h2><p>ROS2 的 Launch 系统使用 Python 脚本实现，相比 ROS1 的 XML 格式更加灵活强大。Launch 文件可以描述节点的启动顺序、参数配置、条件判断和事件响应，是系统级编排的核心工具。</p>
+<div class="code-block-wrapper" data-lang="python" data-code="from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument, GroupAction, TimerAction
+from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node, LifecycleNode
+from launch_ros.event_handlers import OnStateTransition
+from launch.event_handlers import OnProcessStart
+from lifecycle_msgs.msg import Transition
+
+def generate_launch_description():
+    use_sim = DeclareLaunchArgument('use_sim', default_value='false')
+    config_file = DeclareLaunchArgument(
+        'config', default_value='config/robot.yaml'
+    )
+
+    sensor_node = LifecycleNode(
+        package='robot_drivers',
+        executable='sensor_driver',
+        name='imu_driver',
+        namespace='sensors',
+        parameters=[LaunchConfiguration('config')],
+        output='screen'
+    )
+
+    controller_node = Node(
+        package='robot_control',
+        executable='controller',
+        name='motion_controller',
+        parameters=[{
+            'use_sim_time': LaunchConfiguration('use_sim'),
+            'control_frequency': 100.0,
+        }],
+        remappings=[
+            ('cmd_vel', '/robot/cmd_vel'),
+            ('odom', '/robot/odom'),
+        ],
+    )
+
+    configure_event = TimerAction(
+        period=2.0,
+        actions=[
+            Node(
+                package='lifecycle_utils',
+                executable='lifecycle_manager',
+                arguments=['--configure', 'imu_driver'],
+            )
+        ]
+    )
+
+    return LaunchDescription([
+        use_sim,
+        config_file,
+        sensor_node,
+        controller_node,
+        configure_event,
+    ])"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> launch </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> LaunchDescription</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> launch.actions </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> DeclareLaunchArgument, GroupAction, TimerAction</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> launch.substitutions </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> LaunchConfiguration</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> launch_ros.actions </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Node, LifecycleNode</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> launch_ros.event_handlers </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> OnStateTransition</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> launch.event_handlers </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> OnProcessStart</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> lifecycle_msgs.msg </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Transition</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> generate_launch_description</span><span style="color:#24292E;--shiki-dark:#E1E4E8">():</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    use_sim </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> DeclareLaunchArgument(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'use_sim'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">default_value</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'false'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    config_file </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> DeclareLaunchArgument(</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'config'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">default_value</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'config/robot.yaml'</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    sensor_node </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> LifecycleNode(</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        package</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'robot_drivers'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        executable</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'sensor_driver'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        name</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'imu_driver'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        namespace</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'sensors'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        parameters</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[LaunchConfiguration(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'config'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)],</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        output</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'screen'</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    controller_node </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Node(</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        package</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'robot_control'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        executable</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'controller'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        name</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'motion_controller'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        parameters</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[{</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            'use_sim_time'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: LaunchConfiguration(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'use_sim'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            'control_frequency'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">100.0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        }],</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        remappings</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            (</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'cmd_vel'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'/robot/cmd_vel'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            (</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'odom'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'/robot/odom'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        ],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    configure_event </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> TimerAction(</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        period</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2.0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        actions</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            Node(</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">                package</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'lifecycle_utils'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">                executable</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'lifecycle_manager'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">                arguments</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'--configure'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'imu_driver'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            )</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        ]</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> LaunchDescription([</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        use_sim,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        config_file,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        sensor_node,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        controller_node,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        configure_event,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    ])</span></span></code></pre></div><p>Launch 系统的事件模型支持复杂的启动编排：节点 A 启动完成后再启动节点 B，传感器驱动配置成功后自动激活控制器，任何节点崩溃时自动重启。这些功能对于生产级机器人系统至关重要。</p>
+<table>
+<thead>
+<tr>
+<th>Launch 功能</th>
+<th>说明</th>
+<th>使用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DeclareLaunchArgument</td>
+<td>声明可配置的启动参数</td>
+<td>仿真/实机切换</td>
+</tr>
+<tr>
+<td>GroupAction</td>
+<td>将多个动作分组，共享命名空间</td>
+<td>多机器人</td>
+</tr>
+<tr>
+<td>IncludeLaunchDescription</td>
+<td>包含其他 Launch 文件</td>
+<td>模块化启动</td>
+</tr>
+<tr>
+<td>TimerAction</td>
+<td>延时执行</td>
+<td>等待依赖就绪</td>
+</tr>
+<tr>
+<td>OnProcessStart/Exit</td>
+<td>进程事件处理</td>
+<td>节点崩溃重启</td>
+</tr>
+<tr>
+<td>OnStateTransition</td>
+<td>生命周期状态变化</td>
+<td>有序初始化</td>
+</tr>
+</tbody></table>
+<h2 id="小结">小结</h2><ul>
+<li>ROS2 参数系统提供强类型、可验证、支持运行时修改的统一配置方案</li>
+<li>参数回调机制允许在参数修改前验证合法性，确保在线调参安全</li>
+<li>生命周期节点通过四状态七转移模型，使节点初始化和关闭过程可控可编排</li>
+<li>生命周期发布者仅在 Active 状态下发送消息，防止未初始化数据污染系统</li>
+<li>Launch 系统使用 Python 脚本实现灵活的系统级编排，支持条件启动和事件响应</li>
+<li>参数系统与生命周期的结合使得配置在不同状态下有不同行为成为可能</li>
+<li>这些基础设施是构建生产级、可维护的机器人系统的关键</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../hardware-and-systems/ros-and-middleware/ros2-fundamentals/launch-and-params.html"><span class="label">Previous</span>ROS2 启动系统与参数管理</a><a class="next" href="../../../hardware-and-systems/ros-and-middleware/ros2-fundamentals/launch-system.html"><span class="label">Next</span>ROS2 Launch 系统</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#参数声明与管理" data-outline-link="参数声明与管理">参数声明与管理</a></li><li class="depth-2"><a href="#生命周期节点" data-outline-link="生命周期节点">生命周期节点</a></li><li class="depth-2"><a href="#launch-系统与系统编排" data-outline-link="launch-系统与系统编排">Launch 系统与系统编排</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

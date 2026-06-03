@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>错误处理 Result 与 Option · 编程语言与范式</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:编程语言与范式" data-pagefind-meta="slug:languages-and-paradigms">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">编程语言与范式</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item active" href="../../../languages-and-paradigms/index.html" aria-current="page" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../languages-and-paradigms/index.html">编程语言与范式</a><a class="back-to-hubs" href="../../../languages-and-paradigms/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../languages-and-paradigms/rust-language/index.html">Rust 语言 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="languages-and-paradigms"><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:rust-language/ownership-and-borrowing"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/rust-language/ownership-and-borrowing/index.html">所有权与借用 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/ownership-and-borrowing/ownership-rules.html">所有权规则与移动语义</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/ownership-and-borrowing/references-and-borrowing.html">引用与借用规则</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/ownership-and-borrowing/lifetimes.html">生命周期标注</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/ownership-and-borrowing/smart-pointers.html">智能指针</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:rust-language/type-system" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/rust-language/type-system/index.html">类型系统 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/type-system/traits-and-generics.html">Trait 与泛型</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/type-system/enums-and-pattern-matching.html">枚举与模式匹配</a></li><li class="leaf"><a class="leaf-title active" href="../../../languages-and-paradigms/rust-language/type-system/error-handling.html">错误处理 Result 与 Option</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/type-system/typestate-pattern.html">类型状态模式</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:rust-language/concurrency"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/rust-language/concurrency/index.html">并发编程 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/concurrency/threads-and-channels.html">线程与消息传递</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/concurrency/shared-state.html">共享状态与 Mutex</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/concurrency/async-await.html">async/await 与异步运行时</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/concurrency/lock-free.html">无锁编程与原子操作</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:rust-language/systems-programming"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/rust-language/systems-programming/index.html">系统编程 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/systems-programming/unsafe-and-ffi.html">unsafe Rust 与 FFI</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/systems-programming/memory-layout.html">内存布局与零成本抽象</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/systems-programming/embedded-and-nostd.html">嵌入式与 no_std</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/systems-programming/performance-benchmarking.html">性能优化与基准测试</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:rust-language/ecosystem"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/rust-language/ecosystem/index.html">Rust 生态实战 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/ecosystem/cargo.html">Cargo 与包管理</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/ecosystem/wasm.html">WebAssembly 与 Rust</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/ecosystem/web-backend.html">Web 后端 Actix/Axum</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/ecosystem/cli-tools.html">CLI 工具开发</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part II · 系统级语言</span><span>Rust 语言 简介</span><span>类型系统 简介</span><span>错误处理 Result 与 Option</span></nav>
+    <article class="content prose"><h1 id="错误处理-result-与-option">错误处理 Result 与 Option</h1><h2 id="错误处理哲学">错误处理哲学</h2><p>Rust 将错误分为两类：<strong>可恢复错误</strong>使用 <code>Result&lt;T, E&gt;</code>，<strong>不可恢复错误</strong>使用 <code>panic!</code>。没有异常机制，所有错误通过类型系统显式传递。</p>
+<table>
+<thead>
+<tr>
+<th>错误类型</th>
+<th>处理方式</th>
+<th>典型场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>可恢复</td>
+<td><code>Result&lt;T, E&gt;</code></td>
+<td>文件未找到、网络超时、解析失败</td>
+</tr>
+<tr>
+<td>不可恢复</td>
+<td><code>panic!</code></td>
+<td>数组越界、断言失败、程序 bug</td>
+</tr>
+</tbody></table>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[操作可能失败?] --&gt;|是| B{失败是否预期?}&#10;    A --&gt;|否| Z[&quot;直接返回 T&quot;]&#10;    B --&gt;|是: 可恢复| C[&quot;Result&amp;lt;T, E&amp;gt;&quot;]&#10;    B --&gt;|否: 程序 bug| D[&quot;panic!&quot;]&#10;    C --&gt; E[&quot;调用者决定如何处理&quot;]&#10;    D --&gt; F[&quot;立即终止或 unwind&quot;]"></pre><hr>
+<h2 id="操作符">? 操作符</h2><p><code>?</code> 操作符是错误传播的语法糖——如果 <code>Result</code> 是 <code>Err</code>，立即返回该错误；如果是 <code>Ok</code>，提取内部值继续执行。</p>
+<div class="code-block-wrapper" data-lang="rust" data-code="use std::fs;
+use std::io;
+
+fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
+    let mut username = fs::read_to_string(&quot;username.txt&quot;)?;
+    username.truncate(username.trim_end().len());
+    Ok(username)
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>use std::fs;</span></span>
+<span class="line"><span>use std::io;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>fn read_username_from_file() -> Result&#x3C;String, io::Error> {</span></span>
+<span class="line"><span>    let mut username = fs::read_to_string("username.txt")?;</span></span>
+<span class="line"><span>    username.truncate(username.trim_end().len());</span></span>
+<span class="line"><span>    Ok(username)</span></span>
+<span class="line"><span>}</span></span></code></pre></div><p><code>?</code> 操作符的等价展开：</p>
+<div class="code-block-wrapper" data-lang="rust" data-code="fn read_username_verbose() -&gt; Result&lt;String, io::Error&gt; {
+    let username = match fs::read_to_string(&quot;username.txt&quot;) {
+        Ok(content) =&gt; content,
+        Err(e) =&gt; return Err(e),
+    };
+    Ok(username.trim().to_string())
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>fn read_username_verbose() -> Result&#x3C;String, io::Error> {</span></span>
+<span class="line"><span>    let username = match fs::read_to_string("username.txt") {</span></span>
+<span class="line"><span>        Ok(content) => content,</span></span>
+<span class="line"><span>        Err(e) => return Err(e),</span></span>
+<span class="line"><span>    };</span></span>
+<span class="line"><span>    Ok(username.trim().to_string())</span></span>
+<span class="line"><span>}</span></span></code></pre></div><p><code>?</code> 操作符还支持自动类型转换：只要错误类型实现了 <code>From&lt;SourceError&gt; for TargetError</code>，就能自动转换。</p>
+<hr>
+<h2 id="自定义错误类型">自定义错误类型</h2><h3 id="手动实现">手动实现</h3><div class="code-block-wrapper" data-lang="rust" data-code="use std::fmt;
+
+#[derive(Debug)]
+enum AppError {
+    IoError(std::io::Error),
+    ParseError(String),
+    NotFound { resource: String },
+}
+
+impl fmt::Display for AppError {
+    fn fmt(&amp;self, f: &amp;mut fmt::Formatter&lt;'_&gt;) -&gt; fmt::Result {
+        match self {
+            AppError::IoError(e) =&gt; write!(f, &quot;IO 错误: {}&quot;, e),
+            AppError::ParseError(msg) =&gt; write!(f, &quot;解析错误: {}&quot;, msg),
+            AppError::NotFound { resource } =&gt; write!(f, &quot;未找到: {}&quot;, resource),
+        }
+    }
+}
+
+impl std::error::Error for AppError {}
+
+impl From&lt;std::io::Error&gt; for AppError {
+    fn from(e: std::io::Error) -&gt; Self {
+        AppError::IoError(e)
+    }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>use std::fmt;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>#[derive(Debug)]</span></span>
+<span class="line"><span>enum AppError {</span></span>
+<span class="line"><span>    IoError(std::io::Error),</span></span>
+<span class="line"><span>    ParseError(String),</span></span>
+<span class="line"><span>    NotFound { resource: String },</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>impl fmt::Display for AppError {</span></span>
+<span class="line"><span>    fn fmt(&#x26;self, f: &#x26;mut fmt::Formatter&#x3C;'_>) -> fmt::Result {</span></span>
+<span class="line"><span>        match self {</span></span>
+<span class="line"><span>            AppError::IoError(e) => write!(f, "IO 错误: {}", e),</span></span>
+<span class="line"><span>            AppError::ParseError(msg) => write!(f, "解析错误: {}", msg),</span></span>
+<span class="line"><span>            AppError::NotFound { resource } => write!(f, "未找到: {}", resource),</span></span>
+<span class="line"><span>        }</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>impl std::error::Error for AppError {}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>impl From&#x3C;std::io::Error> for AppError {</span></span>
+<span class="line"><span>    fn from(e: std::io::Error) -> Self {</span></span>
+<span class="line"><span>        AppError::IoError(e)</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span>}</span></span></code></pre></div><h3 id="使用-thiserror-库开发推荐">使用 thiserror（库开发推荐）</h3><p><code>thiserror</code> 通过派生宏自动生成 <code>Display</code> 和 <code>Error</code> 实现。</p>
+<div class="code-block-wrapper" data-lang="rust" data-code="use thiserror::Error;
+
+#[derive(Error, Debug)]
+enum DataError {
+    #[error(&quot;IO 操作失败: {0}&quot;)]
+    Io(#[from] std::io::Error),
+
+    #[error(&quot;JSON 解析失败: {0}&quot;)]
+    Json(#[from] serde_json::Error),
+
+    #[error(&quot;字段 `{field}` 验证失败: {reason}&quot;)]
+    Validation { field: String, reason: String },
+
+    #[error(&quot;记录 {0} 不存在&quot;)]
+    NotFound(u64),
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>use thiserror::Error;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>#[derive(Error, Debug)]</span></span>
+<span class="line"><span>enum DataError {</span></span>
+<span class="line"><span>    #[error("IO 操作失败: {0}")]</span></span>
+<span class="line"><span>    Io(#[from] std::io::Error),</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    #[error("JSON 解析失败: {0}")]</span></span>
+<span class="line"><span>    Json(#[from] serde_json::Error),</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    #[error("字段 `{field}` 验证失败: {reason}")]</span></span>
+<span class="line"><span>    Validation { field: String, reason: String },</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    #[error("记录 {0} 不存在")]</span></span>
+<span class="line"><span>    NotFound(u64),</span></span>
+<span class="line"><span>}</span></span></code></pre></div><hr>
+<h2 id="anyhow-应用层错误处理">anyhow：应用层错误处理</h2><p><code>anyhow</code> 提供了 <code>anyhow::Result</code> 和 <code>anyhow::Error</code>，适合应用程序快速传播和附加上下文。</p>
+<div class="code-block-wrapper" data-lang="rust" data-code="use anyhow::{Context, Result};
+use std::fs;
+
+fn load_config(path: &amp;str) -&gt; Result&lt;Config&gt; {
+    let content = fs::read_to_string(path)
+        .with_context(|| format!(&quot;读取配置文件 {} 失败&quot;, path))?;
+
+    let config: Config = serde_json::from_str(&amp;content)
+        .context(&quot;JSON 解析失败&quot;)?;
+
+    Ok(config)
+}
+
+#[derive(serde::Deserialize)]
+struct Config {
+    port: u16,
+    host: String,
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>use anyhow::{Context, Result};</span></span>
+<span class="line"><span>use std::fs;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>fn load_config(path: &#x26;str) -> Result&#x3C;Config> {</span></span>
+<span class="line"><span>    let content = fs::read_to_string(path)</span></span>
+<span class="line"><span>        .with_context(|| format!("读取配置文件 {} 失败", path))?;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    let config: Config = serde_json::from_str(&#x26;content)</span></span>
+<span class="line"><span>        .context("JSON 解析失败")?;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    Ok(config)</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>#[derive(serde::Deserialize)]</span></span>
+<span class="line"><span>struct Config {</span></span>
+<span class="line"><span>    port: u16,</span></span>
+<span class="line"><span>    host: String,</span></span>
+<span class="line"><span>}</span></span></code></pre></div><hr>
+<h2 id="thiserror-vs-anyhow-选择">thiserror vs anyhow 选择</h2><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>thiserror</th>
+<th>anyhow</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>适用场景</td>
+<td>库开发</td>
+<td>应用开发</td>
+</tr>
+<tr>
+<td>错误类型</td>
+<td>自定义枚举</td>
+<td>统一 <code>anyhow::Error</code></td>
+</tr>
+<tr>
+<td>类型信息</td>
+<td>保留，可 match</td>
+<td>擦除，需 downcast</td>
+</tr>
+<tr>
+<td>上下文附加</td>
+<td>手动</td>
+<td><code>.context()</code> / <code>.with_context()</code></td>
+</tr>
+<tr>
+<td>错误链</td>
+<td><code>#[from]</code> 自动实现</td>
+<td>自动捕获</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="组合器链式处理">组合器链式处理</h2><p><code>Result</code> 和 <code>Option</code> 提供丰富的组合器方法，支持函数式链式处理。</p>
+<div class="code-block-wrapper" data-lang="rust" data-code="fn parse_and_double(input: &amp;str) -&gt; Result&lt;i32, String&gt; {
+    input
+        .trim()
+        .parse::&lt;i32&gt;()
+        .map(|n| n * 2)
+        .map_err(|e| format!(&quot;解析失败: {}&quot;, e))
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>fn parse_and_double(input: &#x26;str) -> Result&#x3C;i32, String> {</span></span>
+<span class="line"><span>    input</span></span>
+<span class="line"><span>        .trim()</span></span>
+<span class="line"><span>        .parse::&#x3C;i32>()</span></span>
+<span class="line"><span>        .map(|n| n * 2)</span></span>
+<span class="line"><span>        .map_err(|e| format!("解析失败: {}", e))</span></span>
+<span class="line"><span>}</span></span></code></pre></div><p>常用组合器：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th><code>Result</code> 行为</th>
+<th><code>Option</code> 行为</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>map(f)</code></td>
+<td>变换 Ok 值</td>
+<td>变换 Some 值</td>
+</tr>
+<tr>
+<td><code>map_err(f)</code></td>
+<td>变换 Err 值</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>and_then(f)</code></td>
+<td>Ok 时链式调用</td>
+<td>Some 时链式调用</td>
+</tr>
+<tr>
+<td><code>or_else(f)</code></td>
+<td>Err 时链式调用</td>
+<td>None 时链式调用</td>
+</tr>
+<tr>
+<td><code>unwrap_or(val)</code></td>
+<td>Err 时返回默认值</td>
+<td>None 时返回默认值</td>
+</tr>
+<tr>
+<td><code>ok()</code></td>
+<td>转为 <code>Option&lt;T&gt;</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>transpose()</code></td>
+<td><code>Option&lt;Result&gt;</code> ↔ <code>Result&lt;Option&gt;</code></td>
+<td>同左</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="错误处理最佳实践">错误处理最佳实践</h2><div class="code-block-wrapper" data-lang="rust" data-code="fn process_records(path: &amp;str) -&gt; Result&lt;Vec&lt;Record&gt;, AppError&gt; {
+    let content = std::fs::read_to_string(path)?;
+
+    let records: Vec&lt;Record&gt; = content
+        .lines()
+        .enumerate()
+        .map(|(i, line)| {
+            parse_record(line).map_err(|e| AppError::ParseError(
+                format!(&quot;第 {} 行: {}&quot;, i + 1, e)
+            ))
+        })
+        .collect::&lt;Result&lt;Vec&lt;_&gt;, _&gt;&gt;()?;
+
+    if records.is_empty() {
+        return Err(AppError::NotFound {
+            resource: path.to_string(),
+        });
+    }
+
+    Ok(records)
+}
+
+struct Record {
+    name: String,
+    value: f64,
+}
+
+fn parse_record(line: &amp;str) -&gt; Result&lt;Record, String&gt; {
+    let parts: Vec&lt;&amp;str&gt; = line.split(',').collect();
+    if parts.len() != 2 {
+        return Err(format!(&quot;期望2个字段，实际 {}&quot;, parts.len()));
+    }
+    Ok(Record {
+        name: parts[0].to_string(),
+        value: parts[1].parse().map_err(|e| format!(&quot;{}&quot;, e))?,
+    })
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>fn process_records(path: &#x26;str) -> Result&#x3C;Vec&#x3C;Record>, AppError> {</span></span>
+<span class="line"><span>    let content = std::fs::read_to_string(path)?;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    let records: Vec&#x3C;Record> = content</span></span>
+<span class="line"><span>        .lines()</span></span>
+<span class="line"><span>        .enumerate()</span></span>
+<span class="line"><span>        .map(|(i, line)| {</span></span>
+<span class="line"><span>            parse_record(line).map_err(|e| AppError::ParseError(</span></span>
+<span class="line"><span>                format!("第 {} 行: {}", i + 1, e)</span></span>
+<span class="line"><span>            ))</span></span>
+<span class="line"><span>        })</span></span>
+<span class="line"><span>        .collect::&#x3C;Result&#x3C;Vec&#x3C;_>, _>>()?;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    if records.is_empty() {</span></span>
+<span class="line"><span>        return Err(AppError::NotFound {</span></span>
+<span class="line"><span>            resource: path.to_string(),</span></span>
+<span class="line"><span>        });</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    Ok(records)</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>struct Record {</span></span>
+<span class="line"><span>    name: String,</span></span>
+<span class="line"><span>    value: f64,</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>fn parse_record(line: &#x26;str) -> Result&#x3C;Record, String> {</span></span>
+<span class="line"><span>    let parts: Vec&#x3C;&#x26;str> = line.split(',').collect();</span></span>
+<span class="line"><span>    if parts.len() != 2 {</span></span>
+<span class="line"><span>        return Err(format!("期望2个字段，实际 {}", parts.len()));</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span>    Ok(Record {</span></span>
+<span class="line"><span>        name: parts[0].to_string(),</span></span>
+<span class="line"><span>        value: parts[1].parse().map_err(|e| format!("{}", e))?,</span></span>
+<span class="line"><span>    })</span></span>
+<span class="line"><span>}</span></span></code></pre></div><table>
+<thead>
+<tr>
+<th>原则</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>库用 <code>thiserror</code></td>
+<td>保留类型信息，用户可精确匹配</td>
+</tr>
+<tr>
+<td>应用用 <code>anyhow</code></td>
+<td>快速开发，附加上下文</td>
+</tr>
+<tr>
+<td>避免滥用 <code>unwrap()</code></td>
+<td>仅在确信不会失败时使用，或搭配注释</td>
+</tr>
+<tr>
+<td>优先用 <code>?</code> 传播</td>
+<td>代码简洁，错误链完整</td>
+</tr>
+<tr>
+<td>提供有意义的错误消息</td>
+<td>包含文件路径、行号、上下文信息</td>
+</tr>
+</tbody></table>
+</article>
+    <nav class="pager"><a class="prev" href="../../../languages-and-paradigms/rust-language/type-system/enums-and-pattern-matching.html"><span class="label">Previous</span>枚举与模式匹配</a><a class="next" href="../../../languages-and-paradigms/rust-language/type-system/typestate-pattern.html"><span class="label">Next</span>类型状态模式</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#错误处理哲学" data-outline-link="错误处理哲学">错误处理哲学</a></li><li class="depth-2"><a href="#操作符" data-outline-link="操作符">? 操作符</a></li><li class="depth-2"><a href="#自定义错误类型" data-outline-link="自定义错误类型">自定义错误类型</a></li><li class="depth-3"><a href="#手动实现" data-outline-link="手动实现">手动实现</a></li><li class="depth-3"><a href="#使用-thiserror-库开发推荐" data-outline-link="使用-thiserror-库开发推荐">使用 thiserror（库开发推荐）</a></li><li class="depth-2"><a href="#anyhow-应用层错误处理" data-outline-link="anyhow-应用层错误处理">anyhow：应用层错误处理</a></li><li class="depth-2"><a href="#thiserror-vs-anyhow-选择" data-outline-link="thiserror-vs-anyhow-选择">thiserror vs anyhow 选择</a></li><li class="depth-2"><a href="#组合器链式处理" data-outline-link="组合器链式处理">组合器链式处理</a></li><li class="depth-2"><a href="#错误处理最佳实践" data-outline-link="错误处理最佳实践">错误处理最佳实践</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

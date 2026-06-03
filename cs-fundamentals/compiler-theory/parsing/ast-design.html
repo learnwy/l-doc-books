@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>抽象语法树设计 · 计算机科学基础</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:计算机科学基础" data-pagefind-meta="slug:cs-fundamentals">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">计算机科学基础</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item active" href="../../../cs-fundamentals/index.html" aria-current="page" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../cs-fundamentals/index.html">计算机科学基础</a><a class="back-to-hubs" href="../../../cs-fundamentals/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../cs-fundamentals/compiler-theory/index.html">编译原理与语言理论 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="cs-fundamentals"><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:compiler-theory/language-theory"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/compiler-theory/language-theory/index.html">形式语言与自动机 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/compiler-theory/language-theory/formal-grammars.html">形式文法</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/compiler-theory/language-theory/regular-languages.html">正则语言</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/compiler-theory/language-theory/context-free-languages.html">上下文无关语言</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/compiler-theory/language-theory/turing-machines.html">图灵机</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:compiler-theory/lexical-analysis"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/compiler-theory/lexical-analysis/index.html">词法分析 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/compiler-theory/lexical-analysis/tokenization.html">词法分析与分词</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/compiler-theory/lexical-analysis/regex-engines.html">正则引擎实现</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/compiler-theory/lexical-analysis/lexer-generators.html">词法生成器</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:compiler-theory/parsing" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/compiler-theory/parsing/index.html">语法分析 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/compiler-theory/parsing/top-down-parsing.html">自顶向下解析</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/compiler-theory/parsing/bottom-up-parsing.html">自底向上解析</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/compiler-theory/parsing/parser-generators.html">解析器生成器</a></li><li class="leaf"><a class="leaf-title active" href="../../../cs-fundamentals/compiler-theory/parsing/ast-design.html">抽象语法树设计</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:compiler-theory/semantic-analysis"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/compiler-theory/semantic-analysis/index.html">语义分析与类型系统 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/compiler-theory/semantic-analysis/type-systems.html">类型系统</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/compiler-theory/semantic-analysis/type-inference.html">类型推导</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/compiler-theory/semantic-analysis/scope-and-binding.html">作用域与名字绑定</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:compiler-theory/code-generation"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/compiler-theory/code-generation/index.html">代码生成与优化 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/compiler-theory/code-generation/ir-design.html">中间表示设计</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/compiler-theory/code-generation/optimization-passes.html">优化遍</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/compiler-theory/code-generation/register-allocation.html">寄存器分配</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/compiler-theory/code-generation/codegen-backend.html">代码生成后端</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part III · 系统 (Systems)</span><span>编译原理与语言理论 简介</span><span>语法分析 简介</span><span>抽象语法树设计</span></nav>
+    <article class="content prose"><h1 id="抽象语法树设计">抽象语法树设计</h1><h2 id="核心概念">核心概念</h2><p>抽象语法树（Abstract Syntax Tree, AST）是源代码的树形结构化表示。与具体语法树（CST/解析树）不同，AST 省略了语法上必要但语义上无关的元素——括号、分号、逗号等标点符号被丢弃，只保留程序的语义骨架。</p>
+<p>AST 是编译器前端和后端之间的核心接口。语法分析器生成 AST，语义分析器在 AST 上进行类型检查和名字解析，代码生成器从 AST 出发生成中间表示或目标代码。AST 的设计质量直接影响后续所有阶段的实现复杂度。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    A[源代码] --&gt; B[Token 流]&#10;    B --&gt; C[CST/解析树]&#10;    C --&gt; D[AST]&#10;    D --&gt; E[语义分析]&#10;    E --&gt; F[IR 生成]&#10;    D --&gt; G[代码格式化]&#10;    D --&gt; H[IDE 功能]"></pre><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>具体语法树 CST</th>
+<th>抽象语法树 AST</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>保留标点</td>
+<td>是（括号、分号等）</td>
+<td>否</td>
+</tr>
+<tr>
+<td>保留空白</td>
+<td>可选</td>
+<td>否</td>
+</tr>
+<tr>
+<td>节点数量</td>
+<td>多</td>
+<td>少</td>
+</tr>
+<tr>
+<td>信息忠实度</td>
+<td>完全忠于源码</td>
+<td>忠于语义</td>
+</tr>
+<tr>
+<td>用途</td>
+<td>代码格式化、精确重写</td>
+<td>编译、分析、转换</td>
+</tr>
+<tr>
+<td>构建方式</td>
+<td>解析器直接产出</td>
+<td>解析器构建或 CST 转换</td>
+</tr>
+</tbody></table>
+<h2 id="ast-节点类型设计">AST 节点类型设计</h2><p>AST 的核心是节点类型系统。每种语法结构对应一种节点类型，节点之间的父子关系反映了程序的层次结构。</p>
+<p>常见的 AST 节点类型体系：</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="type Program = {
+  type: 'Program';
+  body: Statement[];
+};
+
+type Statement =
+  | ExpressionStatement
+  | IfStatement
+  | WhileStatement
+  | ReturnStatement
+  | FunctionDeclaration
+  | VariableDeclaration
+  | BlockStatement;
+
+type Expression =
+  | BinaryExpression
+  | UnaryExpression
+  | CallExpression
+  | MemberExpression
+  | Identifier
+  | NumericLiteral
+  | StringLiteral
+  | AssignmentExpression;
+
+type BinaryExpression = {
+  type: 'BinaryExpression';
+  operator: '+' | '-' | '*' | '/' | '==' | '!=';
+  left: Expression;
+  right: Expression;
+};
+
+type IfStatement = {
+  type: 'IfStatement';
+  test: Expression;
+  consequent: BlockStatement;
+  alternate: BlockStatement | IfStatement | null;
+};
+
+type FunctionDeclaration = {
+  type: 'FunctionDeclaration';
+  name: Identifier;
+  params: Identifier[];
+  returnType: TypeAnnotation | null;
+  body: BlockStatement;
+};"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">type</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Program</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  type</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'Program'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  body</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Statement</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">type</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Statement</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ExpressionStatement</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> IfStatement</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> WhileStatement</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ReturnStatement</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> FunctionDeclaration</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> VariableDeclaration</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> BlockStatement</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">type</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Expression</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> BinaryExpression</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> UnaryExpression</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> CallExpression</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> MemberExpression</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Identifier</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> NumericLiteral</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> StringLiteral</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> AssignmentExpression</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">type</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> BinaryExpression</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  type</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'BinaryExpression'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  operator</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '+'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '-'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '*'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '/'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '=='</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '!='</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  left</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Expression</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  right</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Expression</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">type</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> IfStatement</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  type</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'IfStatement'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  test</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Expression</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  consequent</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> BlockStatement</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  alternate</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> BlockStatement</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> IfStatement</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> null</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">type</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> FunctionDeclaration</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  type</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'FunctionDeclaration'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  name</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Identifier</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  params</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Identifier</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  returnType</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> TypeAnnotation</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> null</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  body</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> BlockStatement</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span></code></pre></div><p>节点类型设计的几个关键原则：</p>
+<p><strong>表达式与语句分离</strong>。表达式（Expression）产生值，语句（Statement）执行动作。在 AST 中区分二者有助于类型检查——类型系统只需要处理表达式节点。</p>
+<p><strong>使用联合类型（Tagged Union）</strong>。每个节点有一个 <code>type</code> 字段作为判别标签。这使得 AST 遍历可以通过 <code>switch(node.type)</code> 实现类型安全的分派。</p>
+<p><strong>可选字段用 null/undefined</strong>。例如 <code>IfStatement.alternate</code> 可以是 <code>null</code>（没有 else 分支）。这比为每种组合创建不同的节点类型更简洁。</p>
+<h2 id="位置信息与源码映射">位置信息与源码映射</h2><p>AST 节点需要携带源码位置信息，用于：</p>
+<ul>
+<li>编译错误和警告的精确定位</li>
+<li>IDE 的跳转和高亮功能</li>
+<li>Source Map 生成（用于调试转译后的代码）</li>
+</ul>
+<p>位置信息通常包含起始和结束位置：</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="type SourceLocation = {
+  start: Position;
+  end: Position;
+  source?: string;
+};
+
+type Position = {
+  line: number;
+  column: number;
+  offset: number;
+};
+
+type BaseNode = {
+  type: string;
+  loc: SourceLocation;
+  range?: [number, number];
+};"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">type</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> SourceLocation</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  start</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Position</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  end</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Position</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  source</span><span style="color:#D73A49;--shiki-dark:#F97583">?:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">type</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Position</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  line</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  column</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  offset</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">type</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> BaseNode</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  type</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  loc</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> SourceLocation</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  range</span><span style="color:#D73A49;--shiki-dark:#F97583">?:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span></code></pre></div><p><strong>ESTree 规范</strong>是 JavaScript AST 的事实标准。Babel、ESLint、Prettier 等工具都遵循 ESTree，这使得它们可以共享 AST。ESTree 定义了每种 JS 语法结构的精确节点类型和字段。</p>
+<p><strong>Span/Range 表示法</strong>比行列号更适合内部处理。span 是源码中的字节偏移范围 <code>[start, end)</code>。行列号需要时可以从 span 和源码文本反算，避免在每个节点上存储冗余信息。</p>
+<h2 id="访问者模式与-ast-遍历">访问者模式与 AST 遍历</h2><p>AST 的遍历和变换是编译器最频繁的操作。 <strong>访问者模式</strong>（Visitor Pattern）是实现 AST 遍历的标准设计模式。</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="type Visitor = {
+  visitBinaryExpression?: (node: BinaryExpression) =&gt; void;
+  visitIfStatement?: (node: IfStatement) =&gt; void;
+  visitIdentifier?: (node: Identifier) =&gt; void;
+  // ... 每种节点类型一个方法
+};
+
+function traverse(node: ASTNode, visitor: Visitor): void {
+  const method = visitor[`visit${node.type}`];
+  if (method) method(node);
+
+  for (const child of getChildren(node)) {
+    traverse(child, visitor);
+  }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">type</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Visitor</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  visitBinaryExpression</span><span style="color:#D73A49;--shiki-dark:#F97583">?:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">node</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> BinaryExpression</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#005CC5;--shiki-dark:#79B8FF"> void</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  visitIfStatement</span><span style="color:#D73A49;--shiki-dark:#F97583">?:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">node</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> IfStatement</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#005CC5;--shiki-dark:#79B8FF"> void</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  visitIdentifier</span><span style="color:#D73A49;--shiki-dark:#F97583">?:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">node</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Identifier</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#005CC5;--shiki-dark:#79B8FF"> void</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">  // ... 每种节点类型一个方法</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> traverse</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">node</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ASTNode</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">visitor</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Visitor</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> void</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> method</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> visitor[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`visit${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">node</span><span style="color:#032F62;--shiki-dark:#9ECBFF">.</span><span style="color:#24292E;--shiki-dark:#E1E4E8">type</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (method) </span><span style="color:#6F42C1;--shiki-dark:#B392F0">method</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(node);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> child</span><span style="color:#D73A49;--shiki-dark:#F97583"> of</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> getChildren</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(node)) {</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">    traverse</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(child, visitor);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><p>访问者模式有两个变体：</p>
+<p><strong>前序遍历</strong>（Pre-order）：先访问当前节点，再递归访问子节点。适用于收集信息、构建符号表。</p>
+<p><strong>后序遍历</strong>（Post-order）：先递归访问子节点，再访问当前节点。适用于类型推导（子表达式的类型决定父表达式的类型）。</p>
+<p>Babel 的插件系统就是基于访问者模式构建的。每个 Babel 插件定义一组 visitor 方法，可以在遍历过程中修改 AST 节点。这使得代码转换的编写变得模块化——每个插件只关注自己负责的语法结构。</p>
+<h2 id="ast-变换与不可变性">AST 变换与不可变性</h2><p>AST 变换是编译器和代码工具的核心操作。两种主要策略是<strong>就地修改</strong>（In-Place Mutation）和<strong>不可变变换</strong>（Immutable Transformation）。</p>
+<p><strong>就地修改</strong>直接修改 AST 节点的属性。优点是简单高效，缺点是修改可能影响其他引用同一节点的代码。</p>
+<p><strong>不可变变换</strong>创建新节点代替旧节点。每次变换产生一棵新的 AST（共享未修改的子树）。这使得变换可以安全地组合，不会产生意外的副作用。</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="function constantFold(node: Expression): Expression {
+  if (node.type !== 'BinaryExpression') return node;
+
+  const left = constantFold(node.left);
+  const right = constantFold(node.right);
+
+  if (left.type === 'NumericLiteral' &amp;&amp; right.type === 'NumericLiteral') {
+    return {
+      type: 'NumericLiteral',
+      value: evaluate(node.operator, left.value, right.value),
+      loc: node.loc,
+    };
+  }
+
+  return { ...node, left, right };
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> constantFold</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">node</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Expression</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Expression</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (node.type </span><span style="color:#D73A49;--shiki-dark:#F97583">!==</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'BinaryExpression'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> node;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> left</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> constantFold</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(node.left);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> right</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> constantFold</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(node.right);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (left.type </span><span style="color:#D73A49;--shiki-dark:#F97583">===</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'NumericLiteral'</span><span style="color:#D73A49;--shiki-dark:#F97583"> &#x26;&#x26;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> right.type </span><span style="color:#D73A49;--shiki-dark:#F97583">===</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'NumericLiteral'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'NumericLiteral'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      value: </span><span style="color:#6F42C1;--shiki-dark:#B392F0">evaluate</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(node.operator, left.value, right.value),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      loc: node.loc,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#D73A49;--shiki-dark:#F97583">...</span><span style="color:#24292E;--shiki-dark:#E1E4E8">node, left, right };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><p>上面的常量折叠示例展示了不可变变换的典型模式。递归处理子节点，如果可以求值就返回新的字面量节点，否则返回包含新子节点的新父节点。</p>
+<p>Rust 编译器（rustc）的 AST 变换大量使用这种模式。函数式语言编译器（如 GHC）天然适合不可变 AST，因为不可变数据结构是语言的基础。</p>
+<h2 id="实际-ast-设计案例">实际 AST 设计案例</h2><p>不同编译器的 AST 设计反映了各自的设计哲学：</p>
+<p><strong>Babel AST</strong>（ESTree 风格）：</p>
+<ul>
+<li>节点类型丰富（70+ 种）</li>
+<li>每个节点包含完整的位置信息</li>
+<li>松散类型（JavaScript 对象）</li>
+<li>优化可读性和易修改性</li>
+</ul>
+<p><strong>Rust 编译器 AST</strong>：</p>
+<ul>
+<li>强类型（Rust enum 建模联合类型）</li>
+<li>使用 NodeId 和 Span 标识</li>
+<li>AST → HIR → MIR 多层降低</li>
+<li>每层 IR 删除更多语法糖</li>
+</ul>
+<p><strong>TypeScript AST</strong>：</p>
+<ul>
+<li>所有节点继承 <code>Node</code> 基类</li>
+<li>使用 <code>SyntaxKind</code> 枚举区分类型</li>
+<li>保留完整的 trivia（空白和注释）</li>
+<li>支持增量解析</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>编译器</th>
+<th>AST 风格</th>
+<th>关键特点</th>
+<th>降低策略</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Babel</td>
+<td>ESTree 松散类型</td>
+<td>易修改，插件友好</td>
+<td>AST → AST（同层转换）</td>
+</tr>
+<tr>
+<td>rustc</td>
+<td>强类型 enum</td>
+<td>类型安全，性能好</td>
+<td>AST → HIR → MIR → LLVM IR</td>
+</tr>
+<tr>
+<td>TypeScript</td>
+<td>类继承</td>
+<td>保留 trivia，增量</td>
+<td>AST → Binder → Checker</td>
+</tr>
+<tr>
+<td>Go</td>
+<td>强类型接口</td>
+<td>简洁，节点类型少</td>
+<td>AST → SSA</td>
+</tr>
+<tr>
+<td>Clang</td>
+<td>C++ 类层次</td>
+<td>丰富的元数据</td>
+<td>AST → LLVM IR</td>
+</tr>
+</tbody></table>
+<h2 id="小结">小结</h2><pre class="mermaid" data-diagram-type="mindmap" data-source="mindmap&#10;  root((AST 设计))&#10;    节点类型&#10;      表达式 vs 语句&#10;      联合类型/枚举&#10;      位置信息&#10;    遍历模式&#10;      访问者模式&#10;      前序/后序&#10;    变换策略&#10;      就地修改&#10;      不可变变换&#10;    实际案例&#10;      ESTree/Babel&#10;      rustc HIR/MIR&#10;      TypeScript"></pre><ul>
+<li>AST 是源码的语义骨架，省略了标点等语法噪音</li>
+<li>节点类型使用联合类型（Tagged Union）设计，便于类型安全的模式匹配</li>
+<li>位置信息对错误报告和 IDE 功能至关重要</li>
+<li>访问者模式是 AST 遍历和变换的标准设计模式</li>
+<li>不可变变换比就地修改更安全，适合多阶段编译流水线</li>
+<li>工业级编译器通常有多层 AST/IR（如 rustc 的 AST → HIR → MIR）</li>
+<li>AST 设计需要在表达力、性能和易用性之间找到平衡</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../cs-fundamentals/compiler-theory/parsing/parser-generators.html"><span class="label">Previous</span>解析器生成器</a><a class="next" href="../../../cs-fundamentals/compiler-theory/semantic-analysis/index.html"><span class="label">Next</span>语义分析与类型系统 简介</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#ast-节点类型设计" data-outline-link="ast-节点类型设计">AST 节点类型设计</a></li><li class="depth-2"><a href="#位置信息与源码映射" data-outline-link="位置信息与源码映射">位置信息与源码映射</a></li><li class="depth-2"><a href="#访问者模式与-ast-遍历" data-outline-link="访问者模式与-ast-遍历">访问者模式与 AST 遍历</a></li><li class="depth-2"><a href="#ast-变换与不可变性" data-outline-link="ast-变换与不可变性">AST 变换与不可变性</a></li><li class="depth-2"><a href="#实际-ast-设计案例" data-outline-link="实际-ast-设计案例">实际 AST 设计案例</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MCU 架构与 ARM Cortex-M 内核 · 硬件、机器人与安全工程</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:硬件、机器人与安全工程" data-pagefind-meta="slug:hardware-and-systems">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">硬件、机器人与安全工程</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item active" href="../../../hardware-and-systems/index.html" aria-current="page" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../hardware-and-systems/index.html">硬件、机器人与安全工程</a><a class="back-to-hubs" href="../../../hardware-and-systems/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../hardware-and-systems/embedded-bare-metal/index.html">嵌入式裸机开发</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="hardware-and-systems"><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:embedded-bare-metal/microcontroller-fundamentals" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/embedded-bare-metal/microcontroller-fundamentals/index.html">微控制器基础</a></summary><ul><li class="leaf"><a class="leaf-title active" href="../../../hardware-and-systems/embedded-bare-metal/microcontroller-fundamentals/mcu-architecture-cortex-m.html">MCU 架构与 ARM Cortex-M 内核</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/microcontroller-fundamentals/memory-map-boot-process.html">存储器映射与启动流程</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/microcontroller-fundamentals/clock-system-power-management.html">时钟系统与电源管理</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:embedded-bare-metal/peripheral-programming"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/embedded-bare-metal/peripheral-programming/index.html">外设编程</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/peripheral-programming/gpio-interrupt-system.html">GPIO 与中断系统</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/peripheral-programming/timer-pwm-adc.html">定时器、PWM 与 ADC</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/peripheral-programming/communication-interface-drivers.html">通信接口驱动开发</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:embedded-bare-metal/rtos-basics"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/embedded-bare-metal/rtos-basics/index.html">RTOS 基础</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/rtos-basics/rtos-scheduling-principles.html">RTOS 调度原理</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/rtos-basics/task-management-synchronization.html">任务管理与同步机制</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/rtos-basics/freertos-practice.html">FreeRTOS 实践</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:embedded-bare-metal/debugging-optimization"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/embedded-bare-metal/debugging-optimization/index.html">调试与优化</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/debugging-optimization/jtag-swd-debugging.html">JTAG/SWD 调试原理</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/debugging-optimization/performance-power-optimization.html">性能分析与功耗优化</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/debugging-optimization/firmware-security-ota.html">固件安全与 OTA 更新</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part I · 硬件电子</span><span>嵌入式裸机开发</span><span>微控制器基础</span><span>MCU 架构与 ARM Cortex-M 内核</span></nav>
+    <article class="content prose"><h1 id="mcu-架构与-arm-cortex-m-内核">MCU 架构与 ARM Cortex-M 内核</h1><h2 id="cortex-m-系列概览">Cortex-M 系列概览</h2><p>ARM Cortex-M 是 ARM 公司专为微控制器设计的处理器内核系列，采用 Thumb-2 指令集，在代码密度与执行效率之间取得最优平衡。从超低成本的 Cortex-M0 到高性能的 Cortex-M7，该系列覆盖了嵌入式应用的完整性能谱系。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[ARM Cortex-M 系列] --&gt; B[Cortex-M0/M0+]&#10;    A --&gt; C[Cortex-M3]&#10;    A --&gt; D[Cortex-M4/M4F]&#10;    A --&gt; E[Cortex-M7]&#10;    A --&gt; F[Cortex-M23/M33]&#10;    A --&gt; G[Cortex-M55/M85]&#10;    B --&gt; B1[超低功耗/低成本]&#10;    C --&gt; C1[通用嵌入式]&#10;    D --&gt; D1[DSP + 可选 FPU]&#10;    E --&gt; E1[高性能双发射]&#10;    F --&gt; F1[TrustZone 安全]&#10;    G --&gt; G1[AI/ML 加速 Helium]"></pre><table>
+<thead>
+<tr>
+<th>内核型号</th>
+<th>流水线级数</th>
+<th>指令集</th>
+<th>主要特性</th>
+<th>典型主频</th>
+<th>应用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cortex-M0</td>
+<td>3 级</td>
+<td>Thumb/Thumb-2 子集</td>
+<td>最小门数（12K）</td>
+<td>48 MHz</td>
+<td>IoT 传感器节点</td>
+</tr>
+<tr>
+<td>Cortex-M0+</td>
+<td>2 级</td>
+<td>Thumb/Thumb-2 子集</td>
+<td>单周期 I/O</td>
+<td>48 MHz</td>
+<td>可穿戴/电池设备</td>
+</tr>
+<tr>
+<td>Cortex-M3</td>
+<td>3 级</td>
+<td>完整 Thumb-2</td>
+<td>硬件除法、位带操作</td>
+<td>120 MHz</td>
+<td>工业控制</td>
+</tr>
+<tr>
+<td>Cortex-M4</td>
+<td>3 级</td>
+<td>Thumb-2 + DSP</td>
+<td>SIMD、可选 FPU</td>
+<td>180 MHz</td>
+<td>电机控制/音频</td>
+</tr>
+<tr>
+<td>Cortex-M7</td>
+<td>6 级</td>
+<td>Thumb-2 + DSP + DP-FPU</td>
+<td>双发射、Cache</td>
+<td>480 MHz</td>
+<td>图形/通信</td>
+</tr>
+<tr>
+<td>Cortex-M33</td>
+<td>3 级</td>
+<td>Thumb-2 + DSP + TrustZone</td>
+<td>安全隔离</td>
+<td>100 MHz</td>
+<td>安全 IoT</td>
+</tr>
+<tr>
+<td>Cortex-M55</td>
+<td>4 级</td>
+<td>Thumb-2 + Helium (MVE)</td>
+<td>向量处理</td>
+<td>200 MHz</td>
+<td>端侧 AI 推理</td>
+</tr>
+</tbody></table>
+<h2 id="处理器内核架构">处理器内核架构</h2><h3 id="寄存器组">寄存器组</h3><p>Cortex-M 处理器拥有 16 个 32 位通用寄存器和多个特殊功能寄存器：</p>
+<ul>
+<li><strong>R0-R12</strong>：通用寄存器，用于数据操作和函数参数传递（R0-R3 为前 4 个函数参数）</li>
+<li><strong>R13 (SP)</strong>：栈指针，Cortex-M 支持双栈指针——MSP（主栈指针）和 PSP（进程栈指针）</li>
+<li><strong>R14 (LR)</strong>：链接寄存器，存储函数返回地址，异常返回时使用 EXC_RETURN 魔数</li>
+<li><strong>R15 (PC)</strong>：程序计数器，最低位始终为 1 表示 Thumb 状态</li>
+</ul>
+<p>特殊寄存器包括：</p>
+<ul>
+<li><strong>xPSR</strong>：程序状态寄存器（APSR 标志位 + IPSR 异常号 + EPSR 执行状态）</li>
+<li><strong>PRIMASK</strong>：全局中断屏蔽（置 1 禁止所有可屏蔽中断）</li>
+<li><strong>BASEPRI</strong>：基于优先级的中断屏蔽（仅 M3 及以上）</li>
+<li><strong>FAULTMASK</strong>：故障屏蔽（禁止除 NMI 外的所有异常）</li>
+<li><strong>CONTROL</strong>：控制特权级别和栈指针选择</li>
+</ul>
+<h3 id="工作模式与特权级">工作模式与特权级</h3><p>Cortex-M 定义了两种工作模式和两种特权级别：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>模式</mtext><mo>=</mo><mrow><mo fence="true">{</mo><mtable rowspacing="0.36em" columnalign="left left" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mtext>Thread Mode</mtext></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mtext>正常代码执行</mtext></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mtext>Handler Mode</mtext></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mtext>异常/中断处理</mtext></mstyle></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">\text{模式} = \begin{cases} \text{Thread Mode} &amp; \text{正常代码执行} \\ \text{Handler Mode} &amp; \text{异常/中断处理} \end{cases}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">模式</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:3em;vertical-align:-1.25em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size4">{</span></span><span class="mord"><span class="mtable"><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.69em;"><span style="top:-3.69em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord text"><span class="mord">Thread Mode</span></span></span></span><span style="top:-2.25em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord text"><span class="mord">Handler Mode</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.19em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:1em;"></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.69em;"><span style="top:-3.69em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord text"><span class="mord cjk_fallback">正常代码执行</span></span></span></span><span style="top:-2.25em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord text"><span class="mord cjk_fallback">异常</span><span class="mord">/</span><span class="mord cjk_fallback">中断处理</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.19em;"><span></span></span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></div><div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>特权</mtext><mo>=</mo><mrow><mo fence="true">{</mo><mtable rowspacing="0.36em" columnalign="left left" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mtext>Privileged</mtext></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mtext>完全硬件访问权限</mtext></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mtext>Unprivileged</mtext></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mtext>受限访问（MPU 约束）</mtext></mstyle></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">\text{特权} = \begin{cases} \text{Privileged} &amp; \text{完全硬件访问权限} \\ \text{Unprivileged} &amp; \text{受限访问（MPU 约束）} \end{cases}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">特权</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:3em;vertical-align:-1.25em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size4">{</span></span><span class="mord"><span class="mtable"><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.69em;"><span style="top:-3.69em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord text"><span class="mord">Privileged</span></span></span></span><span style="top:-2.25em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord text"><span class="mord">Unprivileged</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.19em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:1em;"></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.69em;"><span style="top:-3.69em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord text"><span class="mord cjk_fallback">完全硬件访问权限</span></span></span></span><span style="top:-2.25em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord text"><span class="mord cjk_fallback">受限访问（</span><span class="mord">MPU </span><span class="mord cjk_fallback">约束）</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.19em;"><span></span></span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></div><p>Handler Mode 始终以特权级运行。Thread Mode 可通过 CONTROL 寄存器配置为非特权级，配合 MPU 实现 RTOS 的任务隔离。</p>
+<h3 id="流水线结构">流水线结构</h3><p>Cortex-M3/M4 采用 3 级流水线（取指 → 译码 → 执行），Cortex-M7 扩展为 6 级超标量流水线并支持双发射：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mtext>CPI</mtext><mtext>ideal</mtext></msub><mo>=</mo><mn>1</mn><mtext>（单发射）</mtext><mspace width="1em"/><mtext>或</mtext><mspace width="1em"/><mn>0.5</mn><mtext>（M7 双发射最优情况）</mtext></mrow><annotation encoding="application/x-tex">\text{CPI}_{\text{ideal}} = 1 \text{（单发射）} \quad \text{或} \quad 0.5 \text{（M7 双发射最优情况）}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord text"><span class="mord">CPI</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">ideal</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">1</span><span class="mord text"><span class="mord cjk_fallback">（单发射）</span></span><span class="mspace" style="margin-right:1em;"></span><span class="mord text"><span class="mord cjk_fallback">或</span></span><span class="mspace" style="margin-right:1em;"></span><span class="mord">0.5</span><span class="mord text"><span class="mord cjk_fallback">（</span><span class="mord">M7 </span><span class="mord cjk_fallback">双发射最优情况）</span></span></span></span></span></span></div><p>分支预测在 M3/M4 上采用静态预测（向后跳转预测为 taken），M7 引入动态分支预测器。流水线刷新（3 周期惩罚）是影响中断响应延迟的关键因素。</p>
+<h2 id="异常模型与-nvic">异常模型与 NVIC</h2><h3 id="异常类型">异常类型</h3><p>Cortex-M 的异常模型统一了中断和系统异常：</p>
+<table>
+<thead>
+<tr>
+<th>异常编号</th>
+<th>名称</th>
+<th>优先级</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Reset</td>
+<td>-3（最高）</td>
+<td>系统复位</td>
+</tr>
+<tr>
+<td>2</td>
+<td>NMI</td>
+<td>-2</td>
+<td>不可屏蔽中断</td>
+</tr>
+<tr>
+<td>3</td>
+<td>HardFault</td>
+<td>-1</td>
+<td>所有未处理故障的升级</td>
+</tr>
+<tr>
+<td>4</td>
+<td>MemManage</td>
+<td>可配置</td>
+<td>MPU 违规</td>
+</tr>
+<tr>
+<td>5</td>
+<td>BusFault</td>
+<td>可配置</td>
+<td>总线访问错误</td>
+</tr>
+<tr>
+<td>6</td>
+<td>UsageFault</td>
+<td>可配置</td>
+<td>未定义指令/非法状态</td>
+</tr>
+<tr>
+<td>11</td>
+<td>SVCall</td>
+<td>可配置</td>
+<td>系统服务调用</td>
+</tr>
+<tr>
+<td>14</td>
+<td>PendSV</td>
+<td>可配置</td>
+<td>RTOS 上下文切换</td>
+</tr>
+<tr>
+<td>15</td>
+<td>SysTick</td>
+<td>可配置</td>
+<td>系统节拍定时器</td>
+</tr>
+<tr>
+<td>16+</td>
+<td>IRQ0-IRQn</td>
+<td>可配置</td>
+<td>外设中断</td>
+</tr>
+</tbody></table>
+<h3 id="nvic-优先级机制">NVIC 优先级机制</h3><p>NVIC（嵌套向量中断控制器）支持抢占式优先级和子优先级分组：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>优先级位宽</mtext><mo>=</mo><mn>3</mn><mtext> 至 </mtext><mn>8</mn><mtext> 位（厂商实现决定）</mtext></mrow><annotation encoding="application/x-tex">\text{优先级位宽} = 3 \text{ 至 } 8 \text{ 位（厂商实现决定）}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">优先级位宽</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">3</span><span class="mord text"><span class="mord"> </span><span class="mord cjk_fallback">至</span><span class="mord"> </span></span><span class="mord">8</span><span class="mord text"><span class="mord"> </span><span class="mord cjk_fallback">位（厂商实现决定）</span></span></span></span></span></span></div><p>优先级分组通过 AIRCR 寄存器的 PRIGROUP 字段配置，将优先级位分为抢占优先级和子优先级：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>总位数</mtext><mo>=</mo><mtext>抢占位</mtext><mo>+</mo><mtext>子优先位</mtext></mrow><annotation encoding="application/x-tex">\text{总位数} = \text{抢占位} + \text{子优先位}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">总位数</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord text"><span class="mord cjk_fallback">抢占位</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">子优先位</span></span></span></span></span></span></div><p>抢占优先级高的中断可以打断低优先级中断的 ISR 形成嵌套；相同抢占优先级的中断通过子优先级决定排队顺序但不能互相抢占。</p>
+<h3 id="尾链与晚到机制">尾链与晚到机制</h3><p>NVIC 实现了两种优化中断响应的硬件机制：</p>
+<ul>
+<li><strong>尾链（Tail-chaining）</strong>：当一个 ISR 完成时若有等待的中断，跳过完整的出栈-入栈过程，仅需 6 个周期即可进入下一个 ISR</li>
+<li><strong>晚到（Late-arriving）</strong>：在入栈过程中若检测到更高优先级中断到来，入栈完成后直接跳转到高优先级 ISR</li>
+</ul>
+<p>这两种机制使 Cortex-M 的中断响应延迟降低至确定性的 12 个周期（M3/M4 零等待状态 Flash 情况下）。</p>
+<h2 id="thumb-2-指令集">Thumb-2 指令集</h2><p>Thumb-2 是 16 位和 32 位指令的混合编码，兼顾代码密度和执行效率：</p>
+<ul>
+<li><strong>16 位指令</strong>：覆盖最常用操作（MOV、ADD、LDR/STR、分支），代码密度接近纯 Thumb</li>
+<li><strong>32 位指令</strong>：提供完整 ARM 指令能力（大立即数、位域操作、IT 条件块、DSP 扩展）</li>
+</ul>
+<p>关键指令类别：</p>
+<ul>
+<li><strong>数据处理</strong>：ADD、SUB、MUL、SDIV/UDIV（M3+硬件除法）、位带操作</li>
+<li><strong>加载/存储</strong>：LDR/STR（支持前/后索引、PC 相对寻址）、LDM/STM 批量传输</li>
+<li><strong>分支</strong>：B、BL、BX、CBZ/CBNZ（比较并分支）、TBB/TBH（表分支）</li>
+<li><strong>DSP 扩展</strong>（M4+）：SMLAL（乘加）、QADD/QSUB（饱和运算）、SIMD 打包操作</li>
+</ul>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>代码密度</mtext><mo>≈</mo><mfrac><mtext>Thumb-2 尺寸</mtext><mtext>ARM32 尺寸</mtext></mfrac><mo>≈</mo><mn>0.65</mn><mo>∼</mo><mn>0.70</mn></mrow><annotation encoding="application/x-tex">\text{代码密度} \approx \frac{\text{Thumb-2 尺寸}}{\text{ARM32 尺寸}} \approx 0.65 \sim 0.70</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">代码密度</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0574em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord text"><span class="mord">ARM32 </span><span class="mord cjk_fallback">尺寸</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord text"><span class="mord">Thumb-2 </span><span class="mord cjk_fallback">尺寸</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.65</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∼</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.70</span></span></span></span></span></div><h2 id="总线架构">总线架构</h2><h3 id="ahb-apb-总线矩阵">AHB/APB 总线矩阵</h3><p>Cortex-M 系列使用 AMBA（Advanced Microcontroller Bus Architecture）总线体系：</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    CPU[Cortex-M 内核] --&gt; ICode[ICode 总线]&#10;    CPU --&gt; DCode[DCode 总线]&#10;    CPU --&gt; System[System 总线]&#10;    ICode --&gt; Flash[Flash 存储器]&#10;    DCode --&gt; Flash&#10;    System --&gt; BM[总线矩阵]&#10;    DMA[DMA 控制器] --&gt; BM&#10;    BM --&gt; AHB1[AHB1 高速外设]&#10;    BM --&gt; AHB2[AHB2 外设]&#10;    BM --&gt; APB1[APB1 低速外设]&#10;    BM --&gt; APB2[APB2 外设]&#10;    BM --&gt; SRAM[SRAM]"></pre><table>
+<thead>
+<tr>
+<th>总线</th>
+<th>带宽</th>
+<th>典型时钟</th>
+<th>挂载设备</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ICode</td>
+<td>32 位</td>
+<td>HCLK</td>
+<td>Flash 指令读取</td>
+</tr>
+<tr>
+<td>DCode</td>
+<td>32 位</td>
+<td>HCLK</td>
+<td>Flash 数据/常量读取</td>
+</tr>
+<tr>
+<td>System</td>
+<td>32 位</td>
+<td>HCLK</td>
+<td>SRAM、外设、DMA</td>
+</tr>
+<tr>
+<td>AHB1</td>
+<td>32 位</td>
+<td>HCLK</td>
+<td>GPIO、DMA、CRC</td>
+</tr>
+<tr>
+<td>APB1</td>
+<td>32 位</td>
+<td>HCLK/2 或 /4</td>
+<td>UART、I2C、SPI（低速）</td>
+</tr>
+<tr>
+<td>APB2</td>
+<td>32 位</td>
+<td>HCLK 或 /2</td>
+<td>ADC、TIM1、USART1</td>
+</tr>
+</tbody></table>
+<p>哈佛结构的三总线设计允许指令预取、数据访问和 DMA 传输并行执行，最大化总线利用率。</p>
+<h2 id="位带操作">位带操作</h2><p>Cortex-M3/M4 支持位带（Bit-band）操作，将 SRAM 和外设区域的每一个位映射到一个 32 位字地址，实现原子级的单比特读写：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>位带别名地址</mtext><mo>=</mo><mtext>Alias_Base</mtext><mo>+</mo><mo stretchy="false">(</mo><mtext>byte_offset</mtext><mo>×</mo><mn>32</mn><mo stretchy="false">)</mo><mo>+</mo><mo stretchy="false">(</mo><mtext>bit_number</mtext><mo>×</mo><mn>4</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\text{位带别名地址} = \text{Alias\_Base} + (\text{byte\_offset} \times 32) + (\text{bit\_number} \times 4)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">位带别名地址</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0044em;vertical-align:-0.31em;"></span><span class="mord text"><span class="mord">Alias_Base</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.06em;vertical-align:-0.31em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">byte_offset</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">32</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.06em;vertical-align:-0.31em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">bit_number</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">4</span><span class="mclose">)</span></span></span></span></span></div><p>其中 SRAM 位带区域基址为 <code>0x20000000</code>，别名区基址为 <code>0x22000000</code>；外设位带区域基址为 <code>0x40000000</code>，别名区基址为 <code>0x42000000</code>。</p>
+<p>位带操作的硬件保证原子性，无需关中断即可安全修改单个标志位，在多中断环境下尤为重要。相比传统的&quot;读-改-写&quot;序列：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>传统方式：3 条指令</mtext><mspace width="1em"/><mtext>位带方式：1 条 STR 指令</mtext></mrow><annotation encoding="application/x-tex">\text{传统方式：3 条指令} \quad \text{位带方式：1 条 STR 指令}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">传统方式：</span><span class="mord">3 </span><span class="mord cjk_fallback">条指令</span></span><span class="mspace" style="margin-right:1em;"></span><span class="mord text"><span class="mord cjk_fallback">位带方式：</span><span class="mord">1 </span><span class="mord cjk_fallback">条</span><span class="mord"> STR </span><span class="mord cjk_fallback">指令</span></span></span></span></span></span></div><h2 id="cortex-m-选型决策">Cortex-M 选型决策</h2><p>选择 Cortex-M 内核时需权衡性能、成本、功耗和安全需求：</p>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TD&#10;    START[应用需求分析] --&gt; Q1{需要浮点运算?}&#10;    Q1 --&gt;|否| Q2{需要 DSP?}&#10;    Q1 --&gt;|是| Q3{双精度?}&#10;    Q2 --&gt;|否| Q4{超低功耗优先?}&#10;    Q2 --&gt;|是| M4[Cortex-M4F]&#10;    Q3 --&gt;|否| M4&#10;    Q3 --&gt;|是| M7[Cortex-M7]&#10;    Q4 --&gt;|是| M0P[Cortex-M0+]&#10;    Q4 --&gt;|否| M3[Cortex-M3]&#10;    M4 --&gt; Q5{需要安全隔离?}&#10;    M3 --&gt; Q5&#10;    Q5 --&gt;|是| M33[Cortex-M33]&#10;    Q5 --&gt;|否| DONE[选型完成]&#10;    M7 --&gt; DONE&#10;    M0P --&gt; DONE&#10;    M33 --&gt; DONE"></pre><p>关键选型指标：</p>
+<ul>
+<li><strong>门数/成本</strong>：M0（12K 门）&lt; M0+（12K）&lt; M3（32K）&lt; M4（43K）&lt; M7（复杂度最高）</li>
+<li><strong>DMIPS/MHz</strong>：M0（0.84）&lt; M3（1.25）&lt; M4（1.25）&lt; M7（2.14）</li>
+<li><strong>中断延迟</strong>：M0（15 周期）&gt; M3/M4（12 周期）&gt; M7（可变，含 Cache 影响）</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../hardware-and-systems/embedded-bare-metal/microcontroller-fundamentals/index.html"><span class="label">Previous</span>微控制器基础</a><a class="next" href="../../../hardware-and-systems/embedded-bare-metal/microcontroller-fundamentals/memory-map-boot-process.html"><span class="label">Next</span>存储器映射与启动流程</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#cortex-m-系列概览" data-outline-link="cortex-m-系列概览">Cortex-M 系列概览</a></li><li class="depth-2"><a href="#处理器内核架构" data-outline-link="处理器内核架构">处理器内核架构</a></li><li class="depth-3"><a href="#寄存器组" data-outline-link="寄存器组">寄存器组</a></li><li class="depth-3"><a href="#工作模式与特权级" data-outline-link="工作模式与特权级">工作模式与特权级</a></li><li class="depth-3"><a href="#流水线结构" data-outline-link="流水线结构">流水线结构</a></li><li class="depth-2"><a href="#异常模型与-nvic" data-outline-link="异常模型与-nvic">异常模型与 NVIC</a></li><li class="depth-3"><a href="#异常类型" data-outline-link="异常类型">异常类型</a></li><li class="depth-3"><a href="#nvic-优先级机制" data-outline-link="nvic-优先级机制">NVIC 优先级机制</a></li><li class="depth-3"><a href="#尾链与晚到机制" data-outline-link="尾链与晚到机制">尾链与晚到机制</a></li><li class="depth-2"><a href="#thumb-2-指令集" data-outline-link="thumb-2-指令集">Thumb-2 指令集</a></li><li class="depth-2"><a href="#总线架构" data-outline-link="总线架构">总线架构</a></li><li class="depth-3"><a href="#ahb-apb-总线矩阵" data-outline-link="ahb-apb-总线矩阵">AHB/APB 总线矩阵</a></li><li class="depth-2"><a href="#位带操作" data-outline-link="位带操作">位带操作</a></li><li class="depth-2"><a href="#cortex-m-选型决策" data-outline-link="cortex-m-选型决策">Cortex-M 选型决策</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

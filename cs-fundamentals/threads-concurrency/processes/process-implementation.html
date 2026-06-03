@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>进程的实现机制 · 计算机科学基础</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:计算机科学基础" data-pagefind-meta="slug:cs-fundamentals">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">计算机科学基础</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item active" href="../../../cs-fundamentals/index.html" aria-current="page" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../cs-fundamentals/index.html">计算机科学基础</a><a class="back-to-hubs" href="../../../cs-fundamentals/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../cs-fundamentals/threads-concurrency/index.html">线程与并发 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="cs-fundamentals"><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/processes" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/processes/index.html">进程 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/processes/process-definition-and-concepts.html">进程的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/processes/process-core-ideas.html">进程的核心思想</a></li><li class="leaf"><a class="leaf-title active" href="../../../cs-fundamentals/threads-concurrency/processes/process-implementation.html">进程的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/threads"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/threads/index.html">线程 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/threads/thread-definition-and-concepts.html">线程的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/threads/thread-core-ideas.html">线程的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/threads/thread-implementation.html">线程的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/coroutines"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/coroutines/index.html">协程 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/coroutines/coroutine-definition-and-concepts.html">协程的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/coroutines/coroutine-core-ideas.html">协程的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/coroutines/coroutine-implementation.html">协程的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/concurrency-and-parallelism"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/index.html">并发与并行 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/concurrency-parallelism-concepts.html">并发与并行的核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/concurrency-parallelism-ideas.html">并发与并行的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/concurrency-parallelism-implementation.html">并发与并行的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/atomic-operations"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/atomic-operations/index.html">原子操作 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/atomic-operations/atomic-definition-and-concepts.html">原子操作的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/atomic-operations/atomic-core-ideas.html">原子操作的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/atomic-operations/atomic-implementation.html">原子操作的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/locks"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/locks/index.html">锁 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/locks/lock-definition-and-concepts.html">锁的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/locks/lock-core-ideas.html">锁的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/locks/lock-implementation.html">锁的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/actor-model"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/actor-model/index.html">Actor 模型 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/actor-model/actor-model-concepts.html">Actor 模型的核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/actor-model/actor-model-ideas.html">Actor 模型的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/actor-model/actor-model-implementation.html">Actor 模型的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/supplementary"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/index.html">补充主题 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/race-conditions.html">竞态条件</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/deadlock-livelock-starvation.html">死锁、活锁与饥饿</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/semaphores-and-conditions.html">信号量与条件变量</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/thread-pools.html">线程池与任务调度</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/message-passing.html">消息传递</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part III · 系统 (Systems)</span><span>线程与并发 简介</span><span>进程 简介</span><span>进程的实现机制</span></nav>
+    <article class="content prose"><h1 id="进程的实现机制">进程的实现机制</h1><h2 id="进程的创建">进程的创建</h2><p>操作系统提供了多种系统调用来创建新进程。不同的创建方式在语义和效率上各有特点。</p>
+<h3 id="fork-复制当前进程">fork — 复制当前进程</h3><p><code>fork</code> 是 UNIX/Linux 系统中最经典的进程创建方式。它会创建一个当前进程的<strong>近乎完全的副本</strong>（子进程），子进程从 <code>fork</code> 调用之后继续执行。</p>
+<div class="code-block-wrapper" data-lang="pseudocode" data-code="FUNCTION fork_example():
+    pid = fork()
+    IF pid == 0 THEN
+        // 子进程：fork 返回 0
+        print(&quot;我是子进程，PID =&quot;, getpid())
+    ELSE IF pid &gt; 0 THEN
+        // 父进程：fork 返回子进程的 PID
+        print(&quot;我是父进程，子进程 PID =&quot;, pid)
+    ELSE
+        // fork 失败
+        print(&quot;进程创建失败&quot;)
+    END IF
+END FUNCTION"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>FUNCTION fork_example():</span></span>
+<span class="line"><span>    pid = fork()</span></span>
+<span class="line"><span>    IF pid == 0 THEN</span></span>
+<span class="line"><span>        // 子进程：fork 返回 0</span></span>
+<span class="line"><span>        print("我是子进程，PID =", getpid())</span></span>
+<span class="line"><span>    ELSE IF pid > 0 THEN</span></span>
+<span class="line"><span>        // 父进程：fork 返回子进程的 PID</span></span>
+<span class="line"><span>        print("我是父进程，子进程 PID =", pid)</span></span>
+<span class="line"><span>    ELSE</span></span>
+<span class="line"><span>        // fork 失败</span></span>
+<span class="line"><span>        print("进程创建失败")</span></span>
+<span class="line"><span>    END IF</span></span>
+<span class="line"><span>END FUNCTION</span></span></code></pre></div><pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TD&#10;    P[&quot;Parent Process&lt;br/&gt;Calls fork()&quot;]&#10;    P --&gt;|&quot;Copy Address Space&quot;| F{&quot;fork Return Value&quot;}&#10;    F --&gt;|&quot;Returns 0&quot;| C[&quot;Child Process&lt;br/&gt;(New PID)&quot;]&#10;    F --&gt;|&quot;Returns Child PID&quot;| PP[&quot;Parent Process Continues&quot;]&#10;    F --&gt;|&quot;Returns -1&quot;| ERR[&quot;Creation Failed&quot;]"></pre><h3 id="spawn-直接创建新进程">spawn — 直接创建新进程</h3><p><code>spawn</code>（或 <code>exec</code> 系列调用）直接从指定的可执行文件创建新进程，不需要先复制再替换：</p>
+<div class="code-block-wrapper" data-lang="pseudocode" data-code="FUNCTION spawn_example():
+    // 直接指定程序路径和参数创建新进程
+    child_pid = spawn(&quot;/path/to/program&quot;, [&quot;arg1&quot;, &quot;arg2&quot;])
+    IF child_pid &gt; 0 THEN
+        print(&quot;成功创建子进程，PID =&quot;, child_pid)
+        wait(child_pid)  // 等待子进程结束
+    END IF
+END FUNCTION"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>FUNCTION spawn_example():</span></span>
+<span class="line"><span>    // 直接指定程序路径和参数创建新进程</span></span>
+<span class="line"><span>    child_pid = spawn("/path/to/program", ["arg1", "arg2"])</span></span>
+<span class="line"><span>    IF child_pid > 0 THEN</span></span>
+<span class="line"><span>        print("成功创建子进程，PID =", child_pid)</span></span>
+<span class="line"><span>        wait(child_pid)  // 等待子进程结束</span></span>
+<span class="line"><span>    END IF</span></span>
+<span class="line"><span>END FUNCTION</span></span></code></pre></div><h3 id="fork-vs-spawn-对比">fork vs spawn 对比</h3><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>fork</th>
+<th>spawn / exec</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>创建方式</strong></td>
+<td>复制当前进程的地址空间</td>
+<td>从可执行文件创建全新进程</td>
+</tr>
+<tr>
+<td><strong>初始状态</strong></td>
+<td>与父进程几乎相同</td>
+<td>全新的程序映像</td>
+</tr>
+<tr>
+<td><strong>写时复制（COW）</strong></td>
+<td>支持，延迟实际拷贝</td>
+<td>不适用</td>
+</tr>
+<tr>
+<td><strong>典型系统</strong></td>
+<td>UNIX / Linux</td>
+<td>Windows（CreateProcess）、POSIX spawn</td>
+</tr>
+<tr>
+<td><strong>常见用法</strong></td>
+<td>fork + exec 组合</td>
+<td>直接创建新程序进程</td>
+</tr>
+<tr>
+<td><strong>性能</strong></td>
+<td>得益于 COW 开销较小</td>
+<td>无需复制父进程状态</td>
+</tr>
+</tbody></table>
+<h3 id="写时复制-copy-on-write">写时复制（Copy-On-Write）</h3><p>现代操作系统在 <code>fork</code> 时并不会立即复制父进程的所有内存页，而是让父子进程<strong>共享</strong>同一份物理内存，仅在某一方尝试<strong>写入</strong>时才真正复制该内存页：</p>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart LR&#10;    subgraph AFTER_FORK[&quot;After fork (Sharing Phase)&quot;]&#10;        direction TB&#10;        PA1[&quot;Parent Page Table&quot;]&#10;        CA1[&quot;Child Page Table&quot;]&#10;        PHY1[&quot;Physical Page (Read-Only Shared)&quot;]&#10;        PA1 --&gt; PHY1&#10;        CA1 --&gt; PHY1&#10;    end&#10;    subgraph AFTER_WRITE[&quot;After Child Writes (Copy Phase)&quot;]&#10;        direction TB&#10;        PA2[&quot;Parent Page Table&quot;]&#10;        CA2[&quot;Child Page Table&quot;]&#10;        PHY2[&quot;Physical Page A (Parent Process)&quot;]&#10;        PHY3[&quot;Physical Page B (Child Process Copy)&quot;]&#10;        PA2 --&gt; PHY2&#10;        CA2 --&gt; PHY3&#10;    end&#10;    AFTER_FORK --&gt;|&quot;Triggered by Child Write&quot;| AFTER_WRITE"></pre><h2 id="进程调度算法">进程调度算法</h2><p>操作系统需要决定在多个就绪进程中，下一个让哪个进程使用 CPU。不同的调度算法有不同的目标和适用场景。</p>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TD&#10;    Q[&quot;Multiple Processes in Ready Queue&quot;]&#10;    Q --&gt; S{&quot;Scheduling Algorithm Selection&quot;}&#10;    S --&gt;|&quot;First Come First Served&quot;| FCFS[&quot;FCFS&lt;br/&gt;By Arrival Order&quot;]&#10;    S --&gt;|&quot;Shortest Job First&quot;| SJF[&quot;SJF&lt;br/&gt;By Estimated Time&quot;]&#10;    S --&gt;|&quot;Priority Scheduling&quot;| PRI[&quot;Priority&lt;br/&gt;By Priority Level&quot;]&#10;    S --&gt;|&quot;Round-Robin&quot;| RR[&quot;Round-Robin&lt;br/&gt;By Fixed Time Slice&quot;]&#10;    FCFS --&gt; R[&quot;Selected Process&lt;br/&gt;Enters Running State&quot;]&#10;    SJF --&gt; R&#10;    PRI --&gt; R&#10;    RR --&gt; R"></pre><h3 id="先来先服务-fcfs">先来先服务（FCFS）</h3><p>按照进程到达就绪队列的<strong>先后顺序</strong>进行调度，最先到达的进程最先获得 CPU。</p>
+<div class="code-block-wrapper" data-lang="pseudocode" data-code="FUNCTION fcfs_schedule(ready_queue):
+    WHILE ready_queue is not empty:
+        process = ready_queue.dequeue()  // 取出队首进程
+        run(process)                     // 执行直到完成或阻塞
+    END WHILE
+END FUNCTION"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>FUNCTION fcfs_schedule(ready_queue):</span></span>
+<span class="line"><span>    WHILE ready_queue is not empty:</span></span>
+<span class="line"><span>        process = ready_queue.dequeue()  // 取出队首进程</span></span>
+<span class="line"><span>        run(process)                     // 执行直到完成或阻塞</span></span>
+<span class="line"><span>    END WHILE</span></span>
+<span class="line"><span>END FUNCTION</span></span></code></pre></div><p><strong>优点</strong>：实现简单，公平。 <strong>缺点</strong>：长作业会阻塞后续短作业（<strong>护航效应</strong>）。</p>
+<h3 id="最短作业优先-sjf">最短作业优先（SJF）</h3><p>优先调度预计执行时间最短的进程，以最小化平均等待时间。</p>
+<div class="code-block-wrapper" data-lang="pseudocode" data-code="FUNCTION sjf_schedule(ready_queue):
+    WHILE ready_queue is not empty:
+        process = ready_queue.find_shortest()  // 找到预估时间最短的
+        ready_queue.remove(process)
+        run(process)
+    END WHILE
+END FUNCTION"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>FUNCTION sjf_schedule(ready_queue):</span></span>
+<span class="line"><span>    WHILE ready_queue is not empty:</span></span>
+<span class="line"><span>        process = ready_queue.find_shortest()  // 找到预估时间最短的</span></span>
+<span class="line"><span>        ready_queue.remove(process)</span></span>
+<span class="line"><span>        run(process)</span></span>
+<span class="line"><span>    END WHILE</span></span>
+<span class="line"><span>END FUNCTION</span></span></code></pre></div><p><strong>优点</strong>：平均等待时间最优。 <strong>缺点</strong>：难以准确预估执行时间；长作业可能<strong>饥饿</strong>。</p>
+<h3 id="优先级调度-priority">优先级调度（Priority）</h3><p>为每个进程赋予一个优先级数值，调度器选择优先级最高的进程执行。</p>
+<div class="code-block-wrapper" data-lang="pseudocode" data-code="FUNCTION priority_schedule(ready_queue):
+    WHILE ready_queue is not empty:
+        process = ready_queue.find_highest_priority()
+        ready_queue.remove(process)
+        run(process)
+        // 可选：动态调整其他进程的优先级（老化机制）
+        age_waiting_processes(ready_queue)
+    END WHILE
+END FUNCTION"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>FUNCTION priority_schedule(ready_queue):</span></span>
+<span class="line"><span>    WHILE ready_queue is not empty:</span></span>
+<span class="line"><span>        process = ready_queue.find_highest_priority()</span></span>
+<span class="line"><span>        ready_queue.remove(process)</span></span>
+<span class="line"><span>        run(process)</span></span>
+<span class="line"><span>        // 可选：动态调整其他进程的优先级（老化机制）</span></span>
+<span class="line"><span>        age_waiting_processes(ready_queue)</span></span>
+<span class="line"><span>    END WHILE</span></span>
+<span class="line"><span>END FUNCTION</span></span></code></pre></div><p><strong>优点</strong>：可以根据任务重要性分配资源。 <strong>缺点</strong>：低优先级进程可能<strong>饥饿</strong>（可通过老化机制缓解）。</p>
+<h3 id="时间片轮转-round-robin">时间片轮转（Round-Robin）</h3><p>每个进程分配一个固定的<strong>时间片（quantum）</strong>，时间片用完后切换到下一个进程。</p>
+<div class="code-block-wrapper" data-lang="pseudocode" data-code="FUNCTION round_robin_schedule(ready_queue, quantum):
+    WHILE ready_queue is not empty:
+        process = ready_queue.dequeue()
+        run_for(process, quantum)  // 最多执行 quantum 时间
+        IF process is not finished THEN
+            ready_queue.enqueue(process)  // 放回队尾
+        END IF
+    END WHILE
+END FUNCTION"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>FUNCTION round_robin_schedule(ready_queue, quantum):</span></span>
+<span class="line"><span>    WHILE ready_queue is not empty:</span></span>
+<span class="line"><span>        process = ready_queue.dequeue()</span></span>
+<span class="line"><span>        run_for(process, quantum)  // 最多执行 quantum 时间</span></span>
+<span class="line"><span>        IF process is not finished THEN</span></span>
+<span class="line"><span>            ready_queue.enqueue(process)  // 放回队尾</span></span>
+<span class="line"><span>        END IF</span></span>
+<span class="line"><span>    END WHILE</span></span>
+<span class="line"><span>END FUNCTION</span></span></code></pre></div><p><strong>优点</strong>：响应时间好，公平。 <strong>缺点</strong>：时间片过大退化为 FCFS，过小则上下文切换开销大。</p>
+<h3 id="调度算法对比">调度算法对比</h3><table>
+<thead>
+<tr>
+<th>算法</th>
+<th>策略</th>
+<th>抢占式</th>
+<th>优点</th>
+<th>缺点</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>FCFS</strong></td>
+<td>先到先服务</td>
+<td>否</td>
+<td>简单公平</td>
+<td>护航效应</td>
+<td>批处理系统</td>
+</tr>
+<tr>
+<td><strong>SJF</strong></td>
+<td>最短优先</td>
+<td>可选</td>
+<td>平均等待时间最优</td>
+<td>饥饿、难以预估</td>
+<td>已知作业长度的批处理</td>
+</tr>
+<tr>
+<td><strong>Priority</strong></td>
+<td>优先级</td>
+<td>可选</td>
+<td>灵活、可区分重要性</td>
+<td>饥饿（需老化）</td>
+<td>实时系统</td>
+</tr>
+<tr>
+<td><strong>Round-Robin</strong></td>
+<td>时间片轮转</td>
+<td>是</td>
+<td>响应好、公平</td>
+<td>上下文切换开销</td>
+<td>分时系统、交互式系统</td>
+</tr>
+</tbody></table>
+<h2 id="进程间通信-ipc">进程间通信（IPC）</h2><p>由于进程之间内存空间相互隔离，进程间的数据交换需要借助操作系统提供的**进程间通信（Inter-Process Communication, IPC）**机制。</p>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart LR&#10;    PA[&quot;Process A&quot;] --&gt;|&quot;Write&quot;| PIPE[&quot;Pipe / Message Queue / Shared Memory&quot;]&#10;    PIPE --&gt;|&quot;Read&quot;| PB[&quot;Process B&quot;]&#10;    PA --&gt;|&quot;Send&quot;| SOCK[&quot;Socket&quot;]&#10;    SOCK --&gt;|&quot;Receive&quot;| PB&#10;    PA --&gt;|&quot;Signal&quot;| SIG[&quot;Semaphore&quot;]&#10;    SIG --&gt;|&quot;Synchronize&quot;| PB"></pre><h3 id="管道-pipe">管道（Pipe）</h3><p>管道是最简单的 IPC 机制，提供一个<strong>单向的字节流通道</strong>。数据从一端写入，从另一端读出。</p>
+<div class="code-block-wrapper" data-lang="pseudocode" data-code="FUNCTION pipe_example():
+    (read_end, write_end) = create_pipe()
+
+    pid = fork()
+    IF pid == 0 THEN
+        // 子进程：从管道读取
+        close(write_end)
+        data = read(read_end)
+        print(&quot;子进程收到:&quot;, data)
+    ELSE
+        // 父进程：向管道写入
+        close(read_end)
+        write(write_end, &quot;Hello from parent!&quot;)
+    END IF
+END FUNCTION"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>FUNCTION pipe_example():</span></span>
+<span class="line"><span>    (read_end, write_end) = create_pipe()</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    pid = fork()</span></span>
+<span class="line"><span>    IF pid == 0 THEN</span></span>
+<span class="line"><span>        // 子进程：从管道读取</span></span>
+<span class="line"><span>        close(write_end)</span></span>
+<span class="line"><span>        data = read(read_end)</span></span>
+<span class="line"><span>        print("子进程收到:", data)</span></span>
+<span class="line"><span>    ELSE</span></span>
+<span class="line"><span>        // 父进程：向管道写入</span></span>
+<span class="line"><span>        close(read_end)</span></span>
+<span class="line"><span>        write(write_end, "Hello from parent!")</span></span>
+<span class="line"><span>    END IF</span></span>
+<span class="line"><span>END FUNCTION</span></span></code></pre></div><h3 id="消息队列-message-queue">消息队列（Message Queue）</h3><p>消息队列允许进程以<strong>结构化的消息</strong>为单位进行通信，支持按类型选择性接收。</p>
+<div class="code-block-wrapper" data-lang="pseudocode" data-code="FUNCTION message_queue_example():
+    queue = create_message_queue(key)
+
+    // 发送方
+    message = { type: 1, content: &quot;任务数据&quot; }
+    send(queue, message)
+
+    // 接收方
+    received = receive(queue, type: 1)
+    print(&quot;收到消息:&quot;, received.content)
+END FUNCTION"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>FUNCTION message_queue_example():</span></span>
+<span class="line"><span>    queue = create_message_queue(key)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    // 发送方</span></span>
+<span class="line"><span>    message = { type: 1, content: "任务数据" }</span></span>
+<span class="line"><span>    send(queue, message)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    // 接收方</span></span>
+<span class="line"><span>    received = receive(queue, type: 1)</span></span>
+<span class="line"><span>    print("收到消息:", received.content)</span></span>
+<span class="line"><span>END FUNCTION</span></span></code></pre></div><h3 id="共享内存-shared-memory">共享内存（Shared Memory）</h3><p>共享内存是效率最高的 IPC 方式——两个进程将同一块物理内存映射到各自的地址空间中，直接读写即可。</p>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TB&#10;    subgraph SHM_MODEL[&quot;Shared Memory Model&quot;]&#10;        direction LR&#10;        PA2[&quot;Process A&lt;br/&gt;Virtual Address Space&quot;]&#10;        SHM[&quot;Shared Memory Region&lt;br/&gt;(Physical Memory)&quot;]&#10;        PB2[&quot;Process B&lt;br/&gt;Virtual Address Space&quot;]&#10;        PA2 --&gt;|&quot;Map&quot;| SHM&#10;        PB2 --&gt;|&quot;Map&quot;| SHM&#10;    end"></pre><div class="code-block-wrapper" data-lang="pseudocode" data-code="FUNCTION shared_memory_example():
+    shm = create_shared_memory(size: 4096)
+
+    pid = fork()
+    IF pid == 0 THEN
+        // 子进程：读取共享内存
+        attach(shm)
+        data = read_from(shm)
+        print(&quot;子进程读到:&quot;, data)
+    ELSE
+        // 父进程：写入共享内存
+        attach(shm)
+        write_to(shm, &quot;共享数据&quot;)
+        wait(pid)
+    END IF
+END FUNCTION"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>FUNCTION shared_memory_example():</span></span>
+<span class="line"><span>    shm = create_shared_memory(size: 4096)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    pid = fork()</span></span>
+<span class="line"><span>    IF pid == 0 THEN</span></span>
+<span class="line"><span>        // 子进程：读取共享内存</span></span>
+<span class="line"><span>        attach(shm)</span></span>
+<span class="line"><span>        data = read_from(shm)</span></span>
+<span class="line"><span>        print("子进程读到:", data)</span></span>
+<span class="line"><span>    ELSE</span></span>
+<span class="line"><span>        // 父进程：写入共享内存</span></span>
+<span class="line"><span>        attach(shm)</span></span>
+<span class="line"><span>        write_to(shm, "共享数据")</span></span>
+<span class="line"><span>        wait(pid)</span></span>
+<span class="line"><span>    END IF</span></span>
+<span class="line"><span>END FUNCTION</span></span></code></pre></div><h3 id="信号量-semaphore">信号量（Semaphore）</h3><p>信号量主要用于<strong>同步和互斥</strong>，控制多个进程对共享资源的访问顺序。</p>
+<div class="code-block-wrapper" data-lang="pseudocode" data-code="FUNCTION semaphore_example():
+    sem = create_semaphore(initial_value: 1)
+
+    // 进程 A
+    wait(sem)           // P 操作：信号量减 1，若为负则阻塞
+    // 进入临界区，访问共享资源
+    access_shared_resource()
+    signal(sem)         // V 操作：信号量加 1，唤醒等待者
+
+    // 进程 B
+    wait(sem)           // 若进程 A 还在临界区，进程 B 将在此阻塞
+    access_shared_resource()
+    signal(sem)
+END FUNCTION"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>FUNCTION semaphore_example():</span></span>
+<span class="line"><span>    sem = create_semaphore(initial_value: 1)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    // 进程 A</span></span>
+<span class="line"><span>    wait(sem)           // P 操作：信号量减 1，若为负则阻塞</span></span>
+<span class="line"><span>    // 进入临界区，访问共享资源</span></span>
+<span class="line"><span>    access_shared_resource()</span></span>
+<span class="line"><span>    signal(sem)         // V 操作：信号量加 1，唤醒等待者</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    // 进程 B</span></span>
+<span class="line"><span>    wait(sem)           // 若进程 A 还在临界区，进程 B 将在此阻塞</span></span>
+<span class="line"><span>    access_shared_resource()</span></span>
+<span class="line"><span>    signal(sem)</span></span>
+<span class="line"><span>END FUNCTION</span></span></code></pre></div><h3 id="套接字-socket">套接字（Socket）</h3><p>套接字是最通用的 IPC 机制，不仅支持同一台机器上的进程通信，还支持<strong>跨网络</strong>的进程通信。</p>
+<div class="code-block-wrapper" data-lang="pseudocode" data-code="// 服务端
+FUNCTION socket_server():
+    server = create_socket(port: 8080)
+    bind(server)
+    listen(server)
+    client = accept(server)
+    data = receive(client)
+    send(client, &quot;收到: &quot; + data)
+
+// 客户端
+FUNCTION socket_client():
+    client = create_socket()
+    connect(client, &quot;localhost&quot;, 8080)
+    send(client, &quot;Hello!&quot;)
+    response = receive(client)
+    print(response)
+END FUNCTION"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>// 服务端</span></span>
+<span class="line"><span>FUNCTION socket_server():</span></span>
+<span class="line"><span>    server = create_socket(port: 8080)</span></span>
+<span class="line"><span>    bind(server)</span></span>
+<span class="line"><span>    listen(server)</span></span>
+<span class="line"><span>    client = accept(server)</span></span>
+<span class="line"><span>    data = receive(client)</span></span>
+<span class="line"><span>    send(client, "收到: " + data)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>// 客户端</span></span>
+<span class="line"><span>FUNCTION socket_client():</span></span>
+<span class="line"><span>    client = create_socket()</span></span>
+<span class="line"><span>    connect(client, "localhost", 8080)</span></span>
+<span class="line"><span>    send(client, "Hello!")</span></span>
+<span class="line"><span>    response = receive(client)</span></span>
+<span class="line"><span>    print(response)</span></span>
+<span class="line"><span>END FUNCTION</span></span></code></pre></div><h3 id="ipc-机制对比">IPC 机制对比</h3><table>
+<thead>
+<tr>
+<th>IPC 方式</th>
+<th>通信方向</th>
+<th>数据格式</th>
+<th>速度</th>
+<th>是否跨网络</th>
+<th>复杂度</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>管道</strong></td>
+<td>单向（命名管道可双向）</td>
+<td>字节流</td>
+<td>中</td>
+<td>否</td>
+<td>低</td>
+<td>父子进程简单通信</td>
+</tr>
+<tr>
+<td><strong>消息队列</strong></td>
+<td>双向</td>
+<td>结构化消息</td>
+<td>中</td>
+<td>否</td>
+<td>中</td>
+<td>按类型分发消息</td>
+</tr>
+<tr>
+<td><strong>共享内存</strong></td>
+<td>双向</td>
+<td>任意</td>
+<td><strong>最快</strong></td>
+<td>否</td>
+<td>高（需同步）</td>
+<td>大数据量高频通信</td>
+</tr>
+<tr>
+<td><strong>信号量</strong></td>
+<td>同步信号</td>
+<td>无数据</td>
+<td>快</td>
+<td>否</td>
+<td>中</td>
+<td>同步与互斥控制</td>
+</tr>
+<tr>
+<td><strong>套接字</strong></td>
+<td>双向</td>
+<td>字节流/数据报</td>
+<td>慢</td>
+<td><strong>是</strong></td>
+<td>高</td>
+<td>网络通信、跨机器 IPC</td>
+</tr>
+</tbody></table>
+<h2 id="进程的终止">进程的终止</h2><p>进程终止分为<strong>正常终止</strong>和<strong>异常终止</strong>两种情况。</p>
+<h3 id="正常终止">正常终止</h3><div class="code-block-wrapper" data-lang="pseudocode" data-code="FUNCTION normal_exit():
+    // 方式 1：main 函数返回
+    return 0
+
+    // 方式 2：主动调用退出
+    exit(0)         // 正常退出，返回码 0
+
+    // 方式 3：最后一个线程完成
+    // 进程中所有线程执行完毕后自动终止
+END FUNCTION"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>FUNCTION normal_exit():</span></span>
+<span class="line"><span>    // 方式 1：main 函数返回</span></span>
+<span class="line"><span>    return 0</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    // 方式 2：主动调用退出</span></span>
+<span class="line"><span>    exit(0)         // 正常退出，返回码 0</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    // 方式 3：最后一个线程完成</span></span>
+<span class="line"><span>    // 进程中所有线程执行完毕后自动终止</span></span>
+<span class="line"><span>END FUNCTION</span></span></code></pre></div><h3 id="异常终止">异常终止</h3><div class="code-block-wrapper" data-lang="pseudocode" data-code="FUNCTION abnormal_exit():
+    // 方式 1：收到致命信号
+    // 如 SIGSEGV（段错误）、SIGKILL（强制杀死）
+
+    // 方式 2：未捕获的异常
+    THROW uncaught_exception
+
+    // 方式 3：调用 abort
+    abort()         // 异常终止，产生 core dump
+END FUNCTION"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>FUNCTION abnormal_exit():</span></span>
+<span class="line"><span>    // 方式 1：收到致命信号</span></span>
+<span class="line"><span>    // 如 SIGSEGV（段错误）、SIGKILL（强制杀死）</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    // 方式 2：未捕获的异常</span></span>
+<span class="line"><span>    THROW uncaught_exception</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    // 方式 3：调用 abort</span></span>
+<span class="line"><span>    abort()         // 异常终止，产生 core dump</span></span>
+<span class="line"><span>END FUNCTION</span></span></code></pre></div><h3 id="终止后的资源回收">终止后的资源回收</h3><pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TD&#10;    T[&quot;Process Termination&quot;] --&gt; S1[&quot;Close All Open File Descriptors&quot;]&#10;    S1 --&gt; S2[&quot;Release Allocated Memory&quot;]&#10;    S2 --&gt; S3[&quot;Release Occupied I/O Devices&quot;]&#10;    S3 --&gt; S4[&quot;Send SIGCHLD Signal to Parent Process&quot;]&#10;    S4 --&gt; S5{&quot;Did Parent Call wait?&quot;}&#10;    S5 --&gt;|&quot;Yes&quot;| S6[&quot;Reclaim PCB, Process Fully Removed&quot;]&#10;    S5 --&gt;|&quot;No&quot;| S7[&quot;Enter Zombie State&lt;br/&gt;PCB Remains&quot;]"></pre><table>
+<thead>
+<tr>
+<th>终止类型</th>
+<th>返回码</th>
+<th>触发方式</th>
+<th>后续处理</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>正常退出</strong></td>
+<td>0（成功）或自定义值</td>
+<td>return / exit</td>
+<td>父进程通过 wait 获取返回码</td>
+</tr>
+<tr>
+<td><strong>信号终止</strong></td>
+<td>128 + 信号编号</td>
+<td>kill / 异常信号</td>
+<td>可能生成 core dump</td>
+</tr>
+<tr>
+<td><strong>异常终止</strong></td>
+<td>非零</td>
+<td>abort / 未捕获异常</td>
+<td>操作系统强制回收资源</td>
+</tr>
+</tbody></table>
+<h2 id="小结">小结</h2><ul>
+<li>进程创建有两种主要方式：<code>fork</code>（复制当前进程）和 <code>spawn</code>（创建全新进程），现代系统通过<strong>写时复制</strong>优化 fork 的性能。</li>
+<li>操作系统通过调度算法（FCFS、SJF、优先级、时间片轮转）决定哪个进程获得 CPU，不同算法在公平性、响应时间和吞吐量之间做出不同权衡。</li>
+<li>进程间通信（IPC）提供了多种机制（管道、消息队列、共享内存、信号量、套接字），从简单到复杂，从本地到网络，满足不同的通信需求。</li>
+<li>进程终止后，操作系统负责回收其资源，父进程应通过 <code>wait</code> 调用回收子进程的状态信息，避免产生僵尸进程。</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../cs-fundamentals/threads-concurrency/processes/process-core-ideas.html"><span class="label">Previous</span>进程的核心思想</a><a class="next" href="../../../cs-fundamentals/threads-concurrency/threads/index.html"><span class="label">Next</span>线程 简介</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#进程的创建" data-outline-link="进程的创建">进程的创建</a></li><li class="depth-3"><a href="#fork-复制当前进程" data-outline-link="fork-复制当前进程">fork — 复制当前进程</a></li><li class="depth-3"><a href="#spawn-直接创建新进程" data-outline-link="spawn-直接创建新进程">spawn — 直接创建新进程</a></li><li class="depth-3"><a href="#fork-vs-spawn-对比" data-outline-link="fork-vs-spawn-对比">fork vs spawn 对比</a></li><li class="depth-3"><a href="#写时复制-copy-on-write" data-outline-link="写时复制-copy-on-write">写时复制（Copy-On-Write）</a></li><li class="depth-2"><a href="#进程调度算法" data-outline-link="进程调度算法">进程调度算法</a></li><li class="depth-3"><a href="#先来先服务-fcfs" data-outline-link="先来先服务-fcfs">先来先服务（FCFS）</a></li><li class="depth-3"><a href="#最短作业优先-sjf" data-outline-link="最短作业优先-sjf">最短作业优先（SJF）</a></li><li class="depth-3"><a href="#优先级调度-priority" data-outline-link="优先级调度-priority">优先级调度（Priority）</a></li><li class="depth-3"><a href="#时间片轮转-round-robin" data-outline-link="时间片轮转-round-robin">时间片轮转（Round-Robin）</a></li><li class="depth-3"><a href="#调度算法对比" data-outline-link="调度算法对比">调度算法对比</a></li><li class="depth-2"><a href="#进程间通信-ipc" data-outline-link="进程间通信-ipc">进程间通信（IPC）</a></li><li class="depth-3"><a href="#管道-pipe" data-outline-link="管道-pipe">管道（Pipe）</a></li><li class="depth-3"><a href="#消息队列-message-queue" data-outline-link="消息队列-message-queue">消息队列（Message Queue）</a></li><li class="depth-3"><a href="#共享内存-shared-memory" data-outline-link="共享内存-shared-memory">共享内存（Shared Memory）</a></li><li class="depth-3"><a href="#信号量-semaphore" data-outline-link="信号量-semaphore">信号量（Semaphore）</a></li><li class="depth-3"><a href="#套接字-socket" data-outline-link="套接字-socket">套接字（Socket）</a></li><li class="depth-3"><a href="#ipc-机制对比" data-outline-link="ipc-机制对比">IPC 机制对比</a></li><li class="depth-2"><a href="#进程的终止" data-outline-link="进程的终止">进程的终止</a></li><li class="depth-3"><a href="#正常终止" data-outline-link="正常终止">正常终止</a></li><li class="depth-3"><a href="#异常终止" data-outline-link="异常终止">异常终止</a></li><li class="depth-3"><a href="#终止后的资源回收" data-outline-link="终止后的资源回收">终止后的资源回收</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>错误处理与类型安全 · 编程语言与范式</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:编程语言与范式" data-pagefind-meta="slug:languages-and-paradigms">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">编程语言与范式</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item active" href="../../../languages-and-paradigms/index.html" aria-current="page" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../languages-and-paradigms/index.html">编程语言与范式</a><a class="back-to-hubs" href="../../../languages-and-paradigms/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../languages-and-paradigms/typescript/index.html">TypeScript 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="languages-and-paradigms"><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:typescript/basic-types"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/typescript/basic-types/index.html">基础类型 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/basic-types/type-annotations-and-inference.html">类型注解与类型推断</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/basic-types/primitives-and-literal-types.html">原始类型与字面量类型</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/basic-types/arrays-tuples-and-enums.html">数组、元组与枚举</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/basic-types/any-unknown-never-void.html">any、unknown、never 与 void</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:typescript/functions-and-generics"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/typescript/functions-and-generics/index.html">函数与泛型 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/functions-and-generics/function-types-and-overloads.html">函数类型与重载</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/functions-and-generics/generics-basics.html">泛型基础</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/functions-and-generics/generic-constraints-and-inference.html">泛型约束与推断</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:typescript/interfaces-and-classes"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/typescript/interfaces-and-classes/index.html">接口与类 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/interfaces-and-classes/interface-definition-and-implementation.html">接口定义与实现</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/interfaces-and-classes/classes-and-inheritance.html">类与继承</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/interfaces-and-classes/abstract-classes-and-modifiers.html">抽象类与访问修饰符</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:typescript/advanced-type-system"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/typescript/advanced-type-system/index.html">高级类型系统 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/advanced-type-system/union-and-intersection-types.html">联合类型与交叉类型</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/advanced-type-system/type-guards-and-narrowing.html">类型守卫与类型收窄</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/advanced-type-system/mapped-and-conditional-types.html">映射类型与条件类型</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/advanced-type-system/template-literal-types.html">模板字面量类型</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/advanced-type-system/type-level-programming.html">类型体操入门</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:typescript/modules-and-declarations"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/typescript/modules-and-declarations/index.html">模块与声明 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/modules-and-declarations/module-system.html">模块系统</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/modules-and-declarations/declaration-files.html">声明文件与类型声明</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/modules-and-declarations/namespaces-and-directives.html">命名空间与三斜杠指令</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:typescript/utility-types-and-patterns"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/typescript/utility-types-and-patterns/index.html">工具类型与模式 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/utility-types-and-patterns/built-in-utility-types.html">内置工具类型</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/utility-types-and-patterns/custom-utility-types.html">自定义工具类型</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/utility-types-and-patterns/type-level-patterns.html">类型级编程模式</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:typescript/configuration-and-tooling"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/typescript/configuration-and-tooling/index.html">配置与工具 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/configuration-and-tooling/tsconfig-deep-dive.html">tsconfig.json 详解</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/configuration-and-tooling/compiler-options-and-strict-mode.html">编译选项与严格模式</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/configuration-and-tooling/project-references-and-build.html">项目引用与构建流水线</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:typescript/practice-and-best-practices" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/typescript/practice-and-best-practices/index.html">实践与最佳实践 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/practice-and-best-practices/type-safe-design-patterns.html">类型安全的设计模式</a></li><li class="leaf"><a class="leaf-title active" href="../../../languages-and-paradigms/typescript/practice-and-best-practices/error-handling-and-type-safety.html">错误处理与类型安全</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/practice-and-best-practices/migrating-from-javascript.html">从 JavaScript 迁移</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/typescript/practice-and-best-practices/common-antipatterns-and-pitfalls.html">常见反模式与陷阱</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part I · 现代脚本与运行时</span><span>TypeScript 简介</span><span>实践与最佳实践 简介</span><span>错误处理与类型安全</span></nav>
+    <article class="content prose"><h1 id="错误处理与类型安全">错误处理与类型安全</h1><h2 id="场景描述">场景描述</h2><p>JavaScript 的错误处理机制（<code>try/catch</code>）天生缺乏类型信息——<code>catch</code> 子句的参数是 <code>any</code>（或启用严格模式后的 <code>unknown</code>），开发者无法在编译时知道可能抛出什么错误。TypeScript 通过<strong>类型化错误处理模式</strong>弥补这一不足，让错误像数据一样可追踪、可组合、可穷举。</p>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart LR&#10;    subgraph Error Handling Strategies&#10;        EX[&quot;Exception Throwing&lt;br/&gt;try / catch&quot;]&#10;        RS[&quot;Result Type&lt;br/&gt;Return Value Encoding&quot;]&#10;        CC[&quot;Custom Error Classes&lt;br/&gt;Type Hierarchy&quot;]&#10;        EB[&quot;Error Boundaries&lt;br/&gt;Isolate Errors&quot;]&#10;    end&#10;    EX ~~~ RS ~~~ CC ~~~ EB"></pre><hr>
+<h2 id="模式与方案">模式与方案</h2><h3 id="result-either-模式">Result / Either 模式</h3><p>Result 模式将<strong>成功值</strong>和<strong>错误值</strong>统一编码为返回类型，避免使用异常控制流。调用方必须显式处理两种情况，编译器在每个分支中自动收窄类型。</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="type Result&lt;T, E = Error&gt; = { readonly ok: true; readonly value: T } | { readonly ok: false; readonly error: E };
+
+function ok&lt;T&gt;(value: T): Result&lt;T, never&gt; {
+  return { ok: true, value };
+}
+
+function err&lt;E&gt;(error: E): Result&lt;never, E&gt; {
+  return { ok: false, error };
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">type</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Result</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">E</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Error</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#D73A49;--shiki-dark:#F97583">readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> ok</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> true</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; </span><span style="color:#D73A49;--shiki-dark:#F97583">readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> value</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> T</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> } </span><span style="color:#D73A49;--shiki-dark:#F97583">|</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#D73A49;--shiki-dark:#F97583">readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> ok</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> false</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; </span><span style="color:#D73A49;--shiki-dark:#F97583">readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> error</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> E</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> };</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ok</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>(</span><span style="color:#E36209;--shiki-dark:#FFAB70">value</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Result</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">never</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { ok: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">true</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, value };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> err</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">E</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>(</span><span style="color:#E36209;--shiki-dark:#FFAB70">error</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> E</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Result</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#005CC5;--shiki-dark:#79B8FF">never</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">E</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { ok: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">false</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, error };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><p>使用示例：</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+type ParseError =
+  | { type: 'INVALID_JSON'; raw: string }
+  | { type: 'MISSING_FIELD'; field: string }
+  | { type: 'INVALID_EMAIL'; email: string };
+
+function parseUser(input: string): Result&lt;User, ParseError&gt; {
+  let data: unknown;
+  try {
+    data = JSON.parse(input);
+  } catch {
+    return err({ type: 'INVALID_JSON', raw: input });
+  }
+
+  if (typeof data !== 'object' || data === null) {
+    return err({ type: 'INVALID_JSON', raw: input });
+  }
+
+  const obj = data as Record&lt;string, unknown&gt;;
+
+  if (typeof obj['name'] !== 'string') {
+    return err({ type: 'MISSING_FIELD', field: 'name' });
+  }
+
+  if (typeof obj['email'] !== 'string') {
+    return err({ type: 'MISSING_FIELD', field: 'email' });
+  }
+
+  if (!obj['email'].includes('@')) {
+    return err({ type: 'INVALID_EMAIL', email: obj['email'] as string });
+  }
+
+  return ok({
+    id: typeof obj['id'] === 'string' ? obj['id'] : crypto.randomUUID(),
+    name: obj['name'] as string,
+    email: obj['email'] as string,
+  });
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> User</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  id</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  name</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  email</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">type</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ParseError</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#E36209;--shiki-dark:#FFAB70">type</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'INVALID_JSON'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; </span><span style="color:#E36209;--shiki-dark:#FFAB70">raw</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#E36209;--shiki-dark:#FFAB70">type</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'MISSING_FIELD'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; </span><span style="color:#E36209;--shiki-dark:#FFAB70">field</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#E36209;--shiki-dark:#FFAB70">type</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'INVALID_EMAIL'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; </span><span style="color:#E36209;--shiki-dark:#FFAB70">email</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> };</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> parseUser</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">input</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Result</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">User</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">ParseError</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  let</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> data</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> unknown</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  try</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    data </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> JSON</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">parse</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(input);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  } </span><span style="color:#D73A49;--shiki-dark:#F97583">catch</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> err</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'INVALID_JSON'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, raw: input });</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">typeof</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> data </span><span style="color:#D73A49;--shiki-dark:#F97583">!==</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'object'</span><span style="color:#D73A49;--shiki-dark:#F97583"> ||</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> data </span><span style="color:#D73A49;--shiki-dark:#F97583">===</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> null</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> err</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'INVALID_JSON'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, raw: input });</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> obj</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> data </span><span style="color:#D73A49;--shiki-dark:#F97583">as</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Record</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#005CC5;--shiki-dark:#79B8FF">string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">unknown</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">typeof</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> obj[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'name'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">!==</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'string'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> err</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'MISSING_FIELD'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, field: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'name'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> });</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">typeof</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> obj[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'email'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">!==</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'string'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> err</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'MISSING_FIELD'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, field: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'email'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> });</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">!</span><span style="color:#24292E;--shiki-dark:#E1E4E8">obj[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'email'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">].</span><span style="color:#6F42C1;--shiki-dark:#B392F0">includes</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'@'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> err</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'INVALID_EMAIL'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, email: obj[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'email'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">as</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> });</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ok</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    id: </span><span style="color:#D73A49;--shiki-dark:#F97583">typeof</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> obj[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'id'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">===</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'string'</span><span style="color:#D73A49;--shiki-dark:#F97583"> ?</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> obj[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'id'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> crypto.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">randomUUID</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    name: obj[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'name'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">as</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    email: obj[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'email'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">as</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  });</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><p>调用方的穷举处理：</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="const result = parseUser('{&quot;name&quot;: &quot;Alice&quot;}');
+
+if (result.ok) {
+  console.log(`用户: ${result.value.name}`);
+} else {
+  switch (result.error.type) {
+    case 'INVALID_JSON':
+      console.error(`JSON 解析失败: ${result.error.raw}`);
+      break;
+    case 'MISSING_FIELD':
+      console.error(`缺少字段: ${result.error.field}`);
+      break;
+    case 'INVALID_EMAIL':
+      console.error(`邮箱格式错误: ${result.error.email}`);
+      break;
+  }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> result</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> parseUser</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'{"name": "Alice"}'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (result.ok) {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`用户: ${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">result</span><span style="color:#032F62;--shiki-dark:#9ECBFF">.</span><span style="color:#24292E;--shiki-dark:#E1E4E8">value</span><span style="color:#032F62;--shiki-dark:#9ECBFF">.</span><span style="color:#24292E;--shiki-dark:#E1E4E8">name</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">} </span><span style="color:#D73A49;--shiki-dark:#F97583">else</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  switch</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (result.error.type) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    case</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'INVALID_JSON'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">error</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`JSON 解析失败: ${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">result</span><span style="color:#032F62;--shiki-dark:#9ECBFF">.</span><span style="color:#24292E;--shiki-dark:#E1E4E8">error</span><span style="color:#032F62;--shiki-dark:#9ECBFF">.</span><span style="color:#24292E;--shiki-dark:#E1E4E8">raw</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      break</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    case</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'MISSING_FIELD'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">error</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`缺少字段: ${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">result</span><span style="color:#032F62;--shiki-dark:#9ECBFF">.</span><span style="color:#24292E;--shiki-dark:#E1E4E8">error</span><span style="color:#032F62;--shiki-dark:#9ECBFF">.</span><span style="color:#24292E;--shiki-dark:#E1E4E8">field</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      break</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    case</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'INVALID_EMAIL'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">error</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`邮箱格式错误: ${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">result</span><span style="color:#032F62;--shiki-dark:#9ECBFF">.</span><span style="color:#24292E;--shiki-dark:#E1E4E8">error</span><span style="color:#032F62;--shiki-dark:#9ECBFF">.</span><span style="color:#24292E;--shiki-dark:#E1E4E8">email</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      break</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><h3 id="result-工具函数">Result 工具函数</h3><div class="code-block-wrapper" data-lang="typescript" data-code="function map&lt;T, U, E&gt;(result: Result&lt;T, E&gt;, fn: (value: T) =&gt; U): Result&lt;U, E&gt; {
+  if (result.ok) {
+    return ok(fn(result.value));
+  }
+  return result;
+}
+
+function flatMap&lt;T, U, E&gt;(result: Result&lt;T, E&gt;, fn: (value: T) =&gt; Result&lt;U, E&gt;): Result&lt;U, E&gt; {
+  if (result.ok) {
+    return fn(result.value);
+  }
+  return result;
+}
+
+function unwrapOr&lt;T, E&gt;(result: Result&lt;T, E&gt;, defaultValue: T): T {
+  if (result.ok) {
+    return result.value;
+  }
+  return defaultValue;
+}
+
+const parsed = parseUser('{&quot;name&quot;: &quot;Bob&quot;, &quot;email&quot;: &quot;bob@example.com&quot;}');
+const greeting = map(parsed, (user) =&gt; `你好, ${user.name}`);
+const message = unwrapOr(greeting, '你好, 访客');"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> map</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">U</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">E</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>(</span><span style="color:#E36209;--shiki-dark:#FFAB70">result</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Result</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">E</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">fn</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">value</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> U</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Result</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">U</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">E</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (result.ok) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ok</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">fn</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(result.value));</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> result;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> flatMap</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">U</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">E</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>(</span><span style="color:#E36209;--shiki-dark:#FFAB70">result</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Result</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">E</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">fn</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">value</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Result</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">U</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">E</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Result</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">U</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">E</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (result.ok) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> fn</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(result.value);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> result;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> unwrapOr</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">E</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>(</span><span style="color:#E36209;--shiki-dark:#FFAB70">result</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Result</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">E</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>, </span><span style="color:#E36209;--shiki-dark:#FFAB70">defaultValue</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> T</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (result.ok) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> result.value;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> defaultValue;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> parsed</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> parseUser</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'{"name": "Bob", "email": "bob@example.com"}'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> greeting</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> map</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(parsed, (</span><span style="color:#E36209;--shiki-dark:#FFAB70">user</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#032F62;--shiki-dark:#9ECBFF"> `你好, ${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">user</span><span style="color:#032F62;--shiki-dark:#9ECBFF">.</span><span style="color:#24292E;--shiki-dark:#E1E4E8">name</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> message</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> unwrapOr</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(greeting, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'你好, 访客'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span></code></pre></div><h3 id="自定义错误类层次">自定义错误类层次</h3><p>当需要使用 <code>throw</code> 异常机制时，自定义错误类能提供更好的类型信息和错误分类：</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="class AppError extends Error {
+  constructor(
+    message: string,
+    readonly code: string,
+    readonly statusCode: number,
+  ) {
+    super(message);
+    this.name = 'AppError';
+  }
+}
+
+class ValidationError extends AppError {
+  constructor(
+    message: string,
+    readonly field: string,
+    readonly constraint: string,
+  ) {
+    super(message, 'VALIDATION_ERROR', 400);
+    this.name = 'ValidationError';
+  }
+}
+
+class NotFoundError extends AppError {
+  constructor(
+    readonly resource: string,
+    readonly resourceId: string,
+  ) {
+    super(`${resource} &quot;${resourceId}&quot; 不存在`, 'NOT_FOUND', 404);
+    this.name = 'NotFoundError';
+  }
+}
+
+class AuthenticationError extends AppError {
+  constructor(message: string = '认证失败') {
+    super(message, 'AUTH_ERROR', 401);
+    this.name = 'AuthenticationError';
+  }
+}
+
+class AuthorizationError extends AppError {
+  constructor(
+    readonly requiredPermission: string,
+    message: string = '权限不足',
+  ) {
+    super(message, 'FORBIDDEN', 403);
+    this.name = 'AuthorizationError';
+  }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> AppError</span><span style="color:#D73A49;--shiki-dark:#F97583"> extends</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Error</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  constructor</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    message</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> code</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> statusCode</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  ) {</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    super</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(message);</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.name </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'AppError'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ValidationError</span><span style="color:#D73A49;--shiki-dark:#F97583"> extends</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> AppError</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  constructor</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    message</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> field</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> constraint</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  ) {</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    super</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(message, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'VALIDATION_ERROR'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">400</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.name </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'ValidationError'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> NotFoundError</span><span style="color:#D73A49;--shiki-dark:#F97583"> extends</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> AppError</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  constructor</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> resource</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> resourceId</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  ) {</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    super</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">resource</span><span style="color:#032F62;--shiki-dark:#9ECBFF">} "${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">resourceId</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}" 不存在`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'NOT_FOUND'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">404</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.name </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'NotFoundError'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> AuthenticationError</span><span style="color:#D73A49;--shiki-dark:#F97583"> extends</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> AppError</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  constructor</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">message</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '认证失败'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    super</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(message, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'AUTH_ERROR'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">401</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.name </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'AuthenticationError'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> AuthorizationError</span><span style="color:#D73A49;--shiki-dark:#F97583"> extends</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> AppError</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  constructor</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> requiredPermission</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    message</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '权限不足'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  ) {</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    super</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(message, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'FORBIDDEN'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">403</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.name </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'AuthorizationError'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TD&#10;    BASE[&quot;AppError&lt;br/&gt;code + statusCode&quot;] --&gt; VE[&quot;ValidationError&lt;br/&gt;field + constraint&quot;]&#10;    BASE --&gt; NFE[&quot;NotFoundError&lt;br/&gt;resource + resourceId&quot;]&#10;    BASE --&gt; AE[&quot;AuthenticationError&quot;]&#10;    BASE --&gt; AZE[&quot;AuthorizationError&lt;br/&gt;requiredPermission&quot;]"></pre><h3 id="穷举错误匹配">穷举错误匹配</h3><p>结合自定义错误类和类型守卫，实现穷举匹配：</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="function isAppError(error: unknown): error is AppError {
+  return error instanceof AppError;
+}
+
+function handleError(error: unknown): { status: number; message: string } {
+  if (error instanceof ValidationError) {
+    return {
+      status: 400,
+      message: `验证失败: ${error.field} - ${error.constraint}`,
+    };
+  }
+
+  if (error instanceof NotFoundError) {
+    return {
+      status: 404,
+      message: `${error.resource} &quot;${error.resourceId}&quot; 未找到`,
+    };
+  }
+
+  if (error instanceof AuthenticationError) {
+    return { status: 401, message: error.message };
+  }
+
+  if (error instanceof AuthorizationError) {
+    return {
+      status: 403,
+      message: `需要权限: ${error.requiredPermission}`,
+    };
+  }
+
+  if (isAppError(error)) {
+    return { status: error.statusCode, message: error.message };
+  }
+
+  return { status: 500, message: '内部服务器错误' };
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> isAppError</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">error</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> unknown</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#E36209;--shiki-dark:#FFAB70"> error</span><span style="color:#D73A49;--shiki-dark:#F97583"> is</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> AppError</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> error </span><span style="color:#D73A49;--shiki-dark:#F97583">instanceof</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> AppError</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> handleError</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">error</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> unknown</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#E36209;--shiki-dark:#FFAB70">status</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; </span><span style="color:#E36209;--shiki-dark:#FFAB70">message</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> } {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (error </span><span style="color:#D73A49;--shiki-dark:#F97583">instanceof</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ValidationError</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      status: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">400</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      message: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">`验证失败: ${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">error</span><span style="color:#032F62;--shiki-dark:#9ECBFF">.</span><span style="color:#24292E;--shiki-dark:#E1E4E8">field</span><span style="color:#032F62;--shiki-dark:#9ECBFF">} - ${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">error</span><span style="color:#032F62;--shiki-dark:#9ECBFF">.</span><span style="color:#24292E;--shiki-dark:#E1E4E8">constraint</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (error </span><span style="color:#D73A49;--shiki-dark:#F97583">instanceof</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> NotFoundError</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      status: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">404</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      message: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">`${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">error</span><span style="color:#032F62;--shiki-dark:#9ECBFF">.</span><span style="color:#24292E;--shiki-dark:#E1E4E8">resource</span><span style="color:#032F62;--shiki-dark:#9ECBFF">} "${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">error</span><span style="color:#032F62;--shiki-dark:#9ECBFF">.</span><span style="color:#24292E;--shiki-dark:#E1E4E8">resourceId</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}" 未找到`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (error </span><span style="color:#D73A49;--shiki-dark:#F97583">instanceof</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> AuthenticationError</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { status: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">401</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, message: error.message };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (error </span><span style="color:#D73A49;--shiki-dark:#F97583">instanceof</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> AuthorizationError</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      status: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">403</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      message: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">`需要权限: ${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">error</span><span style="color:#032F62;--shiki-dark:#9ECBFF">.</span><span style="color:#24292E;--shiki-dark:#E1E4E8">requiredPermission</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#6F42C1;--shiki-dark:#B392F0">isAppError</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(error)) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { status: error.statusCode, message: error.message };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { status: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">500</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, message: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'内部服务器错误'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><h3 id="类型安全的-try-catch">类型安全的 try/catch</h3><p>启用 <code>useUnknownInCatchVariables</code> 后，<code>catch</code> 变量类型为 <code>unknown</code>。封装一个安全的错误处理工具：</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="function trySafe&lt;T&gt;(fn: () =&gt; T): Result&lt;T, Error&gt; {
+  try {
+    return ok(fn());
+  } catch (error) {
+    if (error instanceof Error) {
+      return err(error);
+    }
+    return err(new Error(String(error)));
+  }
+}
+
+async function trySafeAsync&lt;T&gt;(fn: () =&gt; Promise&lt;T&gt;): Promise&lt;Result&lt;T, Error&gt;&gt; {
+  try {
+    const value = await fn();
+    return ok(value);
+  } catch (error) {
+    if (error instanceof Error) {
+      return err(error);
+    }
+    return err(new Error(String(error)));
+  }
+}
+
+const jsonResult = trySafe(() =&gt; JSON.parse('{&quot;key&quot;: &quot;value&quot;}'));
+
+if (jsonResult.ok) {
+  console.log(jsonResult.value);
+}
+
+const fetchResult = await trySafeAsync(() =&gt; fetch('https://api.example.com/data').then((r) =&gt; r.json()));"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> trySafe</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">fn</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> () </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Result</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">Error</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  try</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ok</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">fn</span><span style="color:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  } </span><span style="color:#D73A49;--shiki-dark:#F97583">catch</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (error) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (error </span><span style="color:#D73A49;--shiki-dark:#F97583">instanceof</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Error</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      return</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> err</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(error);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> err</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">new</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Error</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">String</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(error)));</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">async</span><span style="color:#D73A49;--shiki-dark:#F97583"> function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> trySafeAsync</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">fn</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> () </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Result</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">Error</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  try</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> value</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> fn</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ok</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(value);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  } </span><span style="color:#D73A49;--shiki-dark:#F97583">catch</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (error) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (error </span><span style="color:#D73A49;--shiki-dark:#F97583">instanceof</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Error</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      return</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> err</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(error);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> err</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">new</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Error</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">String</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(error)));</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> jsonResult</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> trySafe</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#005CC5;--shiki-dark:#79B8FF"> JSON</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">parse</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'{"key": "value"}'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">));</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (jsonResult.ok) {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(jsonResult.value);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> fetchResult</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> trySafeAsync</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> fetch</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'https://api.example.com/data'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">).</span><span style="color:#6F42C1;--shiki-dark:#B392F0">then</span><span style="color:#24292E;--shiki-dark:#E1E4E8">((</span><span style="color:#E36209;--shiki-dark:#FFAB70">r</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> r.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">json</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()));</span></span></code></pre></div><h3 id="错误边界模式">错误边界模式</h3><p>在大型应用中，使用错误边界隔离不同模块的错误，防止一个模块的失败影响整个系统：</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="type BoundaryResult&lt;T&gt; = {
+  readonly module: string;
+  readonly result: Result&lt;T, Error&gt;;
+  readonly duration: number;
+};
+
+async function withErrorBoundary&lt;T&gt;(module: string, fn: () =&gt; Promise&lt;T&gt;): Promise&lt;BoundaryResult&lt;T&gt;&gt; {
+  const start = Date.now();
+  try {
+    const value = await fn();
+    return {
+      module,
+      result: ok(value),
+      duration: Date.now() - start,
+    };
+  } catch (error) {
+    return {
+      module,
+      result: err(error instanceof Error ? error : new Error(String(error))),
+      duration: Date.now() - start,
+    };
+  }
+}
+
+const results = await Promise.all([
+  withErrorBoundary('用户模块', () =&gt; fetchUsers()),
+  withErrorBoundary('订单模块', () =&gt; fetchOrders()),
+  withErrorBoundary('通知模块', () =&gt; fetchNotifications()),
+]);
+
+for (const { module, result, duration } of results) {
+  if (result.ok) {
+    console.log(`${module}: 成功 (${duration}ms)`);
+  } else {
+    console.error(`${module}: 失败 - ${result.error.message} (${duration}ms)`);
+  }
+}
+
+async function fetchUsers(): Promise&lt;string[]&gt; {
+  return ['Alice', 'Bob'];
+}
+async function fetchOrders(): Promise&lt;number[]&gt; {
+  return [1, 2, 3];
+}
+async function fetchNotifications(): Promise&lt;string[]&gt; {
+  return ['新消息'];
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">type</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> BoundaryResult</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> module</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> result</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Result</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">Error</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> duration</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">async</span><span style="color:#D73A49;--shiki-dark:#F97583"> function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> withErrorBoundary</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>(</span><span style="color:#E36209;--shiki-dark:#FFAB70">module</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">fn</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> () </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">BoundaryResult</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> start</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Date.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">now</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  try</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> value</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> fn</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      module,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      result: </span><span style="color:#6F42C1;--shiki-dark:#B392F0">ok</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(value),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      duration: Date.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">now</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> start,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  } </span><span style="color:#D73A49;--shiki-dark:#F97583">catch</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (error) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      module,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      result: </span><span style="color:#6F42C1;--shiki-dark:#B392F0">err</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(error </span><span style="color:#D73A49;--shiki-dark:#F97583">instanceof</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Error</span><span style="color:#D73A49;--shiki-dark:#F97583"> ?</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> error </span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Error</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">String</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(error))),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      duration: Date.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">now</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> start,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> results</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">all</span><span style="color:#24292E;--shiki-dark:#E1E4E8">([</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  withErrorBoundary</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'用户模块'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, () </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> fetchUsers</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()),</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  withErrorBoundary</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'订单模块'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, () </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> fetchOrders</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()),</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  withErrorBoundary</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'通知模块'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, () </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> fetchNotifications</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">]);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#005CC5;--shiki-dark:#79B8FF">module</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">result</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">duration</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> } </span><span style="color:#D73A49;--shiki-dark:#F97583">of</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> results) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (result.ok) {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`${</span><span style="color:#005CC5;--shiki-dark:#79B8FF">module</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}: 成功 (${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">duration</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}ms)`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  } </span><span style="color:#D73A49;--shiki-dark:#F97583">else</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">error</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`${</span><span style="color:#005CC5;--shiki-dark:#79B8FF">module</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}: 失败 - ${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">result</span><span style="color:#032F62;--shiki-dark:#9ECBFF">.</span><span style="color:#24292E;--shiki-dark:#E1E4E8">error</span><span style="color:#032F62;--shiki-dark:#9ECBFF">.</span><span style="color:#24292E;--shiki-dark:#E1E4E8">message</span><span style="color:#032F62;--shiki-dark:#9ECBFF">} (${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">duration</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}ms)`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">async</span><span style="color:#D73A49;--shiki-dark:#F97583"> function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> fetchUsers</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#005CC5;--shiki-dark:#79B8FF">string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[]> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Alice'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Bob'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">async</span><span style="color:#D73A49;--shiki-dark:#F97583"> function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> fetchOrders</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#005CC5;--shiki-dark:#79B8FF">number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[]> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">async</span><span style="color:#D73A49;--shiki-dark:#F97583"> function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> fetchNotifications</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#005CC5;--shiki-dark:#79B8FF">string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[]> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'新消息'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><hr>
+<h2 id="类型安全技巧">类型安全技巧</h2><h3 id="异常-vs-result-类型对比">异常 vs Result 类型对比</h3><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>异常（throw/catch）</th>
+<th>Result 类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>类型安全</td>
+<td>❌ catch 变量为 unknown</td>
+<td>✅ 错误类型在签名中明确</td>
+</tr>
+<tr>
+<td>穷举检查</td>
+<td>❌ 编译器无法检查</td>
+<td>✅ 可辨识联合支持穷举</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>抛出异常有性能开销</td>
+<td>✅ 普通对象创建，无额外开销</td>
+</tr>
+<tr>
+<td>可组合性</td>
+<td>需要嵌套 try/catch</td>
+<td>✅ 支持 map/flatMap 链式组合</td>
+</tr>
+<tr>
+<td>调用方感知</td>
+<td>❌ 不看实现不知道会抛什么</td>
+<td>✅ 返回类型明确告知</td>
+</tr>
+<tr>
+<td>异步支持</td>
+<td>✅ async/await 原生支持</td>
+<td>需要 <code>Promise&lt;Result&lt;T, E&gt;&gt;</code></td>
+</tr>
+<tr>
+<td>生态兼容性</td>
+<td>✅ Node.js/浏览器标准方式</td>
+<td>需要团队约定</td>
+</tr>
+</tbody></table>
+<h3 id="选择建议">选择建议</h3><pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TD&#10;    START[&quot;Need to Handle Errors&quot;] --&gt; Q1[&quot;Is the Error Expected?&quot;]&#10;    Q1 --&gt;|&quot;Yes&quot;| RESULT[&quot;Use Result Type&lt;br/&gt;(Business Logic Errors)&quot;]&#10;    Q1 --&gt;|&quot;No&quot;| Q2[&quot;Need to Interrupt Current Flow?&quot;]&#10;    Q2 --&gt;|&quot;Yes&quot;| THROW[&quot;Throw Exception&lt;br/&gt;(System-Level Errors)&quot;]&#10;    Q2 --&gt;|&quot;No&quot;| LOG[&quot;Log and Degrade Gracefully&quot;]"></pre><hr>
+<h2 id="常见反模式">常见反模式</h2><table>
+<thead>
+<tr>
+<th>反模式</th>
+<th>问题</th>
+<th>正确做法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>catch (e: any)</code></td>
+<td>绕过类型检查</td>
+<td>使用 <code>unknown</code> 并进行类型守卫</td>
+</tr>
+<tr>
+<td>忽略 catch 子句</td>
+<td>错误被静默吞掉</td>
+<td>至少记录日志或返回默认值</td>
+</tr>
+<tr>
+<td><code>throw &quot;string&quot;</code></td>
+<td>丢失堆栈信息</td>
+<td>始终 <code>throw new Error(...)</code></td>
+</tr>
+<tr>
+<td>Result 中嵌套 try/catch</td>
+<td>混合两种错误模式</td>
+<td>在边界处统一转换为 Result</td>
+</tr>
+<tr>
+<td>所有错误用同一个 Error 类</td>
+<td>无法区分错误类型</td>
+<td>建立错误类层次结构</td>
+</tr>
+</tbody></table>
+<h2 id="小结">小结</h2><ul>
+<li><strong>Result 类型</strong>（<code>{ok: true, value} | {ok: false, error}</code>）将错误编码为返回值，让编译器强制调用方处理两种情况。</li>
+<li><code>map</code> 和 <code>flatMap</code> 工具函数让 Result 类型支持<strong>链式组合</strong>，避免嵌套 if/else。</li>
+<li><strong>自定义错误类层次</strong>（<code>AppError → ValidationError / NotFoundError</code>）为异常机制提供类型化的分类和元数据。</li>
+<li>启用 <code>useUnknownInCatchVariables</code> 后，<code>catch</code> 变量为 <code>unknown</code>，必须通过 <code>instanceof</code> 或类型守卫缩窄后使用。</li>
+<li><code>trySafe</code> / <code>trySafeAsync</code> 封装将 <code>try/catch</code> 异常转换为 Result 类型，在两种模式之间架起桥梁。</li>
+<li><strong>错误边界模式</strong>隔离不同模块的错误，防止局部故障扩散到整个系统。</li>
+<li>可预期的<strong>业务错误</strong>适合使用 Result 类型，不可预期的<strong>系统错误</strong>适合使用异常机制。</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../languages-and-paradigms/typescript/practice-and-best-practices/type-safe-design-patterns.html"><span class="label">Previous</span>类型安全的设计模式</a><a class="next" href="../../../languages-and-paradigms/typescript/practice-and-best-practices/migrating-from-javascript.html"><span class="label">Next</span>从 JavaScript 迁移</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#场景描述" data-outline-link="场景描述">场景描述</a></li><li class="depth-2"><a href="#模式与方案" data-outline-link="模式与方案">模式与方案</a></li><li class="depth-3"><a href="#result-either-模式" data-outline-link="result-either-模式">Result / Either 模式</a></li><li class="depth-3"><a href="#result-工具函数" data-outline-link="result-工具函数">Result 工具函数</a></li><li class="depth-3"><a href="#自定义错误类层次" data-outline-link="自定义错误类层次">自定义错误类层次</a></li><li class="depth-3"><a href="#穷举错误匹配" data-outline-link="穷举错误匹配">穷举错误匹配</a></li><li class="depth-3"><a href="#类型安全的-try-catch" data-outline-link="类型安全的-try-catch">类型安全的 try/catch</a></li><li class="depth-3"><a href="#错误边界模式" data-outline-link="错误边界模式">错误边界模式</a></li><li class="depth-2"><a href="#类型安全技巧" data-outline-link="类型安全技巧">类型安全技巧</a></li><li class="depth-3"><a href="#异常-vs-result-类型对比" data-outline-link="异常-vs-result-类型对比">异常 vs Result 类型对比</a></li><li class="depth-3"><a href="#选择建议" data-outline-link="选择建议">选择建议</a></li><li class="depth-2"><a href="#常见反模式" data-outline-link="常见反模式">常见反模式</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

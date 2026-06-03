@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>查询优化：执行计划分析、索引策略、慢查询诊断 · 跨学科工程师之道</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:跨学科工程师之道" data-pagefind-meta="slug:cross-discipline-craft">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">跨学科工程师之道</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item active" href="../../../cross-discipline-craft/index.html" aria-current="page" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../cross-discipline-craft/index.html">跨学科工程师之道</a><a class="back-to-hubs" href="../../../cross-discipline-craft/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../cross-discipline-craft/data-analytics-engineering/index.html">数据分析与工程 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="cross-discipline-craft"><li class="chapter"><details class="folder-collapse" data-sb-key="cross-discipline-craft:folder:data-analytics-engineering/sql-for-developers" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cross-discipline-craft/data-analytics-engineering/sql-for-developers/index.html">开发者 SQL 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/sql-for-developers/advanced-queries.html">高级查询：窗口函数、CTE、子查询优化</a></li><li class="leaf"><a class="leaf-title active" href="../../../cross-discipline-craft/data-analytics-engineering/sql-for-developers/query-optimization.html">查询优化：执行计划分析、索引策略、慢查询诊断</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/sql-for-developers/data-modeling.html">数据建模：范式设计、星型/雪花模型、维度建模</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/sql-for-developers/sql-for-analytics.html">分析 SQL：留存分析、漏斗查询、队列分析</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cross-discipline-craft:folder:data-analytics-engineering/data-visualization"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-visualization/index.html">数据可视化 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-visualization/visualization-principles.html">可视化原则：Edward Tufte 原则、数据墨水比、图表选择决策树</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-visualization/chart-types.html">图表类型：柱状/折线/散点/热力图/桑基图的适用场景</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-visualization/dashboard-design.html">仪表盘设计：布局原则、信息密度、交互设计</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-visualization/visualization-tools.html">可视化工具：D3.js / ECharts / Grafana / Metabase / Superset 对比</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cross-discipline-craft:folder:data-analytics-engineering/event-tracking-design"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cross-discipline-craft/data-analytics-engineering/event-tracking-design/index.html">埋点设计 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/event-tracking-design/tracking-fundamentals.html">埋点基础：事件模型、属性设计、埋点分类</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/event-tracking-design/tracking-plan.html">埋点方案设计：埋点文档规范、命名规范、Review 流程</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/event-tracking-design/data-quality.html">数据质量：数据校验、异常检测、数据修复策略</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/event-tracking-design/privacy-compliance.html">隐私合规：GDPR/CCPA 合规、用户同意管理、数据脱敏</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cross-discipline-craft:folder:data-analytics-engineering/data-warehouse-basics"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-warehouse-basics/index.html">数据仓库基础 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-warehouse-basics/dw-architecture.html">数仓架构：Lambda/Kappa 架构、分层设计（ODS/DWD/DWS/ADS）</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-warehouse-basics/etl-pipeline.html">ETL 流水线：数据抽取/转换/加载、调度系统、增量处理</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-warehouse-basics/olap-basics.html">OLAP 基础：OLAP vs OLTP、多维分析、ClickHouse/Doris/StarRocks</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-warehouse-basics/data-lake.html">数据湖：数据湖 vs 数据仓库、Lakehouse 架构、Iceberg/Hudi</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cross-discipline-craft:folder:data-analytics-engineering/business-metrics"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cross-discipline-craft/data-analytics-engineering/business-metrics/index.html">业务指标 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/business-metrics/north-star-metrics.html">北极星指标：如何定义北极星指标、指标树分解、输入/输出指标</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/business-metrics/retention-analysis.html">留存分析：DAU/MAU/留存率计算、留存曲线、提升策略</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/business-metrics/monetization-metrics.html">变现指标：LTV/CAC/ARPU/ARPPU、付费率、ROI 分析</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/business-metrics/growth-metrics.html">增长指标：病毒系数、K-Factor、增长飞轮、增长实验框架</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cross-discipline-craft:folder:data-analytics-engineering/data-driven-culture"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-driven-culture/index.html">数据驱动文化 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-driven-culture/data-literacy.html">数据素养：全员数据素养培养、数据民主化、自助分析</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-driven-culture/experiment-culture.html">实验文化：假设驱动、实验框架、失败容忍度</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-driven-culture/data-governance.html">数据治理：数据目录、数据血缘、数据所有权、数据 SLA</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-driven-culture/analytics-organization.html">分析组织：集中式/嵌入式/混合式数据团队、数据中台</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part I · 相邻角色</span><span>数据分析与工程 简介</span><span>开发者 SQL 简介</span><span>查询优化：执行计划分析、索引策略、慢查询诊断</span></nav>
+    <article class="content prose"><h1 id="查询优化-执行计划分析-索引策略-慢查询诊断">查询优化：执行计划分析、索引策略、慢查询诊断</h1><h2 id="执行计划基础">执行计划基础</h2><p>执行计划是数据库优化器对 SQL 查询的具体执行方案，理解执行计划是查询优化的第一步。每个数据库在收到 SQL 语句后，都会经历解析、优化和执行三个阶段，执行计划就是优化阶段的输出产物。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    A[SQL 语句] --&gt; B[解析器]&#10;    B --&gt; C[优化器]&#10;    C --&gt; D[执行计划]&#10;    D --&gt; E[执行引擎]&#10;    E --&gt; F[结果集]&#10;    C --&gt; G[统计信息]&#10;    G --&gt; C"></pre><h3 id="查看执行计划">查看执行计划</h3><div class="code-block-wrapper" data-lang="sql" data-code="-- PostgreSQL
+EXPLAIN ANALYZE
+SELECT u.user_name, COUNT(o.order_id) AS order_count
+FROM users u
+LEFT JOIN orders o ON u.user_id = o.user_id
+WHERE u.created_at &gt;= '2025-01-01'
+GROUP BY u.user_name
+ORDER BY order_count DESC
+LIMIT 10;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- PostgreSQL</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">EXPLAIN ANALYZE</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> u</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">user_name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">COUNT</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">o</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">order_id</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> order_count</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> users u</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">LEFT JOIN</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders o </span><span style="color:#D73A49;--shiki-dark:#F97583">ON</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> u</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">user_id</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> o</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">user_id</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> u</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">created_at</span><span style="color:#D73A49;--shiki-dark:#F97583"> >=</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '2025-01-01'</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">GROUP BY</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> u</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">user_name</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> order_count </span><span style="color:#D73A49;--shiki-dark:#F97583">DESC</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">LIMIT</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 10</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre></div><div class="code-block-wrapper" data-lang="sql" data-code="-- MySQL
+EXPLAIN FORMAT=JSON
+SELECT u.user_name, COUNT(o.order_id) AS order_count
+FROM users u
+LEFT JOIN orders o ON u.user_id = o.user_id
+WHERE u.created_at &gt;= '2025-01-01'
+GROUP BY u.user_name
+ORDER BY order_count DESC
+LIMIT 10;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- MySQL</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">EXPLAIN FORMAT</span><span style="color:#D73A49;--shiki-dark:#F97583">=JSON</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> u</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">user_name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">COUNT</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">o</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">order_id</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> order_count</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> users u</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">LEFT JOIN</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders o </span><span style="color:#D73A49;--shiki-dark:#F97583">ON</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> u</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">user_id</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> o</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">user_id</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> u</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">created_at</span><span style="color:#D73A49;--shiki-dark:#F97583"> >=</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '2025-01-01'</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">GROUP BY</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> u</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">user_name</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> order_count </span><span style="color:#D73A49;--shiki-dark:#F97583">DESC</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">LIMIT</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 10</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre></div><h3 id="执行计划中的关键操作">执行计划中的关键操作</h3><table>
+<thead>
+<tr>
+<th>操作类型</th>
+<th>含义</th>
+<th>性能影响</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Seq Scan</td>
+<td>全表扫描</td>
+<td>大表时性能差</td>
+</tr>
+<tr>
+<td>Index Scan</td>
+<td>索引扫描</td>
+<td>高选择性时高效</td>
+</tr>
+<tr>
+<td>Index Only Scan</td>
+<td>仅索引扫描（覆盖索引）</td>
+<td>最高效</td>
+</tr>
+<tr>
+<td>Bitmap Index Scan</td>
+<td>位图索引扫描</td>
+<td>中等选择性适用</td>
+</tr>
+<tr>
+<td>Nested Loop</td>
+<td>嵌套循环连接</td>
+<td>小结果集高效</td>
+</tr>
+<tr>
+<td>Hash Join</td>
+<td>哈希连接</td>
+<td>大结果集高效</td>
+</tr>
+<tr>
+<td>Merge Join</td>
+<td>合并连接</td>
+<td>已排序数据高效</td>
+</tr>
+<tr>
+<td>Sort</td>
+<td>排序操作</td>
+<td>内存不足时溢出</td>
+</tr>
+<tr>
+<td>Hash Aggregate</td>
+<td>哈希聚合</td>
+<td>分组数少时高效</td>
+</tr>
+</tbody></table>
+<h3 id="执行计划分析要点">执行计划分析要点</h3><pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[分析执行计划] --&gt; B[查看总耗时]&#10;    A --&gt; C[找到最耗时的节点]&#10;    A --&gt; D[检查行数估算]&#10;    A --&gt; E[检查扫描类型]&#10;    B --&gt; B1[EXPLAIN ANALYZE 显示实际耗时]&#10;    C --&gt; C1[关注 actual time 最大的节点]&#10;    D --&gt; D1[估算行数与实际行数差异大说明统计信息过时]&#10;    E --&gt; E1[Seq Scan 在大表上通常需要优化]"></pre><div class="code-block-wrapper" data-lang="sql" data-code="-- PostgreSQL 执行计划示例输出解读
+/*
+Sort  (cost=1234.56..1234.78 rows=10 width=64) (actual time=45.123..45.130 rows=10 loops=1)
+  Sort Key: order_count DESC
+  Sort Method: top-N heapsort  Memory: 25kB
+  -&gt;  HashAggregate  (cost=1200.00..1220.00 rows=2000 width=64) (actual time=44.567..44.890 rows=1500 loops=1)
+        Group Key: u.user_name
+        -&gt;  Hash Left Join  (cost=100.00..1100.00 rows=20000 width=48) (actual time=1.234..30.567 rows=18500 loops=1)
+              Hash Cond: (u.user_id = o.user_id)
+              -&gt;  Index Scan using idx_users_created on users u  (cost=0.29..50.00 rows=5000 width=32) (actual time=0.012..2.345 rows=4800 loops=1)
+                    Index Cond: (created_at &gt;= '2025-01-01')
+              -&gt;  Hash  (cost=80.00..80.00 rows=10000 width=16) (actual time=1.100..1.100 rows=10000 loops=1)
+                    -&gt;  Seq Scan on orders o  (cost=0.00..80.00 rows=10000 width=16) (actual time=0.005..0.600 rows=10000 loops=1)
+*/"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- PostgreSQL 执行计划示例输出解读</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">/*</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">Sort  (cost=1234.56..1234.78 rows=10 width=64) (actual time=45.123..45.130 rows=10 loops=1)</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">  Sort Key: order_count DESC</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">  Sort Method: top-N heapsort  Memory: 25kB</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">  ->  HashAggregate  (cost=1200.00..1220.00 rows=2000 width=64) (actual time=44.567..44.890 rows=1500 loops=1)</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">        Group Key: u.user_name</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">        ->  Hash Left Join  (cost=100.00..1100.00 rows=20000 width=48) (actual time=1.234..30.567 rows=18500 loops=1)</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">              Hash Cond: (u.user_id = o.user_id)</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">              ->  Index Scan using idx_users_created on users u  (cost=0.29..50.00 rows=5000 width=32) (actual time=0.012..2.345 rows=4800 loops=1)</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">                    Index Cond: (created_at >= '2025-01-01')</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">              ->  Hash  (cost=80.00..80.00 rows=10000 width=16) (actual time=1.100..1.100 rows=10000 loops=1)</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">                    ->  Seq Scan on orders o  (cost=0.00..80.00 rows=10000 width=16) (actual time=0.005..0.600 rows=10000 loops=1)</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">*/</span></span></code></pre></div><p>关键指标解读：</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>cost</td>
+<td>优化器估算的相对代价（启动代价..总代价）</td>
+</tr>
+<tr>
+<td>rows</td>
+<td>估算的输出行数</td>
+</tr>
+<tr>
+<td>actual time</td>
+<td>实际执行时间（毫秒，首行..末行）</td>
+</tr>
+<tr>
+<td>actual rows</td>
+<td>实际输出行数</td>
+</tr>
+<tr>
+<td>loops</td>
+<td>该节点被执行的次数</td>
+</tr>
+<tr>
+<td>Sort Method</td>
+<td>排序使用的算法和内存消耗</td>
+</tr>
+<tr>
+<td>Hash Cond</td>
+<td>哈希连接的条件</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="索引策略">索引策略</h2><p>索引是数据库查询优化中最重要的手段，合理的索引设计可以将查询性能提升数个数量级。</p>
+<h3 id="索引类型">索引类型</h3><pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[索引类型] --&gt; B[B-Tree 索引]&#10;    A --&gt; C[Hash 索引]&#10;    A --&gt; D[GIN 索引]&#10;    A --&gt; E[GiST 索引]&#10;    A --&gt; F[BRIN 索引]&#10;    B --&gt; B1[等值查询、范围查询、排序]&#10;    C --&gt; C1[仅等值查询]&#10;    D --&gt; D1[全文搜索、数组、JSONB]&#10;    E --&gt; E1[几何数据、全文搜索]&#10;    F --&gt; F1[大表顺序数据、时序数据]"></pre><table>
+<thead>
+<tr>
+<th>索引类型</th>
+<th>适用场景</th>
+<th>存储开销</th>
+<th>维护成本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>B-Tree</td>
+<td>等值、范围、排序、前缀匹配</td>
+<td>中等</td>
+<td>中等</td>
+</tr>
+<tr>
+<td>Hash</td>
+<td>纯等值查询</td>
+<td>低</td>
+<td>低</td>
+</tr>
+<tr>
+<td>GIN</td>
+<td>全文搜索、数组包含、JSONB</td>
+<td>高</td>
+<td>高</td>
+</tr>
+<tr>
+<td>GiST</td>
+<td>地理空间、范围类型</td>
+<td>中等</td>
+<td>中等</td>
+</tr>
+<tr>
+<td>BRIN</td>
+<td>大表中物理有序的列</td>
+<td>极低</td>
+<td>极低</td>
+</tr>
+</tbody></table>
+<h3 id="复合索引设计原则">复合索引设计原则</h3><div class="code-block-wrapper" data-lang="sql" data-code="-- 遵循最左前缀原则
+CREATE INDEX idx_orders_composite
+ON orders (user_id, status, created_at DESC);
+
+-- 以下查询可以利用该索引
+SELECT * FROM orders WHERE user_id = 100;
+SELECT * FROM orders WHERE user_id = 100 AND status = 'completed';
+SELECT * FROM orders WHERE user_id = 100 AND status = 'completed' AND created_at &gt; '2025-01-01';
+
+-- 以下查询无法利用该索引的第一列
+SELECT * FROM orders WHERE status = 'completed';
+SELECT * FROM orders WHERE created_at &gt; '2025-01-01';"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 遵循最左前缀原则</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">CREATE</span><span style="color:#D73A49;--shiki-dark:#F97583"> INDEX</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> idx_orders_composite</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">ON</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders (user_id, </span><span style="color:#D73A49;--shiki-dark:#F97583">status</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, created_at </span><span style="color:#D73A49;--shiki-dark:#F97583">DESC</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 以下查询可以利用该索引</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders </span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> user_id </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 100</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders </span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> user_id </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 100</span><span style="color:#D73A49;--shiki-dark:#F97583"> AND</span><span style="color:#D73A49;--shiki-dark:#F97583"> status</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'completed'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders </span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> user_id </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 100</span><span style="color:#D73A49;--shiki-dark:#F97583"> AND</span><span style="color:#D73A49;--shiki-dark:#F97583"> status</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'completed'</span><span style="color:#D73A49;--shiki-dark:#F97583"> AND</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> created_at </span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '2025-01-01'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 以下查询无法利用该索引的第一列</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders </span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#D73A49;--shiki-dark:#F97583"> status</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'completed'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders </span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> created_at </span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '2025-01-01'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre></div><p>复合索引列排序策略：</p>
+<table>
+<thead>
+<tr>
+<th>优先级</th>
+<th>列类型</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>等值条件列</td>
+<td>精确匹配最先缩小范围</td>
+</tr>
+<tr>
+<td>2</td>
+<td>范围条件列</td>
+<td>范围扫描在等值之后最高效</td>
+</tr>
+<tr>
+<td>3</td>
+<td>排序列</td>
+<td>避免额外的排序操作</td>
+</tr>
+<tr>
+<td>4</td>
+<td>覆盖索引所需列</td>
+<td>实现 Index Only Scan</td>
+</tr>
+</tbody></table>
+<h3 id="覆盖索引">覆盖索引</h3><div class="code-block-wrapper" data-lang="sql" data-code="-- 创建覆盖索引，包含查询所需的所有列
+CREATE INDEX idx_orders_covering
+ON orders (user_id, status) INCLUDE (amount, created_at);
+
+-- 以下查询可以仅通过索引完成，无需回表
+SELECT user_id, status, amount, created_at
+FROM orders
+WHERE user_id = 100 AND status = 'completed';"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 创建覆盖索引，包含查询所需的所有列</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">CREATE</span><span style="color:#D73A49;--shiki-dark:#F97583"> INDEX</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> idx_orders_covering</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">ON</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders (user_id, </span><span style="color:#D73A49;--shiki-dark:#F97583">status</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">INCLUDE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (amount, created_at);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 以下查询可以仅通过索引完成，无需回表</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> user_id, </span><span style="color:#D73A49;--shiki-dark:#F97583">status</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, amount, created_at</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> user_id </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 100</span><span style="color:#D73A49;--shiki-dark:#F97583"> AND</span><span style="color:#D73A49;--shiki-dark:#F97583"> status</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'completed'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre></div><h3 id="部分索引">部分索引</h3><div class="code-block-wrapper" data-lang="sql" data-code="-- 只为活跃订单创建索引
+CREATE INDEX idx_active_orders
+ON orders (user_id, created_at)
+WHERE status = 'active';
+
+-- 只为非空值创建索引
+CREATE INDEX idx_users_email
+ON users (email)
+WHERE email IS NOT NULL;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 只为活跃订单创建索引</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">CREATE</span><span style="color:#D73A49;--shiki-dark:#F97583"> INDEX</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> idx_active_orders</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">ON</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders (user_id, created_at)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#D73A49;--shiki-dark:#F97583"> status</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'active'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 只为非空值创建索引</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">CREATE</span><span style="color:#D73A49;--shiki-dark:#F97583"> INDEX</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> idx_users_email</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">ON</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> users (email)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> email </span><span style="color:#D73A49;--shiki-dark:#F97583">IS NOT NULL</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre></div><h3 id="表达式索引">表达式索引</h3><div class="code-block-wrapper" data-lang="sql" data-code="-- 为计算表达式创建索引
+CREATE INDEX idx_users_lower_email
+ON users (LOWER(email));
+
+-- 为 JSONB 字段创建索引
+CREATE INDEX idx_events_properties
+ON events USING GIN ((properties -&gt; 'tags'));
+
+-- 为日期截断创建索引
+CREATE INDEX idx_orders_month
+ON orders (DATE_TRUNC('month', created_at));"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 为计算表达式创建索引</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">CREATE</span><span style="color:#D73A49;--shiki-dark:#F97583"> INDEX</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> idx_users_lower_email</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">ON</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> users (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">LOWER</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(email));</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 为 JSONB 字段创建索引</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">CREATE</span><span style="color:#D73A49;--shiki-dark:#F97583"> INDEX</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> idx_events_properties</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">ON</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> events </span><span style="color:#D73A49;--shiki-dark:#F97583">USING</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> GIN ((properties </span><span style="color:#D73A49;--shiki-dark:#F97583">-></span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'tags'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">));</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 为日期截断创建索引</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">CREATE</span><span style="color:#D73A49;--shiki-dark:#F97583"> INDEX</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> idx_orders_month</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">ON</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders (DATE_TRUNC(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'month'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, created_at));</span></span></code></pre></div><hr>
+<h2 id="慢查询诊断">慢查询诊断</h2><h3 id="慢查询识别">慢查询识别</h3><div class="code-block-wrapper" data-lang="sql" data-code="-- PostgreSQL：查看当前运行时间最长的查询
+SELECT
+    pid,
+    now() - pg_stat_activity.query_start AS duration,
+    query,
+    state
+FROM pg_stat_activity
+WHERE (now() - pg_stat_activity.query_start) &gt; interval '5 seconds'
+    AND state != 'idle'
+ORDER BY duration DESC;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- PostgreSQL：查看当前运行时间最长的查询</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    pid,</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    now</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> pg_stat_activity</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">query_start</span><span style="color:#D73A49;--shiki-dark:#F97583"> AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> duration,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    query,</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    state</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> pg_stat_activity</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">now</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> pg_stat_activity</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">query_start</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> interval </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'5 seconds'</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    AND</span><span style="color:#D73A49;--shiki-dark:#F97583"> state</span><span style="color:#D73A49;--shiki-dark:#F97583"> !=</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'idle'</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> duration </span><span style="color:#D73A49;--shiki-dark:#F97583">DESC</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre></div><div class="code-block-wrapper" data-lang="sql" data-code="-- PostgreSQL：查看最耗时的查询（需要 pg_stat_statements 扩展）
+SELECT
+    query,
+    calls,
+    total_exec_time / 1000 AS total_seconds,
+    mean_exec_time AS avg_ms,
+    rows
+FROM pg_stat_statements
+ORDER BY total_exec_time DESC
+LIMIT 20;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- PostgreSQL：查看最耗时的查询（需要 pg_stat_statements 扩展）</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    query,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    calls,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    total_exec_time </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1000</span><span style="color:#D73A49;--shiki-dark:#F97583"> AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> total_seconds,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    mean_exec_time </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> avg_ms,</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    rows</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> pg_stat_statements</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> total_exec_time </span><span style="color:#D73A49;--shiki-dark:#F97583">DESC</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">LIMIT</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 20</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre></div><h3 id="常见慢查询原因与解决方案">常见慢查询原因与解决方案</h3><pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[慢查询诊断] --&gt; B[缺少索引]&#10;    A --&gt; C[索引失效]&#10;    A --&gt; D[不合理的 JOIN]&#10;    A --&gt; E[数据倾斜]&#10;    A --&gt; F[锁竞争]&#10;    B --&gt; B1[创建合适的索引]&#10;    C --&gt; C1[检查隐式类型转换/函数使用]&#10;    D --&gt; D1[调整 JOIN 顺序和类型]&#10;    E --&gt; E1[数据分区或查询改写]&#10;    F --&gt; F1[优化事务粒度]"></pre><table>
+<thead>
+<tr>
+<th>问题类型</th>
+<th>典型症状</th>
+<th>诊断方法</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>全表扫描</td>
+<td>大表查询耗时长</td>
+<td>EXPLAIN 显示 Seq Scan</td>
+<td>创建合适索引</td>
+</tr>
+<tr>
+<td>索引失效</td>
+<td>有索引但未使用</td>
+<td>EXPLAIN 仍显示 Seq Scan</td>
+<td>避免函数包裹索引列</td>
+</tr>
+<tr>
+<td>N+1 查询问题</td>
+<td>大量简单查询</td>
+<td>慢查询日志显示高频相似查询</td>
+<td>改写为批量 JOIN</td>
+</tr>
+<tr>
+<td>统计信息过时</td>
+<td>行数估算偏差大</td>
+<td>估算行数与实际行数差距大</td>
+<td>ANALYZE 更新统计信息</td>
+</tr>
+<tr>
+<td>内存溢出排序</td>
+<td>Sort Method 显示 external merge</td>
+<td>EXPLAIN ANALYZE 查看排序方式</td>
+<td>增加 work_mem 或添加索引</td>
+</tr>
+<tr>
+<td>锁等待</td>
+<td>查询长时间挂起</td>
+<td>pg_locks 查看锁信息</td>
+<td>优化事务范围</td>
+</tr>
+</tbody></table>
+<h3 id="索引失效的常见场景">索引失效的常见场景</h3><div class="code-block-wrapper" data-lang="sql" data-code="-- 隐式类型转换导致索引失效
+-- 假设 user_id 列是 INTEGER 类型
+SELECT * FROM orders WHERE user_id = '12345';  -- 字符串导致索引失效
+SELECT * FROM orders WHERE user_id = 12345;    -- 正确的类型匹配
+
+-- 对索引列使用函数
+SELECT * FROM users WHERE YEAR(created_at) = 2025;  -- 索引失效
+SELECT * FROM users WHERE created_at &gt;= '2025-01-01' AND created_at &lt; '2026-01-01';  -- 索引生效
+
+-- 前导通配符
+SELECT * FROM users WHERE name LIKE '%张';    -- 索引失效
+SELECT * FROM users WHERE name LIKE '张%';    -- 索引生效
+
+-- OR 条件
+SELECT * FROM orders WHERE user_id = 100 OR status = 'pending';  -- 可能索引失效
+-- 改写为 UNION ALL
+SELECT * FROM orders WHERE user_id = 100
+UNION ALL
+SELECT * FROM orders WHERE status = 'pending' AND user_id != 100;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 隐式类型转换导致索引失效</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 假设 user_id 列是 INTEGER 类型</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders </span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> user_id </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '12345'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;  </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 字符串导致索引失效</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders </span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> user_id </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 12345</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;    </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 正确的类型匹配</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 对索引列使用函数</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> users </span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> YEAR</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(created_at) </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2025</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;  </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 索引失效</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> users </span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> created_at </span><span style="color:#D73A49;--shiki-dark:#F97583">>=</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '2025-01-01'</span><span style="color:#D73A49;--shiki-dark:#F97583"> AND</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> created_at </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '2026-01-01'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;  </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 索引生效</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 前导通配符</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> users </span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#D73A49;--shiki-dark:#F97583"> name</span><span style="color:#D73A49;--shiki-dark:#F97583"> LIKE</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '%张'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;    </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 索引失效</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> users </span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#D73A49;--shiki-dark:#F97583"> name</span><span style="color:#D73A49;--shiki-dark:#F97583"> LIKE</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '张%'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;    </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 索引生效</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- OR 条件</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders </span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> user_id </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 100</span><span style="color:#D73A49;--shiki-dark:#F97583"> OR</span><span style="color:#D73A49;--shiki-dark:#F97583"> status</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'pending'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;  </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 可能索引失效</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 改写为 UNION ALL</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders </span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> user_id </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 100</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">UNION ALL</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders </span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#D73A49;--shiki-dark:#F97583"> status</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'pending'</span><span style="color:#D73A49;--shiki-dark:#F97583"> AND</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> user_id </span><span style="color:#D73A49;--shiki-dark:#F97583">!=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 100</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre></div><h3 id="查询优化检查清单">查询优化检查清单</h3><div class="code-block-wrapper" data-lang="sql" data-code="-- 步骤 1：使用 EXPLAIN ANALYZE 获取实际执行计划
+EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+SELECT ...;
+
+-- 步骤 2：检查是否有不必要的全表扫描
+-- 步骤 3：检查 JOIN 的驱动顺序是否合理
+-- 步骤 4：检查排序和聚合操作的内存使用
+-- 步骤 5：检查估算行数与实际行数的偏差
+-- 步骤 6：考虑是否需要创建或调整索引
+
+-- 更新统计信息
+ANALYZE table_name;
+
+-- 检查索引使用情况
+SELECT
+    schemaname,
+    tablename,
+    indexname,
+    idx_scan,
+    idx_tup_read,
+    idx_tup_fetch
+FROM pg_stat_user_indexes
+WHERE schemaname = 'public'
+ORDER BY idx_scan ASC;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 步骤 1：使用 EXPLAIN ANALYZE 获取实际执行计划</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">EXPLAIN (ANALYZE, BUFFERS, FORMAT </span><span style="color:#D73A49;--shiki-dark:#F97583">TEXT</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ...;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 步骤 2：检查是否有不必要的全表扫描</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 步骤 3：检查 JOIN 的驱动顺序是否合理</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 步骤 4：检查排序和聚合操作的内存使用</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 步骤 5：检查估算行数与实际行数的偏差</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 步骤 6：考虑是否需要创建或调整索引</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 更新统计信息</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">ANALYZE table_name;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 检查索引使用情况</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    schemaname,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    tablename,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    indexname,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    idx_scan,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    idx_tup_read,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    idx_tup_fetch</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> pg_stat_user_indexes</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> schemaname </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'public'</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> idx_scan </span><span style="color:#D73A49;--shiki-dark:#F97583">ASC</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre></div><hr>
+<h2 id="查询改写技巧">查询改写技巧</h2><h3 id="避免-select">避免 SELECT *</h3><div class="code-block-wrapper" data-lang="sql" data-code="-- 低效：返回所有列
+SELECT * FROM orders WHERE user_id = 100;
+
+-- 高效：只查询需要的列
+SELECT order_id, amount, status, created_at
+FROM orders
+WHERE user_id = 100;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 低效：返回所有列</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders </span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> user_id </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 100</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 高效：只查询需要的列</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> order_id, amount, </span><span style="color:#D73A49;--shiki-dark:#F97583">status</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, created_at</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> user_id </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 100</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre></div><h3 id="批量操作优化">批量操作优化</h3><div class="code-block-wrapper" data-lang="sql" data-code="-- 低效：逐行插入
+INSERT INTO logs (user_id, action) VALUES (1, 'click');
+INSERT INTO logs (user_id, action) VALUES (2, 'view');
+INSERT INTO logs (user_id, action) VALUES (3, 'click');
+
+-- 高效：批量插入
+INSERT INTO logs (user_id, action)
+VALUES
+    (1, 'click'),
+    (2, 'view'),
+    (3, 'click');"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 低效：逐行插入</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">INSERT INTO</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> logs (user_id, </span><span style="color:#D73A49;--shiki-dark:#F97583">action</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">VALUES</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'click'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">INSERT INTO</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> logs (user_id, </span><span style="color:#D73A49;--shiki-dark:#F97583">action</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">VALUES</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'view'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">INSERT INTO</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> logs (user_id, </span><span style="color:#D73A49;--shiki-dark:#F97583">action</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">VALUES</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'click'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 高效：批量插入</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">INSERT INTO</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> logs (user_id, </span><span style="color:#D73A49;--shiki-dark:#F97583">action</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">VALUES</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'click'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'view'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'click'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span></code></pre></div><h3 id="分页查询优化">分页查询优化</h3><div class="code-block-wrapper" data-lang="sql" data-code="-- 传统 OFFSET 分页（深分页性能差）
+SELECT * FROM orders ORDER BY created_at DESC LIMIT 20 OFFSET 100000;
+
+-- 游标分页（Keyset Pagination）
+SELECT * FROM orders
+WHERE created_at &lt; '2025-03-15T10:30:00'
+ORDER BY created_at DESC
+LIMIT 20;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 传统 OFFSET 分页（深分页性能差）</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders </span><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> created_at </span><span style="color:#D73A49;--shiki-dark:#F97583">DESC</span><span style="color:#D73A49;--shiki-dark:#F97583"> LIMIT</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 20</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> OFFSET </span><span style="color:#005CC5;--shiki-dark:#79B8FF">100000</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 游标分页（Keyset Pagination）</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> created_at </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '2025-03-15T10:30:00'</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> created_at </span><span style="color:#D73A49;--shiki-dark:#F97583">DESC</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">LIMIT</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 20</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre></div><table>
+<thead>
+<tr>
+<th>分页方式</th>
+<th>深分页性能</th>
+<th>实现复杂度</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OFFSET</td>
+<td>差</td>
+<td>低</td>
+<td>总量小、浅分页</td>
+</tr>
+<tr>
+<td>Keyset</td>
+<td>优</td>
+<td>中</td>
+<td>瀑布流、时间线</td>
+</tr>
+<tr>
+<td>延迟关联</td>
+<td>良</td>
+<td>中</td>
+<td>需要跳页的场景</td>
+</tr>
+</tbody></table>
+<div class="code-block-wrapper" data-lang="sql" data-code="-- 延迟关联优化深分页
+SELECT o.*
+FROM orders o
+INNER JOIN (
+    SELECT order_id FROM orders ORDER BY created_at DESC LIMIT 20 OFFSET 100000
+) AS sub ON o.order_id = sub.order_id;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 延迟关联优化深分页</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> o.</span><span style="color:#D73A49;--shiki-dark:#F97583">*</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders o</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">INNER JOIN</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    SELECT</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> order_id </span><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders </span><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> created_at </span><span style="color:#D73A49;--shiki-dark:#F97583">DESC</span><span style="color:#D73A49;--shiki-dark:#F97583"> LIMIT</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 20</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> OFFSET </span><span style="color:#005CC5;--shiki-dark:#79B8FF">100000</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> sub </span><span style="color:#D73A49;--shiki-dark:#F97583">ON</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> o</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">order_id</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> sub</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">order_id</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre></div><hr>
+<h2 id="小结">小结</h2><ul>
+<li>执行计划是查询优化的起点，EXPLAIN ANALYZE 提供实际执行的耗时和行数信息</li>
+<li>B-Tree 索引是最通用的索引类型，复合索引应遵循等值优先、范围其次、排序最后的列排序原则</li>
+<li>覆盖索引通过 INCLUDE 子句避免回表，部分索引通过 WHERE 条件减少索引体积</li>
+<li>索引失效的常见原因包括隐式类型转换、函数包裹索引列和前导通配符</li>
+<li>深分页应使用 Keyset Pagination 或延迟关联替代 OFFSET</li>
+<li>定期更新统计信息（ANALYZE）确保优化器生成正确的执行计划</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../cross-discipline-craft/data-analytics-engineering/sql-for-developers/advanced-queries.html"><span class="label">Previous</span>高级查询：窗口函数、CTE、子查询优化</a><a class="next" href="../../../cross-discipline-craft/data-analytics-engineering/sql-for-developers/data-modeling.html"><span class="label">Next</span>数据建模：范式设计、星型/雪花模型、维度建模</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#执行计划基础" data-outline-link="执行计划基础">执行计划基础</a></li><li class="depth-3"><a href="#查看执行计划" data-outline-link="查看执行计划">查看执行计划</a></li><li class="depth-3"><a href="#执行计划中的关键操作" data-outline-link="执行计划中的关键操作">执行计划中的关键操作</a></li><li class="depth-3"><a href="#执行计划分析要点" data-outline-link="执行计划分析要点">执行计划分析要点</a></li><li class="depth-2"><a href="#索引策略" data-outline-link="索引策略">索引策略</a></li><li class="depth-3"><a href="#索引类型" data-outline-link="索引类型">索引类型</a></li><li class="depth-3"><a href="#复合索引设计原则" data-outline-link="复合索引设计原则">复合索引设计原则</a></li><li class="depth-3"><a href="#覆盖索引" data-outline-link="覆盖索引">覆盖索引</a></li><li class="depth-3"><a href="#部分索引" data-outline-link="部分索引">部分索引</a></li><li class="depth-3"><a href="#表达式索引" data-outline-link="表达式索引">表达式索引</a></li><li class="depth-2"><a href="#慢查询诊断" data-outline-link="慢查询诊断">慢查询诊断</a></li><li class="depth-3"><a href="#慢查询识别" data-outline-link="慢查询识别">慢查询识别</a></li><li class="depth-3"><a href="#常见慢查询原因与解决方案" data-outline-link="常见慢查询原因与解决方案">常见慢查询原因与解决方案</a></li><li class="depth-3"><a href="#索引失效的常见场景" data-outline-link="索引失效的常见场景">索引失效的常见场景</a></li><li class="depth-3"><a href="#查询优化检查清单" data-outline-link="查询优化检查清单">查询优化检查清单</a></li><li class="depth-2"><a href="#查询改写技巧" data-outline-link="查询改写技巧">查询改写技巧</a></li><li class="depth-3"><a href="#避免-select" data-outline-link="避免-select">避免 SELECT \*</a></li><li class="depth-3"><a href="#批量操作优化" data-outline-link="批量操作优化">批量操作优化</a></li><li class="depth-3"><a href="#分页查询优化" data-outline-link="分页查询优化">分页查询优化</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

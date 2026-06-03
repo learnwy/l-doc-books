@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>多 Agent 编码流水线 · AI 系统深度剖析</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:AI 系统深度剖析" data-pagefind-meta="slug:ai-systems-deep-dive">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">AI 系统深度剖析</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item active" href="../../../ai-systems-deep-dive/index.html" aria-current="page" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../ai-systems-deep-dive/index.html">AI 系统深度剖析</a><a class="back-to-hubs" href="../../../ai-systems-deep-dive/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/index.html">AI 自主编程与智能编码自动化 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="ai-systems-deep-dive"><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:ai-autonomous-coding/autonomous-coding-foundations"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/autonomous-coding-foundations/index.html">自主编程基础 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/autonomous-coding-foundations/assisted-to-autonomous.html">从辅助编程到自主开发的演进</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/autonomous-coding-foundations/ai-agent-coding-architecture.html">AI 编码 Agent 的核心架构</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/autonomous-coding-foundations/code-generation-reliability.html">代码生成的可靠性与正确性保证</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/autonomous-coding-foundations/autonomous-coding-landscape.html">自主编码工具与平台全景</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:ai-autonomous-coding/intelligent-coding-workflows" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/intelligent-coding-workflows/index.html">智能编码工作流 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/intelligent-coding-workflows/task-decomposition-planning.html">任务分解与自主规划策略</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/intelligent-coding-workflows/context-aware-generation.html">上下文感知的代码生成</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/intelligent-coding-workflows/test-driven-ai-coding.html">测试驱动的 AI 编码循环</a></li><li class="leaf"><a class="leaf-title active" href="../../../ai-systems-deep-dive/ai-autonomous-coding/intelligent-coding-workflows/multi-agent-coding-pipelines.html">多 Agent 编码流水线</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:ai-autonomous-coding/harness-and-orchestration"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/harness-and-orchestration/index.html">Harness 与编排引擎 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/harness-and-orchestration/coding-agent-harness.html">编码 Agent Harness 设计</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/harness-and-orchestration/execution-sandboxing.html">执行沙箱与安全隔离</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/harness-and-orchestration/feedback-loop-self-repair.html">反馈循环与自修复机制</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/harness-and-orchestration/observability-debugging.html">可观测性与 Agent 调试</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:ai-autonomous-coding/scaling-and-production"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/scaling-and-production/index.html">规模化与生产实践 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/scaling-and-production/enterprise-ai-coding.html">企业级 AI 编码平台架构</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/scaling-and-production/quality-assurance-at-scale.html">规模化质量保障体系</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/scaling-and-production/cost-optimization-strategy.html">成本优化与资源调度策略</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/scaling-and-production/future-autonomous-development.html">自主开发的未来趋势</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part VI · 微调与自主 (Fine-tuning &amp; Autonomy)</span><span>AI 自主编程与智能编码自动化 简介</span><span>智能编码工作流 简介</span><span>多 Agent 编码流水线</span></nav>
+    <article class="content prose"><h1 id="多-agent-编码流水线">多 Agent 编码流水线</h1><h2 id="核心概念">核心概念</h2><p>当单个 AI Agent 面对需要数十步操作的复杂编码任务时，会遇到上下文窗口溢出、角色混淆和错误累积等瓶颈。多 Agent 编码流水线通过将不同职责分配给专职 Agent，形成类似软件开发团队的协作结构——规划 Agent 负责架构设计，编码 Agent 负责代码实现，审查 Agent 负责质量把关，测试 Agent 负责验证保障。这种分工协作模式是自主编码从&quot;单兵作战&quot;走向&quot;团队协作&quot;的关键架构演进。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    A[用户需求] --&gt; B[规划 Agent]&#10;    B --&gt; C[任务队列]&#10;    C --&gt; D1[编码 Agent 1]&#10;    C --&gt; D2[编码 Agent 2]&#10;    D1 --&gt; E[审查 Agent]&#10;    D2 --&gt; E&#10;    E --&gt; F{通过?}&#10;    F --&gt;|否| G[修复建议]&#10;    G --&gt; D1&#10;    G --&gt; D2&#10;    F --&gt;|是| H[测试 Agent]&#10;    H --&gt; I{通过?}&#10;    I --&gt;|否| J[回退到编码]&#10;    J --&gt; D1&#10;    I --&gt;|是| K[集成合并]"></pre><table>
+<thead>
+<tr>
+<th>架构模式</th>
+<th>协调方式</th>
+<th>适用场景</th>
+<th>复杂度</th>
+<th>可靠性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>流水线</td>
+<td>顺序传递</td>
+<td>标准开发流程</td>
+<td>低</td>
+<td>高</td>
+</tr>
+<tr>
+<td>监督者</td>
+<td>中央调度</td>
+<td>复杂项目协调</td>
+<td>中</td>
+<td>高</td>
+</tr>
+<tr>
+<td>对等协作</td>
+<td>消息广播</td>
+<td>并行开发</td>
+<td>高</td>
+<td>中</td>
+</tr>
+<tr>
+<td>层次化</td>
+<td>树形委托</td>
+<td>大规模项目</td>
+<td>高</td>
+<td>最高</td>
+</tr>
+</tbody></table>
+<h2 id="专职-agent-的角色设计">专职 Agent 的角色设计</h2><p>多 Agent 系统的核心设计决策是角色划分。每个 Agent 拥有独立的系统 Prompt、工具集和上下文窗口，专注于特定的职责领域。</p>
+<p>**规划 Agent（Planner）**负责将高层需求分解为可执行的任务列表。它的上下文中包含项目架构概览、模块依赖图和技术栈信息，但不需要具体的代码实现细节。规划 Agent 使用推理能力最强的模型（如 Claude 3.5 Sonnet with extended thinking），因为规划质量对最终结果的影响是决定性的。</p>
+<p>**编码 Agent（Coder）**接收具体的编码任务（如&quot;在 <code>user-service.ts</code> 中添加 <code>deleteUser</code> 方法&quot;），读取相关文件、生成代码变更并通过基础验证。编码 Agent 使用平衡速度与质量的模型，因为它的调用频率最高。</p>
+<p>**审查 Agent（Reviewer）**模拟人类代码审查者，检查编码 Agent 的输出。它关注的维度包括：代码正确性、风格一致性、安全漏洞、性能问题和可维护性。审查 Agent 使用与编码 Agent 不同的模型，引入&quot;第二视角&quot;来减少系统性盲区。</p>
+<p>**测试 Agent（Tester）**负责编写测试用例和运行测试套件。它既生成新的测试来验证新功能，也运行已有测试来检查回归问题。测试 Agent 需要深度理解测试框架的 API 和项目的测试约定。</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="interface AgentRole {
+  name: string;
+  systemPrompt: string;
+  model: string;
+  tools: ToolDefinition[];
+  contextStrategy: ContextStrategy;
+  maxTokenBudget: number;
+}
+
+const plannerRole: AgentRole = {
+  name: 'planner',
+  systemPrompt: 'You are a software architect...',
+  model: 'claude-sonnet-4-20250514',
+  tools: ['read_file', 'list_dir', 'search_codebase'],
+  contextStrategy: 'architecture-focused',
+  maxTokenBudget: 100000,
+};
+
+const coderRole: AgentRole = {
+  name: 'coder',
+  systemPrompt: 'You are a senior developer...',
+  model: 'claude-sonnet-4-20250514',
+  tools: ['read_file', 'write_file', 'execute_command', 'search_codebase'],
+  contextStrategy: 'implementation-focused',
+  maxTokenBudget: 150000,
+};
+
+const reviewerRole: AgentRole = {
+  name: 'reviewer',
+  systemPrompt: 'You are a code reviewer...',
+  model: 'claude-sonnet-4-20250514',
+  tools: ['read_file', 'search_codebase', 'git_diff'],
+  contextStrategy: 'diff-focused',
+  maxTokenBudget: 80000,
+};"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> AgentRole</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  name</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  systemPrompt</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  model</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  tools</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ToolDefinition</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  contextStrategy</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ContextStrategy</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  maxTokenBudget</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> plannerRole</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> AgentRole</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  name: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'planner'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  systemPrompt: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'You are a software architect...'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  model: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'claude-sonnet-4-20250514'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  tools: [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'read_file'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'list_dir'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'search_codebase'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  contextStrategy: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'architecture-focused'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  maxTokenBudget: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">100000</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> coderRole</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> AgentRole</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  name: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'coder'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  systemPrompt: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'You are a senior developer...'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  model: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'claude-sonnet-4-20250514'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  tools: [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'read_file'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'write_file'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'execute_command'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'search_codebase'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  contextStrategy: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'implementation-focused'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  maxTokenBudget: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">150000</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> reviewerRole</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> AgentRole</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  name: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'reviewer'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  systemPrompt: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'You are a code reviewer...'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  model: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'claude-sonnet-4-20250514'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  tools: [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'read_file'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'search_codebase'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'git_diff'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  contextStrategy: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'diff-focused'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  maxTokenBudget: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">80000</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span></code></pre></div><table>
+<thead>
+<tr>
+<th>Agent 角色</th>
+<th>核心职责</th>
+<th>模型偏好</th>
+<th>工具集</th>
+<th>上下文重点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>规划 Agent</td>
+<td>需求分解、架构设计</td>
+<td>强推理模型</td>
+<td>只读工具</td>
+<td>架构、模块关系</td>
+</tr>
+<tr>
+<td>编码 Agent</td>
+<td>代码实现、文件编辑</td>
+<td>平衡型模型</td>
+<td>读写 + 执行</td>
+<td>目标文件及依赖</td>
+</tr>
+<tr>
+<td>审查 Agent</td>
+<td>代码审查、问题发现</td>
+<td>不同于编码的模型</td>
+<td>只读 + diff</td>
+<td>变更差异及上下文</td>
+</tr>
+<tr>
+<td>测试 Agent</td>
+<td>测试生成、验证执行</td>
+<td>平衡型模型</td>
+<td>读写 + 测试执行</td>
+<td>测试框架 + 被测代码</td>
+</tr>
+</tbody></table>
+<h2 id="流水线编排模式">流水线编排模式</h2><p>流水线编排定义了多个 Agent 之间的交互方式和任务流转规则。不同的编排模式适合不同的项目复杂度和团队需求。</p>
+<p><strong>顺序流水线</strong>是最简单的模式：需求→规划→编码→审查→测试→合并。每个阶段由对应的 Agent 完成后，结果传递给下一个阶段。优势是流程清晰、易于调试，劣势是总耗时等于各阶段耗时之和。</p>
+<p><strong>并行流水线</strong>让独立的编码任务由多个编码 Agent 同时处理。规划 Agent 在分解任务时标记哪些子任务可以并行执行（无数据依赖），这些任务被分配给不同的编码 Agent。并行度提升了吞吐量，但引入了合并冲突的风险。</p>
+<p><strong>反馈流水线</strong>在顺序流水线的基础上增加回退机制。当审查 Agent 发现问题时，将修改建议返回给编码 Agent 重新处理。当测试 Agent 发现回归时，将失败信息返回给编码 Agent 修复。</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="interface Pipeline {
+  stages: PipelineStage[]
+  feedback: FeedbackRule[]
+
+  async execute(task: Task): Promise&lt;PipelineResult&gt; {
+    let context = await this.stages[0].agent.process(task)
+
+    for (let i = 1; i &lt; this.stages.length; i++) {
+      const result = await this.stages[i].agent.process(context)
+
+      if (result.needsRevision) {
+        const targetStage = this.findRevisionTarget(result.issues)
+        context = await this.stages[targetStage].agent.revise(result.issues, context)
+        i = targetStage
+        continue
+      }
+
+      context = result
+    }
+
+    return context
+  }
+}
+
+interface PipelineStage {
+  name: string
+  agent: AgentRole
+  inputSchema: Schema
+  outputSchema: Schema
+  maxRevisions: number
+}
+
+interface FeedbackRule {
+  fromStage: string
+  toStage: string
+  condition: string
+  maxRetries: number
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Pipeline</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  stages</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> PipelineStage</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[]</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  feedback</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> FeedbackRule</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  async</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> execute</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">task</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Task</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">PipelineResult</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    let</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> context </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.stages[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">].agent.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">process</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(task)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">let</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; i </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.stages.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">length</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; i</span><span style="color:#D73A49;--shiki-dark:#F97583">++</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> result</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.stages[i].agent.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">process</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(context)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (result.needsRevision) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> targetStage</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">findRevisionTarget</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(result.issues)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        context </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.stages[targetStage].agent.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">revise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(result.issues, context)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        i </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> targetStage</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        continue</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      context </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> result</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> context</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> PipelineStage</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  name</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  agent</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> AgentRole</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  inputSchema</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Schema</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  outputSchema</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Schema</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  maxRevisions</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> FeedbackRule</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  fromStage</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  toStage</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  condition</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  maxRetries</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><pre class="mermaid" data-diagram-type="graph" data-source="graph TB&#10;    subgraph &quot;顺序流水线&quot;&#10;        S1[规划] --&gt; S2[编码] --&gt; S3[审查] --&gt; S4[测试] --&gt; S5[合并]&#10;    end&#10;    subgraph &quot;并行流水线&quot;&#10;        P1[规划] --&gt; P2a[编码 A]&#10;        P1 --&gt; P2b[编码 B]&#10;        P1 --&gt; P2c[编码 C]&#10;        P2a --&gt; P3[合并 + 审查]&#10;        P2b --&gt; P3&#10;        P2c --&gt; P3&#10;        P3 --&gt; P4[测试]&#10;    end"></pre><h2 id="冲突解决与合并策略">冲突解决与合并策略</h2><p>当多个编码 Agent 并行工作时，它们可能修改相同的文件或相互冲突的代码区域。冲突解决是多 Agent 系统的核心工程挑战。</p>
+<p><strong>文件级锁定</strong>是最简单的冲突预防策略。在规划阶段，为每个编码 Agent 分配独立的文件集合，禁止两个 Agent 修改同一个文件。这消除了合并冲突，但限制了并行度——如果多个任务都需要修改同一个文件（如路由配置文件），就只能串行执行。</p>
+<p><strong>区域级锁定</strong>更精细：允许多个 Agent 修改同一个文件，但各自只操作不同的代码区域。例如一个 Agent 在文件顶部添加新的 import，另一个 Agent 在文件底部添加新的函数。这需要更复杂的锁定和合并机制。</p>
+<p><strong>乐观并发 + 自动合并</strong>最灵活：所有 Agent 自由修改文件，在合并阶段使用 Git 的三路合并算法自动解决不冲突的变更。对于真正冲突的部分，由一个专门的&quot;合并 Agent&quot;进行语义级合并。</p>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>并行度</th>
+<th>冲突率</th>
+<th>实现复杂度</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>文件级锁定</td>
+<td>低</td>
+<td>0%</td>
+<td>低</td>
+<td>小项目、独立模块</td>
+</tr>
+<tr>
+<td>区域级锁定</td>
+<td>中</td>
+<td>低</td>
+<td>中</td>
+<td>中等项目</td>
+</tr>
+<tr>
+<td>乐观并发</td>
+<td>高</td>
+<td>中</td>
+<td>高</td>
+<td>大项目、松耦合模块</td>
+</tr>
+<tr>
+<td>顺序执行</td>
+<td>无并行</td>
+<td>0%</td>
+<td>极低</td>
+<td>强耦合变更</td>
+</tr>
+</tbody></table>
+<div class="code-block-wrapper" data-lang="typescript" data-code="interface MergeStrategy {
+  async merge(changes: AgentChange[]): Promise&lt;MergeResult&gt; {
+    const grouped = this.groupByFile(changes)
+    const results: FileResult[] = []
+
+    for (const [file, fileChanges] of grouped) {
+      if (fileChanges.length === 1) {
+        results.push({ file, status: &quot;clean&quot;, content: fileChanges[0].content })
+        continue
+      }
+
+      const mergeResult = await this.threeWayMerge(file, fileChanges)
+      if (mergeResult.hasConflicts) {
+        const resolved = await this.mergeAgent.resolve(mergeResult.conflicts)
+        results.push({ file, status: &quot;resolved&quot;, content: resolved })
+      } else {
+        results.push({ file, status: &quot;auto-merged&quot;, content: mergeResult.content })
+      }
+    }
+
+    return { files: results, hasManualConflicts: results.some((r) =&gt; r.status === &quot;manual&quot;) }
+  }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> MergeStrategy</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  async</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> merge</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">changes</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> AgentChange</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[])</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">MergeResult</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> grouped</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">groupByFile</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(changes)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> results</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> FileResult</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> []</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">file</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">fileChanges</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">of</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> grouped) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (fileChanges.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">length</span><span style="color:#D73A49;--shiki-dark:#F97583"> ===</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        results.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">push</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ file, status: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"clean"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, content: fileChanges[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">].content })</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        continue</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> mergeResult</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">threeWayMerge</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(file, fileChanges)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (mergeResult.hasConflicts) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> resolved</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.mergeAgent.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">resolve</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(mergeResult.conflicts)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        results.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">push</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ file, status: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"resolved"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, content: resolved })</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      } </span><span style="color:#D73A49;--shiki-dark:#F97583">else</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        results.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">push</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ file, status: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"auto-merged"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, content: mergeResult.content })</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { files: results, hasManualConflicts: results.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">some</span><span style="color:#24292E;--shiki-dark:#E1E4E8">((</span><span style="color:#E36209;--shiki-dark:#FFAB70">r</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> r.status </span><span style="color:#D73A49;--shiki-dark:#F97583">===</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "manual"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><h2 id="专业化-agent-模式">专业化 Agent 模式</h2><p>除了通用的规划-编码-审查-测试四角色，多 Agent 系统还可以引入更专业化的 Agent 角色。</p>
+<p><strong>前端 Agent</strong> 专注于 React/Vue 组件开发，理解组件生命周期、状态管理模式和 CSS 布局技术。它的上下文中包含设计系统的 Token 定义和组件库 API。</p>
+<p><strong>后端 Agent</strong> 专注于服务端逻辑，理解数据库查询优化、API 设计原则和并发控制。它的上下文中包含数据库 Schema 和中间件配置。</p>
+<p><strong>数据库 Agent</strong> 专注于 Schema 设计和迁移脚本编写。它理解索引策略、数据一致性约束和迁移的向后兼容性。</p>
+<p><strong>安全 Agent</strong> 专注于安全审查，检查 Agent 生成的代码是否存在注入漏洞、权限绕过、敏感信息泄露等安全问题。</p>
+<p><strong>文档 Agent</strong> 在功能实现完成后，自动生成或更新 API 文档、README 和变更日志。</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="interface SpecializedAgentConfig {
+  frontend: {
+    focus: ['React components', 'CSS/Tailwind', 'state management'];
+    contextPriority: ['design-tokens', 'component-library', 'page-layout'];
+    model: 'claude-sonnet-4-20250514';
+  };
+  backend: {
+    focus: ['API routes', 'database queries', 'middleware'];
+    contextPriority: ['schema', 'routes', 'middleware-config'];
+    model: 'claude-sonnet-4-20250514';
+  };
+  database: {
+    focus: ['schema design', 'migrations', 'query optimization'];
+    contextPriority: ['current-schema', 'migration-history', 'query-patterns'];
+    model: 'claude-sonnet-4-20250514';
+  };
+  security: {
+    focus: ['injection prevention', 'auth/authz', 'data protection'];
+    contextPriority: ['auth-config', 'input-handling', 'data-flow'];
+    model: 'claude-sonnet-4-20250514';
+  };
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> SpecializedAgentConfig</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  frontend</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    focus</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'React components'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'CSS/Tailwind'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'state management'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    contextPriority</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'design-tokens'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'component-library'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'page-layout'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    model</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'claude-sonnet-4-20250514'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  };</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  backend</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    focus</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'API routes'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'database queries'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'middleware'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    contextPriority</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'schema'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'routes'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'middleware-config'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    model</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'claude-sonnet-4-20250514'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  };</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  database</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    focus</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'schema design'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'migrations'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'query optimization'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    contextPriority</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'current-schema'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'migration-history'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'query-patterns'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    model</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'claude-sonnet-4-20250514'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  };</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  security</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    focus</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'injection prevention'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'auth/authz'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'data protection'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    contextPriority</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'auth-config'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'input-handling'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'data-flow'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    model</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'claude-sonnet-4-20250514'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><table>
+<thead>
+<tr>
+<th>专业化 Agent</th>
+<th>核心关注</th>
+<th>典型工具</th>
+<th>何时启用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>前端 Agent</td>
+<td>组件、样式、交互</td>
+<td>浏览器预览、Storybook</td>
+<td>涉及 UI 变更</td>
+</tr>
+<tr>
+<td>后端 Agent</td>
+<td>API、业务逻辑、数据</td>
+<td>API 测试、数据库客户端</td>
+<td>涉及服务端变更</td>
+</tr>
+<tr>
+<td>数据库 Agent</td>
+<td>Schema、迁移、索引</td>
+<td>数据库 CLI、迁移工具</td>
+<td>涉及数据模型变更</td>
+</tr>
+<tr>
+<td>安全 Agent</td>
+<td>漏洞、权限、加密</td>
+<td>安全扫描器</td>
+<td>所有变更（后置审查）</td>
+</tr>
+<tr>
+<td>文档 Agent</td>
+<td>API 文档、README</td>
+<td>文档生成器</td>
+<td>功能完成后</td>
+</tr>
+</tbody></table>
+<h2 id="agent-间通信协议">Agent 间通信协议</h2><p>多 Agent 系统的通信协议决定了 Agent 之间如何传递任务、结果和反馈。设计良好的通信协议需要满足：结构化（可解析）、版本化（可演进）和可追溯（可调试）。</p>
+<p><strong>消息传递模式</strong>是最常见的通信方式。每个 Agent 通过发送和接收结构化消息来协调工作。</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="interface AgentMessage {
+  id: string;
+  from: string;
+  to: string;
+  type: 'task' | 'result' | 'feedback' | 'query' | 'status';
+  timestamp: number;
+  payload: unknown;
+  replyTo?: string;
+  metadata: {
+    priority: 'low' | 'medium' | 'high';
+    ttl: number;
+    retryCount: number;
+  };
+}
+
+interface TaskPayload {
+  taskId: string;
+  description: string;
+  constraints: string[];
+  context: {
+    relevantFiles: string[];
+    dependencies: string[];
+    previousResults: string[];
+  };
+  expectedOutput: OutputSchema;
+}
+
+interface ReviewFeedback {
+  approved: boolean;
+  issues: {
+    severity: 'critical' | 'major' | 'minor' | 'suggestion';
+    file: string;
+    line: number;
+    description: string;
+    suggestedFix?: string;
+  }[];
+  overallComment: string;
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> AgentMessage</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  id</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  from</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  to</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  type</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'task'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'result'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'feedback'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'query'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'status'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  timestamp</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  payload</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> unknown</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  replyTo</span><span style="color:#D73A49;--shiki-dark:#F97583">?:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  metadata</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    priority</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'low'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'medium'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'high'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    ttl</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    retryCount</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> TaskPayload</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  taskId</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  description</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  constraints</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  context</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    relevantFiles</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    dependencies</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    previousResults</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  };</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  expectedOutput</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> OutputSchema</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ReviewFeedback</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  approved</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> boolean</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  issues</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    severity</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'critical'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'major'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'minor'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'suggestion'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    file</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    line</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    description</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    suggestedFix</span><span style="color:#D73A49;--shiki-dark:#F97583">?:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }[];</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  overallComment</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><p><strong>共享状态模式</strong>通过一个中央状态存储（如 Redis 或内存中的状态对象）实现 Agent 间的状态共享。每个 Agent 可以读取全局状态来了解当前进度，也可以更新状态来通知其他 Agent。</p>
+<table>
+<thead>
+<tr>
+<th>通信模式</th>
+<th>耦合度</th>
+<th>可扩展性</th>
+<th>调试难度</th>
+<th>适用规模</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>消息传递</td>
+<td>低</td>
+<td>高</td>
+<td>中</td>
+<td>大规模</td>
+</tr>
+<tr>
+<td>共享状态</td>
+<td>中</td>
+<td>中</td>
+<td>低</td>
+<td>中等规模</td>
+</tr>
+<tr>
+<td>直接调用</td>
+<td>高</td>
+<td>低</td>
+<td>低</td>
+<td>小规模</td>
+</tr>
+<tr>
+<td>事件驱动</td>
+<td>最低</td>
+<td>最高</td>
+<td>高</td>
+<td>大规模分布式</td>
+</tr>
+</tbody></table>
+<h2 id="小结">小结</h2><ul>
+<li><strong>多 Agent 编码流水线</strong>通过角色分工解决单 Agent 的能力瓶颈，是自主编码的规模化架构。</li>
+<li><strong>四大核心角色</strong>（规划、编码、审查、测试）模拟了真实开发团队的协作模式，每个角色使用独立的上下文和工具集。</li>
+<li><strong>编排模式</strong>（顺序、并行、反馈）决定了 Agent 的交互方式，反馈流水线是可靠性最高的选择。</li>
+<li><strong>冲突解决</strong>是并行编码的核心挑战，文件级锁定简单但限制并行度，乐观并发灵活但实现复杂。</li>
+<li><strong>专业化 Agent</strong>（前端、后端、安全、文档）通过领域知识增强了系统的专业能力。</li>
+<li><strong>通信协议</strong>需要结构化、版本化和可追溯，消息传递模式是大规模系统的首选方案。</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../ai-systems-deep-dive/ai-autonomous-coding/intelligent-coding-workflows/test-driven-ai-coding.html"><span class="label">Previous</span>测试驱动的 AI 编码循环</a><a class="next" href="../../../ai-systems-deep-dive/ai-autonomous-coding/harness-and-orchestration/index.html"><span class="label">Next</span>Harness 与编排引擎 简介</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#专职-agent-的角色设计" data-outline-link="专职-agent-的角色设计">专职 Agent 的角色设计</a></li><li class="depth-2"><a href="#流水线编排模式" data-outline-link="流水线编排模式">流水线编排模式</a></li><li class="depth-2"><a href="#冲突解决与合并策略" data-outline-link="冲突解决与合并策略">冲突解决与合并策略</a></li><li class="depth-2"><a href="#专业化-agent-模式" data-outline-link="专业化-agent-模式">专业化 Agent 模式</a></li><li class="depth-2"><a href="#agent-间通信协议" data-outline-link="agent-间通信协议">Agent 间通信协议</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>GAN 变体与演进 · AI 系统深度剖析</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:AI 系统深度剖析" data-pagefind-meta="slug:ai-systems-deep-dive">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">AI 系统深度剖析</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item active" href="../../../ai-systems-deep-dive/index.html" aria-current="page" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../ai-systems-deep-dive/index.html">AI 系统深度剖析</a><a class="back-to-hubs" href="../../../ai-systems-deep-dive/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../ai-systems-deep-dive/generative-ai/index.html">生成式 AI 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="ai-systems-deep-dive"><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:generative-ai/generative-foundations"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/generative-ai/generative-foundations/index.html">生成模型基础 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/generative-ai/generative-foundations/generative-model-landscape.html">生成模型全景</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/generative-ai/generative-foundations/probabilistic-generative-models.html">概率生成模型</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/generative-ai/generative-foundations/latent-space.html">隐空间</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/generative-ai/generative-foundations/evaluation-metrics.html">生成质量评估指标</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:generative-ai/diffusion-models"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/generative-ai/diffusion-models/index.html">扩散模型 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/generative-ai/diffusion-models/diffusion-theory.html">扩散过程的数学理论</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/generative-ai/diffusion-models/stable-diffusion.html">Stable Diffusion 架构解析</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/generative-ai/diffusion-models/conditioning-guidance.html">条件引导机制</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/generative-ai/diffusion-models/diffusion-acceleration.html">扩散模型加速</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:generative-ai/gan-and-vae" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/generative-ai/gan-and-vae/index.html">GAN 与 VAE 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/generative-ai/gan-and-vae/gan-fundamentals.html">GAN 基础原理</a></li><li class="leaf"><a class="leaf-title active" href="../../../ai-systems-deep-dive/generative-ai/gan-and-vae/gan-variants.html">GAN 变体与演进</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/generative-ai/gan-and-vae/vae-fundamentals.html">VAE 基础原理</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/generative-ai/gan-and-vae/flow-models.html">标准化流模型</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:generative-ai/text-to-image"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/generative-ai/text-to-image/index.html">文本到图像 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/generative-ai/text-to-image/text-image-architecture.html">文图架构设计</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/generative-ai/text-to-image/controlnet-and-adapters.html">ControlNet 与适配器</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/generative-ai/text-to-image/image-editing.html">图像编辑技术</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/generative-ai/text-to-image/image-generation-pipeline.html">图像生成管线</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:generative-ai/multimodal-generation"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/generative-ai/multimodal-generation/index.html">多模态生成 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/generative-ai/multimodal-generation/text-to-video.html">文本到视频生成</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/generative-ai/multimodal-generation/text-to-audio.html">文本到音频生成</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/generative-ai/multimodal-generation/text-to-3d.html">文本到三维生成</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/generative-ai/multimodal-generation/cross-modal-generation.html">跨模态统一生成</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:generative-ai/aigc-applications"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/generative-ai/aigc-applications/index.html">AIGC 应用 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/generative-ai/aigc-applications/creative-ai.html">创意 AI</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/generative-ai/aigc-applications/code-generation.html">代码生成</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/generative-ai/aigc-applications/content-pipeline.html">内容生产管线</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/generative-ai/aigc-applications/copyright-and-ethics.html">版权与伦理</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part III · 生成式与多模态 (Generative &amp; Multimodal)</span><span>生成式 AI 简介</span><span>GAN 与 VAE 简介</span><span>GAN 变体与演进</span></nav>
+    <article class="content prose"><h1 id="gan-变体与演进">GAN 变体与演进</h1><h2 id="核心概念">核心概念</h2><p>从 2014 年原始 GAN 到 2024 年的 GigaGAN，GAN 架构经历了十年的快速演进。这条技术路线围绕两个核心挑战展开：提升生成图像的分辨率和真实感，以及增强对生成过程的精确控制。DCGAN 奠定了卷积 GAN 的基础架构，ProGAN 引入渐进式训练突破了高分辨率生成的瓶颈，StyleGAN 系列通过风格注入机制实现了对生成图像各个层面的精细控制。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    A[GAN 2014] --&gt; B[DCGAN 2015]&#10;    B --&gt; C[WGAN 2017]&#10;    C --&gt; D[ProGAN 2017]&#10;    D --&gt; E[StyleGAN 2018]&#10;    E --&gt; F[StyleGAN2 2020]&#10;    F --&gt; G[StyleGAN3 2021]&#10;    B --&gt; H[Pix2Pix 2016]&#10;    H --&gt; I[CycleGAN 2017]&#10;    I --&gt; J[SPADE 2019]&#10;    G --&gt; K[GigaGAN 2023]"></pre><p>每一代 GAN 的改进都有明确的技术焦点，从网络结构设计到训练策略优化，从无条件生成到条件可控生成。</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>年份</th>
+<th>核心创新</th>
+<th>最大分辨率</th>
+<th>FID (最佳)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DCGAN</td>
+<td>2015</td>
+<td>卷积架构规范</td>
+<td>64×64</td>
+<td>~30</td>
+</tr>
+<tr>
+<td>ProGAN</td>
+<td>2017</td>
+<td>渐进式生长训练</td>
+<td>1024×1024</td>
+<td>8.04</td>
+</tr>
+<tr>
+<td>StyleGAN</td>
+<td>2018</td>
+<td>风格注入 + AdaIN</td>
+<td>1024×1024</td>
+<td>4.40</td>
+</tr>
+<tr>
+<td>StyleGAN2</td>
+<td>2020</td>
+<td>权重调制 + 路径正则</td>
+<td>1024×1024</td>
+<td>2.84</td>
+</tr>
+<tr>
+<td>StyleGAN3</td>
+<td>2021</td>
+<td>等变设计消除伪影</td>
+<td>1024×1024</td>
+<td>3.07</td>
+</tr>
+<tr>
+<td>GigaGAN</td>
+<td>2023</td>
+<td>大规模条件 GAN</td>
+<td>4096×4096</td>
+<td>9.09</td>
+</tr>
+</tbody></table>
+<h2 id="stylegan-架构体系">StyleGAN 架构体系</h2><p>StyleGAN 是 GAN 发展史上最具影响力的架构创新。它引入映射网络和风格注入机制，将生成过程分解为&quot;内容&quot;和&quot;风格&quot;两个层面。输入噪声 z 首先通过 8 层 MLP 映射网络转化为中间隐空间 W 中的向量 w，然后 w 通过仿射变换生成缩放和偏移参数（风格向量），注入到合成网络每一层的 AdaIN（自适应实例归一化）中。</p>
+<p>W 空间相比 Z 空间具有更好的解耦特性。由于映射网络可以学习非线性变换来&quot;展开&quot;隐空间中的纠缠结构，W 空间中的线性操作（如插值和方向编辑）对应更自然的语义变化。不同层的风格向量控制不同粒度的属性——浅层控制姿态和形状，中间层控制面部特征，深层控制颜色和微细节。</p>
+<div class="code-block-wrapper" data-lang="python" data-code="import torch
+import torch.nn as nn
+
+class MappingNetwork(nn.Module):
+    def __init__(self, z_dim=512, w_dim=512, n_layers=8):
+        super().__init__()
+        layers = []
+        for i in range(n_layers):
+            in_dim = z_dim if i == 0 else w_dim
+            layers.extend([nn.Linear(in_dim, w_dim), nn.LeakyReLU(0.2)])
+        self.net = nn.Sequential(*layers)
+
+    def forward(self, z):
+        return self.net(z)
+
+class AdaIN(nn.Module):
+    def __init__(self, channels, w_dim=512):
+        super().__init__()
+        self.norm = nn.InstanceNorm2d(channels)
+        self.style = nn.Linear(w_dim, channels * 2)
+
+    def forward(self, x, w):
+        style = self.style(w).unsqueeze(-1).unsqueeze(-1)
+        gamma, beta = style.chunk(2, dim=1)
+        return gamma * self.norm(x) + beta
+
+class SynthesisBlock(nn.Module):
+    def __init__(self, in_channels, out_channels, w_dim=512):
+        super().__init__()
+        self.conv = nn.Conv2d(in_channels, out_channels, 3, padding=1)
+        self.adain = AdaIN(out_channels, w_dim)
+        self.noise_scale = nn.Parameter(torch.zeros(1))
+
+    def forward(self, x, w):
+        x = self.conv(x)
+        noise = torch.randn(x.shape[0], 1, x.shape[2], x.shape[3], device=x.device)
+        x = x + self.noise_scale * noise
+        return self.adain(x, w)"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> torch</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> torch.nn </span><span style="color:#D73A49;--shiki-dark:#F97583">as</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> nn</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> MappingNetwork</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">nn</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Module</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, z_dim</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">512</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, w_dim</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">512</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, n_layers</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">8</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        super</span><span style="color:#24292E;--shiki-dark:#E1E4E8">().</span><span style="color:#005CC5;--shiki-dark:#79B8FF">__init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        layers </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> []</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> range</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(n_layers):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            in_dim </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> z_dim </span><span style="color:#D73A49;--shiki-dark:#F97583">if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#D73A49;--shiki-dark:#F97583"> else</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> w_dim</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            layers.extend([nn.Linear(in_dim, w_dim), nn.LeakyReLU(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0.2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)])</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.net </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> nn.Sequential(</span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">layers)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> forward</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, z):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.net(z)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> AdaIN</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">nn</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Module</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, channels, w_dim</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">512</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        super</span><span style="color:#24292E;--shiki-dark:#E1E4E8">().</span><span style="color:#005CC5;--shiki-dark:#79B8FF">__init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.norm </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> nn.InstanceNorm2d(channels)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.style </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> nn.Linear(w_dim, channels </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> forward</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, x, w):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        style </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.style(w).unsqueeze(</span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">).unsqueeze(</span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        gamma, beta </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> style.chunk(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">dim</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> gamma </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.norm(x) </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> beta</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> SynthesisBlock</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">nn</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Module</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, in_channels, out_channels, w_dim</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">512</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        super</span><span style="color:#24292E;--shiki-dark:#E1E4E8">().</span><span style="color:#005CC5;--shiki-dark:#79B8FF">__init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.conv </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> nn.Conv2d(in_channels, out_channels, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">padding</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.adain </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> AdaIN(out_channels, w_dim)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.noise_scale </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> nn.Parameter(torch.zeros(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> forward</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, x, w):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        x </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.conv(x)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        noise </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> torch.randn(x.shape[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">], </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, x.shape[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">], x.shape[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">], </span><span style="color:#E36209;--shiki-dark:#FFAB70">device</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">x.device)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        x </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> x </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.noise_scale </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> noise</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.adain(x, w)</span></span></code></pre></div><p>StyleGAN2 改进了三个关键方面：一是用权重调制（Weight Modulation/Demodulation）替代 AdaIN，消除了 AdaIN 引入的水滴伪影；二是引入路径长度正则化，鼓励 W 空间中的等距变化产生等比例的图像变化；三是改进了渐进式增长策略，采用跳跃连接和残差结构。StyleGAN3 进一步通过等变卷积设计消除了纹理粘连（texture sticking）伪影。</p>
+<h2 id="图像翻译与-cyclegan">图像翻译与 CycleGAN</h2><p>图像翻译任务的目标是学习从一个视觉域到另一个视觉域的映射。Pix2Pix 使用成对训练数据，通过条件 GAN 加 L1 重构损失实现精确的图像翻译。其 PatchGAN 判别器只在局部 patch 级别判断真假，而非整张图像，这一设计使判别器更高效且对图像尺寸不敏感。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    subgraph CycleGAN&#10;        A[域 A 图像] --&gt; GAB[G: A→B]&#10;        GAB --&gt; B1[生成域 B]&#10;        B1 --&gt; GBA[G: B→A]&#10;        GBA --&gt; A1[重构域 A]&#10;        B[域 B 图像] --&gt; GBA2[G: B→A]&#10;        GBA2 --&gt; A2[生成域 A]&#10;        A2 --&gt; GAB2[G: A→B]&#10;        GAB2 --&gt; B2[重构域 B]&#10;    end"></pre><p>CycleGAN 的突破在于无需成对训练数据即可实现域间翻译。它通过两个生成器 G: A→B 和 F: B→A 加循环一致性损失 ||F(G(x)) - x||₁ + ||G(F(y)) - y||₁ 来约束映射关系。循环一致性确保翻译是可逆的，避免了模式崩塌到无关图像的问题。</p>
+<div class="code-block-wrapper" data-lang="python" data-code="import torch
+import torch.nn as nn
+
+class ResnetGenerator(nn.Module):
+    def __init__(self, input_nc=3, output_nc=3, ngf=64, n_blocks=9):
+        super().__init__()
+        model = [nn.ReflectionPad2d(3), nn.Conv2d(input_nc, ngf, 7), nn.InstanceNorm2d(ngf), nn.ReLU()]
+        for i in range(2):
+            mult = 2 ** i
+            model += [nn.Conv2d(ngf * mult, ngf * mult * 2, 3, 2, 1),
+                      nn.InstanceNorm2d(ngf * mult * 2), nn.ReLU()]
+        mult = 4
+        for _ in range(n_blocks):
+            model += [ResnetBlock(ngf * mult)]
+        for i in range(2):
+            mult = 2 ** (2 - i)
+            model += [nn.ConvTranspose2d(ngf * mult, ngf * mult // 2, 3, 2, 1, output_padding=1),
+                      nn.InstanceNorm2d(ngf * mult // 2), nn.ReLU()]
+        model += [nn.ReflectionPad2d(3), nn.Conv2d(ngf, output_nc, 7), nn.Tanh()]
+        self.model = nn.Sequential(*model)
+
+    def forward(self, x):
+        return self.model(x)
+
+class ResnetBlock(nn.Module):
+    def __init__(self, dim):
+        super().__init__()
+        self.block = nn.Sequential(
+            nn.ReflectionPad2d(1), nn.Conv2d(dim, dim, 3), nn.InstanceNorm2d(dim), nn.ReLU(),
+            nn.ReflectionPad2d(1), nn.Conv2d(dim, dim, 3), nn.InstanceNorm2d(dim),
+        )
+
+    def forward(self, x):
+        return x + self.block(x)"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> torch</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> torch.nn </span><span style="color:#D73A49;--shiki-dark:#F97583">as</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> nn</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ResnetGenerator</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">nn</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Module</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, input_nc</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, output_nc</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, ngf</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">64</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, n_blocks</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">9</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        super</span><span style="color:#24292E;--shiki-dark:#E1E4E8">().</span><span style="color:#005CC5;--shiki-dark:#79B8FF">__init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        model </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [nn.ReflectionPad2d(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">), nn.Conv2d(input_nc, ngf, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">7</span><span style="color:#24292E;--shiki-dark:#E1E4E8">), nn.InstanceNorm2d(ngf), nn.ReLU()]</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> range</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            mult </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#D73A49;--shiki-dark:#F97583"> **</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            model </span><span style="color:#D73A49;--shiki-dark:#F97583">+=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [nn.Conv2d(ngf </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> mult, ngf </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> mult </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                      nn.InstanceNorm2d(ngf </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> mult </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">), nn.ReLU()]</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        mult </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 4</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> _ </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> range</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(n_blocks):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            model </span><span style="color:#D73A49;--shiki-dark:#F97583">+=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [ResnetBlock(ngf </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> mult)]</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> range</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            mult </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#D73A49;--shiki-dark:#F97583"> **</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#D73A49;--shiki-dark:#F97583"> -</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            model </span><span style="color:#D73A49;--shiki-dark:#F97583">+=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [nn.ConvTranspose2d(ngf </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> mult, ngf </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> mult </span><span style="color:#D73A49;--shiki-dark:#F97583">//</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">output_padding</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                      nn.InstanceNorm2d(ngf </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> mult </span><span style="color:#D73A49;--shiki-dark:#F97583">//</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">), nn.ReLU()]</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        model </span><span style="color:#D73A49;--shiki-dark:#F97583">+=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [nn.ReflectionPad2d(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">), nn.Conv2d(ngf, output_nc, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">7</span><span style="color:#24292E;--shiki-dark:#E1E4E8">), nn.Tanh()]</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.model </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> nn.Sequential(</span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">model)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> forward</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, x):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.model(x)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ResnetBlock</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">nn</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Module</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, dim):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        super</span><span style="color:#24292E;--shiki-dark:#E1E4E8">().</span><span style="color:#005CC5;--shiki-dark:#79B8FF">__init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.block </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> nn.Sequential(</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            nn.ReflectionPad2d(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">), nn.Conv2d(dim, dim, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">), nn.InstanceNorm2d(dim), nn.ReLU(),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            nn.ReflectionPad2d(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">), nn.Conv2d(dim, dim, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">), nn.InstanceNorm2d(dim),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> forward</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, x):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> x </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.block(x)</span></span></code></pre></div><p>SPADE（Spatially-Adaptive Normalization）针对语义图引导的图像合成提出了空间自适应归一化层。与全局的 AdaIN 不同，SPADE 从语义分割图中为每个空间位置生成独立的归一化参数，实现了精确的空间语义控制。SPADE 在场景合成和图像编辑中广泛使用。</p>
+<h2 id="大规模-gan-与-gigagan">大规模 GAN 与 GigaGAN</h2><p>尽管扩散模型在 2022 年后主导了图像生成领域，GAN 在大规模和高分辨率场景中仍然具有独特优势——特别是推理速度。GigaGAN 通过大规模条件 GAN 训练探索了 GAN 的 scaling law，展示了 GAN 在十亿参数规模下的竞争力。</p>
+<p>GigaGAN 引入了多个架构创新：自适应核选择（Adaptive Kernel Selection）根据不同空间位置动态选择卷积核，实现了高效的高分辨率生成；交错注意力（Interleaved Attention）在卷积层之间插入注意力层，增强了全局一致性；视觉-语言对齐（Vision-Language Alignment）使用 CLIP 特征进行条件注入。</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>StyleGAN3</th>
+<th>GigaGAN</th>
+<th>SD 1.5</th>
+<th>SDXL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>架构</td>
+<td>CNN</td>
+<td>CNN + Attention</td>
+<td>U-Net</td>
+<td>U-Net</td>
+</tr>
+<tr>
+<td>参数量</td>
+<td>~30M</td>
+<td>~1B</td>
+<td>~1B</td>
+<td>~3.5B</td>
+</tr>
+<tr>
+<td>推理速度</td>
+<td>~0.05s</td>
+<td>~0.1s</td>
+<td>~3s (20步)</td>
+<td>~5s (20步)</td>
+</tr>
+<tr>
+<td>最大分辨率</td>
+<td>1024</td>
+<td>4096</td>
+<td>512</td>
+<td>1024</td>
+</tr>
+<tr>
+<td>条件类型</td>
+<td>无/类别</td>
+<td>文本</td>
+<td>文本</td>
+<td>文本</td>
+</tr>
+</tbody></table>
+<p>GAN 在实时应用中的速度优势仍然无可替代。在需要毫秒级响应的场景（如游戏实时材质生成、视频通话背景替换），GAN 的单步推理特性是决定性的优势。此外，GAN 的判别器在扩散模型的蒸馏和评估中扮演着重要角色——SDXL Turbo 的对抗蒸馏和 FID 评估中的特征提取都依赖判别器网络。</p>
+<h2 id="小结">小结</h2><pre class="mermaid" data-diagram-type="mindmap" data-source="mindmap&#10;  root((GAN 变体))&#10;    架构演进&#10;      DCGAN 卷积规范&#10;      ProGAN 渐进生长&#10;      StyleGAN 风格注入&#10;    图像翻译&#10;      Pix2Pix 成对翻译&#10;      CycleGAN 无配对翻译&#10;      SPADE 语义引导&#10;    大规模 GAN&#10;      GigaGAN&#10;      速度优势&#10;      与扩散模型互补&#10;    核心创新&#10;      映射网络与 W 空间&#10;      自适应归一化&#10;      循环一致性"></pre><ul>
+<li>StyleGAN 通过映射网络和风格注入实现了对生成过程各层面的精细控制</li>
+<li>W 空间比 Z 空间具有更好的解耦特性，是图像编辑和操纵的理想操作空间</li>
+<li>CycleGAN 通过循环一致性损失实现无配对图像翻译，是域适应的经典方法</li>
+<li>GigaGAN 展示了 GAN 在十亿参数规模下的竞争力和独特的速度优势</li>
+<li>GAN 的对抗训练思想和判别器网络在扩散模型时代仍然发挥着关键作用</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../ai-systems-deep-dive/generative-ai/gan-and-vae/gan-fundamentals.html"><span class="label">Previous</span>GAN 基础原理</a><a class="next" href="../../../ai-systems-deep-dive/generative-ai/gan-and-vae/vae-fundamentals.html"><span class="label">Next</span>VAE 基础原理</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#stylegan-架构体系" data-outline-link="stylegan-架构体系">StyleGAN 架构体系</a></li><li class="depth-2"><a href="#图像翻译与-cyclegan" data-outline-link="图像翻译与-cyclegan">图像翻译与 CycleGAN</a></li><li class="depth-2"><a href="#大规模-gan-与-gigagan" data-outline-link="大规模-gan-与-gigagan">大规模 GAN 与 GigaGAN</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

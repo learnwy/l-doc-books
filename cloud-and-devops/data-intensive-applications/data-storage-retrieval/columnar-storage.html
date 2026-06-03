@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>列式存储与 OLAP 优化 · 云与 DevOps 工程</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:云与 DevOps 工程" data-pagefind-meta="slug:cloud-and-devops">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">云与 DevOps 工程</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item active" href="../../../cloud-and-devops/index.html" aria-current="page" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../cloud-and-devops/index.html">云与 DevOps 工程</a><a class="back-to-hubs" href="../../../cloud-and-devops/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../cloud-and-devops/data-intensive-applications/index.html">数据密集型应用设计 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="cloud-and-devops"><li class="chapter"><details class="folder-collapse" data-sb-key="cloud-and-devops:folder:data-intensive-applications/data-storage-retrieval" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cloud-and-devops/data-intensive-applications/data-storage-retrieval/index.html">数据存储与检索 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/data-storage-retrieval/storage-engine-comparison.html">存储引擎对比：LSM-Tree 与 B-Tree</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/data-storage-retrieval/index-structures.html">索引结构与查询优化</a></li><li class="leaf"><a class="leaf-title active" href="../../../cloud-and-devops/data-intensive-applications/data-storage-retrieval/columnar-storage.html">列式存储与 OLAP 优化</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cloud-and-devops:folder:data-intensive-applications/replication-and-partitioning"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cloud-and-devops/data-intensive-applications/replication-and-partitioning/index.html">复制与分区 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/replication-and-partitioning/replication-models.html">主从复制与多主复制</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/replication-and-partitioning/partitioning-strategies.html">分区策略与再平衡</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/replication-and-partitioning/consistency-and-consensus.html">复制一致性与共识算法</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cloud-and-devops:folder:data-intensive-applications/transactions-and-consistency"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cloud-and-devops/data-intensive-applications/transactions-and-consistency/index.html">事务与一致性 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/transactions-and-consistency/acid-vs-base.html">ACID 与 BASE：事务语义对比</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/transactions-and-consistency/distributed-transactions.html">分布式事务实现机制</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/transactions-and-consistency/consistency-models.html">分布式一致性模型</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cloud-and-devops:folder:data-intensive-applications/stream-and-batch-processing"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cloud-and-devops/data-intensive-applications/stream-and-batch-processing/index.html">流处理与批处理 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/stream-and-batch-processing/mapreduce-evolution.html">MapReduce 演进：从批处理到统一计算</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/stream-and-batch-processing/stream-processing-architecture.html">流处理架构与实时计算</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/stream-and-batch-processing/event-sourcing-cqrs.html">事件溯源与 CQRS 模式</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part VII · 数据与伸缩</span><span>数据密集型应用设计 简介</span><span>数据存储与检索 简介</span><span>列式存储与 OLAP 优化</span></nav>
+    <article class="content prose"><h1 id="列式存储与-olap-优化">列式存储与 OLAP 优化</h1><h2 id="概述">概述</h2><p>列式存储（Columnar Storage）是面向分析型查询（OLAP）场景的存储架构创新。与传统行式存储逐行组织数据不同，列式存储将同一列的所有值连续存放在一起。这种看似简单的组织方式变革，带来了压缩率、查询性能和向量化执行三个维度的量级提升。</p>
+<p>在数据仓库和实时分析领域，ClickHouse 单节点可在亚秒内扫描数十亿行、DuckDB 让笔记本电脑具备 TB 级分析能力——这些成就的基础都是列式存储架构。理解列式存储的设计决策，是构建高效数据分析系统的必备知识。</p>
+<h2 id="核心概念">核心概念</h2><h3 id="行式存储-vs-列式存储">行式存储 vs 列式存储</h3><div class="code-block-wrapper" data-lang="text" data-code="行式存储 (Row-oriented):
+Row 1: [id=1, name=&quot;Alice&quot;, age=30, city=&quot;Beijing&quot;, salary=50000]
+Row 2: [id=2, name=&quot;Bob&quot;,   age=25, city=&quot;Shanghai&quot;, salary=45000]
+Row 3: [id=3, name=&quot;Carol&quot;, age=35, city=&quot;Beijing&quot;, salary=60000]
+
+列式存储 (Column-oriented):
+id:     [1, 2, 3, ...]
+name:   [&quot;Alice&quot;, &quot;Bob&quot;, &quot;Carol&quot;, ...]
+age:    [30, 25, 35, ...]
+city:   [&quot;Beijing&quot;, &quot;Shanghai&quot;, &quot;Beijing&quot;, ...]
+salary: [50000, 45000, 60000, ...]"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>行式存储 (Row-oriented):</span></span>
+<span class="line"><span>Row 1: [id=1, name="Alice", age=30, city="Beijing", salary=50000]</span></span>
+<span class="line"><span>Row 2: [id=2, name="Bob",   age=25, city="Shanghai", salary=45000]</span></span>
+<span class="line"><span>Row 3: [id=3, name="Carol", age=35, city="Beijing", salary=60000]</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>列式存储 (Column-oriented):</span></span>
+<span class="line"><span>id:     [1, 2, 3, ...]</span></span>
+<span class="line"><span>name:   ["Alice", "Bob", "Carol", ...]</span></span>
+<span class="line"><span>age:    [30, 25, 35, ...]</span></span>
+<span class="line"><span>city:   ["Beijing", "Shanghai", "Beijing", ...]</span></span>
+<span class="line"><span>salary: [50000, 45000, 60000, ...]</span></span></code></pre></div><p><strong>性能影响分析：</strong></p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>行式存储</th>
+<th>列式存储</th>
+<th>分析场景优势</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>I/O 量</td>
+<td>读取整行（含不需要的列）</td>
+<td>仅读取查询涉及的列</td>
+<td>列存减少 10-100x I/O</td>
+</tr>
+<tr>
+<td>压缩率</td>
+<td>混合类型，压缩率低</td>
+<td>同类型数据，压缩率高</td>
+<td>列存 3-10x 更高压缩率</td>
+</tr>
+<tr>
+<td>向量化执行</td>
+<td>逐行处理，缓存不友好</td>
+<td>批量处理同类型数据</td>
+<td>列存 5-10x CPU 效率</td>
+</tr>
+<tr>
+<td>写入效率</td>
+<td>追加一行简单高效</td>
+<td>需要写入多个列文件</td>
+<td>行存更适合事务写入</td>
+</tr>
+<tr>
+<td>点查询</td>
+<td>一次 I/O 获取完整行</td>
+<td>需要跨列组装</td>
+<td>行存更优</td>
+</tr>
+</tbody></table>
+<h3 id="列式压缩技术">列式压缩技术</h3><p>同列数据具有相同类型和相似分布，使得高效压缩成为可能：</p>
+<table>
+<thead>
+<tr>
+<th>压缩技术</th>
+<th>原理</th>
+<th>适用场景</th>
+<th>压缩比</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Run-Length Encoding (RLE)</td>
+<td>连续重复值存储为 (值, 次数)</td>
+<td>排序列、低基数列</td>
+<td>10-1000x</td>
+</tr>
+<tr>
+<td>Dictionary Encoding</td>
+<td>将值映射为整数字典 ID</td>
+<td>字符串列、枚举列</td>
+<td>5-20x</td>
+</tr>
+<tr>
+<td>Bit Packing</td>
+<td>用最少位数表示整数值</td>
+<td>小范围整数</td>
+<td>2-8x</td>
+</tr>
+<tr>
+<td>Delta Encoding</td>
+<td>存储相邻值的差值</td>
+<td>时间戳、自增 ID</td>
+<td>5-50x</td>
+</tr>
+<tr>
+<td>Frame of Reference (FOR)</td>
+<td>块内值减去最小值</td>
+<td>范围有限的数值</td>
+<td>2-4x</td>
+</tr>
+<tr>
+<td>LZ4 / ZSTD</td>
+<td>通用无损压缩</td>
+<td>通用后置压缩</td>
+<td>2-5x</td>
+</tr>
+</tbody></table>
+<p><strong>压缩示例：</strong></p>
+<div class="code-block-wrapper" data-lang="text" data-code="原始数据 (city 列, 100万行):
+[&quot;Beijing&quot;, &quot;Shanghai&quot;, &quot;Beijing&quot;, &quot;Beijing&quot;, &quot;Guangzhou&quot;, ...]
+
+Step 1: 排序后 RLE
+[(&quot;Beijing&quot;, 450000), (&quot;Guangzhou&quot;, 150000), (&quot;Shanghai&quot;, 400000)]
+
+Step 2: Dictionary Encoding
+Dictionary: {0: &quot;Beijing&quot;, 1: &quot;Guangzhou&quot;, 2: &quot;Shanghai&quot;}
+Data: [0, 0, 0, ..., 1, 1, ..., 2, 2, ...]
+
+压缩前: 100万 × 平均8字节 = 8MB
+压缩后: 字典 30B + 位图 ≈ 125KB
+压缩比: 64x"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>原始数据 (city 列, 100万行):</span></span>
+<span class="line"><span>["Beijing", "Shanghai", "Beijing", "Beijing", "Guangzhou", ...]</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Step 1: 排序后 RLE</span></span>
+<span class="line"><span>[("Beijing", 450000), ("Guangzhou", 150000), ("Shanghai", 400000)]</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Step 2: Dictionary Encoding</span></span>
+<span class="line"><span>Dictionary: {0: "Beijing", 1: "Guangzhou", 2: "Shanghai"}</span></span>
+<span class="line"><span>Data: [0, 0, 0, ..., 1, 1, ..., 2, 2, ...]</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>压缩前: 100万 × 平均8字节 = 8MB</span></span>
+<span class="line"><span>压缩后: 字典 30B + 位图 ≈ 125KB</span></span>
+<span class="line"><span>压缩比: 64x</span></span></code></pre></div><h3 id="向量化执行引擎">向量化执行引擎</h3><p>列式存储天然适配向量化执行（Vectorized Execution），即一次操作处理一批同类型值而非逐行处理：</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    A[&quot;Column Chunk - 1024 values&quot;] --&gt; B[&quot;SIMD Filter&quot;]&#10;    B --&gt; C[&quot;Vectorized Aggregate&quot;]&#10;    C --&gt; D[&quot;Result&quot;]"></pre><div class="code-block-wrapper" data-lang="c" data-code="// 传统逐行执行 (Volcano Model)
+for each row in table:
+    if row.age &gt; 30:
+        sum += row.salary
+
+// 向量化执行 (Batch Processing)
+// 一次处理 1024 个值，充分利用 CPU SIMD 指令
+age_batch = load_column_chunk(&quot;age&quot;, offset, 1024)
+mask = simd_compare_gt(age_batch, 30)  // 一条指令比较 1024 个值
+salary_batch = load_column_chunk(&quot;salary&quot;, offset, 1024)
+sum += simd_masked_sum(salary_batch, mask)"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 传统逐行执行 (Volcano Model)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> each row in table:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> row.age </span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 30</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        sum </span><span style="color:#D73A49;--shiki-dark:#F97583">+=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> row.salary</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 向量化执行 (Batch Processing)</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 一次处理 1024 个值，充分利用 CPU SIMD 指令</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">age_batch </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> load_column_chunk</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"age"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, offset, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1024</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">mask </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> simd_compare_gt</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(age_batch, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">30</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#6A737D;--shiki-dark:#6A737D">  // 一条指令比较 1024 个值</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">salary_batch </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> load_column_chunk</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"salary"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, offset, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1024</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">sum </span><span style="color:#D73A49;--shiki-dark:#F97583">+=</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> simd_masked_sum</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(salary_batch, mask)</span></span></code></pre></div><p><strong>向量化执行的性能优势来源：</strong></p>
+<ol>
+<li><strong>CPU Cache 友好</strong>：连续内存访问，L1/L2 缓存命中率高</li>
+<li><strong>SIMD 指令利用</strong>：AVX-512 一次处理 64 字节（16 个 int32）</li>
+<li><strong>分支预测友好</strong>：批量判断减少 CPU 分支预测失败</li>
+<li><strong>编译优化</strong>：编译器更容易对循环进行自动向量化</li>
+</ol>
+<h3 id="开放列式格式">开放列式格式</h3><table>
+<thead>
+<tr>
+<th>格式</th>
+<th>开发方</th>
+<th>特点</th>
+<th>典型使用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Apache Parquet</td>
+<td>Twitter/Cloudera</td>
+<td>嵌套数据支持好、生态广</td>
+<td>Spark, Hive, Presto</td>
+</tr>
+<tr>
+<td>Apache ORC</td>
+<td>Hortonworks</td>
+<td>轻量级索引、ACID 支持</td>
+<td>Hive, Presto</td>
+</tr>
+<tr>
+<td>Apache Arrow</td>
+<td>Apache</td>
+<td>内存列式格式、零拷贝</td>
+<td>跨系统数据交换</td>
+</tr>
+<tr>
+<td>Lance</td>
+<td>LanceDB</td>
+<td>向量友好、版本化</td>
+<td>AI/ML 数据集</td>
+</tr>
+</tbody></table>
+<p><strong>Parquet 文件结构：</strong></p>
+<div class="code-block-wrapper" data-lang="text" data-code="File:
+├── Row Group 1 (通常 128MB)
+│   ├── Column Chunk: id
+│   │   ├── Page 1 (Data Page, 压缩后)
+│   │   ├── Page 2
+│   │   └── Column Metadata
+│   ├── Column Chunk: name
+│   ├── Column Chunk: age
+│   └── ...
+├── Row Group 2
+│   └── ...
+└── Footer (Schema + Row Group Metadata + Column Statistics)"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>File:</span></span>
+<span class="line"><span>├── Row Group 1 (通常 128MB)</span></span>
+<span class="line"><span>│   ├── Column Chunk: id</span></span>
+<span class="line"><span>│   │   ├── Page 1 (Data Page, 压缩后)</span></span>
+<span class="line"><span>│   │   ├── Page 2</span></span>
+<span class="line"><span>│   │   └── Column Metadata</span></span>
+<span class="line"><span>│   ├── Column Chunk: name</span></span>
+<span class="line"><span>│   ├── Column Chunk: age</span></span>
+<span class="line"><span>│   └── ...</span></span>
+<span class="line"><span>├── Row Group 2</span></span>
+<span class="line"><span>│   └── ...</span></span>
+<span class="line"><span>└── Footer (Schema + Row Group Metadata + Column Statistics)</span></span></code></pre></div><h2 id="实战指南">实战指南</h2><h3 id="clickhouse-实践-mergetree-引擎">ClickHouse 实践：MergeTree 引擎</h3><p>ClickHouse 的 MergeTree 引擎结合了 LSM-Tree 的写入模式和列式存储的查询优势：</p>
+<div class="code-block-wrapper" data-lang="sql" data-code="-- 创建分析表
+CREATE TABLE events (
+    event_date Date,
+    user_id    UInt64,
+    event_type LowCardinality(String),  -- 自动字典编码
+    properties String,
+    metric     Float64
+) ENGINE = MergeTree()
+PARTITION BY toYYYYMM(event_date)     -- 按月分区
+ORDER BY (event_type, user_id, event_date)  -- 排序键 (影响压缩和查询)
+SETTINGS index_granularity = 8192;     -- 稀疏索引粒度
+
+-- 典型分析查询：扫描数十亿行在亚秒完成
+SELECT
+    event_type,
+    count() AS cnt,
+    uniq(user_id) AS unique_users,
+    avg(metric) AS avg_metric
+FROM events
+WHERE event_date &gt;= '2026-01-01'
+  AND event_date &lt; '2026-02-01'
+GROUP BY event_type
+ORDER BY cnt DESC
+LIMIT 20;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 创建分析表</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">CREATE</span><span style="color:#D73A49;--shiki-dark:#F97583"> TABLE</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> events</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    event_date </span><span style="color:#D73A49;--shiki-dark:#F97583">Date</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    user_id    UInt64,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    event_type LowCardinality(String),  </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 自动字典编码</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    properties String,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    metric     Float64</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">) ENGINE </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> MergeTree()</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">PARTITION</span><span style="color:#D73A49;--shiki-dark:#F97583"> BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> toYYYYMM(event_date)     </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 按月分区</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (event_type, user_id, event_date)  </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 排序键 (影响压缩和查询)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">SETTINGS index_granularity </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 8192</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;     </span><span style="color:#6A737D;--shiki-dark:#6A737D">-- 稀疏索引粒度</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 典型分析查询：扫描数十亿行在亚秒完成</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    event_type,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    count</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> cnt,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    uniq(user_id) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> unique_users,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    avg</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(metric) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> avg_metric</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> events</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> event_date </span><span style="color:#D73A49;--shiki-dark:#F97583">>=</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '2026-01-01'</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  AND</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> event_date </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '2026-02-01'</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">GROUP BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> event_type</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> cnt </span><span style="color:#D73A49;--shiki-dark:#F97583">DESC</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">LIMIT</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 20</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre></div><h3 id="duckdb-实践-嵌入式-olap">DuckDB 实践：嵌入式 OLAP</h3><div class="code-block-wrapper" data-lang="python" data-code="import duckdb
+
+# DuckDB 直接查询 Parquet 文件（无需导入）
+con = duckdb.connect()
+
+# 查询 10GB Parquet 数据集
+result = con.execute(&quot;&quot;&quot;
+    SELECT
+        l_returnflag,
+        l_linestatus,
+        sum(l_quantity) as sum_qty,
+        sum(l_extendedprice) as sum_base_price,
+        avg(l_discount) as avg_disc
+    FROM read_parquet('s3://bucket/lineitem/*.parquet')
+    WHERE l_shipdate &lt;= DATE '2026-01-01' - INTERVAL 90 DAY
+    GROUP BY l_returnflag, l_linestatus
+    ORDER BY l_returnflag, l_linestatus
+&quot;&quot;&quot;).fetchdf()
+
+# 在笔记本电脑上 2-3 秒完成 (得益于列式扫描 + 向量化执行)"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> duckdb</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># DuckDB 直接查询 Parquet 文件（无需导入）</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">con </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> duckdb.connect()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 查询 10GB Parquet 数据集</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">result </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> con.execute(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"""</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">    SELECT</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        l_returnflag,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        l_linestatus,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        sum(l_quantity) as sum_qty,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        sum(l_extendedprice) as sum_base_price,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        avg(l_discount) as avg_disc</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">    FROM read_parquet('s3://bucket/lineitem/*.parquet')</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">    WHERE l_shipdate &#x3C;= DATE '2026-01-01' - INTERVAL 90 DAY</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">    GROUP BY l_returnflag, l_linestatus</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">    ORDER BY l_returnflag, l_linestatus</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">"""</span><span style="color:#24292E;--shiki-dark:#E1E4E8">).fetchdf()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 在笔记本电脑上 2-3 秒完成 (得益于列式扫描 + 向量化执行)</span></span></code></pre></div><h3 id="数据建模-宽表-vs-星型模型">数据建模：宽表 vs 星型模型</h3><p>列式存储改变了数据建模的最佳实践：</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    subgraph &quot;Star Schema - Traditional&quot;&#10;        F[&quot;Fact: sales&quot;] --&gt; D1[&quot;Dim: product&quot;]&#10;        F --&gt; D2[&quot;Dim: customer&quot;]&#10;        F --&gt; D3[&quot;Dim: time&quot;]&#10;    end&#10;    subgraph &quot;Wide Table - Columnar Optimized&quot;&#10;        W[&quot;Denormalized Wide Table: all columns in one table&quot;]&#10;    end"></pre><p><strong>列式存储下的建模建议：</strong></p>
+<ul>
+<li>预聚合宽表优于多表 JOIN（列存 JOIN 代价高）</li>
+<li>利用 Dictionary Encoding 容忍冗余字符串列</li>
+<li>按查询频率设计排序键（高频过滤列作为前缀）</li>
+<li>分区键选择时间列（便于数据生命周期管理）</li>
+</ul>
+<h2 id="最佳实践">最佳实践</h2><h3 id="排序键选择策略">排序键选择策略</h3><p>排序键（Sort Key / ORDER BY）是列式存储性能优化的核心杠杆：</p>
+<ol>
+<li><strong>高频过滤列作为前缀</strong>：排序后相同值连续存放，RLE 压缩极高效</li>
+<li><strong>基数从低到高排列</strong>：低基数列排在前面，压缩效果最佳</li>
+<li><strong>考虑查询模式</strong>：如果 90% 查询按 <code>(tenant_id, date)</code> 过滤，则以此为排序键</li>
+<li><strong>避免高基数列作前缀</strong>：UUID 等高基数列会破坏压缩效果</li>
+</ol>
+<h3 id="分区策略">分区策略</h3><table>
+<thead>
+<tr>
+<th>策略</th>
+<th>适用场景</th>
+<th>注意事项</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>按时间分区 (月/日)</td>
+<td>时序数据、日志</td>
+<td>最常用，便于 TTL</td>
+</tr>
+<tr>
+<td>按租户分区</td>
+<td>多租户 SaaS</td>
+<td>避免分区过多</td>
+</tr>
+<tr>
+<td>按哈希分区</td>
+<td>均匀分布的高基数键</td>
+<td>不支持范围裁剪</td>
+</tr>
+<tr>
+<td>多级分区</td>
+<td>复合过滤条件</td>
+<td>复杂度高</td>
+</tr>
+</tbody></table>
+<h3 id="查询优化技巧">查询优化技巧</h3><ul>
+<li><strong>投影下推</strong>：只读取查询需要的列（列存天然支持）</li>
+<li><strong>谓词下推</strong>：过滤条件尽早执行，利用分区裁剪和稀疏索引</li>
+<li><strong>聚合下推</strong>：在存储层完成部分聚合，减少数据传输</li>
+<li><strong>物化视图</strong>：预计算高频聚合查询，用空间换时间</li>
+</ul>
+<h2 id="工具与生态">工具与生态</h2><table>
+<thead>
+<tr>
+<th>系统</th>
+<th>类型</th>
+<th>存储格式</th>
+<th>特色</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ClickHouse</td>
+<td>OLAP 数据库</td>
+<td>MergeTree (自有列式)</td>
+<td>极致单节点性能</td>
+</tr>
+<tr>
+<td>DuckDB</td>
+<td>嵌入式 OLAP</td>
+<td>自有列式格式</td>
+<td>零配置分析</td>
+</tr>
+<tr>
+<td>Apache Druid</td>
+<td>实时 OLAP</td>
+<td>Segment (列式)</td>
+<td>亚秒级实时摄入查询</td>
+</tr>
+<tr>
+<td>StarRocks</td>
+<td>MPP OLAP</td>
+<td>列式 + 向量化</td>
+<td>兼顾实时与离线</td>
+</tr>
+<tr>
+<td>Databricks Photon</td>
+<td>查询引擎</td>
+<td>Delta Lake (Parquet)</td>
+<td>Spark 生态 C++ 向量化</td>
+</tr>
+<tr>
+<td>Apache Doris</td>
+<td>MPP OLAP</td>
+<td>列式存储</td>
+<td>简单易用的分析引擎</td>
+</tr>
+<tr>
+<td>Snowflake</td>
+<td>云数仓</td>
+<td>微分区列式</td>
+<td>存算分离、自动优化</td>
+</tr>
+</tbody></table>
+<h2 id="总结">总结</h2><p>列式存储通过三个核心机制实现 OLAP 场景的性能飞跃：列裁剪大幅减少 I/O、同类型压缩提升存储效率、向量化执行充分利用现代 CPU。在 2026 年的数据分析生态中，列式存储已从&quot;专用优化&quot;变为&quot;默认选择&quot;。</p>
+<p>关键设计决策包括：排序键的选择直接决定压缩率和查询性能；分区策略影响数据生命周期管理和裁剪效率；文件格式的选择（Parquet vs Arrow vs 专有格式）取决于数据交换需求和查询引擎集成度。工程师应当建立&quot;列思维&quot;——将每一列视为独立的压缩数据流，从列的视角思考数据组织与查询优化。</p>
+</article>
+    <nav class="pager"><a class="prev" href="../../../cloud-and-devops/data-intensive-applications/data-storage-retrieval/index-structures.html"><span class="label">Previous</span>索引结构与查询优化</a><a class="next" href="../../../cloud-and-devops/data-intensive-applications/replication-and-partitioning/index.html"><span class="label">Next</span>复制与分区 简介</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#概述" data-outline-link="概述">概述</a></li><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-3"><a href="#行式存储-vs-列式存储" data-outline-link="行式存储-vs-列式存储">行式存储 vs 列式存储</a></li><li class="depth-3"><a href="#列式压缩技术" data-outline-link="列式压缩技术">列式压缩技术</a></li><li class="depth-3"><a href="#向量化执行引擎" data-outline-link="向量化执行引擎">向量化执行引擎</a></li><li class="depth-3"><a href="#开放列式格式" data-outline-link="开放列式格式">开放列式格式</a></li><li class="depth-2"><a href="#实战指南" data-outline-link="实战指南">实战指南</a></li><li class="depth-3"><a href="#clickhouse-实践-mergetree-引擎" data-outline-link="clickhouse-实践-mergetree-引擎">ClickHouse 实践：MergeTree 引擎</a></li><li class="depth-3"><a href="#duckdb-实践-嵌入式-olap" data-outline-link="duckdb-实践-嵌入式-olap">DuckDB 实践：嵌入式 OLAP</a></li><li class="depth-3"><a href="#数据建模-宽表-vs-星型模型" data-outline-link="数据建模-宽表-vs-星型模型">数据建模：宽表 vs 星型模型</a></li><li class="depth-2"><a href="#最佳实践" data-outline-link="最佳实践">最佳实践</a></li><li class="depth-3"><a href="#排序键选择策略" data-outline-link="排序键选择策略">排序键选择策略</a></li><li class="depth-3"><a href="#分区策略" data-outline-link="分区策略">分区策略</a></li><li class="depth-3"><a href="#查询优化技巧" data-outline-link="查询优化技巧">查询优化技巧</a></li><li class="depth-2"><a href="#工具与生态" data-outline-link="工具与生态">工具与生态</a></li><li class="depth-2"><a href="#总结" data-outline-link="总结">总结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

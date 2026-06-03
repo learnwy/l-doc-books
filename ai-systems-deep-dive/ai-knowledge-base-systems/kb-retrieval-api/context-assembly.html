@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>上下文组装与 Prompt 工程 · AI 系统深度剖析</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:AI 系统深度剖析" data-pagefind-meta="slug:ai-systems-deep-dive">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">AI 系统深度剖析</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item active" href="../../../ai-systems-deep-dive/index.html" aria-current="page" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../ai-systems-deep-dive/index.html">AI 系统深度剖析</a><a class="back-to-hubs" href="../../../ai-systems-deep-dive/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/index.html">AI 知识库系统 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="ai-systems-deep-dive"><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:ai-knowledge-base-systems/kb-architecture"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/kb-architecture/index.html">知识库架构设计 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/kb-architecture/kb-design-principles.html">知识库设计原则</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/kb-architecture/multi-layer-architecture.html">多层知识库架构</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/kb-architecture/knowledge-lifecycle.html">知识生命周期管理</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:ai-knowledge-base-systems/knowledge-processing"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/knowledge-processing/index.html">知识处理与结构化 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/knowledge-processing/document-parsing.html">文档解析与格式转换</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/knowledge-processing/knowledge-structuring.html">知识结构化与语义标注</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/knowledge-processing/quality-assurance.html">知识质量保障体系</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:ai-knowledge-base-systems/knowledge-graph-layer"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/knowledge-graph-layer/index.html">知识图谱与关联 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/knowledge-graph-layer/entity-linking.html">实体链接与消歧</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/knowledge-graph-layer/knowledge-graph-integration.html">知识图谱集成</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/knowledge-graph-layer/semantic-search.html">语义搜索与图检索</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:ai-knowledge-base-systems/kb-retrieval-api" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/kb-retrieval-api/index.html">检索与 API 层 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/kb-retrieval-api/retrieval-strategies.html">检索策略与 RAG 管道</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/kb-retrieval-api/api-design.html">知识库 API 设计</a></li><li class="leaf"><a class="leaf-title active" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/kb-retrieval-api/context-assembly.html">上下文组装与 Prompt 工程</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:ai-knowledge-base-systems/kb-operations"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/kb-operations/index.html">知识库运维 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/kb-operations/kb-monitoring.html">知识库监控与告警</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/kb-operations/knowledge-update.html">知识更新与版本管理</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/kb-operations/scaling-optimization.html">扩展与性能优化</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:ai-knowledge-base-systems/kb-practice"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/kb-practice/index.html">知识库实战 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/kb-practice/kb-automation.html">知识库自动化运维</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/kb-practice/domain-kb-practice.html">领域知识库实战</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/kb-practice/evaluation-improvement.html">评估与持续改进</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part V · 数据与知识 (Data &amp; Knowledge)</span><span>AI 知识库系统 简介</span><span>检索与 API 层 简介</span><span>上下文组装与 Prompt 工程</span></nav>
+    <article class="content prose"><h1 id="上下文组装与-prompt-工程">上下文组装与 Prompt 工程</h1><h2 id="核心概念">核心概念</h2><p>上下文组装（Context Assembly）是 RAG 管道中将检索到的知识片段、用户查询和系统指令组合为 LLM 输入的过程。这一环节直接决定了 LLM 回答的质量——不恰当的上下文组装会导致答案偏离主题、遗漏关键信息或产生幻觉。Prompt 工程在此环节发挥核心作用，通过精心设计的模板和策略来引导 LLM 生成准确、完整、有据可查的回答。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    subgraph 上下文组装流程&#10;        R[检索结果] --&gt; F[过滤与去重]&#10;        F --&gt; S[排序与选择]&#10;        S --&gt; C[压缩与格式化]&#10;        C --&gt; T[模板填充]&#10;        Q[用户查询] --&gt; T&#10;        I[系统指令] --&gt; T&#10;        T --&gt; V[Token 验证]&#10;        V --&gt; L[LLM 输入]&#10;    end"></pre><table>
+<thead>
+<tr>
+<th>组装策略</th>
+<th>适用场景</th>
+<th>上下文利用率</th>
+<th>实现复杂度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>简单拼接</td>
+<td>通用问答</td>
+<td>60-70%</td>
+<td>低</td>
+</tr>
+<tr>
+<td>相关性排序</td>
+<td>精确问答</td>
+<td>70-80%</td>
+<td>中</td>
+</tr>
+<tr>
+<td>分层组装</td>
+<td>复杂推理</td>
+<td>80-90%</td>
+<td>高</td>
+</tr>
+<tr>
+<td>动态压缩</td>
+<td>长文档</td>
+<td>85-95%</td>
+<td>高</td>
+</tr>
+<tr>
+<td>Map-Reduce</td>
+<td>多文档综合</td>
+<td>75-85%</td>
+<td>高</td>
+</tr>
+</tbody></table>
+<h2 id="检索结果后处理">检索结果后处理</h2><p>检索到的原始结果通常包含冗余和噪声，需要经过后处理才能作为有效的上下文。后处理包括三个步骤：去重（移除内容高度重叠的片段）、过滤（根据相关性阈值移除低质量结果）和排序（按照对回答的贡献度重新排序）。</p>
+<p>去重策略需要在语义层面而非字符层面工作。由于文本切分时使用了重叠窗口，相邻的切片可能包含大量重复内容。通过计算片段之间的余弦相似度，当相似度超过阈值（如 0.85）时只保留得分更高的片段。</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="interface PostProcessor {
+  process(chunks: ReadonlyArray&lt;RetrievedChunk&gt;, config: PostProcessConfig): ReadonlyArray&lt;RetrievedChunk&gt;;
+}
+
+interface PostProcessConfig {
+  readonly deduplicationThreshold: number;
+  readonly minRelevanceScore: number;
+  readonly maxChunks: number;
+  readonly diversityWeight: number;
+}
+
+const createPostProcessor = (embeddingModel: EmbeddingModel): PostProcessor =&gt; ({
+  process: (chunks, config) =&gt; {
+    const filtered = chunks.filter((c) =&gt; c.score &gt;= config.minRelevanceScore);
+    const deduplicated = maxMarginalRelevance(filtered, config.deduplicationThreshold, config.diversityWeight);
+    return deduplicated.slice(0, config.maxChunks);
+  },
+});
+
+const maxMarginalRelevance = (
+  chunks: ReadonlyArray&lt;RetrievedChunk&gt;,
+  threshold: number,
+  diversityWeight: number,
+): ReadonlyArray&lt;RetrievedChunk&gt; =&gt; {
+  const selected: RetrievedChunk[] = [];
+  const remaining = [...chunks];
+  while (remaining.length &gt; 0) {
+    let bestIdx = 0;
+    let bestScore = -Infinity;
+    for (let i = 0; i &lt; remaining.length; i++) {
+      const relevance = remaining[i].score;
+      const maxSimilarity =
+        selected.length &gt; 0 ? Math.max(...selected.map((s) =&gt; computeSimilarity(remaining[i], s))) : 0;
+      const mmrScore = (1 - diversityWeight) * relevance - diversityWeight * maxSimilarity;
+      if (mmrScore &gt; bestScore) {
+        bestScore = mmrScore;
+        bestIdx = i;
+      }
+    }
+    if (selected.length &gt; 0) {
+      const maxSim = Math.max(...selected.map((s) =&gt; computeSimilarity(remaining[bestIdx], s)));
+      if (maxSim &gt; threshold) break;
+    }
+    selected.push(remaining[bestIdx]);
+    remaining.splice(bestIdx, 1);
+  }
+  return selected;
+};"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> PostProcessor</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  process</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">chunks</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ReadonlyArray</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">RetrievedChunk</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>, </span><span style="color:#E36209;--shiki-dark:#FFAB70">config</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> PostProcessConfig</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ReadonlyArray</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">RetrievedChunk</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> PostProcessConfig</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> deduplicationThreshold</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> minRelevanceScore</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> maxChunks</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> diversityWeight</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> createPostProcessor</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">embeddingModel</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> EmbeddingModel</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> PostProcessor</span><span style="color:#D73A49;--shiki-dark:#F97583"> =></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ({</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  process</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: (</span><span style="color:#E36209;--shiki-dark:#FFAB70">chunks</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">config</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> filtered</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> chunks.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">filter</span><span style="color:#24292E;--shiki-dark:#E1E4E8">((</span><span style="color:#E36209;--shiki-dark:#FFAB70">c</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> c.score </span><span style="color:#D73A49;--shiki-dark:#F97583">>=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> config.minRelevanceScore);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> deduplicated</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> maxMarginalRelevance</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(filtered, config.deduplicationThreshold, config.diversityWeight);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> deduplicated.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">slice</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, config.maxChunks);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> maxMarginalRelevance</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  chunks</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ReadonlyArray</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">RetrievedChunk</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  threshold</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  diversityWeight</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ReadonlyArray</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">RetrievedChunk</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> selected</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> RetrievedChunk</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [];</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> remaining</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#D73A49;--shiki-dark:#F97583">...</span><span style="color:#24292E;--shiki-dark:#E1E4E8">chunks];</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  while</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (remaining.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">length</span><span style="color:#D73A49;--shiki-dark:#F97583"> ></span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    let</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> bestIdx </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    let</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> bestScore </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#D73A49;--shiki-dark:#F97583"> -</span><span style="color:#005CC5;--shiki-dark:#79B8FF">Infinity</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">let</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; i </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> remaining.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">length</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; i</span><span style="color:#D73A49;--shiki-dark:#F97583">++</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> relevance</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> remaining[i].score;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> maxSimilarity</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        selected.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">length</span><span style="color:#D73A49;--shiki-dark:#F97583"> ></span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#D73A49;--shiki-dark:#F97583"> ?</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Math.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">max</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">...</span><span style="color:#24292E;--shiki-dark:#E1E4E8">selected.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">map</span><span style="color:#24292E;--shiki-dark:#E1E4E8">((</span><span style="color:#E36209;--shiki-dark:#FFAB70">s</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> computeSimilarity</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(remaining[i], s))) </span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> mmrScore</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#D73A49;--shiki-dark:#F97583"> -</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> diversityWeight) </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> relevance </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> diversityWeight </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> maxSimilarity;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (mmrScore </span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> bestScore) {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        bestScore </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> mmrScore;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        bestIdx </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (selected.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">length</span><span style="color:#D73A49;--shiki-dark:#F97583"> ></span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> maxSim</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Math.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">max</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">...</span><span style="color:#24292E;--shiki-dark:#E1E4E8">selected.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">map</span><span style="color:#24292E;--shiki-dark:#E1E4E8">((</span><span style="color:#E36209;--shiki-dark:#FFAB70">s</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> computeSimilarity</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(remaining[bestIdx], s)));</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (maxSim </span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> threshold) </span><span style="color:#D73A49;--shiki-dark:#F97583">break</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    selected.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">push</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(remaining[bestIdx]);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    remaining.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">splice</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(bestIdx, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> selected;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span></code></pre></div><p>Maximal Marginal Relevance（MMR）算法在去重的同时保证结果的多样性——它在选择下一个片段时同时考虑与查询的相关性和与已选片段的差异性，通过 λ 参数控制二者的平衡。</p>
+<h2 id="prompt-模板设计">Prompt 模板设计</h2><p>Prompt 模板是上下文组装的骨架，定义了系统指令、上下文片段和用户查询的组织方式。好的 Prompt 模板需要满足几个目标：明确 LLM 的角色和行为边界、清晰地标记上下文和查询的边界、指导 LLM 如何处理不确定性（如知识不足时说明而非编造）。</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="interface PromptTemplate {
+  readonly name: string;
+  readonly systemPrompt: string;
+  readonly contextFormat: string;
+  readonly queryFormat: string;
+  readonly variables: ReadonlyArray&lt;TemplateVariable&gt;;
+}
+
+interface TemplateVariable {
+  readonly name: string;
+  readonly type: 'string' | 'chunks' | 'metadata';
+  readonly required: boolean;
+}
+
+const QA_TEMPLATE: PromptTemplate = {
+  name: 'knowledge_qa',
+  systemPrompt: `你是一个基于知识库的专业问答助手。请严格根据提供的参考资料回答问题。
+规则：
+1. 只使用参考资料中的信息，不要添加未经证实的内容
+2. 如果参考资料不足以回答问题，明确说明
+3. 引用具体的资料来源
+4. 使用清晰的中文表达`,
+  contextFormat: `参考资料：
+{{#each chunks}}
+[来源 {{@index}}] {{this.source}}
+{{this.content}}
+{{/each}}`,
+  queryFormat: `问题：{{query}}`,
+  variables: [
+    { name: 'chunks', type: 'chunks', required: true },
+    { name: 'query', type: 'string', required: true },
+  ],
+};
+
+const COMPARISON_TEMPLATE: PromptTemplate = {
+  name: 'comparison',
+  systemPrompt: `你是一个技术对比分析专家。请根据参考资料，从多个维度对比分析用户提到的技术方案。
+要求：
+1. 使用表格形式呈现对比结果
+2. 每个维度都给出客观评价
+3. 最后给出场景化的选型建议`,
+  contextFormat: `参考资料：
+{{#each chunks}}
+[资料 {{@index}}] {{this.content}}
+{{/each}}`,
+  queryFormat: `请对比分析：{{query}}`,
+  variables: [
+    { name: 'chunks', type: 'chunks', required: true },
+    { name: 'query', type: 'string', required: true },
+  ],
+};"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> PromptTemplate</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> name</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> systemPrompt</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> contextFormat</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> queryFormat</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> variables</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ReadonlyArray</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">TemplateVariable</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> TemplateVariable</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> name</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> type</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'string'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'chunks'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'metadata'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> required</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> boolean</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> QA_TEMPLATE</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> PromptTemplate</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  name: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'knowledge_qa'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  systemPrompt: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">`你是一个基于知识库的专业问答助手。请严格根据提供的参考资料回答问题。</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">规则：</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">1. 只使用参考资料中的信息，不要添加未经证实的内容</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">2. 如果参考资料不足以回答问题，明确说明</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">3. 引用具体的资料来源</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">4. 使用清晰的中文表达`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  contextFormat: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">`参考资料：</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">{{#each chunks}}</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">[来源 {{@index}}] {{this.source}}</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">{{this.content}}</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">{{/each}}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  queryFormat: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">`问题：{{query}}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  variables: [</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    { name: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'chunks'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'chunks'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, required: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">true</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    { name: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'query'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'string'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, required: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">true</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  ],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> COMPARISON_TEMPLATE</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> PromptTemplate</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  name: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'comparison'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  systemPrompt: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">`你是一个技术对比分析专家。请根据参考资料，从多个维度对比分析用户提到的技术方案。</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">要求：</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">1. 使用表格形式呈现对比结果</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">2. 每个维度都给出客观评价</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">3. 最后给出场景化的选型建议`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  contextFormat: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">`参考资料：</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">{{#each chunks}}</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">[资料 {{@index}}] {{this.content}}</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">{{/each}}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  queryFormat: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">`请对比分析：{{query}}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  variables: [</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    { name: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'chunks'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'chunks'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, required: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">true</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    { name: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'query'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'string'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, required: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">true</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  ],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span></code></pre></div><table>
+<thead>
+<tr>
+<th>模板类型</th>
+<th>适用场景</th>
+<th>系统指令重点</th>
+<th>输出格式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>通用问答</td>
+<td>单一知识点查询</td>
+<td>忠实性、引用</td>
+<td>段落文本</td>
+</tr>
+<tr>
+<td>对比分析</td>
+<td>多方案比较</td>
+<td>客观性、维度</td>
+<td>表格 + 建议</td>
+</tr>
+<tr>
+<td>操作指南</td>
+<td>How-to 类问题</td>
+<td>步骤清晰</td>
+<td>编号步骤</td>
+</tr>
+<tr>
+<td>概念解释</td>
+<td>知识概念理解</td>
+<td>深入浅出</td>
+<td>渐进式解释</td>
+</tr>
+<tr>
+<td>代码生成</td>
+<td>技术实现问题</td>
+<td>可运行、简洁</td>
+<td>代码块 + 说明</td>
+</tr>
+</tbody></table>
+<h2 id="多文档综合策略">多文档综合策略</h2><p>当查询涉及多个主题或需要综合多个来源的信息时，简单的上下文拼接往往不够——可能超出 token 限制，或者 LLM 难以从大量上下文中提取和综合关键信息。</p>
+<p>Map-Reduce 策略将问题分解为两个阶段。Map 阶段：对每个检索到的文档片段独立生成一个中间回答。Reduce 阶段：将所有中间回答综合为最终回答。这种策略能够处理远超上下文窗口的文档量，但增加了 LLM 调用次数和延迟。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    subgraph Map-Reduce 策略&#10;        C1[片段 1] --&gt; M1[Map: 中间回答 1]&#10;        C2[片段 2] --&gt; M2[Map: 中间回答 2]&#10;        C3[片段 3] --&gt; M3[Map: 中间回答 3]&#10;        C4[片段 N] --&gt; M4[Map: 中间回答 N]&#10;        M1 --&gt; R[Reduce: 综合回答]&#10;        M2 --&gt; R&#10;        M3 --&gt; R&#10;        M4 --&gt; R&#10;    end"></pre><p>Refine 策略是另一种处理多文档的方法——它依次处理每个文档片段，每次在上一轮回答的基础上进行细化和补充。这种策略保证了信息的渐进式整合，但由于是串行处理，延迟更高。</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="interface MultiDocStrategy {
+  synthesize(query: string, chunks: ReadonlyArray&lt;RetrievedChunk&gt;, llm: LLMClient): Promise&lt;SynthesisResult&gt;;
+}
+
+interface SynthesisResult {
+  readonly answer: string;
+  readonly intermediateResults: ReadonlyArray&lt;string&gt;;
+  readonly llmCalls: number;
+  readonly totalTokens: number;
+}
+
+const createMapReduceStrategy = (batchSize: number): MultiDocStrategy =&gt; ({
+  synthesize: async (query, chunks, llm) =&gt; {
+    const batches = partition(chunks, batchSize);
+    const mapResults = await Promise.all(
+      batches.map(async (batch) =&gt; {
+        const context = batch.map((c) =&gt; c.content).join('\n---\n');
+        return llm.complete(`根据以下资料，回答问题: ${query}\n\n资料:\n${context}`);
+      }),
+    );
+    const reduceContext = mapResults.map((r, i) =&gt; `[来源组 ${i + 1}] ${r}`).join('\n\n');
+    const answer = await llm.complete(
+      `综合以下各组回答，生成一个完整、不重复的最终回答:\n问题: ${query}\n\n${reduceContext}`,
+    );
+    return {
+      answer,
+      intermediateResults: mapResults,
+      llmCalls: batches.length + 1,
+      totalTokens: 0,
+    };
+  },
+});"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> MultiDocStrategy</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  synthesize</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">query</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">chunks</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ReadonlyArray</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">RetrievedChunk</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>, </span><span style="color:#E36209;--shiki-dark:#FFAB70">llm</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> LLMClient</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">SynthesisResult</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> SynthesisResult</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> answer</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> intermediateResults</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ReadonlyArray</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#005CC5;--shiki-dark:#79B8FF">string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> llmCalls</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> totalTokens</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> createMapReduceStrategy</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">batchSize</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> MultiDocStrategy</span><span style="color:#D73A49;--shiki-dark:#F97583"> =></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ({</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  synthesize</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#D73A49;--shiki-dark:#F97583">async</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">query</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">chunks</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">llm</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> batches</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> partition</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(chunks, batchSize);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> mapResults</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">all</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      batches.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">map</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">async</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">batch</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> context</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> batch.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">map</span><span style="color:#24292E;--shiki-dark:#E1E4E8">((</span><span style="color:#E36209;--shiki-dark:#FFAB70">c</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> c.content).</span><span style="color:#6F42C1;--shiki-dark:#B392F0">join</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'</span><span style="color:#005CC5;--shiki-dark:#79B8FF">\n</span><span style="color:#032F62;--shiki-dark:#9ECBFF">---</span><span style="color:#005CC5;--shiki-dark:#79B8FF">\n</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> llm.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">complete</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`根据以下资料，回答问题: ${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">query</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}</span><span style="color:#005CC5;--shiki-dark:#79B8FF">\n\n</span><span style="color:#032F62;--shiki-dark:#9ECBFF">资料:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">\n</span><span style="color:#032F62;--shiki-dark:#9ECBFF">${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">context</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      }),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    );</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> reduceContext</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> mapResults.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">map</span><span style="color:#24292E;--shiki-dark:#E1E4E8">((</span><span style="color:#E36209;--shiki-dark:#FFAB70">r</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">i</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#032F62;--shiki-dark:#9ECBFF"> `[来源组 ${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">i</span><span style="color:#D73A49;--shiki-dark:#F97583"> +</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}] ${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">r</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">).</span><span style="color:#6F42C1;--shiki-dark:#B392F0">join</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'</span><span style="color:#005CC5;--shiki-dark:#79B8FF">\n\n</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> answer</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> llm.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">complete</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">      `综合以下各组回答，生成一个完整、不重复的最终回答:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">\n</span><span style="color:#032F62;--shiki-dark:#9ECBFF">问题: ${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">query</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}</span><span style="color:#005CC5;--shiki-dark:#79B8FF">\n\n</span><span style="color:#032F62;--shiki-dark:#9ECBFF">${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">reduceContext</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    );</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      answer,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      intermediateResults: mapResults,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      llmCalls: batches.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">length</span><span style="color:#D73A49;--shiki-dark:#F97583"> +</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      totalTokens: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre></div><h2 id="引用与溯源">引用与溯源</h2><p>知识库问答的一个核心要求是可溯源性——用户需要知道答案来自哪些原始文档，以便验证和深入阅读。引用系统需要在回答中精确标记每个事实断言的来源。</p>
+<p>实现引用的技术方案有两种：Inline 引用——在 Prompt 中要求 LLM 以 [1][2] 格式标注引用；后处理引用——生成回答后，通过 NLI 模型将回答中的每个句子与检索到的片段进行匹配，自动添加引用标注。</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="interface CitationResult {
+  readonly answer: string;
+  readonly citations: ReadonlyArray&lt;Citation&gt;;
+}
+
+interface Citation {
+  readonly index: number;
+  readonly text: string;
+  readonly sourceId: string;
+  readonly sourceTitle: string;
+  readonly confidence: number;
+  readonly span: { start: number; end: number };
+}
+
+const addPostHocCitations = async (
+  answer: string,
+  chunks: ReadonlyArray&lt;RetrievedChunk&gt;,
+  nliModel: NLIModel,
+): Promise&lt;CitationResult&gt; =&gt; {
+  const sentences = splitSentences(answer);
+  const citations: Citation[] = [];
+  let citationIndex = 1;
+  for (const sentence of sentences) {
+    const matches = await Promise.all(
+      chunks.map(async (chunk) =&gt; ({
+        chunk,
+        entailment: await nliModel.checkEntailment(chunk.content, sentence),
+      })),
+    );
+    const bestMatch = matches
+      .filter((m) =&gt; m.entailment.score &gt; 0.7)
+      .sort((a, b) =&gt; b.entailment.score - a.entailment.score)[0];
+    if (bestMatch) {
+      citations.push({
+        index: citationIndex++,
+        text: sentence,
+        sourceId: bestMatch.chunk.id,
+        sourceTitle: bestMatch.chunk.source,
+        confidence: bestMatch.entailment.score,
+        span: { start: answer.indexOf(sentence), end: answer.indexOf(sentence) + sentence.length },
+      });
+    }
+  }
+  return { answer, citations };
+};"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> CitationResult</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> answer</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> citations</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ReadonlyArray</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Citation</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Citation</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> index</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> text</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> sourceId</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> sourceTitle</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> confidence</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  readonly</span><span style="color:#E36209;--shiki-dark:#FFAB70"> span</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#E36209;--shiki-dark:#FFAB70">start</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; </span><span style="color:#E36209;--shiki-dark:#FFAB70">end</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> addPostHocCitations</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> async</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  answer</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  chunks</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ReadonlyArray</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">RetrievedChunk</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  nliModel</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> NLIModel</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">CitationResult</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> sentences</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> splitSentences</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(answer);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> citations</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Citation</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [];</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  let</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> citationIndex </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> sentence</span><span style="color:#D73A49;--shiki-dark:#F97583"> of</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> sentences) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> matches</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">all</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      chunks.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">map</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">async</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">chunk</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ({</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        chunk,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        entailment: </span><span style="color:#D73A49;--shiki-dark:#F97583">await</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> nliModel.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">checkEntailment</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(chunk.content, sentence),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      })),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    );</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> bestMatch</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> matches</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      .</span><span style="color:#6F42C1;--shiki-dark:#B392F0">filter</span><span style="color:#24292E;--shiki-dark:#E1E4E8">((</span><span style="color:#E36209;--shiki-dark:#FFAB70">m</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> m.entailment.score </span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.7</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      .</span><span style="color:#6F42C1;--shiki-dark:#B392F0">sort</span><span style="color:#24292E;--shiki-dark:#E1E4E8">((</span><span style="color:#E36209;--shiki-dark:#FFAB70">a</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">b</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> b.entailment.score </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> a.entailment.score)[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (bestMatch) {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      citations.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">push</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        index: citationIndex</span><span style="color:#D73A49;--shiki-dark:#F97583">++</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        text: sentence,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        sourceId: bestMatch.chunk.id,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        sourceTitle: bestMatch.chunk.source,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        confidence: bestMatch.entailment.score,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        span: { start: answer.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">indexOf</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(sentence), end: answer.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">indexOf</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(sentence) </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> sentence.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">length</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      });</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { answer, citations };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span></code></pre></div><h2 id="小结">小结</h2><ul>
+<li>上下文组装将检索结果、用户查询和系统指令组合为最优化的 LLM 输入</li>
+<li>MMR 算法在去重时兼顾相关性和多样性，避免检索结果同质化</li>
+<li>Prompt 模板按场景差异化设计，通用问答、对比分析、操作指南各有专属模板</li>
+<li>Map-Reduce 和 Refine 策略处理超出上下文窗口的多文档综合问题</li>
+<li>可溯源的引用系统通过 Inline 或后处理方式将答案中的每个断言关联到原始来源</li>
+<li>Token 预算管理在系统指令、上下文、查询和生成之间合理分配有限资源</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/kb-retrieval-api/api-design.html"><span class="label">Previous</span>知识库 API 设计</a><a class="next" href="../../../ai-systems-deep-dive/ai-knowledge-base-systems/kb-operations/index.html"><span class="label">Next</span>知识库运维 简介</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#检索结果后处理" data-outline-link="检索结果后处理">检索结果后处理</a></li><li class="depth-2"><a href="#prompt-模板设计" data-outline-link="prompt-模板设计">Prompt 模板设计</a></li><li class="depth-2"><a href="#多文档综合策略" data-outline-link="多文档综合策略">多文档综合策略</a></li><li class="depth-2"><a href="#引用与溯源" data-outline-link="引用与溯源">引用与溯源</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

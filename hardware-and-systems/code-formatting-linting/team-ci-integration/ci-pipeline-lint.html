@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>CI 流水线中的 Lint 集成 · 硬件、机器人与安全工程</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:硬件、机器人与安全工程" data-pagefind-meta="slug:hardware-and-systems">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">硬件、机器人与安全工程</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item active" href="../../../hardware-and-systems/index.html" aria-current="page" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../hardware-and-systems/index.html">硬件、机器人与安全工程</a><a class="back-to-hubs" href="../../../hardware-and-systems/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../hardware-and-systems/code-formatting-linting/index.html">代码格式化与 Lint 工具 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="hardware-and-systems"><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:code-formatting-linting/formatting-principles"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/code-formatting-linting/formatting-principles/index.html">格式化原理 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/code-formatting-linting/formatting-principles/ast-based-formatting.html">基于 AST 的格式化原理</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/code-formatting-linting/formatting-principles/prettier-deep-dive.html">Prettier 深度解析</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/code-formatting-linting/formatting-principles/editorconfig.html">EditorConfig 与编辑器统一配置</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/code-formatting-linting/formatting-principles/formatting-history.html">代码格式化工具演进史</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:code-formatting-linting/eslint-in-depth"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/code-formatting-linting/eslint-in-depth/index.html">ESLint 深入实践 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/code-formatting-linting/eslint-in-depth/eslint-architecture.html">ESLint 架构与工作原理</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/code-formatting-linting/eslint-in-depth/custom-rules.html">自定义 ESLint 规则开发</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/code-formatting-linting/eslint-in-depth/eslint-config-design.html">ESLint 配置体系设计</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/code-formatting-linting/eslint-in-depth/eslint-flat-config.html">ESLint Flat Config 迁移与实践</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:code-formatting-linting/next-gen-tools"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/code-formatting-linting/next-gen-tools/index.html">下一代工具 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/code-formatting-linting/next-gen-tools/biome-overview.html">Biome 全面解析</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/code-formatting-linting/next-gen-tools/oxlint-overview.html">OXC 与 oxlint 概览</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/code-formatting-linting/next-gen-tools/tool-comparison.html">新一代工具横向对比</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/code-formatting-linting/next-gen-tools/migration-guide.html">迁移指南：从 ESLint/Prettier 到新一代工具</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:code-formatting-linting/team-ci-integration" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/code-formatting-linting/team-ci-integration/index.html">团队协作与 CI 集成 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/code-formatting-linting/team-ci-integration/lint-staged-husky.html">lint-staged 与 Husky 实战</a></li><li class="leaf"><a class="leaf-title active" href="../../../hardware-and-systems/code-formatting-linting/team-ci-integration/ci-pipeline-lint.html">CI 流水线中的 Lint 集成</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/code-formatting-linting/team-ci-integration/monorepo-lint-strategy.html">Monorepo 中的 Lint 策略</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/code-formatting-linting/team-ci-integration/code-review-automation.html">代码审查自动化</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part IV · 编辑器与编译器</span><span>代码格式化与 Lint 工具 简介</span><span>团队协作与 CI 集成 简介</span><span>CI 流水线中的 Lint 集成</span></nav>
+    <article class="content prose"><h1 id="ci-流水线中的-lint-集成">CI 流水线中的 Lint 集成</h1><h2 id="核心概念">核心概念</h2><p>CI（持续集成）流水线中的 lint 检查是代码质量的<strong>最终防线</strong>。与本地 pre-commit 检查不同，CI lint 不可绕过、针对全量代码、且在代码合并前执行。设计合理的 CI lint 策略需要在<strong>检查全面性与执行效率</strong>之间取得平衡。</p>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TD&#10;    A[Push / PR 触发] --&gt; B[CI 流水线启动]&#10;    B --&gt; C[安装依赖]&#10;    C --&gt; D[并行检查]&#10;    D --&gt; E[格式化检查]&#10;    D --&gt; F[Lint 检查]&#10;    D --&gt; G[类型检查]&#10;    D --&gt; H[单元测试]&#10;    E --&gt; I{全部通过?}&#10;    F --&gt; I&#10;    G --&gt; I&#10;    H --&gt; I&#10;    I --&gt;|是| J[允许合并]&#10;    I --&gt;|否| K[阻止合并并报告]"></pre><p>CI lint 与本地 lint 的分工对比：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>本地 lint-staged</th>
+<th>CI lint</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>触发时机</td>
+<td>git commit 前</td>
+<td>Push / PR</td>
+</tr>
+<tr>
+<td>检查范围</td>
+<td>仅暂存文件</td>
+<td>全量代码</td>
+</tr>
+<tr>
+<td>可跳过</td>
+<td>--no-verify</td>
+<td>不可跳过</td>
+</tr>
+<tr>
+<td>执行环境</td>
+<td>开发者机器</td>
+<td>CI 服务器</td>
+</tr>
+<tr>
+<td>反馈速度</td>
+<td>秒级</td>
+<td>分钟级</td>
+</tr>
+<tr>
+<td>修复方式</td>
+<td>--fix 自动修复</td>
+<td>仅报告（--check）</td>
+</tr>
+</tbody></table>
+<h2 id="github-actions-实践">GitHub Actions 实践</h2><p>GitHub Actions 是最常用的 CI 平台之一。以下是一个完整的 lint 工作流配置：</p>
+<div class="code-block-wrapper" data-lang="yaml" data-code="name: Code Quality
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint &amp; Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Format Check
+        run: pnpm prettier --check &quot;src/**/*.{ts,tsx,css,json,md}&quot;
+
+      - name: Lint
+        run: pnpm eslint . --max-warnings 0
+
+      - name: Type Check
+        run: pnpm tsc --noEmit"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">Code Quality</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">on</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  pull_request</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    branches</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">main</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">develop</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  push</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    branches</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">main</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">concurrency</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  group</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">${{ github.workflow }}-${{ github.ref }}</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  cancel-in-progress</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">true</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">jobs</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  lint</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">Lint &#x26; Format</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    runs-on</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">ubuntu-latest</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    steps</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      - </span><span style="color:#22863A;--shiki-dark:#85E89D">uses</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">actions/checkout@v4</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      - </span><span style="color:#22863A;--shiki-dark:#85E89D">uses</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">pnpm/action-setup@v4</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">        with</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">          version</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">9</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      - </span><span style="color:#22863A;--shiki-dark:#85E89D">uses</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">actions/setup-node@v4</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">        with</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">          node-version</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">22</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">          cache</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">pnpm</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      - </span><span style="color:#22863A;--shiki-dark:#85E89D">run</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">pnpm install --frozen-lockfile</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      - </span><span style="color:#22863A;--shiki-dark:#85E89D">name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">Format Check</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">        run</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">pnpm prettier --check "src/**/*.{ts,tsx,css,json,md}"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      - </span><span style="color:#22863A;--shiki-dark:#85E89D">name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">Lint</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">        run</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">pnpm eslint . --max-warnings 0</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      - </span><span style="color:#22863A;--shiki-dark:#85E89D">name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">Type Check</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">        run</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">pnpm tsc --noEmit</span></span></code></pre></div><p>使用 Biome 的简化版本：</p>
+<div class="code-block-wrapper" data-lang="yaml" data-code="jobs:
+  quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: biomejs/setup-biome@v2
+      - run: biome ci ."><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">jobs</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  quality</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">Code Quality</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    runs-on</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">ubuntu-latest</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    steps</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      - </span><span style="color:#22863A;--shiki-dark:#85E89D">uses</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">actions/checkout@v4</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      - </span><span style="color:#22863A;--shiki-dark:#85E89D">uses</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">biomejs/setup-biome@v2</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      - </span><span style="color:#22863A;--shiki-dark:#85E89D">run</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">biome ci .</span></span></code></pre></div><pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart LR&#10;    A[PR 创建] --&gt; B[GitHub Actions 触发]&#10;    B --&gt; C{检查类型}&#10;    C --&gt; D[biome ci .]&#10;    C --&gt; E[tsc --noEmit]&#10;    C --&gt; F[vitest --run]&#10;    D --&gt; G[合并结果]&#10;    E --&gt; G&#10;    F --&gt; G&#10;    G --&gt; H[PR 状态更新]"></pre><p><strong>关键实践</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>实践</th>
+<th>说明</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>--frozen-lockfile</code></td>
+<td>确保依赖版本一致</td>
+<td>避免 CI 安装不同版本</td>
+</tr>
+<tr>
+<td><code>--max-warnings 0</code></td>
+<td>将 warning 视为 error</td>
+<td>CI 中不容忍任何警告</td>
+</tr>
+<tr>
+<td><code>cancel-in-progress</code></td>
+<td>取消同分支旧任务</td>
+<td>节省 CI 资源</td>
+</tr>
+<tr>
+<td><code>--check</code> 而非 <code>--write</code></td>
+<td>CI 中只检查不修复</td>
+<td>明确责任归开发者</td>
+</tr>
+<tr>
+<td>并行 Job</td>
+<td>lint / test / typecheck 并行</td>
+<td>缩短总时间</td>
+</tr>
+</tbody></table>
+<h2 id="缓存策略与性能优化">缓存策略与性能优化</h2><p>CI 中的 lint 性能优化对于大型项目至关重要。主要优化方向包括依赖缓存、增量 lint 和任务并行化。</p>
+<p><strong>依赖缓存</strong>：缓存 <code>node_modules</code> 和包管理器缓存可以显著减少安装时间：</p>
+<div class="code-block-wrapper" data-lang="yaml" data-code="- uses: actions/setup-node@v4
+  with:
+    node-version: 22
+    cache: pnpm"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">- </span><span style="color:#22863A;--shiki-dark:#85E89D">uses</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">actions/setup-node@v4</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  with</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    node-version</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">22</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    cache</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">pnpm</span></span></code></pre></div><p><strong>ESLint 缓存</strong>：ESLint 支持缓存功能，跳过未变更的文件：</p>
+<div class="code-block-wrapper" data-lang="yaml" data-code="- name: Restore ESLint cache
+  uses: actions/cache@v4
+  with:
+    path: .eslintcache
+    key: eslint-${{ hashFiles('eslint.config.mjs') }}-${{ github.sha }}
+    restore-keys: |
+      eslint-${{ hashFiles('eslint.config.mjs') }}-
+
+- run: eslint --cache --cache-location .eslintcache ."><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">- </span><span style="color:#22863A;--shiki-dark:#85E89D">name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">Restore ESLint cache</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  uses</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">actions/cache@v4</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  with</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    path</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">.eslintcache</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    key</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">eslint-${{ hashFiles('eslint.config.mjs') }}-${{ github.sha }}</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    restore-keys</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#D73A49;--shiki-dark:#F97583">|</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">      eslint-${{ hashFiles('eslint.config.mjs') }}-</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">- </span><span style="color:#22863A;--shiki-dark:#85E89D">run</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">eslint --cache --cache-location .eslintcache .</span></span></code></pre></div><p><strong>增量 Lint</strong>：只对 PR 中变更的文件运行 lint：</p>
+<div class="code-block-wrapper" data-lang="yaml" data-code="- name: Get changed files
+  id: changed
+  uses: tj-actions/changed-files@v44
+  with:
+    files: |
+      **/*.ts
+      **/*.tsx
+
+- name: Lint changed files
+  if: steps.changed.outputs.any_changed == 'true'
+  run: eslint ${{ steps.changed.outputs.all_changed_files }}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">- </span><span style="color:#22863A;--shiki-dark:#85E89D">name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">Get changed files</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  id</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">changed</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  uses</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">tj-actions/changed-files@v44</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  with</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    files</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#D73A49;--shiki-dark:#F97583">|</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">      **/*.ts</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">      **/*.tsx</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">- </span><span style="color:#22863A;--shiki-dark:#85E89D">name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">Lint changed files</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  if</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">steps.changed.outputs.any_changed == 'true'</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  run</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">eslint ${{ steps.changed.outputs.all_changed_files }}</span></span></code></pre></div><table>
+<thead>
+<tr>
+<th>优化策略</th>
+<th>适用场景</th>
+<th>时间节省</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>依赖缓存</td>
+<td>所有项目</td>
+<td>安装时间减少 60-80%</td>
+</tr>
+<tr>
+<td>ESLint 缓存</td>
+<td>大型项目</td>
+<td>lint 时间减少 50-70%</td>
+</tr>
+<tr>
+<td>增量 lint</td>
+<td>PR 检查</td>
+<td>与变更文件数成正比</td>
+</tr>
+<tr>
+<td>Biome 替代</td>
+<td>性能敏感项目</td>
+<td>lint 时间减少 90%+</td>
+</tr>
+<tr>
+<td>并行 Job</td>
+<td>多检查项目</td>
+<td>总时间取决于最慢 Job</td>
+</tr>
+</tbody></table>
+<h2 id="多平台-ci-配置">多平台 CI 配置</h2><p>除 GitHub Actions 外，其他 CI 平台的 lint 配置模式类似：</p>
+<p><strong>GitLab CI</strong>：</p>
+<div class="code-block-wrapper" data-lang="yaml" data-code="lint:
+  stage: quality
+  image: node:22
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+      - .eslintcache
+  script:
+    - npm ci
+    - npx eslint --cache .
+    - npx prettier --check .
+  rules:
+    - if: $CI_PIPELINE_SOURCE == &quot;merge_request_event&quot;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">lint</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  stage</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">quality</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  image</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">node:22</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  cache</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    key</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">${CI_COMMIT_REF_SLUG}</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    paths</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      - </span><span style="color:#032F62;--shiki-dark:#9ECBFF">node_modules/</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      - </span><span style="color:#032F62;--shiki-dark:#9ECBFF">.eslintcache</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  script</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    - </span><span style="color:#032F62;--shiki-dark:#9ECBFF">npm ci</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    - </span><span style="color:#032F62;--shiki-dark:#9ECBFF">npx eslint --cache .</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    - </span><span style="color:#032F62;--shiki-dark:#9ECBFF">npx prettier --check .</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  rules</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    - </span><span style="color:#22863A;--shiki-dark:#85E89D">if</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">$CI_PIPELINE_SOURCE == "merge_request_event"</span></span></code></pre></div><p><strong>通用 CI 脚本</strong>：编写平台无关的 lint 脚本，在 <code>package.json</code> 中统一管理：</p>
+<div class="code-block-wrapper" data-lang="json" data-code="{
+  &quot;scripts&quot;: {
+    &quot;lint&quot;: &quot;eslint .&quot;,
+    &quot;lint:fix&quot;: &quot;eslint --fix .&quot;,
+    &quot;format&quot;: &quot;prettier --write .&quot;,
+    &quot;format:check&quot;: &quot;prettier --check .&quot;,
+    &quot;typecheck&quot;: &quot;tsc --noEmit&quot;,
+    &quot;quality&quot;: &quot;npm run format:check &amp;&amp; npm run lint &amp;&amp; npm run typecheck&quot;,
+    &quot;quality:ci&quot;: &quot;biome ci .&quot;
+  }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">  "scripts"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    "lint"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"eslint ."</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    "lint:fix"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"eslint --fix ."</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    "format"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"prettier --write ."</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    "format:check"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"prettier --check ."</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    "typecheck"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"tsc --noEmit"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    "quality"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"npm run format:check &#x26;&#x26; npm run lint &#x26;&#x26; npm run typecheck"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    "quality:ci"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"biome ci ."</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><p>这样任何 CI 平台只需调用 <code>npm run quality</code> 或 <code>npm run quality:ci</code> 即可，不需要在 CI 配置中硬编码具体的工具命令。</p>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TD&#10;    A[package.json scripts] --&gt; B[&quot;quality: format:check + lint + typecheck&quot;]&#10;    A --&gt; C[&quot;quality:ci: biome ci&quot;]&#10;    B --&gt; D[GitHub Actions]&#10;    B --&gt; E[GitLab CI]&#10;    B --&gt; F[Jenkins]&#10;    C --&gt; D&#10;    C --&gt; E&#10;    C --&gt; F"></pre><h2 id="失败报告与开发者体验">失败报告与开发者体验</h2><p>CI lint 失败时的报告质量直接影响开发者的修复效率。</p>
+<p><strong>Problem Matchers</strong>：GitHub Actions 支持 Problem Matchers，可以将 lint 错误直接显示在 PR 的代码 diff 中：</p>
+<div class="code-block-wrapper" data-lang="json" data-code="{
+  &quot;problemMatcher&quot;: [
+    {
+      &quot;owner&quot;: &quot;eslint&quot;,
+      &quot;pattern&quot;: [
+        {
+          &quot;regexp&quot;: &quot;^(.+):(\\d+):(\\d+):\\s+(error|warning)\\s+(.+?)\\s+(.+)$&quot;,
+          &quot;file&quot;: 1,
+          &quot;line&quot;: 2,
+          &quot;column&quot;: 3,
+          &quot;severity&quot;: 4,
+          &quot;message&quot;: 5,
+          &quot;code&quot;: 6
+        }
+      ]
+    }
+  ]
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">  "problemMatcher"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: [</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">      "owner"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"eslint"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">      "pattern"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: [</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        {</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">          "regexp"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"^(.+):(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="color:#032F62;--shiki-dark:#9ECBFF">d+):(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="color:#032F62;--shiki-dark:#9ECBFF">d+):</span><span style="color:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="color:#032F62;--shiki-dark:#9ECBFF">s+(error|warning)</span><span style="color:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="color:#032F62;--shiki-dark:#9ECBFF">s+(.+?)</span><span style="color:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="color:#032F62;--shiki-dark:#9ECBFF">s+(.+)$"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">          "file"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">          "line"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">          "column"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">          "severity"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">4</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">          "message"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">5</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">          "code"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">6</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      ]</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  ]</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><p><strong>Annotations</strong>：使用 GitHub Actions 的注解功能在代码行级别标记问题：</p>
+<div class="code-block-wrapper" data-lang="yaml" data-code="- name: Lint with annotations
+  run: |
+    eslint . --format @microsoft/eslint-formatter-sarif --output-file eslint.sarif
+  continue-on-error: true
+
+- uses: github/codeql-action/upload-sarif@v3
+  with:
+    sarif_file: eslint.sarif"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">- </span><span style="color:#22863A;--shiki-dark:#85E89D">name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">Lint with annotations</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  run</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#D73A49;--shiki-dark:#F97583">|</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">    eslint . --format @microsoft/eslint-formatter-sarif --output-file eslint.sarif</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  continue-on-error</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">true</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">- </span><span style="color:#22863A;--shiki-dark:#85E89D">uses</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">github/codeql-action/upload-sarif@v3</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  with</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    sarif_file</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">eslint.sarif</span></span></code></pre></div><table>
+<thead>
+<tr>
+<th>报告方式</th>
+<th>展示位置</th>
+<th>开发者体验</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>纯文本输出</td>
+<td>CI 日志</td>
+<td>需要手动查找</td>
+</tr>
+<tr>
+<td>Problem Matcher</td>
+<td>PR 文件 diff 行内</td>
+<td>直观定位问题</td>
+</tr>
+<tr>
+<td>SARIF 上传</td>
+<td>PR Security tab</td>
+<td>结构化问题列表</td>
+</tr>
+<tr>
+<td>Annotations</td>
+<td>PR Checks tab</td>
+<td>逐行标注</td>
+</tr>
+</tbody></table>
+<h2 id="小结">小结</h2><pre class="mermaid" data-diagram-type="mindmap" data-source="mindmap&#10;  root((CI Lint))&#10;    流水线设计&#10;      格式化检查&#10;      Lint 检查&#10;      类型检查&#10;      并行执行&#10;    性能优化&#10;      依赖缓存&#10;      ESLint 缓存&#10;      增量 lint&#10;      Biome 替代&#10;    多平台&#10;      GitHub Actions&#10;      GitLab CI&#10;      平台无关脚本&#10;    失败报告&#10;      Problem Matchers&#10;      SARIF&#10;      行级注解&#10;    最佳实践&#10;      --check 不修复&#10;      --max-warnings 0&#10;      package.json 统一入口"></pre><ul>
+<li>CI lint 是代码质量的不可绕过的最终防线，与本地 pre-commit 形成两层保障</li>
+<li>性能优化的核心是缓存（依赖 + ESLint）和增量策略（只 lint 变更文件）</li>
+<li><code>package.json</code> scripts 作为平台无关的统一入口，避免在 CI 配置中硬编码工具命令</li>
+<li>Problem Matchers 和 SARIF 报告可以在 PR diff 中直观展示 lint 问题</li>
+<li>Biome 的 <code>ci</code> 命令是最简化的 CI lint 方案，单条命令覆盖格式化和 lint 检查</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../hardware-and-systems/code-formatting-linting/team-ci-integration/lint-staged-husky.html"><span class="label">Previous</span>lint-staged 与 Husky 实战</a><a class="next" href="../../../hardware-and-systems/code-formatting-linting/team-ci-integration/monorepo-lint-strategy.html"><span class="label">Next</span>Monorepo 中的 Lint 策略</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#github-actions-实践" data-outline-link="github-actions-实践">GitHub Actions 实践</a></li><li class="depth-2"><a href="#缓存策略与性能优化" data-outline-link="缓存策略与性能优化">缓存策略与性能优化</a></li><li class="depth-2"><a href="#多平台-ci-配置" data-outline-link="多平台-ci-配置">多平台 CI 配置</a></li><li class="depth-2"><a href="#失败报告与开发者体验" data-outline-link="失败报告与开发者体验">失败报告与开发者体验</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

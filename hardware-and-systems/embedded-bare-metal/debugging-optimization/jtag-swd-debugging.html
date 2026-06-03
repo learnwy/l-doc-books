@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>JTAG/SWD 调试原理 · 硬件、机器人与安全工程</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:硬件、机器人与安全工程" data-pagefind-meta="slug:hardware-and-systems">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">硬件、机器人与安全工程</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item active" href="../../../hardware-and-systems/index.html" aria-current="page" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../hardware-and-systems/index.html">硬件、机器人与安全工程</a><a class="back-to-hubs" href="../../../hardware-and-systems/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../hardware-and-systems/embedded-bare-metal/index.html">嵌入式裸机开发</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="hardware-and-systems"><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:embedded-bare-metal/microcontroller-fundamentals"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/embedded-bare-metal/microcontroller-fundamentals/index.html">微控制器基础</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/microcontroller-fundamentals/mcu-architecture-cortex-m.html">MCU 架构与 ARM Cortex-M 内核</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/microcontroller-fundamentals/memory-map-boot-process.html">存储器映射与启动流程</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/microcontroller-fundamentals/clock-system-power-management.html">时钟系统与电源管理</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:embedded-bare-metal/peripheral-programming"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/embedded-bare-metal/peripheral-programming/index.html">外设编程</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/peripheral-programming/gpio-interrupt-system.html">GPIO 与中断系统</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/peripheral-programming/timer-pwm-adc.html">定时器、PWM 与 ADC</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/peripheral-programming/communication-interface-drivers.html">通信接口驱动开发</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:embedded-bare-metal/rtos-basics"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/embedded-bare-metal/rtos-basics/index.html">RTOS 基础</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/rtos-basics/rtos-scheduling-principles.html">RTOS 调度原理</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/rtos-basics/task-management-synchronization.html">任务管理与同步机制</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/rtos-basics/freertos-practice.html">FreeRTOS 实践</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:embedded-bare-metal/debugging-optimization" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/embedded-bare-metal/debugging-optimization/index.html">调试与优化</a></summary><ul><li class="leaf"><a class="leaf-title active" href="../../../hardware-and-systems/embedded-bare-metal/debugging-optimization/jtag-swd-debugging.html">JTAG/SWD 调试原理</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/debugging-optimization/performance-power-optimization.html">性能分析与功耗优化</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/debugging-optimization/firmware-security-ota.html">固件安全与 OTA 更新</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part I · 硬件电子</span><span>嵌入式裸机开发</span><span>调试与优化</span><span>JTAG/SWD 调试原理</span></nav>
+    <article class="content prose"><h1 id="jtag-swd-调试原理">JTAG/SWD 调试原理</h1><h2 id="调试接口概述">调试接口概述</h2><p>嵌入式调试依赖处理器内置的调试硬件单元和外部调试器（Debug Probe）之间的通信。ARM Cortex-M 系列支持两种标准调试接口：JTAG（联合测试行动组）和 SWD（串行线调试），它们为开发者提供断点、单步、内存访问和实时跟踪等能力。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    PC[主机 IDE] --&gt;|USB| PROBE[调试探针&lt;br/&gt;ST-Link/J-Link]&#10;    PROBE --&gt;|JTAG 或 SWD| TARGET[目标 MCU]&#10;    TARGET --&gt; DAP[调试访问端口 DAP]&#10;    DAP --&gt; AHB_AP[AHB-AP&lt;br/&gt;内存访问]&#10;    DAP --&gt; CTRL[DP 控制]&#10;    AHB_AP --&gt; CORE[CPU 内核]&#10;    AHB_AP --&gt; SRAM[SRAM]&#10;    AHB_AP --&gt; PERIPH[外设寄存器]"></pre><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>JTAG</th>
+<th>SWD</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>信号线数</td>
+<td>5（TCK/TMS/TDI/TDO/TRST）</td>
+<td>2（SWCLK/SWDIO）</td>
+</tr>
+<tr>
+<td>数据方向</td>
+<td>单向（TDI→TDO）</td>
+<td>双向（SWDIO 分时复用）</td>
+</tr>
+<tr>
+<td>最大时钟</td>
+<td>~20 MHz</td>
+<td>~50 MHz</td>
+</tr>
+<tr>
+<td>多设备级联</td>
+<td>支持菊花链</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>引脚节约</td>
+<td>差</td>
+<td>好（仅需 2 引脚）</td>
+</tr>
+<tr>
+<td>SWO 跟踪</td>
+<td>需额外引脚</td>
+<td>可复用 SWO 引脚</td>
+</tr>
+<tr>
+<td>Cortex-M 支持</td>
+<td>全部</td>
+<td>全部（推荐）</td>
+</tr>
+</tbody></table>
+<h2 id="coresight-调试架构">CoreSight 调试架构</h2><h3 id="组件层次">组件层次</h3><p>ARM CoreSight 是一套标准化的片上调试与跟踪架构，定义了调试组件的发现、配置和互连方式：</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    DP[调试端口 DP&lt;br/&gt;SWJ-DP] --&gt; AP1[AHB-AP&lt;br/&gt;内存访问]&#10;    DP --&gt; AP2[APB-AP&lt;br/&gt;调试组件访问]&#10;    AP1 --&gt; CPU_MEM[CPU 地址空间]&#10;    AP2 --&gt; FPB[FPB&lt;br/&gt;Flash 断点单元]&#10;    AP2 --&gt; DWT[DWT&lt;br/&gt;数据观察点与跟踪]&#10;    AP2 --&gt; ITM[ITM&lt;br/&gt;仪器化跟踪宏单元]&#10;    AP2 --&gt; TPIU[TPIU&lt;br/&gt;跟踪端口接口]&#10;    AP2 --&gt; ETM[ETM&lt;br/&gt;嵌入式跟踪宏单元]"></pre><table>
+<thead>
+<tr>
+<th>组件</th>
+<th>全称</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DP</td>
+<td>Debug Port</td>
+<td>物理接口协议层（SWD/JTAG）</td>
+</tr>
+<tr>
+<td>AHB-AP</td>
+<td>AHB Access Port</td>
+<td>通过 AHB 总线访问全部 4GB 地址空间</td>
+</tr>
+<tr>
+<td>FPB</td>
+<td>Flash Patch and Breakpoint</td>
+<td>硬件断点（6-8 个）和 Flash 补丁</td>
+</tr>
+<tr>
+<td>DWT</td>
+<td>Data Watchpoint and Trace</td>
+<td>数据观察点、周期计数器、异常跟踪</td>
+</tr>
+<tr>
+<td>ITM</td>
+<td>Instrumentation Trace Macrocell</td>
+<td>printf 风格的软件跟踪输出</td>
+</tr>
+<tr>
+<td>TPIU</td>
+<td>Trace Port Interface Unit</td>
+<td>跟踪数据输出到 SWO/TracePort</td>
+</tr>
+<tr>
+<td>ETM</td>
+<td>Embedded Trace Macrocell</td>
+<td>完整指令流跟踪（高端内核）</td>
+</tr>
+</tbody></table>
+<h3 id="dap-访问流程">DAP 访问流程</h3><p>通过 SWD 接口读取 MCU 内存的完整协议流程：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>IDE 请求</mtext><mo>→</mo><mtext>USB 传输</mtext><mo>→</mo><mtext>探针转换为 SWD 帧</mtext><mo>→</mo><mtext>DP 选择 AP</mtext><mo>→</mo><mtext>AHB-AP 发起总线事务</mtext></mrow><annotation encoding="application/x-tex">\text{IDE 请求} \rightarrow \text{USB 传输} \rightarrow \text{探针转换为 SWD 帧} \rightarrow \text{DP 选择 AP} \rightarrow \text{AHB-AP 发起总线事务}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord">IDE </span><span class="mord cjk_fallback">请求</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord">USB </span><span class="mord cjk_fallback">传输</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">探针转换为</span><span class="mord"> SWD </span><span class="mord cjk_fallback">帧</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord">DP </span><span class="mord cjk_fallback">选择</span><span class="mord"> AP</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord">AHB-AP </span><span class="mord cjk_fallback">发起总线事务</span></span></span></span></span></span></div><p>SWD 协议帧结构：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>位数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Start</td>
+<td>1</td>
+<td>固定为 1</td>
+</tr>
+<tr>
+<td>APnDP</td>
+<td>1</td>
+<td>0=DP 访问，1=AP 访问</td>
+</tr>
+<tr>
+<td>RnW</td>
+<td>1</td>
+<td>0=写，1=读</td>
+</tr>
+<tr>
+<td>A[2:3]</td>
+<td>2</td>
+<td>寄存器地址</td>
+</tr>
+<tr>
+<td>Parity</td>
+<td>1</td>
+<td>奇偶校验</td>
+</tr>
+<tr>
+<td>Stop</td>
+<td>1</td>
+<td>固定为 0</td>
+</tr>
+<tr>
+<td>Park</td>
+<td>1</td>
+<td>固定为 1</td>
+</tr>
+<tr>
+<td>ACK</td>
+<td>3</td>
+<td>目标响应（OK/WAIT/FAULT）</td>
+</tr>
+<tr>
+<td>DATA</td>
+<td>32</td>
+<td>数据负载</td>
+</tr>
+<tr>
+<td>Parity</td>
+<td>1</td>
+<td>数据校验</td>
+</tr>
+</tbody></table>
+<h2 id="硬件断点">硬件断点</h2><h3 id="fpb-单元">FPB 单元</h3><p>Flash Patch and Breakpoint 单元提供硬件断点能力，无需修改 Flash 中的代码：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>断点数量</mtext><mo>=</mo><mn>6</mn><mtext>（指令断点）</mtext><mo>+</mo><mn>2</mn><mtext>（文字断点）（</mtext><mi>C</mi><mi>o</mi><mi>r</mi><mi>t</mi><mi>e</mi><mi>x</mi><mo>−</mo><mi>M</mi><mn>3</mn><mi mathvariant="normal">/</mi><mi>M</mi><mn>4</mn><mtext>典型值）</mtext></mrow><annotation encoding="application/x-tex">\text{断点数量} = 6 \text{（指令断点）} + 2 \text{（文字断点）}（Cortex-M3/M4 典型值）</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">断点数量</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord">6</span><span class="mord text"><span class="mord cjk_fallback">（指令断点）</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mord text"><span class="mord cjk_fallback">（文字断点）</span></span><span class="mord cjk_fallback">（</span><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="mord mathnormal" style="margin-right:0.0278em;">or</span><span class="mord mathnormal">t</span><span class="mord mathnormal">e</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">M</span><span class="mord">3/</span><span class="mord mathnormal" style="margin-right:0.109em;">M</span><span class="mord">4</span><span class="mord cjk_fallback">典型值）</span></span></span></span></span></div><p>硬件断点的工作原理：</p>
+<ol>
+<li>将目标地址写入 FPB 比较器寄存器</li>
+<li>CPU 取指时 FPB 并行比较 PC 值</li>
+<li>匹配时产生调试事件，CPU 进入调试状态（Halted）</li>
+</ol>
+<h3 id="软件断点">软件断点</h3><p>当硬件断点数量不足时，调试器可使用软件断点：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>原指令</mtext><mover><mo stretchy="true" minsize="3.0em">→</mo><mpadded width="+0.6em" lspace="0.3em"><mtext>替换</mtext></mpadded></mover><mtext>BKPT #imm（</mtext><mi>T</mi><mi>h</mi><mi>u</mi><mi>m</mi><mi>b</mi><mo>−</mo><mn>2</mn><mtext>断点指令）</mtext></mrow><annotation encoding="application/x-tex">\text{原指令} \xrightarrow{\text{替换}} \text{BKPT \#imm}（Thumb-2 断点指令）</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1113em;vertical-align:-0.011em;"></span><span class="mord text"><span class="mord cjk_fallback">原指令</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel x-arrow"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1003em;"><span style="top:-3.322em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight x-arrow-pad"><span class="mord mtight"><span class="mord text mtight"><span class="mord cjk_fallback mtight">替换</span></span></span></span></span><span class="svg-align" style="top:-2.689em;"><span class="pstrut" style="height:2.7em;"></span><span class="hide-tail" style="height:0.522em;min-width:1.469em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="0.522em" viewBox="0 0 400000 522" preserveAspectRatio="xMaxYMin slice"><path d="M0 241v40h399891c-47.3 35.3-84 78-110 128
+-16.7 32-27.7 63.7-33 95 0 1.3-.2 2.7-.5 4-.3 1.3-.5 2.3-.5 3 0 7.3 6.7 11 20
+ 11 8 0 13.2-.8 15.5-2.5 2.3-1.7 4.2-5.5 5.5-11.5 2-13.3 5.7-27 11-41 14.7-44.7
+ 39-84.5 73-119.5s73.7-60.2 119-75.5c6-2 9-5.7 9-11s-3-9-9-11c-45.3-15.3-85
+-40.5-119-75.5s-58.3-74.8-73-119.5c-4.7-14-8.3-27.3-11-40-1.3-6.7-3.2-10.8-5.5
+-12.5-2.3-1.7-7.5-2.5-15.5-2.5-14 0-21 3.7-21 11 0 2 2 10.3 6 25 20.7 83.3 67
+ 151.7 139 205zm0 0v40h399900v-40z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.011em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord">BKPT #imm</span></span><span class="mord cjk_fallback">（</span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mord mathnormal">h</span><span class="mord mathnormal">u</span><span class="mord mathnormal">mb</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">2</span><span class="mord cjk_fallback">断点指令）</span></span></span></span></span></div><p>软件断点需要修改 Flash/RAM 中的指令，对 Flash 中的代码需配合 FPB 的 Flash 补丁功能重映射到 SRAM。</p>
+<h2 id="数据观察点">数据观察点</h2><h3 id="dwt-功能">DWT 功能</h3><p>DWT（Data Watchpoint and Trace）单元提供数据访问监控：</p>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>说明</th>
+<th>数量（M4 典型）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据观察点</td>
+<td>监控特定地址的读/写访问</td>
+<td>4 个</td>
+</tr>
+<tr>
+<td>PC 采样</td>
+<td>周期性记录 PC 值</td>
+<td>持续</td>
+</tr>
+<tr>
+<td>周期计数器</td>
+<td>精确测量代码执行周期</td>
+<td>1 个（CYCCNT）</td>
+</tr>
+<tr>
+<td>异常跟踪</td>
+<td>记录异常进出事件</td>
+<td>持续</td>
+</tr>
+<tr>
+<td>CPI 计数</td>
+<td>统计各类指令的额外周期</td>
+<td>6 种分类</td>
+</tr>
+</tbody></table>
+<h3 id="数据观察点配置">数据观察点配置</h3><p>数据观察点可监控变量的意外修改：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>触发条件</mtext><mo>=</mo><mtext>地址匹配</mtext><mo>∧</mo><mo stretchy="false">(</mo><mtext>读</mtext><mo>∨</mo><mtext>写</mtext><mo>∨</mo><mtext>读写</mtext><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\text{触发条件} = \text{地址匹配} \land (\text{读} \lor \text{写} \lor \text{读写})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">触发条件</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">地址匹配</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∧</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord cjk_fallback">读</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∨</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">写</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∨</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord cjk_fallback">读写</span></span><span class="mclose">)</span></span></span></span></span></div><div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>地址掩码</mtext><mo>=</mo><msup><mn>2</mn><mi>n</mi></msup><mtext> 字节对齐（</mtext><mi>n</mi><mo>=</mo><mtext>MASK 字段值）</mtext></mrow><annotation encoding="application/x-tex">\text{地址掩码} = 2^n \text{ 字节对齐}（n = \text{MASK 字段值}）</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">地址掩码</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7144em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7144em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span><span class="mord text"><span class="mord"> </span><span class="mord cjk_fallback">字节对齐</span></span><span class="mord cjk_fallback">（</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord">MASK </span><span class="mord cjk_fallback">字段值</span></span><span class="mord cjk_fallback">）</span></span></span></span></span></div><p>当全局变量被意外修改时，数据观察点会在修改瞬间暂停 CPU，调用栈显示修改者的完整上下文。</p>
+<h3 id="cyccnt-周期计数器">CYCCNT 周期计数器</h3><p>DWT_CYCCNT 是一个 32 位递增计数器，每个 CPU 周期加 1：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>执行时间</mtext><mo>=</mo><mfrac><mrow><mtext>CYCCNT_after</mtext><mo>−</mo><mtext>CYCCNT_before</mtext></mrow><msub><mi>f</mi><mtext>CPU</mtext></msub></mfrac></mrow><annotation encoding="application/x-tex">\text{执行时间} = \frac{\text{CYCCNT\_after} - \text{CYCCNT\_before}}{f_{\text{CPU}}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">执行时间</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.2749em;vertical-align:-0.8804em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3944em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.1076em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">CPU</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.7em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord text"><span class="mord">CYCCNT_after</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord text"><span class="mord">CYCCNT_before</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8804em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></div><p>以 168 MHz 为例，CYCCNT 每 ~25.5 秒溢出一次，适用于微秒至秒级的精确计时。</p>
+<h2 id="itm-跟踪输出">ITM 跟踪输出</h2><h3 id="非侵入式-printf">非侵入式 printf</h3><p>ITM（Instrumentation Trace Macrocell）提供类似 printf 的调试输出，但几乎不影响程序执行时序：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>传输路径：ITM 刺激端口</mtext><mo>→</mo><mtext>TPIU</mtext><mo>→</mo><mtext>SWO 引脚</mtext><mo>→</mo><mtext>探针</mtext><mo>→</mo><mtext>IDE 终端</mtext></mrow><annotation encoding="application/x-tex">\text{传输路径}：\text{ITM 刺激端口} \rightarrow \text{TPIU} \rightarrow \text{SWO 引脚} \rightarrow \text{探针} \rightarrow \text{IDE 终端}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">传输路径</span></span><span class="mord cjk_fallback">：</span><span class="mord text"><span class="mord">ITM </span><span class="mord cjk_fallback">刺激端口</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord">TPIU</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord">SWO </span><span class="mord cjk_fallback">引脚</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">探针</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord">IDE </span><span class="mord cjk_fallback">终端</span></span></span></span></span></span></div><table>
+<thead>
+<tr>
+<th>对比</th>
+<th>printf（UART）</th>
+<th>ITM SWO</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>延迟</td>
+<td>~1 ms/字节</td>
+<td>~几 μs（FIFO 缓冲）</td>
+</tr>
+<tr>
+<td>时序影响</td>
+<td>严重（阻塞）</td>
+<td>极小（异步输出）</td>
+</tr>
+<tr>
+<td>硬件需求</td>
+<td>UART 引脚+USB 转串口</td>
+<td>SWO 引脚（已在调试接口中）</td>
+</tr>
+<tr>
+<td>带宽</td>
+<td>115200 bps</td>
+<td>数 Mbps</td>
+</tr>
+<tr>
+<td>信息类型</td>
+<td>仅文本</td>
+<td>文本+时间戳+异常事件</td>
+</tr>
+</tbody></table>
+<h3 id="刺激端口">刺激端口</h3><p>ITM 提供 32 个刺激端口（Stimulus Port），每个端口 32 位宽：</p>
+<ul>
+<li>端口 0：通常用于 printf 重定向</li>
+<li>端口 1-30：可用于不同模块/级别的跟踪</li>
+<li>端口 31：保留给 DWT 硬件事件</li>
+</ul>
+<h2 id="实时跟踪">实时跟踪</h2><h3 id="swo-模式">SWO 模式</h3><p>SWO（Serial Wire Output）通过单根信号线输出跟踪数据，支持两种编码：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>SWO 带宽</mtext><mo>=</mo><mtext>时钟频率</mtext><mo>×</mo><mtext>编码效率</mtext></mrow><annotation encoding="application/x-tex">\text{SWO 带宽} = \text{时钟频率} \times \text{编码效率}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord">SWO </span><span class="mord cjk_fallback">带宽</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord text"><span class="mord cjk_fallback">时钟频率</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">编码效率</span></span></span></span></span></span></div><table>
+<thead>
+<tr>
+<th>编码</th>
+<th>效率</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Manchester</td>
+<td>50%</td>
+<td>自带时钟同步，容错好</td>
+</tr>
+<tr>
+<td>NRZ/UART</td>
+<td>80%</td>
+<td>异步，带宽更高</td>
+</tr>
+</tbody></table>
+<h3 id="etm-指令跟踪">ETM 指令跟踪</h3><p>高端调试器（如 J-Trace）配合 ETM 可记录完整的指令执行流：</p>
+<table>
+<thead>
+<tr>
+<th>跟踪类型</th>
+<th>信息量</th>
+<th>接口</th>
+<th>典型场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SWO/ITM</td>
+<td>软件仪器化</td>
+<td>1 引脚</td>
+<td>printf 调试</td>
+</tr>
+<tr>
+<td>ETM + TPIU</td>
+<td>完整指令流</td>
+<td>4-引脚 TracePort</td>
+<td>代码覆盖率分析</td>
+</tr>
+<tr>
+<td>MTB</td>
+<td>微型跟踪缓冲</td>
+<td>片内 SRAM</td>
+<td>M0+ 低成本跟踪</td>
+</tr>
+</tbody></table>
+<h2 id="调试会话管理">调试会话管理</h2><h3 id="连接与复位类型">连接与复位类型</h3><table>
+<thead>
+<tr>
+<th>复位类型</th>
+<th>动作</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>硬件复位</td>
+<td>NRST 引脚拉低</td>
+<td>完整系统复位</td>
+</tr>
+<tr>
+<td>内核复位</td>
+<td>AIRCR.VECTRESET</td>
+<td>仅复位 CPU（外设保持）</td>
+</tr>
+<tr>
+<td>系统复位</td>
+<td>AIRCR.SYSRESETREQ</td>
+<td>复位 CPU+外设</td>
+</tr>
+<tr>
+<td>连接时不复位</td>
+<td>—</td>
+<td>附加到运行中的系统</td>
+</tr>
+</tbody></table>
+<h3 id="半主机模式">半主机模式</h3><p>半主机（Semihosting）机制允许目标代码通过调试器使用主机的 I/O 功能：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>目标</mtext><mover><mo stretchy="true" minsize="3.0em">→</mo><mpadded width="+0.6em" lspace="0.3em"><mtext>BKPT #0xAB</mtext></mpadded></mover><mtext>调试器拦截</mtext><mover><mo stretchy="true" minsize="3.0em">→</mo><mpadded width="+0.6em" lspace="0.3em"><mtext>执行 I/O</mtext></mpadded></mover><mtext>返回结果</mtext></mrow><annotation encoding="application/x-tex">\text{目标} \xrightarrow{\text{BKPT \#0xAB}} \text{调试器拦截} \xrightarrow{\text{执行 I/O}} \text{返回结果}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1191em;vertical-align:-0.011em;"></span><span class="mord text"><span class="mord cjk_fallback">目标</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel x-arrow"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1081em;"><span style="top:-3.322em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight x-arrow-pad"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">BKPT #0xAB</span></span></span></span></span><span class="svg-align" style="top:-2.689em;"><span class="pstrut" style="height:2.7em;"></span><span class="hide-tail" style="height:0.522em;min-width:1.469em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="0.522em" viewBox="0 0 400000 522" preserveAspectRatio="xMaxYMin slice"><path d="M0 241v40h399891c-47.3 35.3-84 78-110 128
+-16.7 32-27.7 63.7-33 95 0 1.3-.2 2.7-.5 4-.3 1.3-.5 2.3-.5 3 0 7.3 6.7 11 20
+ 11 8 0 13.2-.8 15.5-2.5 2.3-1.7 4.2-5.5 5.5-11.5 2-13.3 5.7-27 11-41 14.7-44.7
+ 39-84.5 73-119.5s73.7-60.2 119-75.5c6-2 9-5.7 9-11s-3-9-9-11c-45.3-15.3-85
+-40.5-119-75.5s-58.3-74.8-73-119.5c-4.7-14-8.3-27.3-11-40-1.3-6.7-3.2-10.8-5.5
+-12.5-2.3-1.7-7.5-2.5-15.5-2.5-14 0-21 3.7-21 11 0 2 2 10.3 6 25 20.7 83.3 67
+ 151.7 139 205zm0 0v40h399900v-40z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.011em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.158em;vertical-align:-0.011em;"></span><span class="mord text"><span class="mord cjk_fallback">调试器拦截</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel x-arrow"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.147em;"><span style="top:-3.322em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight x-arrow-pad"><span class="mord mtight"><span class="mord text mtight"><span class="mord cjk_fallback mtight">执行</span><span class="mord mtight"> I/O</span></span></span></span></span><span class="svg-align" style="top:-2.689em;"><span class="pstrut" style="height:2.7em;"></span><span class="hide-tail" style="height:0.522em;min-width:1.469em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="0.522em" viewBox="0 0 400000 522" preserveAspectRatio="xMaxYMin slice"><path d="M0 241v40h399891c-47.3 35.3-84 78-110 128
+-16.7 32-27.7 63.7-33 95 0 1.3-.2 2.7-.5 4-.3 1.3-.5 2.3-.5 3 0 7.3 6.7 11 20
+ 11 8 0 13.2-.8 15.5-2.5 2.3-1.7 4.2-5.5 5.5-11.5 2-13.3 5.7-27 11-41 14.7-44.7
+ 39-84.5 73-119.5s73.7-60.2 119-75.5c6-2 9-5.7 9-11s-3-9-9-11c-45.3-15.3-85
+-40.5-119-75.5s-58.3-74.8-73-119.5c-4.7-14-8.3-27.3-11-40-1.3-6.7-3.2-10.8-5.5
+-12.5-2.3-1.7-7.5-2.5-15.5-2.5-14 0-21 3.7-21 11 0 2 2 10.3 6 25 20.7 83.3 67
+ 151.7 139 205zm0 0v40h399900v-40z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.011em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">返回结果</span></span></span></span></span></span></div><p>半主机适合开发阶段的调试输出，但会在断点处暂停 CPU 数毫秒，不适合实时系统和无调试器的生产环境。</p>
+<h2 id="调试器选型">调试器选型</h2><table>
+<thead>
+<tr>
+<th>调试器</th>
+<th>厂商</th>
+<th>接口</th>
+<th>SWO</th>
+<th>ETM</th>
+<th>价格范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ST-Link/V3</td>
+<td>ST</td>
+<td>SWD/JTAG</td>
+<td>是</td>
+<td>否</td>
+<td>低</td>
+</tr>
+<tr>
+<td>J-Link BASE</td>
+<td>SEGGER</td>
+<td>SWD/JTAG</td>
+<td>是</td>
+<td>否</td>
+<td>中</td>
+</tr>
+<tr>
+<td>J-Link PLUS</td>
+<td>SEGGER</td>
+<td>SWD/JTAG</td>
+<td>是</td>
+<td>否</td>
+<td>中高</td>
+</tr>
+<tr>
+<td>J-Trace PRO</td>
+<td>SEGGER</td>
+<td>SWD/JTAG</td>
+<td>是</td>
+<td>是</td>
+<td>高</td>
+</tr>
+<tr>
+<td>ULINK2</td>
+<td>Keil</td>
+<td>SWD/JTAG</td>
+<td>是</td>
+<td>否</td>
+<td>中</td>
+</tr>
+<tr>
+<td>DAP-Link</td>
+<td>开源</td>
+<td>SWD</td>
+<td>有限</td>
+<td>否</td>
+<td>极低</td>
+</tr>
+</tbody></table>
+</article>
+    <nav class="pager"><a class="prev" href="../../../hardware-and-systems/embedded-bare-metal/debugging-optimization/index.html"><span class="label">Previous</span>调试与优化</a><a class="next" href="../../../hardware-and-systems/embedded-bare-metal/debugging-optimization/performance-power-optimization.html"><span class="label">Next</span>性能分析与功耗优化</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#调试接口概述" data-outline-link="调试接口概述">调试接口概述</a></li><li class="depth-2"><a href="#coresight-调试架构" data-outline-link="coresight-调试架构">CoreSight 调试架构</a></li><li class="depth-3"><a href="#组件层次" data-outline-link="组件层次">组件层次</a></li><li class="depth-3"><a href="#dap-访问流程" data-outline-link="dap-访问流程">DAP 访问流程</a></li><li class="depth-2"><a href="#硬件断点" data-outline-link="硬件断点">硬件断点</a></li><li class="depth-3"><a href="#fpb-单元" data-outline-link="fpb-单元">FPB 单元</a></li><li class="depth-3"><a href="#软件断点" data-outline-link="软件断点">软件断点</a></li><li class="depth-2"><a href="#数据观察点" data-outline-link="数据观察点">数据观察点</a></li><li class="depth-3"><a href="#dwt-功能" data-outline-link="dwt-功能">DWT 功能</a></li><li class="depth-3"><a href="#数据观察点配置" data-outline-link="数据观察点配置">数据观察点配置</a></li><li class="depth-3"><a href="#cyccnt-周期计数器" data-outline-link="cyccnt-周期计数器">CYCCNT 周期计数器</a></li><li class="depth-2"><a href="#itm-跟踪输出" data-outline-link="itm-跟踪输出">ITM 跟踪输出</a></li><li class="depth-3"><a href="#非侵入式-printf" data-outline-link="非侵入式-printf">非侵入式 printf</a></li><li class="depth-3"><a href="#刺激端口" data-outline-link="刺激端口">刺激端口</a></li><li class="depth-2"><a href="#实时跟踪" data-outline-link="实时跟踪">实时跟踪</a></li><li class="depth-3"><a href="#swo-模式" data-outline-link="swo-模式">SWO 模式</a></li><li class="depth-3"><a href="#etm-指令跟踪" data-outline-link="etm-指令跟踪">ETM 指令跟踪</a></li><li class="depth-2"><a href="#调试会话管理" data-outline-link="调试会话管理">调试会话管理</a></li><li class="depth-3"><a href="#连接与复位类型" data-outline-link="连接与复位类型">连接与复位类型</a></li><li class="depth-3"><a href="#半主机模式" data-outline-link="半主机模式">半主机模式</a></li><li class="depth-2"><a href="#调试器选型" data-outline-link="调试器选型">调试器选型</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

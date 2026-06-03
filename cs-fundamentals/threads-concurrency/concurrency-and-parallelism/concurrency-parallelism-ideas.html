@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>并发与并行的核心思想 · 计算机科学基础</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:计算机科学基础" data-pagefind-meta="slug:cs-fundamentals">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">计算机科学基础</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item active" href="../../../cs-fundamentals/index.html" aria-current="page" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../cs-fundamentals/index.html">计算机科学基础</a><a class="back-to-hubs" href="../../../cs-fundamentals/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../cs-fundamentals/threads-concurrency/index.html">线程与并发 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="cs-fundamentals"><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/processes"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/processes/index.html">进程 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/processes/process-definition-and-concepts.html">进程的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/processes/process-core-ideas.html">进程的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/processes/process-implementation.html">进程的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/threads"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/threads/index.html">线程 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/threads/thread-definition-and-concepts.html">线程的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/threads/thread-core-ideas.html">线程的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/threads/thread-implementation.html">线程的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/coroutines"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/coroutines/index.html">协程 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/coroutines/coroutine-definition-and-concepts.html">协程的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/coroutines/coroutine-core-ideas.html">协程的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/coroutines/coroutine-implementation.html">协程的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/concurrency-and-parallelism" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/index.html">并发与并行 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/concurrency-parallelism-concepts.html">并发与并行的核心概念</a></li><li class="leaf"><a class="leaf-title active" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/concurrency-parallelism-ideas.html">并发与并行的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/concurrency-parallelism-implementation.html">并发与并行的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/atomic-operations"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/atomic-operations/index.html">原子操作 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/atomic-operations/atomic-definition-and-concepts.html">原子操作的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/atomic-operations/atomic-core-ideas.html">原子操作的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/atomic-operations/atomic-implementation.html">原子操作的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/locks"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/locks/index.html">锁 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/locks/lock-definition-and-concepts.html">锁的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/locks/lock-core-ideas.html">锁的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/locks/lock-implementation.html">锁的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/actor-model"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/actor-model/index.html">Actor 模型 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/actor-model/actor-model-concepts.html">Actor 模型的核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/actor-model/actor-model-ideas.html">Actor 模型的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/actor-model/actor-model-implementation.html">Actor 模型的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/supplementary"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/index.html">补充主题 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/race-conditions.html">竞态条件</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/deadlock-livelock-starvation.html">死锁、活锁与饥饿</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/semaphores-and-conditions.html">信号量与条件变量</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/thread-pools.html">线程池与任务调度</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/message-passing.html">消息传递</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part III · 系统 (Systems)</span><span>线程与并发 简介</span><span>并发与并行 简介</span><span>并发与并行的核心思想</span></nav>
+    <article class="content prose"><h1 id="并发与并行的核心思想">并发与并行的核心思想</h1><h2 id="并发的核心思想-提升资源利用率">并发的核心思想：提升资源利用率</h2><p>并发的核心目标不是让程序跑得更快，而是<strong>提升资源利用率</strong>。在实际系统中，CPU 和 I/O 设备的工作节奏差异巨大：CPU 运算以纳秒计，而磁盘读写以毫秒计，网络请求更可能以百毫秒计。如果程序只能串行执行，那么 CPU 在等待 I/O 完成的漫长时间里将完全空闲。</p>
+<p>并发通过<strong>交替执行</strong>不同任务，让 CPU 在一个任务等待 I/O 时切换到另一个任务继续工作，从而&quot;填满&quot;CPU 的空闲时间。</p>
+<h3 id="cpu-与-i-o-的速度鸿沟">CPU 与 I/O 的速度鸿沟</h3><table>
+<thead>
+<tr>
+<th>操作类型</th>
+<th>典型耗时</th>
+<th>相对 CPU 周期</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CPU 寄存器访问</td>
+<td>~0.3 ns</td>
+<td>1 个周期</td>
+</tr>
+<tr>
+<td>L1 缓存访问</td>
+<td>~1 ns</td>
+<td>3 个周期</td>
+</tr>
+<tr>
+<td>L2 缓存访问</td>
+<td>~4 ns</td>
+<td>12 个周期</td>
+</tr>
+<tr>
+<td>主内存访问</td>
+<td>~100 ns</td>
+<td>300 个周期</td>
+</tr>
+<tr>
+<td>SSD 随机读取</td>
+<td>~100 μs</td>
+<td>300,000 个周期</td>
+</tr>
+<tr>
+<td>磁盘随机读取</td>
+<td>~10 ms</td>
+<td>30,000,000 个周期</td>
+</tr>
+<tr>
+<td>网络往返（同机房）</td>
+<td>~0.5 ms</td>
+<td>1,500,000 个周期</td>
+</tr>
+<tr>
+<td>网络往返（跨地域）</td>
+<td>~50 ms</td>
+<td>150,000,000 个周期</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>CPU 执行一次加法运算约需 0.3 纳秒，而一次磁盘读取约需 10 毫秒——差距达到 <strong>3000 万倍</strong>。如果不使用并发，CPU 在 I/O 期间的闲置是巨大的浪费。</p>
+</blockquote>
+<h3 id="cpu-与-i-o-交替-并发的本质">CPU 与 I/O 交替：并发的本质</h3><pre class="mermaid" data-diagram-type="sequenceDiagram" data-source="sequenceDiagram&#10;    participant CPU as CPU&#10;    participant T1 as Task 1&#10;    participant T2 as Task 2&#10;    participant T3 as Task 3&#10;    participant IO as I/O Device&#10;&#10;    T1-&gt;&gt;CPU: Compute (0.1ms)&#10;    T1-&gt;&gt;IO: Initiate disk read&#10;    Note over T1: Waiting for I/O...&#10;    T2-&gt;&gt;CPU: Compute (0.2ms)&#10;    T2-&gt;&gt;IO: Initiate network request&#10;    Note over T2: Waiting for I/O...&#10;    T3-&gt;&gt;CPU: Compute (0.1ms)&#10;    IO--&gt;&gt;T1: Disk read complete&#10;    T1-&gt;&gt;CPU: Continue computing (0.1ms)&#10;    IO--&gt;&gt;T2: Network response arrived&#10;    T2-&gt;&gt;CPU: Continue computing (0.1ms)"></pre><pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart LR&#10;    subgraph Serial Execution&#10;        direction TB&#10;        S1[&quot;Task 1: CPU 0.1ms&quot;] --&gt; S2[&quot;Task 1: I/O 5ms&lt;br/&gt;(CPU idle)&quot;]&#10;        S2 --&gt; S3[&quot;Task 1: CPU 0.1ms&quot;]&#10;        S3 --&gt; S4[&quot;Task 2: CPU 0.1ms&quot;]&#10;        S4 --&gt; S5[&quot;Task 2: I/O 5ms&lt;br/&gt;(CPU idle)&quot;]&#10;        S5 --&gt; S6[&quot;Task 2: CPU 0.1ms&quot;]&#10;        S6 --&gt; ST[&quot;Total time ≈ 10.4ms&lt;br/&gt;CPU utilization ≈ 3.8%&quot;]&#10;    end&#10;    subgraph Concurrent Execution&#10;        direction TB&#10;        C1[&quot;Task 1: CPU 0.1ms&quot;] --&gt; C2[&quot;Task 1: Initiate I/O&quot;]&#10;        C2 --&gt; C3[&quot;Task 2: CPU 0.1ms&lt;br/&gt;(utilizing wait time)&quot;]&#10;        C3 --&gt; C4[&quot;Task 2: Initiate I/O&quot;]&#10;        C4 --&gt; C5[&quot;Task 1: I/O complete&lt;br/&gt;CPU 0.1ms&quot;]&#10;        C5 --&gt; C6[&quot;Task 2: I/O complete&lt;br/&gt;CPU 0.1ms&quot;]&#10;        C6 --&gt; CT[&quot;Total time ≈ 5.4ms&lt;br/&gt;CPU utilization ≈ 7.4%&quot;]&#10;    end"></pre><h3 id="并发的适用场景">并发的适用场景</h3><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>特征</th>
+<th>并发效果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Web 服务器</td>
+<td>大量连接，每个连接有大量 I/O 等待</td>
+<td>极大提升吞吐量</td>
+</tr>
+<tr>
+<td>文件批处理</td>
+<td>读取多个文件，处理后写回</td>
+<td>读写与计算重叠</td>
+</tr>
+<tr>
+<td>数据库应用</td>
+<td>频繁查询，等待数据库响应</td>
+<td>多个查询并发执行</td>
+</tr>
+<tr>
+<td>GUI 应用</td>
+<td>UI 渲染与后台计算交替</td>
+<td>UI 保持响应不卡顿</td>
+</tr>
+<tr>
+<td>爬虫程序</td>
+<td>大量网络请求</td>
+<td>多个请求并行发出</td>
+</tr>
+</tbody></table>
+<h2 id="并行的核心思想-提升执行速度">并行的核心思想：提升执行速度</h2><p>并行的核心目标是<strong>提升执行速度</strong>。如果一个任务可以被拆分为多个独立的子任务，那么把这些子任务分配到多个 CPU 核心上同时执行，总耗时将大幅缩短。</p>
+<h3 id="任务拆分与并行加速">任务拆分与并行加速</h3><div class="code-block-wrapper" data-lang="pseudocode" data-code="// 串行：对 1000 万个元素求和
+函数 serialSum(arr):
+    sum = 0
+    for i = 0 to 9999999:
+        sum += arr[i]
+    return sum
+// 耗时: T
+
+// 并行：将数组分为 4 段，4 个核心同时求和
+函数 parallelSum(arr):
+    part1 = 核心1计算: sum(arr[0..2499999])        // T/4
+    part2 = 核心2计算: sum(arr[2500000..4999999])   // T/4
+    part3 = 核心3计算: sum(arr[5000000..7499999])   // T/4
+    part4 = 核心4计算: sum(arr[7500000..9999999])   // T/4
+    return part1 + part2 + part3 + part4
+// 理论耗时: T/4（4倍加速）"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>// 串行：对 1000 万个元素求和</span></span>
+<span class="line"><span>函数 serialSum(arr):</span></span>
+<span class="line"><span>    sum = 0</span></span>
+<span class="line"><span>    for i = 0 to 9999999:</span></span>
+<span class="line"><span>        sum += arr[i]</span></span>
+<span class="line"><span>    return sum</span></span>
+<span class="line"><span>// 耗时: T</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>// 并行：将数组分为 4 段，4 个核心同时求和</span></span>
+<span class="line"><span>函数 parallelSum(arr):</span></span>
+<span class="line"><span>    part1 = 核心1计算: sum(arr[0..2499999])        // T/4</span></span>
+<span class="line"><span>    part2 = 核心2计算: sum(arr[2500000..4999999])   // T/4</span></span>
+<span class="line"><span>    part3 = 核心3计算: sum(arr[5000000..7499999])   // T/4</span></span>
+<span class="line"><span>    part4 = 核心4计算: sum(arr[7500000..9999999])   // T/4</span></span>
+<span class="line"><span>    return part1 + part2 + part3 + part4</span></span>
+<span class="line"><span>// 理论耗时: T/4（4倍加速）</span></span></code></pre></div><pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TB&#10;    A[&quot;Original Task&lt;br/&gt;Process 10 million elements&quot;] --&gt; B[&quot;Split into 4 subtasks&quot;]&#10;    B --&gt; C1[&quot;Core 1&lt;br/&gt;Process 2.5 million&quot;]&#10;    B --&gt; C2[&quot;Core 2&lt;br/&gt;Process 2.5 million&quot;]&#10;    B --&gt; C3[&quot;Core 3&lt;br/&gt;Process 2.5 million&quot;]&#10;    B --&gt; C4[&quot;Core 4&lt;br/&gt;Process 2.5 million&quot;]&#10;    C1 --&gt; D[&quot;Merge results&quot;]&#10;    C2 --&gt; D&#10;    C3 --&gt; D&#10;    C4 --&gt; D&#10;    D --&gt; E[&quot;Final result&quot;]"></pre><h3 id="阿姆达尔定律-amdahl-s-law">阿姆达尔定律（Amdahl&#39;s Law）</h3><p>并行加速并非无限的。程序中总有一些<strong>无法并行化的串行部分</strong>（如初始化、结果合并），这限制了并行的最大加速比。</p>
+<p>阿姆达尔定律给出了理论上的最大加速比：</p>
+<div class="code-block-wrapper" data-lang="text" data-code="加速比 = 1 / (S + (1-S)/N)
+
+S = 程序中串行部分的比例
+N = 并行处理器（核心）数量"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>加速比 = 1 / (S + (1-S)/N)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>S = 程序中串行部分的比例</span></span>
+<span class="line"><span>N = 并行处理器（核心）数量</span></span></code></pre></div><table>
+<thead>
+<tr>
+<th>串行比例 S</th>
+<th>2 核加速比</th>
+<th>4 核加速比</th>
+<th>8 核加速比</th>
+<th>无限核加速比</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0%</td>
+<td>2.00x</td>
+<td>4.00x</td>
+<td>8.00x</td>
+<td>∞</td>
+</tr>
+<tr>
+<td>5%</td>
+<td>1.90x</td>
+<td>3.48x</td>
+<td>5.93x</td>
+<td>20.00x</td>
+</tr>
+<tr>
+<td>10%</td>
+<td>1.82x</td>
+<td>3.08x</td>
+<td>4.71x</td>
+<td>10.00x</td>
+</tr>
+<tr>
+<td>25%</td>
+<td>1.60x</td>
+<td>2.29x</td>
+<td>2.91x</td>
+<td>4.00x</td>
+</tr>
+<tr>
+<td>50%</td>
+<td>1.33x</td>
+<td>1.60x</td>
+<td>1.78x</td>
+<td>2.00x</td>
+</tr>
+</tbody></table>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart LR&#10;    subgraph Program with 10% Serial Portion&#10;        direction TB&#10;        SA[&quot;Serial portion 10%&lt;br/&gt;(non-parallelizable)&quot;] --&gt; PA[&quot;Parallelizable portion 90%&quot;]&#10;        PA --&gt; RA[&quot;4-core speedup: 3.08x&quot;]&#10;    end&#10;    subgraph Program with 50% Serial Portion&#10;        direction TB&#10;        SB[&quot;Serial portion 50%&lt;br/&gt;(non-parallelizable)&quot;] --&gt; PB[&quot;Parallelizable portion 50%&quot;]&#10;        PB --&gt; RB[&quot;4-core speedup: 1.60x&quot;]&#10;    end"></pre><blockquote>
+<p>关键启示：即使有无限多的核心，如果程序有 50% 的串行部分，最大加速比也只有 2 倍。要获得好的并行效果，<strong>减少串行比例</strong>比增加核心数更重要。</p>
+</blockquote>
+<h3 id="并行的适用场景">并行的适用场景</h3><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>特征</th>
+<th>并行效果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>科学计算</td>
+<td>大规模矩阵运算、模拟仿真</td>
+<td>线性加速（接近核心数倍）</td>
+</tr>
+<tr>
+<td>图像/视频处理</td>
+<td>每个像素/帧可独立处理</td>
+<td>高度可并行</td>
+</tr>
+<tr>
+<td>大数据处理</td>
+<td>MapReduce、数据分片</td>
+<td>分布式并行处理</td>
+</tr>
+<tr>
+<td>机器学习训练</td>
+<td>梯度计算、数据并行</td>
+<td>多 GPU 加速</td>
+</tr>
+<tr>
+<td>编译过程</td>
+<td>多个源文件独立编译</td>
+<td>多核同时编译</td>
+</tr>
+</tbody></table>
+<h2 id="何时选择并发-何时选择并行">何时选择并发，何时选择并行</h2><pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TD&#10;    A[&quot;Analyze your task characteristics&quot;] --&gt; B{&quot;Where is the main bottleneck?&quot;}&#10;    B --&gt;|&quot;I/O waiting&lt;br/&gt;(network, disk, database)&quot;| C[&quot;Choose concurrency&quot;]&#10;    B --&gt;|&quot;CPU computation&lt;br/&gt;(math operations, data processing)&quot;| D{&quot;Can the task be split into&lt;br/&gt;independent subtasks?&quot;}&#10;    B --&gt;|&quot;Both&quot;| E[&quot;Concurrency + Parallelism&quot;]&#10;    D --&gt;|&quot;Yes&quot;| F[&quot;Choose parallelism&quot;]&#10;    D --&gt;|&quot;No (strong sequential dependency)&quot;| G[&quot;Optimize the algorithm itself&quot;]&#10;&#10;    C --&gt; C1[&quot;Coroutines / Async I/O&lt;br/&gt;Event-driven&quot;]&#10;    F --&gt; F1[&quot;Multi-thread / Multi-process&lt;br/&gt;Distributed computing&quot;]&#10;    E --&gt; E1[&quot;Multi-thread + Async I/O&lt;br/&gt;Thread pool + Coroutines&quot;]"></pre><table>
+<thead>
+<tr>
+<th>决策维度</th>
+<th>选择并发</th>
+<th>选择并行</th>
+<th>两者结合</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>瓶颈类型</td>
+<td>I/O 密集型</td>
+<td>CPU 密集型</td>
+<td>混合型</td>
+</tr>
+<tr>
+<td>核心数</td>
+<td>单核即可</td>
+<td>需要多核</td>
+<td>需要多核</td>
+</tr>
+<tr>
+<td>复杂度</td>
+<td>中等（异步逻辑）</td>
+<td>中等（任务拆分）</td>
+<td>高（两者兼顾）</td>
+</tr>
+<tr>
+<td>典型方案</td>
+<td>async/await、事件循环</td>
+<td>多线程、多进程</td>
+<td>线程池 + 异步 I/O</td>
+</tr>
+</tbody></table>
+<h2 id="并发与并行的协同">并发与并行的协同</h2><p>在实际系统中，并发与并行通常<strong>协同工作</strong>。例如一个高性能 Web 服务器：</p>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TB&#10;    subgraph Parallelism Layer&#10;        direction LR&#10;        W1[&quot;Worker Thread 1&lt;br/&gt;(Core 1)&quot;]&#10;        W2[&quot;Worker Thread 2&lt;br/&gt;(Core 2)&quot;]&#10;        W3[&quot;Worker Thread 3&lt;br/&gt;(Core 3)&quot;]&#10;        W4[&quot;Worker Thread 4&lt;br/&gt;(Core 4)&quot;]&#10;    end&#10;    subgraph Concurrency Layer - Thread 1&#10;        direction TB&#10;        W1 --&gt; C1[&quot;Coroutine 1: Handle Request A&quot;]&#10;        W1 --&gt; C2[&quot;Coroutine 2: Handle Request B&quot;]&#10;        W1 --&gt; C3[&quot;Coroutine 3: Handle Request C&quot;]&#10;    end&#10;    subgraph Concurrency Layer - Thread 2&#10;        direction TB&#10;        W2 --&gt; C4[&quot;Coroutine 4: Handle Request D&quot;]&#10;        W2 --&gt; C5[&quot;Coroutine 5: Handle Request E&quot;]&#10;        W2 --&gt; C6[&quot;Coroutine 6: Handle Request F&quot;]&#10;    end"></pre><p>在这个模型中：</p>
+<ul>
+<li><strong>并行层</strong>：多个工作线程运行在不同 CPU 核心上，实现真正的并行。</li>
+<li><strong>并发层</strong>：每个工作线程内部运行多个协程，通过协作式调度实现并发。</li>
+<li><strong>效果</strong>：既利用了多核加速，又在每个核心内高效处理大量 I/O 密集型请求。</li>
+</ul>
+<div class="code-block-wrapper" data-lang="pseudocode" data-code="// 高性能服务器：并行 + 并发
+主函数():
+    workers = 创建线程池(核心数)       // 并行：多个工作线程
+
+    for each worker in workers:
+        worker.run():
+            event_loop = 创建事件循环()  // 并发：每个线程一个事件循环
+            while true:
+                conn = 接受连接()
+                event_loop.spawn(处理请求(conn))  // 每个连接一个协程"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>// 高性能服务器：并行 + 并发</span></span>
+<span class="line"><span>主函数():</span></span>
+<span class="line"><span>    workers = 创建线程池(核心数)       // 并行：多个工作线程</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    for each worker in workers:</span></span>
+<span class="line"><span>        worker.run():</span></span>
+<span class="line"><span>            event_loop = 创建事件循环()  // 并发：每个线程一个事件循环</span></span>
+<span class="line"><span>            while true:</span></span>
+<span class="line"><span>                conn = 接受连接()</span></span>
+<span class="line"><span>                event_loop.spawn(处理请求(conn))  // 每个连接一个协程</span></span></code></pre></div><h2 id="小结">小结</h2><ul>
+<li>并发的核心思想是<strong>提升资源利用率</strong>：通过交替执行多个任务，让 CPU 在 I/O 等待期间不闲置，充分利用 CPU 与 I/O 之间的速度差异。</li>
+<li>并行的核心思想是<strong>提升执行速度</strong>：将可独立执行的子任务分配到多个核心同时运行，缩短总执行时间。</li>
+<li><strong>阿姆达尔定律</strong>告诉我们：并行加速受限于程序的串行部分比例，减少串行比例比增加核心数更重要。</li>
+<li>I/O 密集型任务优先选择<strong>并发</strong>（协程、异步 I/O），CPU 密集型任务优先选择<strong>并行</strong>（多线程、多进程）。</li>
+<li>实际高性能系统通常将并发与并行<strong>协同使用</strong>：多核并行 + 核内协程并发，既利用多核加速又高效处理 I/O。</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/concurrency-parallelism-concepts.html"><span class="label">Previous</span>并发与并行的核心概念</a><a class="next" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/concurrency-parallelism-implementation.html"><span class="label">Next</span>并发与并行的实现机制</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#并发的核心思想-提升资源利用率" data-outline-link="并发的核心思想-提升资源利用率">并发的核心思想：提升资源利用率</a></li><li class="depth-3"><a href="#cpu-与-i-o-的速度鸿沟" data-outline-link="cpu-与-i-o-的速度鸿沟">CPU 与 I/O 的速度鸿沟</a></li><li class="depth-3"><a href="#cpu-与-i-o-交替-并发的本质" data-outline-link="cpu-与-i-o-交替-并发的本质">CPU 与 I/O 交替：并发的本质</a></li><li class="depth-3"><a href="#并发的适用场景" data-outline-link="并发的适用场景">并发的适用场景</a></li><li class="depth-2"><a href="#并行的核心思想-提升执行速度" data-outline-link="并行的核心思想-提升执行速度">并行的核心思想：提升执行速度</a></li><li class="depth-3"><a href="#任务拆分与并行加速" data-outline-link="任务拆分与并行加速">任务拆分与并行加速</a></li><li class="depth-3"><a href="#阿姆达尔定律-amdahl-s-law" data-outline-link="阿姆达尔定律-amdahl-s-law">阿姆达尔定律（Amdahl's Law）</a></li><li class="depth-3"><a href="#并行的适用场景" data-outline-link="并行的适用场景">并行的适用场景</a></li><li class="depth-2"><a href="#何时选择并发-何时选择并行" data-outline-link="何时选择并发-何时选择并行">何时选择并发，何时选择并行</a></li><li class="depth-2"><a href="#并发与并行的协同" data-outline-link="并发与并行的协同">并发与并行的协同</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

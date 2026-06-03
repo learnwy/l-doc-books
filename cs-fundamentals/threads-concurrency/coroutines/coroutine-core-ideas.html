@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>协程的核心思想 · 计算机科学基础</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:计算机科学基础" data-pagefind-meta="slug:cs-fundamentals">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">计算机科学基础</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item active" href="../../../cs-fundamentals/index.html" aria-current="page" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../cs-fundamentals/index.html">计算机科学基础</a><a class="back-to-hubs" href="../../../cs-fundamentals/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../cs-fundamentals/threads-concurrency/index.html">线程与并发 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="cs-fundamentals"><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/processes"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/processes/index.html">进程 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/processes/process-definition-and-concepts.html">进程的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/processes/process-core-ideas.html">进程的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/processes/process-implementation.html">进程的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/threads"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/threads/index.html">线程 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/threads/thread-definition-and-concepts.html">线程的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/threads/thread-core-ideas.html">线程的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/threads/thread-implementation.html">线程的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/coroutines" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/coroutines/index.html">协程 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/coroutines/coroutine-definition-and-concepts.html">协程的定义与核心概念</a></li><li class="leaf"><a class="leaf-title active" href="../../../cs-fundamentals/threads-concurrency/coroutines/coroutine-core-ideas.html">协程的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/coroutines/coroutine-implementation.html">协程的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/concurrency-and-parallelism"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/index.html">并发与并行 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/concurrency-parallelism-concepts.html">并发与并行的核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/concurrency-parallelism-ideas.html">并发与并行的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/concurrency-parallelism-implementation.html">并发与并行的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/atomic-operations"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/atomic-operations/index.html">原子操作 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/atomic-operations/atomic-definition-and-concepts.html">原子操作的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/atomic-operations/atomic-core-ideas.html">原子操作的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/atomic-operations/atomic-implementation.html">原子操作的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/locks"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/locks/index.html">锁 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/locks/lock-definition-and-concepts.html">锁的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/locks/lock-core-ideas.html">锁的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/locks/lock-implementation.html">锁的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/actor-model"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/actor-model/index.html">Actor 模型 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/actor-model/actor-model-concepts.html">Actor 模型的核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/actor-model/actor-model-ideas.html">Actor 模型的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/actor-model/actor-model-implementation.html">Actor 模型的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/supplementary"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/index.html">补充主题 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/race-conditions.html">竞态条件</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/deadlock-livelock-starvation.html">死锁、活锁与饥饿</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/semaphores-and-conditions.html">信号量与条件变量</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/thread-pools.html">线程池与任务调度</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/message-passing.html">消息传递</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part III · 系统 (Systems)</span><span>线程与并发 简介</span><span>协程 简介</span><span>协程的核心思想</span></nav>
+    <article class="content prose"><h1 id="协程的核心思想">协程的核心思想</h1><h2 id="用户控制调度-绕过内核上下文切换">用户控制调度：绕过内核上下文切换</h2><p>协程最核心的思想是将<strong>调度权从操作系统内核转移到用户程序</strong>。传统线程模型中，操作系统内核负责在多个线程之间分配 CPU 时间片，每次切换都需要进入内核态、保存/恢复完整的 CPU 上下文（寄存器、栈指针、程序计数器等），开销显著。</p>
+<p>协程则完全在用户空间完成切换，避免了昂贵的内核态陷入：</p>
+<pre class="mermaid" data-diagram-type="sequenceDiagram" data-source="sequenceDiagram&#10;    participant ThreadA as Thread A&#10;    participant Kernel as OS Kernel&#10;    participant ThreadB as Thread B&#10;&#10;    ThreadA-&gt;&gt;Kernel: Time slice expired / System call&#10;    Note over Kernel: Save Thread A full context&lt;br/&gt;(registers, stack, page tables, etc.)&#10;    Kernel-&gt;&gt;ThreadB: Restore Thread B context&#10;    Note over Kernel: Context switch cost: ~1-10 microseconds"></pre><pre class="mermaid" data-diagram-type="sequenceDiagram" data-source="sequenceDiagram&#10;    participant CoroA as Coroutine A&#10;    participant Scheduler as User-space Scheduler&#10;    participant CoroB as Coroutine B&#10;&#10;    CoroA-&gt;&gt;Scheduler: yield / await&#10;    Note over Scheduler: Save Coroutine A minimal state&lt;br/&gt;(program counter, local variables)&#10;    Scheduler-&gt;&gt;CoroB: Restore Coroutine B state&#10;    Note over Scheduler: Context switch cost: ~10-100 nanoseconds"></pre><p>两者的开销对比非常明显：</p>
+<table>
+<thead>
+<tr>
+<th>对比维度</th>
+<th>线程上下文切换</th>
+<th>协程上下文切换</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>切换层级</td>
+<td>用户态 → 内核态 → 用户态</td>
+<td>仅用户态</td>
+</tr>
+<tr>
+<td>保存内容</td>
+<td>全部 CPU 寄存器、栈、页表、FPU 状态</td>
+<td>程序计数器 + 少量局部变量</td>
+</tr>
+<tr>
+<td>典型耗时</td>
+<td>1~10 微秒</td>
+<td>10~100 纳秒</td>
+</tr>
+<tr>
+<td>性能差距</td>
+<td>—</td>
+<td>快 <strong>10~100 倍</strong></td>
+</tr>
+<tr>
+<td>是否触发系统调用</td>
+<td>是</td>
+<td>否</td>
+</tr>
+</tbody></table>
+<h2 id="协作式多任务-主动让出控制权">协作式多任务：主动让出控制权</h2><p>协程的第二个核心思想是<strong>协作式多任务（Cooperative Multitasking）</strong>。每个协程在执行过程中，必须在适当的时机主动调用 <code>yield</code> 或 <code>await</code> 来让出控制权，调度器才能切换到其他协程。</p>
+<p>这与操作系统的抢占式调度形成了鲜明对比：</p>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TB&#10;    subgraph Preemptive Scheduling&#10;        direction TB&#10;        P1[&quot;Thread A Executing&quot;] --&gt;|&quot;Timer Interrupt&lt;br/&gt;(Forced Switch)&quot;| P2[&quot;OS Saves A's Context&quot;]&#10;        P2 --&gt; P3[&quot;OS Restores B's Context&quot;]&#10;        P3 --&gt; P4[&quot;Thread B Executing&quot;]&#10;        P4 --&gt;|&quot;Timer Interrupt&lt;br/&gt;(Forced Switch)&quot;| P5[&quot;OS Saves B's Context&quot;]&#10;    end&#10;&#10;    subgraph Cooperative Scheduling&#10;        direction TB&#10;        C1[&quot;Coroutine A Executing&quot;] --&gt;|&quot;yield&lt;br/&gt;(Voluntary Yield)&quot;| C2[&quot;Scheduler Saves A's State&quot;]&#10;        C2 --&gt; C3[&quot;Scheduler Restores B's State&quot;]&#10;        C3 --&gt; C4[&quot;Coroutine B Executing&quot;]&#10;        C4 --&gt;|&quot;await I/O&lt;br/&gt;(Voluntary Yield)&quot;| C5[&quot;Scheduler Saves B's State&quot;]&#10;    end"></pre><h3 id="协作式调度的优势">协作式调度的优势</h3><p>主动让出机制带来了一系列重要优势：</p>
+<table>
+<thead>
+<tr>
+<th>优势</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>可预测性</strong></td>
+<td>程序员明确知道切换发生在哪里，逻辑更清晰</td>
+</tr>
+<tr>
+<td><strong>减少竞争</strong></td>
+<td>yield 点之间的代码不会被中断，天然减少数据竞争</td>
+</tr>
+<tr>
+<td><strong>无需加锁</strong></td>
+<td>在同一线程内的协程切换，共享数据访问通常不需要锁</td>
+</tr>
+<tr>
+<td><strong>调试友好</strong></td>
+<td>执行流程可控，比多线程更容易调试和推理</td>
+</tr>
+</tbody></table>
+<h3 id="协作式调度的风险">协作式调度的风险</h3><p>协作式调度也有其风险：如果某个协程不主动 yield，它将<strong>独占执行权</strong>，其他协程永远无法运行。</p>
+<div class="code-block-wrapper" data-lang="pseudocode" data-code="// ❌ 危险：协程不让出控制权
+协程 badCoroutine():
+    while true:
+        heavyComputation()     // 永远不 yield
+        // 其他协程全部饿死！
+
+// ✅ 正确：在适当位置让出
+协程 goodCoroutine():
+    while true:
+        doSomeWork()
+        yield                  // 定期让出，让其他协程有机会运行"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>// ❌ 危险：协程不让出控制权</span></span>
+<span class="line"><span>协程 badCoroutine():</span></span>
+<span class="line"><span>    while true:</span></span>
+<span class="line"><span>        heavyComputation()     // 永远不 yield</span></span>
+<span class="line"><span>        // 其他协程全部饿死！</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>// ✅ 正确：在适当位置让出</span></span>
+<span class="line"><span>协程 goodCoroutine():</span></span>
+<span class="line"><span>    while true:</span></span>
+<span class="line"><span>        doSomeWork()</span></span>
+<span class="line"><span>        yield                  // 定期让出，让其他协程有机会运行</span></span></code></pre></div><pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart LR&#10;    subgraph Normal Cooperation&#10;        direction TB&#10;        N1[&quot;Coroutine A: Work&quot;] --&gt; N2[&quot;Coroutine A: yield&quot;]&#10;        N2 --&gt; N3[&quot;Coroutine B: Work&quot;]&#10;        N3 --&gt; N4[&quot;Coroutine B: yield&quot;]&#10;        N4 --&gt; N5[&quot;Coroutine C: Work&quot;]&#10;        N5 --&gt; N6[&quot;Coroutine C: yield&quot;]&#10;        N6 --&gt; N1&#10;    end&#10;    subgraph Starvation Problem&#10;        direction TB&#10;        S1[&quot;Coroutine A: Infinite Loop&lt;br/&gt;Never yields&quot;] --&gt; S2[&quot;Coroutine B: Waiting...&quot;]&#10;        S2 --&gt; S3[&quot;Coroutine C: Waiting...&quot;]&#10;        S3 -.-&gt;|&quot;Can never execute&quot;| S2&#10;    end"></pre><h2 id="i-o-密集型场景的高吞吐">I/O 密集型场景的高吞吐</h2><p>协程最大的价值体现在 <strong>I/O 密集型任务</strong>中。在这类任务中，程序的大部分时间都在等待外部操作完成（网络请求、磁盘读写、数据库查询等），CPU 实际上处于空闲状态。</p>
+<h3 id="传统同步模型的浪费">传统同步模型的浪费</h3><div class="code-block-wrapper" data-lang="pseudocode" data-code="// 传统同步模型：线程在 I/O 期间被阻塞
+函数 handleRequest(request):
+    data = 读取数据库(request.query)     // 阻塞等待 ~5ms
+    template = 读取文件(&quot;template.html&quot;) // 阻塞等待 ~2ms
+    result = 渲染模板(template, data)    // CPU 计算 ~0.1ms
+    return result
+
+// 总耗时 ≈ 7.1ms，其中 CPU 实际工作仅 0.1ms
+// CPU 利用率 ≈ 1.4%"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>// 传统同步模型：线程在 I/O 期间被阻塞</span></span>
+<span class="line"><span>函数 handleRequest(request):</span></span>
+<span class="line"><span>    data = 读取数据库(request.query)     // 阻塞等待 ~5ms</span></span>
+<span class="line"><span>    template = 读取文件("template.html") // 阻塞等待 ~2ms</span></span>
+<span class="line"><span>    result = 渲染模板(template, data)    // CPU 计算 ~0.1ms</span></span>
+<span class="line"><span>    return result</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>// 总耗时 ≈ 7.1ms，其中 CPU 实际工作仅 0.1ms</span></span>
+<span class="line"><span>// CPU 利用率 ≈ 1.4%</span></span></code></pre></div><h3 id="协程的异步-i-o-模型">协程的异步 I/O 模型</h3><div class="code-block-wrapper" data-lang="pseudocode" data-code="// 协程模型：I/O 等待期间切换到其他协程
+协程 handleRequest(request):
+    data = await 读取数据库(request.query)     // 让出，切换到其他协程
+    template = await 读取文件(&quot;template.html&quot;) // 让出，切换到其他协程
+    result = 渲染模板(template, data)          // CPU 计算
+    return result
+
+// 等待 I/O 的同时，其他协程可以利用 CPU
+// CPU 利用率大幅提升"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>// 协程模型：I/O 等待期间切换到其他协程</span></span>
+<span class="line"><span>协程 handleRequest(request):</span></span>
+<span class="line"><span>    data = await 读取数据库(request.query)     // 让出，切换到其他协程</span></span>
+<span class="line"><span>    template = await 读取文件("template.html") // 让出，切换到其他协程</span></span>
+<span class="line"><span>    result = 渲染模板(template, data)          // CPU 计算</span></span>
+<span class="line"><span>    return result</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>// 等待 I/O 的同时，其他协程可以利用 CPU</span></span>
+<span class="line"><span>// CPU 利用率大幅提升</span></span></code></pre></div><pre class="mermaid" data-diagram-type="sequenceDiagram" data-source="sequenceDiagram&#10;    participant C1 as Coroutine 1&#10;    participant C2 as Coroutine 2&#10;    participant C3 as Coroutine 3&#10;    participant IO as I/O Subsystem&#10;&#10;    C1-&gt;&gt;IO: await Read Database&#10;    Note over C1: Suspended&#10;    C2-&gt;&gt;C2: Render Template (CPU Work)&#10;    C2-&gt;&gt;IO: await Read File&#10;    Note over C2: Suspended&#10;    C3-&gt;&gt;C3: Process Request (CPU Work)&#10;    IO--&gt;&gt;C1: Database Returns Result&#10;    Note over C1: Resumed&#10;    C1-&gt;&gt;C1: Continue Processing&#10;    IO--&gt;&gt;C2: File Read Complete&#10;    Note over C2: Resumed&#10;    C2-&gt;&gt;C2: Continue Processing"></pre><h3 id="吞吐量对比">吞吐量对比</h3><p>假设有 1000 个并发请求，每个请求的 I/O 等待时间为 5ms，CPU 处理时间为 0.1ms：</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>线程模型（1000 线程）</th>
+<th>协程模型（1000 协程）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>内存消耗</td>
+<td>~1 GB（每线程 ~1MB）</td>
+<td>~4 MB（每协程 ~4KB）</td>
+</tr>
+<tr>
+<td>上下文切换</td>
+<td>~1000 次内核切换</td>
+<td>~1000 次用户态切换</td>
+</tr>
+<tr>
+<td>切换总开销</td>
+<td>~5ms</td>
+<td>~0.05ms</td>
+</tr>
+<tr>
+<td>CPU 利用率</td>
+<td>低（大量时间在等待 I/O）</td>
+<td>高（I/O 等待时执行其他协程）</td>
+</tr>
+<tr>
+<td>理论吞吐量</td>
+<td>受线程数和切换开销限制</td>
+<td>接近 I/O 子系统的理论上限</td>
+</tr>
+</tbody></table>
+<h2 id="yield-与-await-的语义">yield 与 await 的语义</h2><p>协程通过 <code>yield</code> 和 <code>await</code> 两个关键操作实现挂起和恢复：</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>语义</th>
+<th>典型场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>yield</code></td>
+<td>主动让出控制权，可附带返回值</td>
+<td>生成器、惰性序列、手动调度</td>
+</tr>
+<tr>
+<td><code>await</code></td>
+<td>等待异步操作完成，期间让出控制权</td>
+<td>异步 I/O、网络请求、定时器</td>
+</tr>
+</tbody></table>
+<div class="code-block-wrapper" data-lang="typescript" data-code="// yield：生成器模式，按需产出值
+function* fibonacci(): Generator&lt;number&gt; {
+  let a = 0;
+  let b = 1;
+  while (true) {
+    yield a;
+    [a, b] = [b, a + b];
+  }
+}
+
+const fib = fibonacci();
+console.log(fib.next().value); // 0
+console.log(fib.next().value); // 1
+console.log(fib.next().value); // 1
+console.log(fib.next().value); // 2"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// yield：生成器模式，按需产出值</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">function*</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> fibonacci</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Generator</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#005CC5;--shiki-dark:#79B8FF">number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  let</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> a </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  let</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> b </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  while</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">true</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    yield</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> a;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    [a, b] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [b, a </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> b];</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> fib</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> fibonacci</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(fib.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">next</span><span style="color:#24292E;--shiki-dark:#E1E4E8">().value); </span><span style="color:#6A737D;--shiki-dark:#6A737D">// 0</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(fib.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">next</span><span style="color:#24292E;--shiki-dark:#E1E4E8">().value); </span><span style="color:#6A737D;--shiki-dark:#6A737D">// 1</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(fib.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">next</span><span style="color:#24292E;--shiki-dark:#E1E4E8">().value); </span><span style="color:#6A737D;--shiki-dark:#6A737D">// 1</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(fib.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">next</span><span style="color:#24292E;--shiki-dark:#E1E4E8">().value); </span><span style="color:#6A737D;--shiki-dark:#6A737D">// 2</span></span></code></pre></div><div class="code-block-wrapper" data-lang="typescript" data-code="// await：异步等待模式
+async function fetchData(url: string): Promise&lt;string&gt; {
+  const response = await fetch(url);
+  const data = await response.text();
+  return data;
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// await：异步等待模式</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">async</span><span style="color:#D73A49;--shiki-dark:#F97583"> function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> fetchData</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">url</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#005CC5;--shiki-dark:#79B8FF">string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> response</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> fetch</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(url);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> data</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> response.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">text</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> data;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TD&#10;    A[&quot;Coroutine Starts Execution&quot;] --&gt; B{&quot;Encounter yield / await?&quot;}&#10;    B --&gt;|&quot;No&quot;| C[&quot;Continue Executing Next Instruction&quot;]&#10;    C --&gt; B&#10;    B --&gt;|&quot;yield&quot;| D[&quot;Save Current State&lt;br/&gt;Return yield value to Caller&quot;]&#10;    B --&gt;|&quot;await&quot;| E[&quot;Save Current State&lt;br/&gt;Register Callback with I/O System&quot;]&#10;    D --&gt; F[&quot;Wait for Caller to resume&quot;]&#10;    E --&gt; G[&quot;Wait for I/O Completion&quot;]&#10;    F --&gt; H[&quot;Resume Execution&quot;]&#10;    G --&gt; H&#10;    H --&gt; B"></pre><h2 id="协程与回调的对比">协程与回调的对比</h2><p>在协程出现之前，异步编程通常依赖<strong>回调函数（Callback）</strong>。协程的引入使得异步代码可以用接近同步的方式书写：</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="// 回调地狱：嵌套深、难以维护
+function loadUserData(userId: string, callback: (data: any) =&gt; void) {
+  fetchUser(userId, (user) =&gt; {
+    fetchOrders(user.id, (orders) =&gt; {
+      fetchProducts(orders[0].productId, (product) =&gt; {
+        callback({ user, orders, product });
+      });
+    });
+  });
+}
+
+// 协程风格：扁平、清晰、易于理解
+async function loadUserData(userId: string) {
+  const user = await fetchUser(userId);
+  const orders = await fetchOrders(user.id);
+  const product = await fetchProducts(orders[0].productId);
+  return { user, orders, product };
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 回调地狱：嵌套深、难以维护</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> loadUserData</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">userId</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">callback</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">data</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> any</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#005CC5;--shiki-dark:#79B8FF"> void</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  fetchUser</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(userId, (</span><span style="color:#E36209;--shiki-dark:#FFAB70">user</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">    fetchOrders</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(user.id, (</span><span style="color:#E36209;--shiki-dark:#FFAB70">orders</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">      fetchProducts</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(orders[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">].productId, (</span><span style="color:#E36209;--shiki-dark:#FFAB70">product</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">        callback</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ user, orders, product });</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      });</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    });</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  });</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 协程风格：扁平、清晰、易于理解</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">async</span><span style="color:#D73A49;--shiki-dark:#F97583"> function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> loadUserData</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">userId</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> user</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> fetchUser</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(userId);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> orders</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> fetchOrders</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(user.id);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> product</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> fetchProducts</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(orders[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">].productId);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { user, orders, product };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><table>
+<thead>
+<tr>
+<th>对比维度</th>
+<th>回调模式</th>
+<th>协程模式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>代码结构</td>
+<td>深层嵌套（回调地狱）</td>
+<td>扁平化、线性结构</td>
+</tr>
+<tr>
+<td>错误处理</td>
+<td>每层回调需单独处理错误</td>
+<td>try/catch 统一处理</td>
+</tr>
+<tr>
+<td>可读性</td>
+<td>低，逻辑分散</td>
+<td>高，接近同步代码</td>
+</tr>
+<tr>
+<td>可维护性</td>
+<td>难以修改和重构</td>
+<td>易于修改和重构</td>
+</tr>
+<tr>
+<td>控制流</td>
+<td>难以实现循环、条件等复杂控制流</td>
+<td>自然支持所有控制流</td>
+</tr>
+</tbody></table>
+<h2 id="小结">小结</h2><ul>
+<li>协程的第一核心思想是<strong>用户控制调度</strong>，将调度权从内核转移到用户空间，避免昂贵的内核态上下文切换，性能提升 10~100 倍。</li>
+<li>协程的第二核心思想是<strong>协作式多任务</strong>，协程通过主动 yield/await 让出控制权，使得 yield 点之间的代码天然不会被中断。</li>
+<li>协程的最大价值在于 <strong>I/O 密集型场景</strong>，在等待 I/O 期间切换到其他协程执行，极大提升 CPU 利用率和系统吞吐量。</li>
+<li><code>yield</code> 用于主动让出并返回值（生成器模式），<code>await</code> 用于等待异步操作完成。</li>
+<li>协程使得异步代码可以用<strong>接近同步的方式</strong>书写，从根本上解决了回调地狱问题。</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../cs-fundamentals/threads-concurrency/coroutines/coroutine-definition-and-concepts.html"><span class="label">Previous</span>协程的定义与核心概念</a><a class="next" href="../../../cs-fundamentals/threads-concurrency/coroutines/coroutine-implementation.html"><span class="label">Next</span>协程的实现机制</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#用户控制调度-绕过内核上下文切换" data-outline-link="用户控制调度-绕过内核上下文切换">用户控制调度：绕过内核上下文切换</a></li><li class="depth-2"><a href="#协作式多任务-主动让出控制权" data-outline-link="协作式多任务-主动让出控制权">协作式多任务：主动让出控制权</a></li><li class="depth-3"><a href="#协作式调度的优势" data-outline-link="协作式调度的优势">协作式调度的优势</a></li><li class="depth-3"><a href="#协作式调度的风险" data-outline-link="协作式调度的风险">协作式调度的风险</a></li><li class="depth-2"><a href="#i-o-密集型场景的高吞吐" data-outline-link="i-o-密集型场景的高吞吐">I/O 密集型场景的高吞吐</a></li><li class="depth-3"><a href="#传统同步模型的浪费" data-outline-link="传统同步模型的浪费">传统同步模型的浪费</a></li><li class="depth-3"><a href="#协程的异步-i-o-模型" data-outline-link="协程的异步-i-o-模型">协程的异步 I/O 模型</a></li><li class="depth-3"><a href="#吞吐量对比" data-outline-link="吞吐量对比">吞吐量对比</a></li><li class="depth-2"><a href="#yield-与-await-的语义" data-outline-link="yield-与-await-的语义">yield 与 await 的语义</a></li><li class="depth-2"><a href="#协程与回调的对比" data-outline-link="协程与回调的对比">协程与回调的对比</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>分布式事务 · 计算机科学基础</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:计算机科学基础" data-pagefind-meta="slug:cs-fundamentals">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">计算机科学基础</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item active" href="../../../cs-fundamentals/index.html" aria-current="page" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../cs-fundamentals/index.html">计算机科学基础</a><a class="back-to-hubs" href="../../../cs-fundamentals/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../cs-fundamentals/database-systems/index.html">数据库系统 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="cs-fundamentals"><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:database-systems/relational-model"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/database-systems/relational-model/index.html">关系模型基础 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/database-systems/relational-model/relational-algebra.html">关系代数</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/database-systems/relational-model/normalization.html">范式与规范化</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/database-systems/relational-model/er-modeling.html">ER 建模</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/database-systems/relational-model/data-integrity.html">数据完整性</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:database-systems/sql-mastery"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/database-systems/sql-mastery/index.html">SQL 精通 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/database-systems/sql-mastery/ddl-and-dml.html">DDL 与 DML</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/database-systems/sql-mastery/complex-queries.html">复杂查询与子查询</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/database-systems/sql-mastery/aggregate-window-functions.html">聚合窗口函数</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/database-systems/sql-mastery/stored-procedures.html">存储过程与函数</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:database-systems/indexing-and-storage"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/database-systems/indexing-and-storage/index.html">索引与存储引擎 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/database-systems/indexing-and-storage/b-tree-indexes.html">B 树索引</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/database-systems/indexing-and-storage/hash-and-bitmap.html">哈希与位图索引</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/database-systems/indexing-and-storage/storage-engines.html">存储引擎</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/database-systems/indexing-and-storage/partitioning.html">分区与分片</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:database-systems/transactions-and-concurrency" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/database-systems/transactions-and-concurrency/index.html">事务与并发控制 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/database-systems/transactions-and-concurrency/acid-properties.html">ACID 特性</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/database-systems/transactions-and-concurrency/isolation-levels.html">隔离级别</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/database-systems/transactions-and-concurrency/locking-mechanisms.html">锁机制</a></li><li class="leaf"><a class="leaf-title active" href="../../../cs-fundamentals/database-systems/transactions-and-concurrency/distributed-transactions.html">分布式事务</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:database-systems/nosql-and-newdb"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/database-systems/nosql-and-newdb/index.html">NoSQL 与新型数据库 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/database-systems/nosql-and-newdb/key-value-stores.html">键值存储</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/database-systems/nosql-and-newdb/document-databases.html">文档数据库</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/database-systems/nosql-and-newdb/column-family.html">列族存储</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/database-systems/nosql-and-newdb/graph-databases.html">图数据库</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part IV · 网络与分布式 (Networks &amp; Distributed)</span><span>数据库系统 简介</span><span>事务与并发控制 简介</span><span>分布式事务</span></nav>
+    <article class="content prose"><h1 id="分布式事务">分布式事务</h1><h2 id="核心概念">核心概念</h2><p>当数据分布在多个数据库或服务中时，需要跨节点保证事务的一致性。分布式事务比单机事务复杂得多，需要在一致性、可用性和分区容错性之间做出权衡。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    App[应用] --&gt; DB1[数据库 A]&#10;    App --&gt; DB2[数据库 B]&#10;    App --&gt; MQ[消息队列]"></pre><hr>
+<h2 id="cap-定理">CAP 定理</h2><p>CAP 定理指出，分布式系统最多同时满足以下三个特性中的两个：</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Consistency (C)</td>
+<td>所有节点在同一时间看到相同的数据</td>
+</tr>
+<tr>
+<td>Availability (A)</td>
+<td>每个请求都能收到响应（不保证最新数据）</td>
+</tr>
+<tr>
+<td>Partition tolerance (P)</td>
+<td>网络分区时系统仍能运行</td>
+</tr>
+</tbody></table>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    subgraph CAP 三角&#10;        C[一致性 C] --- A[可用性 A]&#10;        A --- P[分区容错 P]&#10;        P --- C&#10;    end&#10;    CP[CP 系统] -.-&gt; C&#10;    CP -.-&gt; P&#10;    AP[AP 系统] -.-&gt; A&#10;    AP -.-&gt; P"></pre><table>
+<thead>
+<tr>
+<th>选择</th>
+<th>牺牲</th>
+<th>典型系统</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CP</td>
+<td>可用性</td>
+<td>ZooKeeper、etcd、HBase</td>
+</tr>
+<tr>
+<td>AP</td>
+<td>一致性</td>
+<td>Cassandra、DynamoDB、CouchDB</td>
+</tr>
+<tr>
+<td>CA</td>
+<td>分区容错</td>
+<td>传统单机数据库（不适用于分布式）</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="base-理论">BASE 理论</h2><p>BASE 是 CAP 中 AP 选择的理论基础，与 ACID 对应：</p>
+<table>
+<thead>
+<tr>
+<th>ACID</th>
+<th>BASE</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Atomicity</td>
+<td>Basically Available</td>
+</tr>
+<tr>
+<td>Consistency</td>
+<td>Soft state</td>
+</tr>
+<tr>
+<td>Isolation</td>
+<td>Eventually consistent</td>
+</tr>
+<tr>
+<td>Durability</td>
+<td>—</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>BASE 特性</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>基本可用</td>
+<td>允许响应延迟或部分功能降级</td>
+</tr>
+<tr>
+<td>软状态</td>
+<td>允许数据在中间状态不一致</td>
+</tr>
+<tr>
+<td>最终一致性</td>
+<td>在无新更新后，数据最终趋于一致</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="两阶段提交-2pc">两阶段提交（2PC）</h2><p>2PC 是最经典的分布式事务协议，由一个协调者（Coordinator）和多个参与者（Participant）组成。</p>
+<pre class="mermaid" data-diagram-type="sequenceDiagram" data-source="sequenceDiagram&#10;    participant C as 协调者&#10;    participant P1 as 参与者 1&#10;    participant P2 as 参与者 2&#10;&#10;    Note over C,P2: 阶段一:准备&#10;    C-&gt;&gt;P1: PREPARE&#10;    C-&gt;&gt;P2: PREPARE&#10;    P1--&gt;&gt;C: YES (可以提交)&#10;    P2--&gt;&gt;C: YES (可以提交)&#10;&#10;    Note over C,P2: 阶段二:提交&#10;    C-&gt;&gt;P1: COMMIT&#10;    C-&gt;&gt;P2: COMMIT&#10;    P1--&gt;&gt;C: ACK&#10;    P2--&gt;&gt;C: ACK"></pre><table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>协调者动作</th>
+<th>参与者动作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>准备阶段</td>
+<td>发送 PREPARE 请求</td>
+<td>执行事务但不提交，返回 YES/NO</td>
+</tr>
+<tr>
+<td>提交阶段</td>
+<td>收到全部 YES → COMMIT</td>
+<td>正式提交事务</td>
+</tr>
+<tr>
+<td>回滚阶段</td>
+<td>收到任何 NO → ABORT</td>
+<td>回滚事务</td>
+</tr>
+</tbody></table>
+<h3 id="2pc-的问题">2PC 的问题</h3><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>描述</th>
+<th>影响</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>同步阻塞</td>
+<td>准备阶段所有参与者持锁等待</td>
+<td>性能低</td>
+</tr>
+<tr>
+<td>单点故障</td>
+<td>协调者宕机导致参与者悬而未决</td>
+<td>可用性差</td>
+</tr>
+<tr>
+<td>数据不一致</td>
+<td>提交阶段部分参与者收到 COMMIT，部分未收到</td>
+<td>需要额外恢复</td>
+</tr>
+<tr>
+<td>网络分区</td>
+<td>协调者与参与者断开，参与者无法决策</td>
+<td>阻塞</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="三阶段提交-3pc">三阶段提交（3PC）</h2><p>3PC 在 2PC 的基础上增加了超时机制和 CanCommit 阶段，减少了阻塞问题。</p>
+<pre class="mermaid" data-diagram-type="sequenceDiagram" data-source="sequenceDiagram&#10;    participant C as 协调者&#10;    participant P as 参与者&#10;&#10;    Note over C,P: 阶段一:CanCommit&#10;    C-&gt;&gt;P: CanCommit?&#10;    P--&gt;&gt;C: YES&#10;&#10;    Note over C,P: 阶段二:PreCommit&#10;    C-&gt;&gt;P: PreCommit&#10;    P--&gt;&gt;C: ACK&#10;&#10;    Note over C,P: 阶段三:DoCommit&#10;    C-&gt;&gt;P: DoCommit&#10;    P--&gt;&gt;C: ACK"></pre><table>
+<thead>
+<tr>
+<th>对比</th>
+<th>2PC</th>
+<th>3PC</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>阶段数</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>超时处理</td>
+<td>参与者阻塞等待</td>
+<td>超时后自动提交/回滚</td>
+</tr>
+<tr>
+<td>阻塞性</td>
+<td>高</td>
+<td>较低</td>
+</tr>
+<tr>
+<td>实际使用</td>
+<td>广泛</td>
+<td>较少</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="saga-模式">Saga 模式</h2><p>Saga 将一个分布式事务拆分为一系列本地事务，每个本地事务有对应的补偿操作。如果某一步失败，依次执行前面步骤的补偿操作。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    T1[创建订单] --&gt; T2[扣减库存]&#10;    T2 --&gt; T3[扣减余额]&#10;    T3 --&gt; T4[发送通知]&#10;&#10;    T3 -.-&gt;|失败| C2[恢复库存]&#10;    C2 -.-&gt; C1[取消订单]"></pre><table>
+<thead>
+<tr>
+<th>执行模式</th>
+<th>说明</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>编排式</td>
+<td>中央协调器控制执行顺序</td>
+<td>流程明确</td>
+</tr>
+<tr>
+<td>协同式</td>
+<td>各服务通过事件驱动自行协调</td>
+<td>松耦合</td>
+</tr>
+</tbody></table>
+<div class="code-block-wrapper" data-lang="text" data-code="编排式 Saga 示例：
+1. 订单服务：创建订单（状态=PENDING）
+2. 库存服务：扣减库存 → 成功
+3. 支付服务：扣款 → 失败
+4. 补偿：库存服务恢复库存
+5. 补偿：订单服务取消订单（状态=CANCELLED）"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>编排式 Saga 示例：</span></span>
+<span class="line"><span>1. 订单服务：创建订单（状态=PENDING）</span></span>
+<span class="line"><span>2. 库存服务：扣减库存 → 成功</span></span>
+<span class="line"><span>3. 支付服务：扣款 → 失败</span></span>
+<span class="line"><span>4. 补偿：库存服务恢复库存</span></span>
+<span class="line"><span>5. 补偿：订单服务取消订单（状态=CANCELLED）</span></span></code></pre></div><h3 id="saga-与-2pc-对比">Saga 与 2PC 对比</h3><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>2PC</th>
+<th>Saga</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>一致性</td>
+<td>强一致</td>
+<td>最终一致</td>
+</tr>
+<tr>
+<td>持锁时间</td>
+<td>长（整个事务期间）</td>
+<td>短（仅本地事务）</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>低</td>
+<td>高</td>
+</tr>
+<tr>
+<td>隔离性</td>
+<td>有保证</td>
+<td>需要额外设计</td>
+</tr>
+<tr>
+<td>补偿逻辑</td>
+<td>不需要</td>
+<td>需要为每步设计补偿</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="tcc-try-confirm-cancel">TCC（Try-Confirm-Cancel）</h2><p>TCC 是一种基于业务层面的两阶段协议，每个参与服务需要实现三个方法：</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>操作</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Try</td>
+<td>预留资源，检查业务可行性</td>
+<td>冻结账户余额</td>
+</tr>
+<tr>
+<td>Confirm</td>
+<td>确认执行，使用预留资源</td>
+<td>实际扣款</td>
+</tr>
+<tr>
+<td>Cancel</td>
+<td>取消执行，释放预留资源</td>
+<td>解冻余额</td>
+</tr>
+</tbody></table>
+<div class="code-block-wrapper" data-lang="text" data-code="TCC 转账流程：
+
+Try 阶段：
+  - 账户 A：冻结 1000 元（available -= 1000, frozen += 1000）
+  - 账户 B：无操作或预检查
+
+Confirm 阶段（全部 Try 成功）：
+  - 账户 A：扣减冻结金额（frozen -= 1000）
+  - 账户 B：增加余额（available += 1000）
+
+Cancel 阶段（任一 Try 失败）：
+  - 账户 A：解冻金额（available += 1000, frozen -= 1000）"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>TCC 转账流程：</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Try 阶段：</span></span>
+<span class="line"><span>  - 账户 A：冻结 1000 元（available -= 1000, frozen += 1000）</span></span>
+<span class="line"><span>  - 账户 B：无操作或预检查</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Confirm 阶段（全部 Try 成功）：</span></span>
+<span class="line"><span>  - 账户 A：扣减冻结金额（frozen -= 1000）</span></span>
+<span class="line"><span>  - 账户 B：增加余额（available += 1000）</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Cancel 阶段（任一 Try 失败）：</span></span>
+<span class="line"><span>  - 账户 A：解冻金额（available += 1000, frozen -= 1000）</span></span></code></pre></div><h3 id="tcc-需要处理的问题">TCC 需要处理的问题</h3><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>空回滚</td>
+<td>Cancel 时检查 Try 是否执行过</td>
+</tr>
+<tr>
+<td>悬挂</td>
+<td>Cancel 先到达，Try 后到达</td>
+</tr>
+<tr>
+<td>幂等性</td>
+<td>Confirm 和 Cancel 必须支持幂等</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="方案选择指南">方案选择指南</h2><pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A{一致性要求?} --&gt;|强一致| B{性能要求?}&#10;    A --&gt;|最终一致| C{补偿复杂度?}&#10;    B --&gt;|高| D[TCC]&#10;    B --&gt;|普通| E[2PC / XA]&#10;    C --&gt;|低| F[Saga]&#10;    C --&gt;|高| G[本地消息表]"></pre><table>
+<thead>
+<tr>
+<th>方案</th>
+<th>一致性</th>
+<th>性能</th>
+<th>实现复杂度</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2PC/XA</td>
+<td>强一致</td>
+<td>低</td>
+<td>中</td>
+<td>传统企业应用</td>
+</tr>
+<tr>
+<td>3PC</td>
+<td>强一致</td>
+<td>中</td>
+<td>高</td>
+<td>理论上，实际少用</td>
+</tr>
+<tr>
+<td>TCC</td>
+<td>强一致</td>
+<td>中高</td>
+<td>高</td>
+<td>金融、支付</td>
+</tr>
+<tr>
+<td>Saga</td>
+<td>最终一致</td>
+<td>高</td>
+<td>中</td>
+<td>微服务长事务</td>
+</tr>
+<tr>
+<td>本地消息表</td>
+<td>最终一致</td>
+<td>高</td>
+<td>低</td>
+<td>异步消息场景</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="小结">小结</h2><pre class="mermaid" data-diagram-type="mindmap" data-source="mindmap&#10;  root((分布式事务))&#10;    理论基础&#10;      CAP 定理&#10;      BASE 理论&#10;    强一致方案&#10;      2PC 两阶段提交&#10;      3PC 三阶段提交&#10;      TCC Try-Confirm-Cancel&#10;    最终一致方案&#10;      Saga 模式&#10;      本地消息表&#10;      事件驱动&#10;    选择依据&#10;      一致性要求&#10;      性能要求&#10;      实现复杂度"></pre><ul>
+<li><strong>CAP 定理</strong>决定了分布式系统必须在一致性和可用性之间权衡。</li>
+<li><strong>2PC</strong> 是经典的强一致方案，但存在同步阻塞和单点故障问题。</li>
+<li><strong>Saga</strong> 通过补偿机制实现最终一致性，适合微服务架构的长事务。</li>
+<li><strong>TCC</strong> 在业务层实现两阶段协议，需要处理空回滚、悬挂和幂等问题。</li>
+<li>选择方案的关键因素是<strong>一致性要求、性能预算和实现复杂度</strong>。</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../cs-fundamentals/database-systems/transactions-and-concurrency/locking-mechanisms.html"><span class="label">Previous</span>锁机制</a><a class="next" href="../../../cs-fundamentals/database-systems/nosql-and-newdb/index.html"><span class="label">Next</span>NoSQL 与新型数据库 简介</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#cap-定理" data-outline-link="cap-定理">CAP 定理</a></li><li class="depth-2"><a href="#base-理论" data-outline-link="base-理论">BASE 理论</a></li><li class="depth-2"><a href="#两阶段提交-2pc" data-outline-link="两阶段提交-2pc">两阶段提交（2PC）</a></li><li class="depth-3"><a href="#2pc-的问题" data-outline-link="2pc-的问题">2PC 的问题</a></li><li class="depth-2"><a href="#三阶段提交-3pc" data-outline-link="三阶段提交-3pc">三阶段提交（3PC）</a></li><li class="depth-2"><a href="#saga-模式" data-outline-link="saga-模式">Saga 模式</a></li><li class="depth-3"><a href="#saga-与-2pc-对比" data-outline-link="saga-与-2pc-对比">Saga 与 2PC 对比</a></li><li class="depth-2"><a href="#tcc-try-confirm-cancel" data-outline-link="tcc-try-confirm-cancel">TCC（Try-Confirm-Cancel）</a></li><li class="depth-3"><a href="#tcc-需要处理的问题" data-outline-link="tcc-需要处理的问题">TCC 需要处理的问题</a></li><li class="depth-2"><a href="#方案选择指南" data-outline-link="方案选择指南">方案选择指南</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

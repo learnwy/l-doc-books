@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>URDF 与机器人建模 · 硬件、机器人与安全工程</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:硬件、机器人与安全工程" data-pagefind-meta="slug:hardware-and-systems">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">硬件、机器人与安全工程</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item active" href="../../../hardware-and-systems/index.html" aria-current="page" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../hardware-and-systems/index.html">硬件、机器人与安全工程</a><a class="back-to-hubs" href="../../../hardware-and-systems/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../hardware-and-systems/ros-and-middleware/index.html">ROS 与机器人中间件 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="hardware-and-systems"><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:ros-and-middleware/ros2-fundamentals"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-fundamentals/index.html">ROS2 基础 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-fundamentals/nodes-and-topics.html">ROS2 节点与话题</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-fundamentals/launch-and-params.html">ROS2 启动系统与参数管理</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-fundamentals/parameters-and-lifecycle.html">ROS2 参数与生命周期</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-fundamentals/launch-system.html">ROS2 Launch 系统</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-fundamentals/services-and-actions.html">ROS2 服务与动作</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-fundamentals/tf2-transforms.html">ROS2 坐标变换（TF2）</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:ros-and-middleware/ros2-advanced"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-advanced/index.html">ROS2 进阶 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-advanced/component-architecture.html">ROS 2 组件架构</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-advanced/nav2-framework.html">Nav2 导航框架</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-advanced/moveit2-planning.html">MoveIt2 运动规划</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-advanced/qos-and-realtime.html">ROS2 QoS 与实时通信</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-advanced/qos-policies.html">ROS 2 QoS 策略</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-advanced/ros2-navigation-stack.html">ROS 2 导航栈</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:ros-and-middleware/communication-protocols"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/ros-and-middleware/communication-protocols/index.html">通信协议 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/communication-protocols/dds-realtime.html">DDS 与实时通信</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/communication-protocols/serial-can-bus.html">串口与 CAN 总线通信</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/communication-protocols/multi-robot-comm.html">多机器人通信架构</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:ros-and-middleware/simulation-tools" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/ros-and-middleware/simulation-tools/index.html">仿真工具 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/simulation-tools/gazebo-simulation.html">Gazebo 仿真环境</a></li><li class="leaf"><a class="leaf-title active" href="../../../hardware-and-systems/ros-and-middleware/simulation-tools/urdf-modeling.html">URDF 与机器人建模</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/simulation-tools/digital-twin.html">数字孪生与 Sim-to-Real</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:ros-and-middleware/robot-simulation"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/ros-and-middleware/robot-simulation/index.html">机器人仿真 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/robot-simulation/gazebo-environment.html">Gazebo 仿真环境</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/robot-simulation/isaac-sim.html">NVIDIA Isaac Sim 机器人仿真</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/robot-simulation/digital-twin.html">数字孪生技术</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/robot-simulation/gazebo-fundamentals.html">Gazebo 仿真基础</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/robot-simulation/urdf-modeling.html">URDF 与机器人建模</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/robot-simulation/ros2-control.html">ros2_control 框架</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part II · 机器人与自动化</span><span>ROS 与机器人中间件 简介</span><span>仿真工具 简介</span><span>URDF 与机器人建模</span></nav>
+    <article class="content prose"><h1 id="urdf-与机器人建模">URDF 与机器人建模</h1><h2 id="核心概念">核心概念</h2><p>URDF（Unified Robot Description Format）是 ROS 生态中描述机器人物理结构的标准 XML 格式。它定义了机器人的连杆（Link）几何形状、质量属性，以及关节（Joint）的运动约束，形成完整的运动链模型。URDF 模型是仿真、可视化、运动规划和控制的共享基础。</p>
+<p>URDF 的核心抽象是<strong>连杆-关节树</strong>：连杆是刚体（有质量、惯量和几何形状），关节是连杆间的约束（规定了运动类型和范围）。整个模型构成一棵有根树，根连杆通常是 <code>base_link</code>。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    subgraph URDF 模型结构&#10;        ROOT[base_link] --&gt;|fixed| BODY[body_link]&#10;        BODY --&gt;|revolute| ARM1[arm_link_1]&#10;        ARM1 --&gt;|revolute| ARM2[arm_link_2]&#10;        ARM2 --&gt;|revolute| WRIST[wrist_link]&#10;        WRIST --&gt;|fixed| TOOL[tool_link]&#10;        ROOT --&gt;|continuous| LW[left_wheel]&#10;        ROOT --&gt;|continuous| RW[right_wheel]&#10;    end"></pre><table>
+<thead>
+<tr>
+<th>关节类型</th>
+<th>运动自由度</th>
+<th>运动描述</th>
+<th>典型应用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>revolute</td>
+<td>1 旋转</td>
+<td>有限角度旋转</td>
+<td>机械臂关节</td>
+</tr>
+<tr>
+<td>continuous</td>
+<td>1 旋转</td>
+<td>无限旋转</td>
+<td>车轮</td>
+</tr>
+<tr>
+<td>prismatic</td>
+<td>1 平移</td>
+<td>有限直线运动</td>
+<td>升降平台</td>
+</tr>
+<tr>
+<td>fixed</td>
+<td>0</td>
+<td>刚性连接</td>
+<td>传感器安装</td>
+</tr>
+<tr>
+<td>floating</td>
+<td>6</td>
+<td>自由运动</td>
+<td>漂浮基座</td>
+</tr>
+<tr>
+<td>planar</td>
+<td>3</td>
+<td>平面运动</td>
+<td>平面机器人</td>
+</tr>
+</tbody></table>
+<h2 id="连杆定义与属性">连杆定义与属性</h2><p>每个连杆包含三个属性块：<code>visual</code>（可视化外观）、<code>collision</code>（碰撞检测几何）和 <code>inertial</code>（惯性属性）。三者可以使用不同的几何形状——碰撞模型通常比视觉模型简化，以提升仿真性能。</p>
+<div class="code-block-wrapper" data-lang="xml" data-code="&lt;link name=&quot;arm_link_1&quot;&gt;
+  &lt;visual&gt;
+    &lt;origin xyz=&quot;0 0 0.15&quot; rpy=&quot;0 0 0&quot;/&gt;
+    &lt;geometry&gt;
+      &lt;mesh filename=&quot;package://my_robot/meshes/arm_link_1.dae&quot; scale=&quot;0.001 0.001 0.001&quot;/&gt;
+    &lt;/geometry&gt;
+    &lt;material name=&quot;blue&quot;&gt;
+      &lt;color rgba=&quot;0.2 0.2 0.8 1.0&quot;/&gt;
+    &lt;/material&gt;
+  &lt;/visual&gt;
+
+  &lt;collision&gt;
+    &lt;origin xyz=&quot;0 0 0.15&quot; rpy=&quot;0 0 0&quot;/&gt;
+    &lt;geometry&gt;
+      &lt;cylinder radius=&quot;0.04&quot; length=&quot;0.3&quot;/&gt;
+    &lt;/geometry&gt;
+  &lt;/collision&gt;
+
+  &lt;inertial&gt;
+    &lt;origin xyz=&quot;0 0 0.15&quot; rpy=&quot;0 0 0&quot;/&gt;
+    &lt;mass value=&quot;2.5&quot;/&gt;
+    &lt;inertia
+      ixx=&quot;0.019&quot; ixy=&quot;0&quot; ixz=&quot;0&quot;
+      iyy=&quot;0.019&quot; iyz=&quot;0&quot;
+      izz=&quot;0.002&quot;/&gt;
+  &lt;/inertial&gt;
+&lt;/link&gt;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">link</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"arm_link_1"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">visual</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">origin</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> xyz</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0 0 0.15"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> rpy</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0 0 0"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">geometry</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">mesh</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> filename</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"package://my_robot/meshes/arm_link_1.dae"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> scale</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0.001 0.001 0.001"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">geometry</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">material</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"blue"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">color</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> rgba</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0.2 0.2 0.8 1.0"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">material</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">visual</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">collision</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">origin</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> xyz</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0 0 0.15"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> rpy</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0 0 0"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">geometry</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">cylinder</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> radius</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0.04"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> length</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0.3"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">geometry</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">collision</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">inertial</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">origin</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> xyz</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0 0 0.15"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> rpy</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0 0 0"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">mass</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> value</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"2.5"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">inertia</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">      ixx</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0.019"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ixy</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ixz</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0"</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">      iyy</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0.019"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> iyz</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0"</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">      izz</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0.002"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">inertial</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">link</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre></div><p>惯性参数的正确计算对仿真精度至关重要：</p>
+<div class="code-block-wrapper" data-lang="python" data-code="import numpy as np
+
+def cylinder_inertia(mass, radius, length):
+    ixx = mass * (3 * radius**2 + length**2) / 12
+    iyy = ixx
+    izz = mass * radius**2 / 2
+    return {'ixx': ixx, 'iyy': iyy, 'izz': izz}
+
+def box_inertia(mass, x, y, z):
+    ixx = mass * (y**2 + z**2) / 12
+    iyy = mass * (x**2 + z**2) / 12
+    izz = mass * (x**2 + y**2) / 12
+    return {'ixx': ixx, 'iyy': iyy, 'izz': izz}
+
+def sphere_inertia(mass, radius):
+    i = 2 * mass * radius**2 / 5
+    return {'ixx': i, 'iyy': i, 'izz': i}
+
+def mesh_inertia_from_cad(stl_path, mass, scale=1.0):
+    from stl import mesh as stl_mesh
+
+    m = stl_mesh.Mesh.from_file(stl_path)
+    volume = m.get_mass_properties()[0] * scale**3
+    density = mass / volume if volume &gt; 0 else 1000
+
+    _, cog, inertia = m.get_mass_properties()
+    scale_factor = mass / (density * volume) if volume &gt; 0 else 1.0
+
+    return {
+        'mass': mass,
+        'cog': cog * scale,
+        'ixx': inertia[0] * scale_factor,
+        'iyy': inertia[4] * scale_factor,
+        'izz': inertia[8] * scale_factor,
+    }"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> numpy </span><span style="color:#D73A49;--shiki-dark:#F97583">as</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> np</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> cylinder_inertia</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(mass, radius, length):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    ixx </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> mass </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> radius</span><span style="color:#D73A49;--shiki-dark:#F97583">**</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#D73A49;--shiki-dark:#F97583"> +</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> length</span><span style="color:#D73A49;--shiki-dark:#F97583">**</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 12</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    iyy </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ixx</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    izz </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> mass </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> radius</span><span style="color:#D73A49;--shiki-dark:#F97583">**</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#D73A49;--shiki-dark:#F97583"> /</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'ixx'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: ixx, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'iyy'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: iyy, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'izz'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: izz}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> box_inertia</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(mass, x, y, z):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    ixx </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> mass </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (y</span><span style="color:#D73A49;--shiki-dark:#F97583">**</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#D73A49;--shiki-dark:#F97583"> +</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> z</span><span style="color:#D73A49;--shiki-dark:#F97583">**</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 12</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    iyy </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> mass </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (x</span><span style="color:#D73A49;--shiki-dark:#F97583">**</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#D73A49;--shiki-dark:#F97583"> +</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> z</span><span style="color:#D73A49;--shiki-dark:#F97583">**</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 12</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    izz </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> mass </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (x</span><span style="color:#D73A49;--shiki-dark:#F97583">**</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#D73A49;--shiki-dark:#F97583"> +</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> y</span><span style="color:#D73A49;--shiki-dark:#F97583">**</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 12</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'ixx'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: ixx, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'iyy'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: iyy, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'izz'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: izz}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> sphere_inertia</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(mass, radius):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    i </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> mass </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> radius</span><span style="color:#D73A49;--shiki-dark:#F97583">**</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#D73A49;--shiki-dark:#F97583"> /</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 5</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'ixx'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: i, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'iyy'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: i, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'izz'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: i}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> mesh_inertia_from_cad</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(stl_path, mass, scale</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1.0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> stl </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> mesh </span><span style="color:#D73A49;--shiki-dark:#F97583">as</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> stl_mesh</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    m </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> stl_mesh.Mesh.from_file(stl_path)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    volume </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> m.get_mass_properties()[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> scale</span><span style="color:#D73A49;--shiki-dark:#F97583">**</span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    density </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> mass </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> volume </span><span style="color:#D73A49;--shiki-dark:#F97583">if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> volume </span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#D73A49;--shiki-dark:#F97583"> else</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1000</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    _, cog, inertia </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> m.get_mass_properties()</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    scale_factor </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> mass </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (density </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> volume) </span><span style="color:#D73A49;--shiki-dark:#F97583">if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> volume </span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#D73A49;--shiki-dark:#F97583"> else</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1.0</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'mass'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: mass,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'cog'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: cog </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> scale,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'ixx'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: inertia[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> scale_factor,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'iyy'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: inertia[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">4</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> scale_factor,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        'izz'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: inertia[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">8</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> scale_factor,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span></code></pre></div><h2 id="xacro-宏语言">Xacro 宏语言</h2><p>Xacro（XML Macros）是 URDF 的预处理器，通过宏定义、参数化、条件判断等编程特性，大幅简化复杂机器人模型的编写。</p>
+<div class="code-block-wrapper" data-lang="xml" data-code="&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;robot xmlns:xacro=&quot;http://ros.org/wiki/xacro&quot; name=&quot;manipulator&quot;&gt;
+
+  &lt;xacro:property name=&quot;pi&quot; value=&quot;3.14159265359&quot;/&gt;
+  &lt;xacro:property name=&quot;joint_effort&quot; value=&quot;50.0&quot;/&gt;
+  &lt;xacro:property name=&quot;joint_velocity&quot; value=&quot;2.0&quot;/&gt;
+
+  &lt;xacro:macro name=&quot;arm_link&quot; params=&quot;name length radius mass color&quot;&gt;
+    &lt;link name=&quot;${name}&quot;&gt;
+      &lt;visual&gt;
+        &lt;origin xyz=&quot;0 0 ${length/2}&quot; rpy=&quot;0 0 0&quot;/&gt;
+        &lt;geometry&gt;&lt;cylinder radius=&quot;${radius}&quot; length=&quot;${length}&quot;/&gt;&lt;/geometry&gt;
+        &lt;material name=&quot;${color}&quot;/&gt;
+      &lt;/visual&gt;
+      &lt;collision&gt;
+        &lt;origin xyz=&quot;0 0 ${length/2}&quot; rpy=&quot;0 0 0&quot;/&gt;
+        &lt;geometry&gt;&lt;cylinder radius=&quot;${radius}&quot; length=&quot;${length}&quot;/&gt;&lt;/geometry&gt;
+      &lt;/collision&gt;
+      &lt;inertial&gt;
+        &lt;origin xyz=&quot;0 0 ${length/2}&quot;/&gt;
+        &lt;mass value=&quot;${mass}&quot;/&gt;
+        &lt;xacro:property name=&quot;ixx&quot; value=&quot;${mass*(3*radius*radius+length*length)/12}&quot;/&gt;
+        &lt;inertia ixx=&quot;${ixx}&quot; ixy=&quot;0&quot; ixz=&quot;0&quot; iyy=&quot;${ixx}&quot; iyz=&quot;0&quot;
+                 izz=&quot;${mass*radius*radius/2}&quot;/&gt;
+      &lt;/inertial&gt;
+    &lt;/link&gt;
+  &lt;/xacro:macro&gt;
+
+  &lt;xacro:macro name=&quot;revolute_joint&quot; params=&quot;name parent child xyz rpy axis lower upper&quot;&gt;
+    &lt;joint name=&quot;${name}&quot; type=&quot;revolute&quot;&gt;
+      &lt;parent link=&quot;${parent}&quot;/&gt;
+      &lt;child link=&quot;${child}&quot;/&gt;
+      &lt;origin xyz=&quot;${xyz}&quot; rpy=&quot;${rpy}&quot;/&gt;
+      &lt;axis xyz=&quot;${axis}&quot;/&gt;
+      &lt;limit lower=&quot;${lower}&quot; upper=&quot;${upper}&quot;
+             effort=&quot;${joint_effort}&quot; velocity=&quot;${joint_velocity}&quot;/&gt;
+      &lt;dynamics damping=&quot;0.1&quot; friction=&quot;0.05&quot;/&gt;
+    &lt;/joint&gt;
+  &lt;/xacro:macro&gt;
+
+  &lt;xacro:arm_link name=&quot;link_1&quot; length=&quot;0.4&quot; radius=&quot;0.04&quot; mass=&quot;2.5&quot; color=&quot;blue&quot;/&gt;
+  &lt;xacro:arm_link name=&quot;link_2&quot; length=&quot;0.35&quot; radius=&quot;0.035&quot; mass=&quot;2.0&quot; color=&quot;green&quot;/&gt;
+  &lt;xacro:arm_link name=&quot;link_3&quot; length=&quot;0.2&quot; radius=&quot;0.03&quot; mass=&quot;1.0&quot; color=&quot;red&quot;/&gt;
+
+  &lt;xacro:revolute_joint name=&quot;joint_1&quot; parent=&quot;base_link&quot; child=&quot;link_1&quot;
+    xyz=&quot;0 0 0.1&quot; rpy=&quot;0 0 0&quot; axis=&quot;0 0 1&quot; lower=&quot;-3.14&quot; upper=&quot;3.14&quot;/&gt;
+  &lt;xacro:revolute_joint name=&quot;joint_2&quot; parent=&quot;link_1&quot; child=&quot;link_2&quot;
+    xyz=&quot;0 0 0.4&quot; rpy=&quot;0 0 0&quot; axis=&quot;0 1 0&quot; lower=&quot;-2.0&quot; upper=&quot;2.0&quot;/&gt;
+  &lt;xacro:revolute_joint name=&quot;joint_3&quot; parent=&quot;link_2&quot; child=&quot;link_3&quot;
+    xyz=&quot;0 0 0.35&quot; rpy=&quot;0 0 0&quot; axis=&quot;0 1 0&quot; lower=&quot;-2.5&quot; upper=&quot;2.5&quot;/&gt;
+
+&lt;/robot&gt;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;?</span><span style="color:#22863A;--shiki-dark:#85E89D">xml</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> version</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"1.0"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">?></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">robot</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> xmlns:xacro</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"http://ros.org/wiki/xacro"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"manipulator"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">xacro:property</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"pi"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> value</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"3.14159265359"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">xacro:property</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"joint_effort"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> value</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"50.0"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">xacro:property</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"joint_velocity"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> value</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"2.0"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">xacro:macro</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"arm_link"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> params</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"name length radius mass color"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">link</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"${name}"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">visual</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">origin</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> xyz</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0 0 ${length/2}"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> rpy</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0 0 0"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">geometry</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>&#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">cylinder</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> radius</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"${radius}"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> length</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"${length}"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/>&#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">geometry</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">material</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"${color}"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">visual</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">collision</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">origin</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> xyz</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0 0 ${length/2}"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> rpy</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0 0 0"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">geometry</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>&#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">cylinder</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> radius</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"${radius}"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> length</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"${length}"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/>&#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">geometry</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">collision</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">inertial</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">origin</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> xyz</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0 0 ${length/2}"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">mass</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> value</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"${mass}"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">xacro:property</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"ixx"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> value</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"${mass*(3*radius*radius+length*length)/12}"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">inertia</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ixx</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"${ixx}"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ixy</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ixz</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> iyy</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"${ixx}"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> iyz</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0"</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">                 izz</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"${mass*radius*radius/2}"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">inertial</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">link</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">xacro:macro</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">xacro:macro</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"revolute_joint"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> params</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"name parent child xyz rpy axis lower upper"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">joint</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"${name}"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> type</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"revolute"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">parent</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> link</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"${parent}"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">child</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> link</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"${child}"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">origin</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> xyz</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"${xyz}"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> rpy</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"${rpy}"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">axis</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> xyz</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"${axis}"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">limit</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> lower</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"${lower}"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> upper</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"${upper}"</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">             effort</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"${joint_effort}"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> velocity</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"${joint_velocity}"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">dynamics</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> damping</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0.1"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> friction</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0.05"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">joint</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">xacro:macro</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">xacro:arm_link</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"link_1"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> length</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0.4"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> radius</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0.04"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> mass</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"2.5"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> color</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"blue"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">xacro:arm_link</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"link_2"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> length</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0.35"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> radius</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0.035"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> mass</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"2.0"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> color</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"green"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">xacro:arm_link</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"link_3"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> length</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0.2"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> radius</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0.03"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> mass</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"1.0"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> color</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"red"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">xacro:revolute_joint</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"joint_1"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> parent</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"base_link"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> child</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"link_1"</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">    xyz</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0 0 0.1"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> rpy</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0 0 0"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> axis</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0 0 1"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> lower</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"-3.14"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> upper</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"3.14"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">xacro:revolute_joint</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"joint_2"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> parent</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"link_1"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> child</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"link_2"</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">    xyz</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0 0 0.4"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> rpy</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0 0 0"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> axis</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0 1 0"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> lower</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"-2.0"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> upper</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"2.0"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">xacro:revolute_joint</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"joint_3"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> parent</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"link_2"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> child</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"link_3"</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">    xyz</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0 0 0.35"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> rpy</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0 0 0"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> axis</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0 1 0"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> lower</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"-2.5"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> upper</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"2.5"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">/></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">robot</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre></div><h2 id="模型验证与调试">模型验证与调试</h2><p>URDF 模型的验证是确保仿真和控制正确性的关键步骤。常见错误包括惯性参数不合理、关节轴方向错误、碰撞模型缺失等。</p>
+<div class="code-block-wrapper" data-lang="bash" data-code="check_urdf robot.urdf
+
+xacro robot.urdf.xacro &gt; robot.urdf &amp;&amp; check_urdf robot.urdf
+
+urdf_to_graphviz robot.urdf"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">check_urdf</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> robot.urdf</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">xacro</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> robot.urdf.xacro</span><span style="color:#D73A49;--shiki-dark:#F97583"> ></span><span style="color:#032F62;--shiki-dark:#9ECBFF"> robot.urdf</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> &#x26;&#x26; </span><span style="color:#6F42C1;--shiki-dark:#B392F0">check_urdf</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> robot.urdf</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">urdf_to_graphviz</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> robot.urdf</span></span></code></pre></div><div class="code-block-wrapper" data-lang="python" data-code="import xml.etree.ElementTree as ET
+import numpy as np
+
+class URDFValidator:
+    def __init__(self, urdf_path):
+        self.tree = ET.parse(urdf_path)
+        self.root = self.tree.getroot()
+        self.issues = []
+
+    def validate(self):
+        self.check_inertials()
+        self.check_collisions()
+        self.check_joint_limits()
+        self.check_tree_structure()
+        return self.issues
+
+    def check_inertials(self):
+        for link in self.root.findall('.//link'):
+            name = link.get('name')
+            inertial = link.find('inertial')
+
+            if inertial is None:
+                self.issues.append(f'[WARN] {name}: 缺少惯性属性')
+                continue
+
+            mass = float(inertial.find('mass').get('value', 0))
+            if mass &lt;= 0:
+                self.issues.append(f'[ERROR] {name}: 质量为零或负值')
+
+            inertia = inertial.find('inertia')
+            if inertia is not None:
+                ixx = float(inertia.get('ixx', 0))
+                iyy = float(inertia.get('iyy', 0))
+                izz = float(inertia.get('izz', 0))
+
+                if ixx &lt;= 0 or iyy &lt;= 0 or izz &lt;= 0:
+                    self.issues.append(f'[ERROR] {name}: 惯量主对角线元素非正')
+
+                if not (ixx + iyy &gt;= izz and ixx + izz &gt;= iyy and iyy + izz &gt;= ixx):
+                    self.issues.append(f'[WARN] {name}: 惯量不满足三角不等式')
+
+    def check_collisions(self):
+        for link in self.root.findall('.//link'):
+            name = link.get('name')
+            visual = link.find('visual')
+            collision = link.find('collision')
+
+            if visual is not None and collision is None:
+                self.issues.append(f'[WARN] {name}: 有视觉模型但缺少碰撞模型')
+
+    def check_joint_limits(self):
+        for joint in self.root.findall('.//joint'):
+            name = joint.get('name')
+            jtype = joint.get('type')
+
+            if jtype in ['revolute', 'prismatic']:
+                limit = joint.find('limit')
+                if limit is None:
+                    self.issues.append(f'[ERROR] {name}: 缺少关节限位')
+                else:
+                    lower = float(limit.get('lower', 0))
+                    upper = float(limit.get('upper', 0))
+                    if lower &gt;= upper:
+                        self.issues.append(f'[ERROR] {name}: 关节限位无效 ({lower} &gt;= {upper})')
+
+    def check_tree_structure(self):
+        parents = set()
+        children = set()
+        for joint in self.root.findall('.//joint'):
+            parents.add(joint.find('parent').get('link'))
+            child = joint.find('child').get('link')
+            if child in children:
+                self.issues.append(f'[ERROR] {child}: 存在多个父连杆（不是树结构）')
+            children.add(child)"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> xml.etree.ElementTree </span><span style="color:#D73A49;--shiki-dark:#F97583">as</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> ET</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> numpy </span><span style="color:#D73A49;--shiki-dark:#F97583">as</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> np</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> URDFValidator</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, urdf_path):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.tree </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> ET</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.parse(urdf_path)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.root </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.tree.getroot()</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.issues </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> []</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> validate</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.check_inertials()</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.check_collisions()</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.check_joint_limits()</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.check_tree_structure()</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.issues</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> check_inertials</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> link </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.root.findall(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'.//link'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            name </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> link.get(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'name'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            inertial </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> link.find(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'inertial'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> inertial </span><span style="color:#D73A49;--shiki-dark:#F97583">is</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> None</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">                self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.issues.append(</span><span style="color:#D73A49;--shiki-dark:#F97583">f</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'[WARN] </span><span style="color:#005CC5;--shiki-dark:#79B8FF">{</span><span style="color:#24292E;--shiki-dark:#E1E4E8">name</span><span style="color:#005CC5;--shiki-dark:#79B8FF">}</span><span style="color:#032F62;--shiki-dark:#9ECBFF">: 缺少惯性属性'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">                continue</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            mass </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> float</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(inertial.find(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'mass'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">).get(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'value'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> mass </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">                self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.issues.append(</span><span style="color:#D73A49;--shiki-dark:#F97583">f</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'[ERROR] </span><span style="color:#005CC5;--shiki-dark:#79B8FF">{</span><span style="color:#24292E;--shiki-dark:#E1E4E8">name</span><span style="color:#005CC5;--shiki-dark:#79B8FF">}</span><span style="color:#032F62;--shiki-dark:#9ECBFF">: 质量为零或负值'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            inertia </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> inertial.find(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'inertia'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> inertia </span><span style="color:#D73A49;--shiki-dark:#F97583">is</span><span style="color:#D73A49;--shiki-dark:#F97583"> not</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> None</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                ixx </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> float</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(inertia.get(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'ixx'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                iyy </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> float</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(inertia.get(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'iyy'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                izz </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> float</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(inertia.get(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'izz'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">                if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ixx </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#D73A49;--shiki-dark:#F97583"> or</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> iyy </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#D73A49;--shiki-dark:#F97583"> or</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> izz </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">                    self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.issues.append(</span><span style="color:#D73A49;--shiki-dark:#F97583">f</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'[ERROR] </span><span style="color:#005CC5;--shiki-dark:#79B8FF">{</span><span style="color:#24292E;--shiki-dark:#E1E4E8">name</span><span style="color:#005CC5;--shiki-dark:#79B8FF">}</span><span style="color:#032F62;--shiki-dark:#9ECBFF">: 惯量主对角线元素非正'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">                if</span><span style="color:#D73A49;--shiki-dark:#F97583"> not</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (ixx </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> iyy </span><span style="color:#D73A49;--shiki-dark:#F97583">>=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> izz </span><span style="color:#D73A49;--shiki-dark:#F97583">and</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ixx </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> izz </span><span style="color:#D73A49;--shiki-dark:#F97583">>=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> iyy </span><span style="color:#D73A49;--shiki-dark:#F97583">and</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> iyy </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> izz </span><span style="color:#D73A49;--shiki-dark:#F97583">>=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ixx):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">                    self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.issues.append(</span><span style="color:#D73A49;--shiki-dark:#F97583">f</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'[WARN] </span><span style="color:#005CC5;--shiki-dark:#79B8FF">{</span><span style="color:#24292E;--shiki-dark:#E1E4E8">name</span><span style="color:#005CC5;--shiki-dark:#79B8FF">}</span><span style="color:#032F62;--shiki-dark:#9ECBFF">: 惯量不满足三角不等式'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> check_collisions</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> link </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.root.findall(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'.//link'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            name </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> link.get(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'name'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            visual </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> link.find(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'visual'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            collision </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> link.find(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'collision'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> visual </span><span style="color:#D73A49;--shiki-dark:#F97583">is</span><span style="color:#D73A49;--shiki-dark:#F97583"> not</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> None</span><span style="color:#D73A49;--shiki-dark:#F97583"> and</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> collision </span><span style="color:#D73A49;--shiki-dark:#F97583">is</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> None</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">                self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.issues.append(</span><span style="color:#D73A49;--shiki-dark:#F97583">f</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'[WARN] </span><span style="color:#005CC5;--shiki-dark:#79B8FF">{</span><span style="color:#24292E;--shiki-dark:#E1E4E8">name</span><span style="color:#005CC5;--shiki-dark:#79B8FF">}</span><span style="color:#032F62;--shiki-dark:#9ECBFF">: 有视觉模型但缺少碰撞模型'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> check_joint_limits</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> joint </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.root.findall(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'.//joint'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            name </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> joint.get(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'name'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            jtype </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> joint.get(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'type'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> jtype </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'revolute'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'prismatic'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                limit </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> joint.find(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'limit'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">                if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> limit </span><span style="color:#D73A49;--shiki-dark:#F97583">is</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> None</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">                    self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.issues.append(</span><span style="color:#D73A49;--shiki-dark:#F97583">f</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'[ERROR] </span><span style="color:#005CC5;--shiki-dark:#79B8FF">{</span><span style="color:#24292E;--shiki-dark:#E1E4E8">name</span><span style="color:#005CC5;--shiki-dark:#79B8FF">}</span><span style="color:#032F62;--shiki-dark:#9ECBFF">: 缺少关节限位'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">                else</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                    lower </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> float</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(limit.get(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'lower'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                    upper </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> float</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(limit.get(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'upper'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">                    if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> lower </span><span style="color:#D73A49;--shiki-dark:#F97583">>=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> upper:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">                        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.issues.append(</span><span style="color:#D73A49;--shiki-dark:#F97583">f</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'[ERROR] </span><span style="color:#005CC5;--shiki-dark:#79B8FF">{</span><span style="color:#24292E;--shiki-dark:#E1E4E8">name</span><span style="color:#005CC5;--shiki-dark:#79B8FF">}</span><span style="color:#032F62;--shiki-dark:#9ECBFF">: 关节限位无效 (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">{</span><span style="color:#24292E;--shiki-dark:#E1E4E8">lower</span><span style="color:#005CC5;--shiki-dark:#79B8FF">}</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> >= </span><span style="color:#005CC5;--shiki-dark:#79B8FF">{</span><span style="color:#24292E;--shiki-dark:#E1E4E8">upper</span><span style="color:#005CC5;--shiki-dark:#79B8FF">}</span><span style="color:#032F62;--shiki-dark:#9ECBFF">)'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> check_tree_structure</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        parents </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> set</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        children </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> set</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> joint </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.root.findall(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'.//joint'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            parents.add(joint.find(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'parent'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">).get(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'link'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            child </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> joint.find(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'child'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">).get(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'link'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> child </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> children:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">                self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.issues.append(</span><span style="color:#D73A49;--shiki-dark:#F97583">f</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'[ERROR] </span><span style="color:#005CC5;--shiki-dark:#79B8FF">{</span><span style="color:#24292E;--shiki-dark:#E1E4E8">child</span><span style="color:#005CC5;--shiki-dark:#79B8FF">}</span><span style="color:#032F62;--shiki-dark:#9ECBFF">: 存在多个父连杆（不是树结构）'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            children.add(child)</span></span></code></pre></div><h2 id="urdf-与-sdf-转换">URDF 与 SDF 转换</h2><p>Gazebo 使用 SDF 格式进行仿真，ROS2 工具链提供了 URDF 到 SDF 的自动转换。但某些仿真特性（如传感器插件、物理属性细调）需要在 SDF 中额外配置。</p>
+<div class="code-block-wrapper" data-lang="xml" data-code="&lt;gazebo reference=&quot;link_1&quot;&gt;
+  &lt;mu1&gt;0.5&lt;/mu1&gt;
+  &lt;mu2&gt;0.5&lt;/mu2&gt;
+  &lt;material&gt;Gazebo/Blue&lt;/material&gt;
+&lt;/gazebo&gt;
+
+&lt;gazebo&gt;
+  &lt;plugin filename=&quot;gz-sim-diff-drive-system&quot; name=&quot;gz::sim::systems::DiffDrive&quot;&gt;
+    &lt;left_joint&gt;left_wheel_joint&lt;/left_joint&gt;
+    &lt;right_joint&gt;right_wheel_joint&lt;/right_joint&gt;
+    &lt;wheel_separation&gt;0.4&lt;/wheel_separation&gt;
+    &lt;wheel_radius&gt;0.08&lt;/wheel_radius&gt;
+    &lt;odom_publish_frequency&gt;50&lt;/odom_publish_frequency&gt;
+    &lt;topic&gt;/cmd_vel&lt;/topic&gt;
+    &lt;odom_topic&gt;/odom&lt;/odom_topic&gt;
+    &lt;frame_id&gt;odom&lt;/frame_id&gt;
+    &lt;child_frame_id&gt;base_link&lt;/child_frame_id&gt;
+  &lt;/plugin&gt;
+&lt;/gazebo&gt;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">gazebo</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> reference</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"link_1"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">mu1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>0.5&#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">mu1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">mu2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>0.5&#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">mu2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">material</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>Gazebo/Blue&#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">material</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">gazebo</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">gazebo</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">plugin</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> filename</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"gz-sim-diff-drive-system"</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"gz::sim::systems::DiffDrive"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">left_joint</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>left_wheel_joint&#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">left_joint</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">right_joint</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>right_wheel_joint&#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">right_joint</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">wheel_separation</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>0.4&#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">wheel_separation</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">wheel_radius</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>0.08&#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">wheel_radius</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">odom_publish_frequency</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>50&#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">odom_publish_frequency</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">topic</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>/cmd_vel&#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">topic</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">odom_topic</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>/odom&#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">odom_topic</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">frame_id</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>odom&#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">frame_id</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="color:#22863A;--shiki-dark:#85E89D">child_frame_id</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>base_link&#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">child_frame_id</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">plugin</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;/</span><span style="color:#22863A;--shiki-dark:#85E89D">gazebo</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre></div><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>URDF</th>
+<th>SDF</th>
+<th>处理方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>连杆几何</td>
+<td>支持</td>
+<td>支持</td>
+<td>自动转换</td>
+</tr>
+<tr>
+<td>关节类型</td>
+<td>支持</td>
+<td>支持</td>
+<td>自动转换</td>
+</tr>
+<tr>
+<td>传感器</td>
+<td>不支持</td>
+<td>支持</td>
+<td>需 gazebo 扩展标签</td>
+</tr>
+<tr>
+<td>物理属性</td>
+<td>有限</td>
+<td>完整</td>
+<td>需 gazebo 扩展标签</td>
+</tr>
+<tr>
+<td>控制插件</td>
+<td>不支持</td>
+<td>支持</td>
+<td>需 gazebo 扩展标签</td>
+</tr>
+<tr>
+<td>闭环运动链</td>
+<td>不支持</td>
+<td>支持</td>
+<td>URDF 无法表示</td>
+</tr>
+</tbody></table>
+<h2 id="小结">小结</h2><ul>
+<li>URDF 通过连杆-关节树结构描述机器人物理模型，是 ROS 生态的标准模型格式</li>
+<li>连杆的三个属性块（visual、collision、inertial）分别服务于可视化、碰撞检测和动力学仿真</li>
+<li>Xacro 宏语言通过参数化和宏定义简化复杂模型编写，是工程实践中的必备工具</li>
+<li>惯性参数的正确性直接影响仿真精度，需通过 CAD 模型或公式计算</li>
+<li>模型验证工具和自定义检查脚本确保 URDF 模型的完整性和一致性</li>
+<li>URDF 到 SDF 的转换通过 Gazebo 扩展标签补充仿真专属特性</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../hardware-and-systems/ros-and-middleware/simulation-tools/gazebo-simulation.html"><span class="label">Previous</span>Gazebo 仿真环境</a><a class="next" href="../../../hardware-and-systems/ros-and-middleware/simulation-tools/digital-twin.html"><span class="label">Next</span>数字孪生与 Sim-to-Real</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#连杆定义与属性" data-outline-link="连杆定义与属性">连杆定义与属性</a></li><li class="depth-2"><a href="#xacro-宏语言" data-outline-link="xacro-宏语言">Xacro 宏语言</a></li><li class="depth-2"><a href="#模型验证与调试" data-outline-link="模型验证与调试">模型验证与调试</a></li><li class="depth-2"><a href="#urdf-与-sdf-转换" data-outline-link="urdf-与-sdf-转换">URDF 与 SDF 转换</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

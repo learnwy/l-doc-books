@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>执行沙箱与安全隔离 · AI 系统深度剖析</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:AI 系统深度剖析" data-pagefind-meta="slug:ai-systems-deep-dive">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">AI 系统深度剖析</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item active" href="../../../ai-systems-deep-dive/index.html" aria-current="page" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../ai-systems-deep-dive/index.html">AI 系统深度剖析</a><a class="back-to-hubs" href="../../../ai-systems-deep-dive/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/index.html">AI 自主编程与智能编码自动化 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="ai-systems-deep-dive"><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:ai-autonomous-coding/autonomous-coding-foundations"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/autonomous-coding-foundations/index.html">自主编程基础 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/autonomous-coding-foundations/assisted-to-autonomous.html">从辅助编程到自主开发的演进</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/autonomous-coding-foundations/ai-agent-coding-architecture.html">AI 编码 Agent 的核心架构</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/autonomous-coding-foundations/code-generation-reliability.html">代码生成的可靠性与正确性保证</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/autonomous-coding-foundations/autonomous-coding-landscape.html">自主编码工具与平台全景</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:ai-autonomous-coding/intelligent-coding-workflows"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/intelligent-coding-workflows/index.html">智能编码工作流 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/intelligent-coding-workflows/task-decomposition-planning.html">任务分解与自主规划策略</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/intelligent-coding-workflows/context-aware-generation.html">上下文感知的代码生成</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/intelligent-coding-workflows/test-driven-ai-coding.html">测试驱动的 AI 编码循环</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/intelligent-coding-workflows/multi-agent-coding-pipelines.html">多 Agent 编码流水线</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:ai-autonomous-coding/harness-and-orchestration" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/harness-and-orchestration/index.html">Harness 与编排引擎 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/harness-and-orchestration/coding-agent-harness.html">编码 Agent Harness 设计</a></li><li class="leaf"><a class="leaf-title active" href="../../../ai-systems-deep-dive/ai-autonomous-coding/harness-and-orchestration/execution-sandboxing.html">执行沙箱与安全隔离</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/harness-and-orchestration/feedback-loop-self-repair.html">反馈循环与自修复机制</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/harness-and-orchestration/observability-debugging.html">可观测性与 Agent 调试</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:ai-autonomous-coding/scaling-and-production"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/scaling-and-production/index.html">规模化与生产实践 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/scaling-and-production/enterprise-ai-coding.html">企业级 AI 编码平台架构</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/scaling-and-production/quality-assurance-at-scale.html">规模化质量保障体系</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/scaling-and-production/cost-optimization-strategy.html">成本优化与资源调度策略</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/scaling-and-production/future-autonomous-development.html">自主开发的未来趋势</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part VI · 微调与自主 (Fine-tuning &amp; Autonomy)</span><span>AI 自主编程与智能编码自动化 简介</span><span>Harness 与编排引擎 简介</span><span>执行沙箱与安全隔离</span></nav>
+    <article class="content prose"><h1 id="执行沙箱与安全隔离">执行沙箱与安全隔离</h1><h2 id="核心概念">核心概念</h2><p><strong>执行沙箱</strong>是自主编码系统中隔离 AI 生成代码运行环境的安全层。当编码 Agent 拥有修改文件、执行 Shell 命令、安装依赖的能力时，一个未经约束的 Agent 可能删除关键文件、引入恶意依赖或泄露敏感信息。沙箱的目标是让 Agent 在一个&quot;可破坏但不影响真实环境&quot;的空间中自由探索，同时对资源消耗和行为边界施加严格约束。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[Agent 执行请求] --&gt; B{沙箱调度器}&#10;    B --&gt; C[容器沙箱]&#10;    B --&gt; D[microVM 沙箱]&#10;    B --&gt; E[Git Worktree 沙箱]&#10;    C --&gt; F[文件系统隔离]&#10;    C --&gt; G[网络策略]&#10;    C --&gt; H[资源限制]&#10;    D --&gt; F&#10;    D --&gt; G&#10;    D --&gt; H&#10;    E --&gt; I[分支隔离]&#10;    F --&gt; J[执行引擎]&#10;    G --&gt; J&#10;    H --&gt; J&#10;    I --&gt; J&#10;    J --&gt; K[结果收集]&#10;    K --&gt; L{安全扫描}&#10;    L --&gt;|通过| M[结果返回 Agent]&#10;    L --&gt;|拒绝| N[隔离 + 告警]"></pre><table>
+<thead>
+<tr>
+<th>沙箱类型</th>
+<th>隔离级别</th>
+<th>启动速度</th>
+<th>资源开销</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Docker 容器</td>
+<td>进程级（共享内核）</td>
+<td>1-3 秒</td>
+<td>中等</td>
+<td>日常开发、CI 流水线集成</td>
+</tr>
+<tr>
+<td>Firecracker microVM</td>
+<td>虚拟机级（独立内核）</td>
+<td>125ms</td>
+<td>较低</td>
+<td>高安全要求、多租户环境</td>
+</tr>
+<tr>
+<td>gVisor 容器</td>
+<td>系统调用级</td>
+<td>2-5 秒</td>
+<td>较高</td>
+<td>平衡安全与性能</td>
+</tr>
+<tr>
+<td>Git Worktree</td>
+<td>文件级（无执行隔离）</td>
+<td>&lt; 1 秒</td>
+<td>极低</td>
+<td>纯代码生成、无需执行</td>
+</tr>
+<tr>
+<td>Wasm 沙箱</td>
+<td>指令级</td>
+<td>&lt; 100ms</td>
+<td>极低</td>
+<td>轻量计算、浏览器端场景</td>
+</tr>
+</tbody></table>
+<h2 id="容器化沙箱架构">容器化沙箱架构</h2><p>容器是编码 Agent 最常用的沙箱方案。每个 Agent 任务在一个独立的容器中运行，容器镜像预装了项目依赖和开发工具链，确保环境一致性。</p>
+<p>Docker 沙箱的核心配置要素：</p>
+<div class="code-block-wrapper" data-lang="yaml" data-code="sandbox:
+  runtime: docker
+  image: 'coding-agent-sandbox:node20-slim'
+
+  filesystem:
+    readonly_mounts:
+      - host: '/repo/snapshot'
+        container: '/workspace'
+        type: 'overlay'
+    writable_layers:
+      - '/workspace/src'
+      - '/workspace/tests'
+      - '/tmp'
+    blocked_paths:
+      - '/workspace/.env'
+      - '/workspace/.git/config'
+      - '/workspace/secrets/'
+
+  network:
+    mode: 'restricted'
+    allow:
+      - 'registry.npmjs.org:443'
+      - 'github.com:443'
+    deny_all_other: true
+    dns: 'cluster-resolver'
+
+  resources:
+    cpu: '2.0'
+    memory: '4Gi'
+    disk: '10Gi'
+    timeout: '30m'
+    max_processes: 100
+    max_open_files: 1024"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">sandbox</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  runtime</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">docker</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  image</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'coding-agent-sandbox:node20-slim'</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  filesystem</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    readonly_mounts</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      - </span><span style="color:#22863A;--shiki-dark:#85E89D">host</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'/repo/snapshot'</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">        container</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'/workspace'</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">        type</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'overlay'</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    writable_layers</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      - </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'/workspace/src'</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      - </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'/workspace/tests'</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      - </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'/tmp'</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    blocked_paths</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      - </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'/workspace/.env'</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      - </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'/workspace/.git/config'</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      - </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'/workspace/secrets/'</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  network</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    mode</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'restricted'</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    allow</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      - </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'registry.npmjs.org:443'</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      - </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'github.com:443'</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    deny_all_other</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">true</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    dns</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'cluster-resolver'</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  resources</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    cpu</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'2.0'</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    memory</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'4Gi'</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    disk</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'10Gi'</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    timeout</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'30m'</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    max_processes</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">100</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    max_open_files</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1024</span></span></code></pre></div><p>OverlayFS 是容器沙箱中文件系统隔离的关键技术——它将仓库快照作为只读底层，Agent 的所有写入操作发生在上层。这意味着 Agent 可以自由修改文件而不影响原始仓库，任务完成后只需提取上层的 diff 即可得到变更集。</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="interface SandboxManager {
+  create(config: SandboxConfig): Promise&lt;Sandbox&gt;;
+  destroy(sandboxId: string): Promise&lt;void&gt;;
+  exec(sandboxId: string, command: string): Promise&lt;ExecResult&gt;;
+  copyOut(sandboxId: string, path: string): Promise&lt;Buffer&gt;;
+  getDiff(sandboxId: string): Promise&lt;FileDiff[]&gt;;
+}
+
+interface Sandbox {
+  id: string;
+  status: 'creating' | 'running' | 'stopped' | 'destroyed';
+  createdAt: Date;
+  resourceUsage: ResourceUsage;
+}
+
+interface ExecResult {
+  exitCode: number;
+  stdout: string;
+  stderr: string;
+  duration: number;
+  resourceSnapshot: ResourceUsage;
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> SandboxManager</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  create</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">config</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> SandboxConfig</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Sandbox</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>;</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  destroy</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">sandboxId</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#005CC5;--shiki-dark:#79B8FF">void</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>;</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  exec</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">sandboxId</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">command</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">ExecResult</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>;</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  copyOut</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">sandboxId</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">path</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Buffer</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>;</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  getDiff</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">sandboxId</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">FileDiff</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[]>;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Sandbox</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  id</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  status</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'creating'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'running'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'stopped'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'destroyed'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  createdAt</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Date</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  resourceUsage</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ResourceUsage</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ExecResult</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  exitCode</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  stdout</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  stderr</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  duration</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  resourceSnapshot</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ResourceUsage</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><p>对于安全要求更高的场景（如金融、医疗行业），Firecracker microVM 提供了更强的隔离——每个沙箱运行在独立的轻量级虚拟机中，拥有独立的内核。即使 Agent 生成的代码利用了内核漏洞，也无法逃逸到宿主机。Firecracker 的启动时间仅 125ms，使其在安全与性能之间取得了出色的平衡。</p>
+<h2 id="文件系统与权限控制">文件系统与权限控制</h2><p>文件系统隔离不仅仅是&quot;把代码放在容器里&quot;——它需要精细的读写权限控制，确保 Agent 只能访问它需要的文件，不能触碰敏感配置。</p>
+<p>权限模型分为三个层级：</p>
+<ol>
+<li><p><strong>目录级白名单</strong>：Agent 只能在指定目录中写入。典型配置是允许写入 <code>src/</code>、<code>tests/</code>、<code>docs/</code>，禁止写入 <code>.github/</code>、配置根目录。</p>
+</li>
+<li><p><strong>文件模式保护</strong>：某些文件即使在可写目录中也需要保护。<code>package-lock.json</code>、<code>.eslintrc</code> 等配置文件通常标记为只读，Agent 修改这些文件需要显式授权。</p>
+</li>
+<li><p><strong>敏感内容过滤</strong>：沙箱在挂载仓库快照前，自动将 <code>.env</code>、密钥文件、证书替换为占位符。Agent 看到的是脱敏后的版本，永远无法接触到真实的密钥。</p>
+</li>
+</ol>
+<div class="code-block-wrapper" data-lang="typescript" data-code="interface FileSystemPolicy {
+  rules: FileRule[];
+  sensitivePatterns: string[];
+  maxFileSize: number;
+  maxTotalSize: number;
+}
+
+interface FileRule {
+  pattern: string;
+  permission: 'read' | 'write' | 'none';
+  requireApproval: boolean;
+}
+
+const defaultPolicy: FileSystemPolicy = {
+  rules: [
+    { pattern: 'src/**', permission: 'write', requireApproval: false },
+    { pattern: 'tests/**', permission: 'write', requireApproval: false },
+    { pattern: '*.lock', permission: 'read', requireApproval: false },
+    { pattern: '.env*', permission: 'none', requireApproval: false },
+    { pattern: '.github/**', permission: 'read', requireApproval: false },
+    { pattern: 'package.json', permission: 'write', requireApproval: true },
+  ],
+  sensitivePatterns: ['**/*.pem', '**/*.key', '**/.env*', '**/secrets/**', '**/credentials/**'],
+  maxFileSize: 1024 * 1024,
+  maxTotalSize: 100 * 1024 * 1024,
+};"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> FileSystemPolicy</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  rules</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> FileRule</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  sensitivePatterns</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  maxFileSize</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  maxTotalSize</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> FileRule</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  pattern</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  permission</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'read'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'write'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'none'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  requireApproval</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> boolean</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> defaultPolicy</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> FileSystemPolicy</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  rules: [</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    { pattern: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'src/**'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, permission: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'write'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, requireApproval: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">false</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    { pattern: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'tests/**'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, permission: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'write'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, requireApproval: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">false</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    { pattern: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'*.lock'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, permission: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'read'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, requireApproval: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">false</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    { pattern: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'.env*'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, permission: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'none'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, requireApproval: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">false</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    { pattern: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'.github/**'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, permission: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'read'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, requireApproval: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">false</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    { pattern: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'package.json'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, permission: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'write'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, requireApproval: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">true</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  ],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  sensitivePatterns: [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'**/*.pem'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'**/*.key'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'**/.env*'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'**/secrets/**'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'**/credentials/**'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  maxFileSize: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1024</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1024</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  maxTotalSize: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">100</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1024</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1024</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span></code></pre></div><p>文件系统审计是另一个关键能力——沙箱记录 Agent 的每一次文件操作（读、写、删除、重命名），形成完整的操作时间线。这不仅用于事后审计，还可以在实时检测到异常模式时触发告警（如短时间内大量删除文件）。</p>
+<h2 id="网络策略与供应链安全">网络策略与供应链安全</h2><p>自主编码 Agent 需要网络访问来安装依赖、查阅文档和调用 API，但不受约束的网络访问会引入严重的安全风险——Agent 可能从恶意源安装带后门的包，或将仓库代码外传到未授权的服务器。</p>
+<p>网络隔离策略的核心原则是<strong>默认拒绝，显式放行</strong>：</p>
+<div class="code-block-wrapper" data-lang="yaml" data-code="network_policy:
+  default: deny
+
+  egress_rules:
+    - name: 'package-registry'
+      destinations: ['registry.npmjs.org', 'pypi.org']
+      ports: [443]
+      protocol: HTTPS
+
+    - name: 'source-control'
+      destinations: ['github.com', 'api.github.com']
+      ports: [443]
+      protocol: HTTPS
+
+    - name: 'llm-api'
+      destinations: ['api.openai.com', 'api.anthropic.com']
+      ports: [443]
+      protocol: HTTPS
+
+  ingress_rules: []
+
+  dns:
+    resolver: 'internal'
+    block_external: true
+
+  monitoring:
+    log_all_connections: true
+    alert_on_blocked: true
+    bandwidth_limit: '100Mbps'"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">network_policy</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  default</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">deny</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  egress_rules</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    - </span><span style="color:#22863A;--shiki-dark:#85E89D">name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'package-registry'</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      destinations</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'registry.npmjs.org'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'pypi.org'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      ports</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">443</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      protocol</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">HTTPS</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    - </span><span style="color:#22863A;--shiki-dark:#85E89D">name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'source-control'</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      destinations</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'github.com'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'api.github.com'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      ports</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">443</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      protocol</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">HTTPS</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    - </span><span style="color:#22863A;--shiki-dark:#85E89D">name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'llm-api'</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      destinations</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'api.openai.com'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'api.anthropic.com'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      ports</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">443</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      protocol</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">HTTPS</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  ingress_rules</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: []</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  dns</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    resolver</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'internal'</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    block_external</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">true</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  monitoring</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    log_all_connections</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">true</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    alert_on_blocked</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">true</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    bandwidth_limit</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'100Mbps'</span></span></code></pre></div><p>供应链攻击是 AI 生成代码面临的独特威胁。LLM 可能生成引用不存在的包名（&quot;幻觉包&quot;），攻击者可以抢注这些包名并植入恶意代码。防御策略包括：</p>
+<table>
+<thead>
+<tr>
+<th>防御措施</th>
+<th>实现方式</th>
+<th>防御目标</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>依赖白名单</td>
+<td>预定义允许安装的包列表</td>
+<td>阻止未授权依赖引入</td>
+</tr>
+<tr>
+<td>私有镜像源</td>
+<td>使用企业内部 npm/PyPI 镜像</td>
+<td>控制包来源</td>
+</tr>
+<tr>
+<td>锁文件校验</td>
+<td>对比新增依赖与锁文件差异</td>
+<td>检测意外依赖变更</td>
+</tr>
+<tr>
+<td>包签名验证</td>
+<td>校验包的 npm provenance</td>
+<td>确保包来源可信</td>
+</tr>
+<tr>
+<td>沙箱内扫描</td>
+<td>安装后立即运行 SCA 扫描</td>
+<td>检测已知漏洞</td>
+</tr>
+<tr>
+<td>幻觉包检测</td>
+<td>验证包是否真实存在且有活跃维护</td>
+<td>防止恶意抢注利用</td>
+</tr>
+</tbody></table>
+<h2 id="资源限制与超时控制">资源限制与超时控制</h2><p>资源限制是防止 Agent 失控的最后一道防线。一个陷入无限循环的 Agent 可能耗尽所有 CPU 和内存，影响同一宿主机上的其他任务。</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="interface ResourceLimits {
+  cpu: CpuLimit;
+  memory: MemoryLimit;
+  disk: DiskLimit;
+  time: TimeLimit;
+  process: ProcessLimit;
+}
+
+interface CpuLimit {
+  cores: number;
+  throttleAt: number;
+}
+
+interface MemoryLimit {
+  maxBytes: number;
+  swapBytes: number;
+  oomAction: 'kill' | 'pause-and-alert';
+}
+
+interface TimeLimit {
+  totalTimeout: number;
+  perStepTimeout: number;
+  idleTimeout: number;
+}
+
+interface ResourceMonitor {
+  track(sandboxId: string): ResourceStream;
+  alert(sandboxId: string, threshold: ResourceThreshold): void;
+  enforce(sandboxId: string, limits: ResourceLimits): void;
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ResourceLimits</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  cpu</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> CpuLimit</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  memory</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> MemoryLimit</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  disk</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> DiskLimit</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  time</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> TimeLimit</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  process</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ProcessLimit</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> CpuLimit</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  cores</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  throttleAt</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> MemoryLimit</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  maxBytes</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  swapBytes</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  oomAction</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'kill'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'pause-and-alert'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> TimeLimit</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  totalTimeout</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  perStepTimeout</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  idleTimeout</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ResourceMonitor</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  track</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">sandboxId</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ResourceStream</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  alert</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">sandboxId</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">threshold</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ResourceThreshold</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> void</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  enforce</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">sandboxId</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">limits</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ResourceLimits</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> void</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><p>资源限制的关键实践：</p>
+<ul>
+<li><strong>CPU</strong>：分配 2 核上限，使用 cgroups v2 的 CPU 带宽控制。当 CPU 使用率持续超过 90% 达 5 分钟时触发告警。</li>
+<li><strong>内存</strong>：硬限制 4GB，OOM 时优先杀死 Agent 进程而非宿主进程。启用内存水位监控，在达到 80% 时预警。</li>
+<li><strong>磁盘</strong>：限制 10GB 写入量。使用 quota 机制防止磁盘填满。定期清理临时文件和构建缓存。</li>
+<li><strong>时间</strong>：总任务超时 30 分钟，单步操作超时 5 分钟，空闲超时 2 分钟。超时后优雅终止，保留中间产物用于分析。</li>
+<li><strong>进程数</strong>：限制最大 100 个进程，防止 fork 炸弹。限制打开的文件描述符数量为 1024。</li>
+</ul>
+<h2 id="git-worktree-隔离模式">Git Worktree 隔离模式</h2><p>对于不需要执行代码的纯生成场景（如代码审查建议、文档生成），Git Worktree 提供了更轻量的隔离方案。</p>
+<div class="code-block-wrapper" data-lang="bash" data-code="repo/
+├── .git/                    # 共享的 Git 数据库
+├── main-worktree/           # 主工作目录（开发者使用）
+├── agent-worktree-task-001/ # Agent 任务 1 的工作目录
+├── agent-worktree-task-002/ # Agent 任务 2 的工作目录
+└── agent-worktree-task-003/ # Agent 任务 3 的工作目录"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">repo/</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">├──</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> .git/</span><span style="color:#6A737D;--shiki-dark:#6A737D">                    # 共享的 Git 数据库</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">├──</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> main-worktree/</span><span style="color:#6A737D;--shiki-dark:#6A737D">           # 主工作目录（开发者使用）</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">├──</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> agent-worktree-task-001/</span><span style="color:#6A737D;--shiki-dark:#6A737D"> # Agent 任务 1 的工作目录</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">├──</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> agent-worktree-task-002/</span><span style="color:#6A737D;--shiki-dark:#6A737D"> # Agent 任务 2 的工作目录</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">└──</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> agent-worktree-task-003/</span><span style="color:#6A737D;--shiki-dark:#6A737D"> # Agent 任务 3 的工作目录</span></span></code></pre></div><p>每个 Worktree 检出独立的分支，Agent 在自己的 Worktree 中操作，不影响其他 Worktree 和主工作目录。任务完成后，Harness 从 Worktree 中提取 diff，创建 PR，然后清理 Worktree。</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="interface WorktreeManager {
+  create(taskId: string, baseBranch: string): Promise&lt;WorktreeContext&gt;;
+  getDiff(taskId: string): Promise&lt;FileDiff[]&gt;;
+  createPR(taskId: string, title: string, body: string): Promise&lt;PullRequest&gt;;
+  cleanup(taskId: string): Promise&lt;void&gt;;
+  listActive(): Promise&lt;WorktreeContext[]&gt;;
+}
+
+interface WorktreeContext {
+  taskId: string;
+  path: string;
+  branch: string;
+  baseBranch: string;
+  createdAt: Date;
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> WorktreeManager</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  create</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">taskId</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">baseBranch</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">WorktreeContext</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>;</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  getDiff</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">taskId</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">FileDiff</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[]>;</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  createPR</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">taskId</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">title</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">body</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">PullRequest</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>;</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  cleanup</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">taskId</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#005CC5;--shiki-dark:#79B8FF">void</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>;</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  listActive</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">WorktreeContext</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[]>;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> WorktreeContext</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  taskId</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  path</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  branch</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  baseBranch</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  createdAt</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Date</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><p>Git Worktree 的优势在于零额外资源开销（不需要容器或 VM），并且与 Git 工作流天然集成。但它不提供执行隔离——Agent 生成的代码在运行时仍需要容器沙箱。因此在实际架构中，Worktree 和容器沙箱通常组合使用：Worktree 管理代码变更的隔离，容器管理执行环境的隔离。</p>
+<table>
+<thead>
+<tr>
+<th>隔离层</th>
+<th>技术</th>
+<th>隔离内容</th>
+<th>生命周期</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>代码隔离</td>
+<td>Git Worktree</td>
+<td>文件变更互不影响</td>
+<td>与任务绑定</td>
+</tr>
+<tr>
+<td>执行隔离</td>
+<td>Docker/Firecracker</td>
+<td>运行环境独立</td>
+<td>按需创建销毁</td>
+</tr>
+<tr>
+<td>网络隔离</td>
+<td>iptables/eBPF</td>
+<td>网络访问受控</td>
+<td>随容器生命周期</td>
+</tr>
+<tr>
+<td>数据隔离</td>
+<td>OverlayFS + 脱敏</td>
+<td>敏感信息不可见</td>
+<td>挂载时生效</td>
+</tr>
+</tbody></table>
+<h2 id="小结">小结</h2><ul>
+<li><strong>执行沙箱是自主编码系统的安全基石</strong>，确保 AI 生成的代码在隔离环境中运行，不影响真实生产环境。</li>
+<li><strong>容器沙箱</strong>（Docker/Firecracker）是最主流的方案，通过 OverlayFS 实现文件系统隔离，通过 cgroups 实现资源限制。</li>
+<li><strong>文件系统权限</strong>采用三级控制模型：目录白名单、文件模式保护、敏感内容过滤，确保 Agent 只能访问必要的文件。</li>
+<li><strong>网络策略</strong>遵循默认拒绝原则，仅放行包管理器、源码管理和 LLM API 的 HTTPS 连接。</li>
+<li><strong>供应链安全</strong>需要多层防御：依赖白名单、私有镜像源、锁文件校验、幻觉包检测。</li>
+<li><strong>资源限制</strong>是最后一道防线：CPU 2 核、内存 4GB、磁盘 10GB、超时 30 分钟，防止失控 Agent 影响系统。</li>
+<li><strong>Git Worktree</strong> 提供轻量级代码隔离，与容器沙箱组合使用覆盖代码层和执行层的双重隔离需求。</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../ai-systems-deep-dive/ai-autonomous-coding/harness-and-orchestration/coding-agent-harness.html"><span class="label">Previous</span>编码 Agent Harness 设计</a><a class="next" href="../../../ai-systems-deep-dive/ai-autonomous-coding/harness-and-orchestration/feedback-loop-self-repair.html"><span class="label">Next</span>反馈循环与自修复机制</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#容器化沙箱架构" data-outline-link="容器化沙箱架构">容器化沙箱架构</a></li><li class="depth-2"><a href="#文件系统与权限控制" data-outline-link="文件系统与权限控制">文件系统与权限控制</a></li><li class="depth-2"><a href="#网络策略与供应链安全" data-outline-link="网络策略与供应链安全">网络策略与供应链安全</a></li><li class="depth-2"><a href="#资源限制与超时控制" data-outline-link="资源限制与超时控制">资源限制与超时控制</a></li><li class="depth-2"><a href="#git-worktree-隔离模式" data-outline-link="git-worktree-隔离模式">Git Worktree 隔离模式</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

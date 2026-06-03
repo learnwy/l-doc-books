@@ -1,0 +1,607 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>React Server Components 架构原理 · 前端工程化全景</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:前端工程化全景" data-pagefind-meta="slug:frontend-engineering">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">前端工程化全景</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item active" href="../../../frontend-engineering/index.html" aria-current="page" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../frontend-engineering/index.html">前端工程化全景</a><a class="back-to-hubs" href="../../../frontend-engineering/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../frontend-engineering/frontend-architecture-patterns/index.html">前端架构模式 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="frontend-engineering"><li class="chapter"><details class="folder-collapse" data-sb-key="frontend-engineering:folder:frontend-architecture-patterns/rendering-architecture" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../frontend-engineering/frontend-architecture-patterns/rendering-architecture/index.html">渲染架构模式 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-architecture-patterns/rendering-architecture/rendering-strategies-comparison.html">渲染策略对比与选型</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-architecture-patterns/rendering-architecture/islands-architecture.html">Islands Architecture 实践</a></li><li class="leaf"><a class="leaf-title active" href="../../../frontend-engineering/frontend-architecture-patterns/rendering-architecture/react-server-components.html">React Server Components 架构原理</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="frontend-engineering:folder:frontend-architecture-patterns/application-structure"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../frontend-engineering/frontend-architecture-patterns/application-structure/index.html">应用结构设计 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-architecture-patterns/application-structure/feature-sliced-design.html">Feature Sliced Design 方法论</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-architecture-patterns/application-structure/clean-architecture-frontend.html">Clean Architecture 前端实践</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-architecture-patterns/application-structure/modular-layering-strategies.html">模块化分层策略</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="frontend-engineering:folder:frontend-architecture-patterns/federation-and-composition"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../frontend-engineering/frontend-architecture-patterns/federation-and-composition/index.html">联邦与组合 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-architecture-patterns/federation-and-composition/module-federation.html">Module Federation 实践</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-architecture-patterns/federation-and-composition/micro-frontend-runtime-integration.html">微前端运行时集成</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-architecture-patterns/federation-and-composition/remote-component-loading.html">远程组件加载</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="frontend-engineering:folder:frontend-architecture-patterns/architecture-evolution"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../frontend-engineering/frontend-architecture-patterns/architecture-evolution/index.html">架构演进策略 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-architecture-patterns/architecture-evolution/progressive-migration-patterns.html">渐进式迁移模式</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-architecture-patterns/architecture-evolution/performance-driven-architecture.html">性能驱动架构决策</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-architecture-patterns/architecture-evolution/technology-selection-framework.html">技术选型决策框架</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part VI · 架构 (Architecture)</span><span>前端架构模式 简介</span><span>渲染架构模式 简介</span><span>React Server Components 架构原理</span></nav>
+    <article class="content prose"><h1 id="react-server-components-架构原理">React Server Components 架构原理</h1><h2 id="概述">概述</h2><p>React Server Components (RSC) 是 React 19 引入的根本性架构变革，它重新定义了组件的执行位置——某些组件只在服务器端运行，永远不会出现在客户端 bundle 中。RSC 不是传统 SSR 的替代品，而是在其基础上增加了一个新维度：服务端组件可以直接访问数据库、文件系统和后端 API，同时将渲染结果以可流式传输的格式发送给客户端。这使得&quot;前后端分离&quot;的边界从 API 接口级别细化到了组件级别。</p>
+<h2 id="核心概念">核心概念</h2><h3 id="rsc-与传统-ssr-的本质区别">RSC 与传统 SSR 的本质区别</h3><pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    subgraph &quot;Traditional SSR&quot;&#10;        A1[&quot;Server renders full HTML&quot;] --&gt; A2[&quot;Client downloads full JS bundle&quot;]&#10;        A2 --&gt; A3[&quot;Client hydrates entire page&quot;]&#10;    end&#10;    subgraph &quot;React Server Components&quot;&#10;        B1[&quot;Server Components render on server&quot;] --&gt; B2[&quot;RSC Payload streamed&quot;]&#10;        B3[&quot;Client Components bundled separately&quot;] --&gt; B4[&quot;Only client JS shipped&quot;]&#10;        B2 --&gt; B5[&quot;Client merges RSC payload + hydrates client components only&quot;]&#10;    end"></pre><p>关键区别：</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>传统 SSR</th>
+<th>RSC</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>服务端渲染范围</td>
+<td>所有组件的初始 HTML</td>
+<td>仅 Server Components</td>
+</tr>
+<tr>
+<td>客户端 JS 包含</td>
+<td>所有组件代码</td>
+<td>仅 Client Components</td>
+</tr>
+<tr>
+<td>组件可访问</td>
+<td>浏览器 API</td>
+<td>服务端 API（DB、FS、密钥）</td>
+</tr>
+<tr>
+<td>数据获取</td>
+<td>useEffect / getServerSideProps</td>
+<td>组件内直接 async/await</td>
+</tr>
+<tr>
+<td>重新渲染</td>
+<td>客户端 re-render</td>
+<td>服务端重新执行 + 增量更新</td>
+</tr>
+<tr>
+<td>bundle 影响</td>
+<td>所有依赖打入 bundle</td>
+<td>服务端依赖不进入 bundle</td>
+</tr>
+</tbody></table>
+<h3 id="server-components-vs-client-components">Server Components vs Client Components</h3><div class="code-block-wrapper" data-lang="typescript" data-code="// Server Component (默认) - 不需要 'use client' 指令
+// 可以直接访问数据库，其代码和依赖不进入客户端 bundle
+import { db } from '@/lib/database';
+import { formatDate } from 'date-fns'; // 这个 80KB 的库不会打入客户端
+
+async function ArticleList() {
+  // 直接查询数据库 - 无需 API 层
+  const articles = await db.article.findMany({
+    orderBy: { createdAt: 'desc' },
+    take: 20,
+  });
+
+  return (
+    &lt;section&gt;
+      {articles.map(article =&gt; (
+        &lt;article key={article.id}&gt;
+          &lt;h2&gt;{article.title}&lt;/h2&gt;
+          &lt;time&gt;{formatDate(article.createdAt, 'yyyy-MM-dd')}&lt;/time&gt;
+          {/* 嵌入 Client Component 处理交互 */}
+          &lt;LikeButton articleId={article.id} initialCount={article.likes} /&gt;
+        &lt;/article&gt;
+      ))}
+    &lt;/section&gt;
+  );
+}
+
+export default ArticleList;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// Server Component (默认) - 不需要 'use client' 指令</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 可以直接访问数据库，其代码和依赖不进入客户端 bundle</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { db } </span><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '@/lib/database'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { formatDate } </span><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'date-fns'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; </span><span style="color:#6A737D;--shiki-dark:#6A737D">// 这个 80KB 的库不会打入客户端</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">async</span><span style="color:#D73A49;--shiki-dark:#F97583"> function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ArticleList</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">  // 直接查询数据库 - 无需 API 层</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> articles</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> db.article.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">findMany</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    orderBy: { createdAt: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'desc'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    take: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">20</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  });</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">section</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      {</span><span style="color:#E36209;--shiki-dark:#FFAB70">articles</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#E36209;--shiki-dark:#FFAB70">map</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">article</span><span style="color:#D73A49;--shiki-dark:#F97583"> =></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        &#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">article key</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{article.id}</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          &#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">h2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>{article.title}</span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">h2</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          &#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">time</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>{</span><span style="color:#6F42C1;--shiki-dark:#B392F0">formatDate</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(article.createdAt, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'yyyy-MM-dd'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)}</span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">time</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          {</span><span style="color:#6A737D;--shiki-dark:#6A737D">/* 嵌入 Client Component 处理交互 */</span><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">          &#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">LikeButton articleId</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{article.id} initialCount</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{article.likes} </span><span style="color:#D73A49;--shiki-dark:#F97583">/></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        &#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">article</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      ))}</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    &#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">section</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  );</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">export</span><span style="color:#D73A49;--shiki-dark:#F97583"> default</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ArticleList;</span></span></code></pre></div><div class="code-block-wrapper" data-lang="typescript" data-code="// Client Component - 需要 'use client' 指令
+'use client';
+
+import { useState, useTransition } from 'react';
+import { likeArticle } from '@/actions/article';
+
+export function LikeButton({ articleId, initialCount }: Props) {
+  const [count, setCount] = useState(initialCount);
+  const [isPending, startTransition] = useTransition();
+
+  const handleLike = () =&gt; {
+    startTransition(async () =&gt; {
+      const newCount = await likeArticle(articleId);
+      setCount(newCount);
+    });
+  };
+
+  return (
+    &lt;button onClick={handleLike} disabled={isPending}&gt;
+      ❤️ {count} {isPending &amp;&amp; '...'}
+    &lt;/button&gt;
+  );
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// Client Component - 需要 'use client' 指令</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">'use client'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { useState, useTransition } </span><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'react'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { likeArticle } </span><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '@/actions/article'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">export</span><span style="color:#D73A49;--shiki-dark:#F97583"> function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> LikeButton</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ </span><span style="color:#E36209;--shiki-dark:#FFAB70">articleId</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">initialCount</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Props</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">count</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">setCount</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> useState</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(initialCount);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">isPending</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">startTransition</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> useTransition</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> handleLike</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> () </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">    startTransition</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">async</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> () </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> newCount</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> likeArticle</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(articleId);</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">      setCount</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(newCount);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    });</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  };</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    &#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">button onClick</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{handleLike} disabled</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{isPending}</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      ❤️ {</span><span style="color:#E36209;--shiki-dark:#FFAB70">count</span><span style="color:#24292E;--shiki-dark:#E1E4E8">} {</span><span style="color:#E36209;--shiki-dark:#FFAB70">isPending</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> &#x26;&#x26; '...'}</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    &#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">button</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  );</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><h3 id="rsc-传输协议">RSC 传输协议</h3><p>RSC 不传输 HTML，而是传输一种特殊的流式格式（RSC Payload），它描述了 React 组件树的结构。客户端 React 运行时将这个 payload 与已有的客户端组件树合并，实现无损更新。</p>
+<div class="code-block-wrapper" data-lang="text" data-code="// RSC Payload 示意（简化）
+0:[&quot;$&quot;,&quot;section&quot;,null,{&quot;children&quot;:[
+  [&quot;$&quot;,&quot;article&quot;,null,{&quot;children&quot;:[
+    [&quot;$&quot;,&quot;h2&quot;,null,{&quot;children&quot;:&quot;Article Title&quot;}],
+    [&quot;$&quot;,&quot;$Lclient_LikeButton&quot;,null,{&quot;articleId&quot;:&quot;1&quot;,&quot;initialCount&quot;:42}]
+  ]}]
+]}]"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>// RSC Payload 示意（简化）</span></span>
+<span class="line"><span>0:["$","section",null,{"children":[</span></span>
+<span class="line"><span>  ["$","article",null,{"children":[</span></span>
+<span class="line"><span>    ["$","h2",null,{"children":"Article Title"}],</span></span>
+<span class="line"><span>    ["$","$Lclient_LikeButton",null,{"articleId":"1","initialCount":42}]</span></span>
+<span class="line"><span>  ]}]</span></span>
+<span class="line"><span>]}]</span></span></code></pre></div><p>这种设计的优势：</p>
+<ul>
+<li>Server Components 可以传递丰富的 React 元素（不仅仅是 HTML 字符串）</li>
+<li>客户端组件的状态在 RSC 重新渲染时得以保留</li>
+<li>支持流式传输，逐步呈现内容</li>
+</ul>
+<h2 id="实战指南">实战指南</h2><h3 id="server-actions-与表单处理">Server Actions 与表单处理</h3><p>Server Actions 是 RSC 架构中处理数据突变的标准方式，替代了传统的 API Route：</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="// app/actions/article.ts
+'use server';
+
+import { db } from '@/lib/database';
+import { revalidatePath } from 'next/cache';
+import { z } from 'zod';
+
+const CreateArticleSchema = z.object({
+  title: z.string().min(1).max(200),
+  content: z.string().min(10),
+  tags: z.array(z.string()),
+});
+
+export async function createArticle(formData: FormData) {
+  const raw = {
+    title: formData.get('title'),
+    content: formData.get('content'),
+    tags: formData.getAll('tags'),
+  };
+
+  const validated = CreateArticleSchema.safeParse(raw);
+  if (!validated.success) {
+    return { error: validated.error.flatten() };
+  }
+
+  const article = await db.article.create({
+    data: validated.data,
+  });
+
+  revalidatePath('/articles');
+  return { success: true, id: article.id };
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// app/actions/article.ts</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">'use server'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { db } </span><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '@/lib/database'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { revalidatePath } </span><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'next/cache'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { z } </span><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'zod'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> CreateArticleSchema</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> z.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">object</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  title: z.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">().</span><span style="color:#6F42C1;--shiki-dark:#B392F0">min</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">).</span><span style="color:#6F42C1;--shiki-dark:#B392F0">max</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">200</span><span style="color:#24292E;--shiki-dark:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  content: z.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">().</span><span style="color:#6F42C1;--shiki-dark:#B392F0">min</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">10</span><span style="color:#24292E;--shiki-dark:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  tags: z.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">array</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(z.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">export</span><span style="color:#D73A49;--shiki-dark:#F97583"> async</span><span style="color:#D73A49;--shiki-dark:#F97583"> function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> createArticle</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">formData</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> FormData</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> raw</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    title: formData.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">get</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'title'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    content: formData.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">get</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'content'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    tags: formData.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">getAll</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'tags'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  };</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> validated</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> CreateArticleSchema.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">safeParse</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(raw);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">!</span><span style="color:#24292E;--shiki-dark:#E1E4E8">validated.success) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { error: validated.error.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">flatten</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> article</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> db.article.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">create</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    data: validated.data,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  });</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  revalidatePath</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'/articles'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { success: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">true</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, id: article.id };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><div class="code-block-wrapper" data-lang="typescript" data-code="// app/articles/new/page.tsx - Server Component 中的表单
+import { createArticle } from '@/actions/article';
+import { SubmitButton } from './SubmitButton';
+
+export default function NewArticlePage() {
+  return (
+    &lt;form action={createArticle}&gt;
+      &lt;input name=&quot;title&quot; placeholder=&quot;Title&quot; required /&gt;
+      &lt;textarea name=&quot;content&quot; placeholder=&quot;Content&quot; required /&gt;
+      &lt;SubmitButton /&gt;
+    &lt;/form&gt;
+  );
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// app/articles/new/page.tsx - Server Component 中的表单</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { createArticle } </span><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '@/actions/article'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { SubmitButton } </span><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> './SubmitButton'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">export</span><span style="color:#D73A49;--shiki-dark:#F97583"> default</span><span style="color:#D73A49;--shiki-dark:#F97583"> function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> NewArticlePage</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    &#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">form action</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{createArticle}</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      &#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">input name</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"title"</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> placeholder</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"Title"</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> required </span><span style="color:#D73A49;--shiki-dark:#F97583">/></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      &#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">textarea name</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"content"</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> placeholder</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"Content"</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> required </span><span style="color:#D73A49;--shiki-dark:#F97583">/></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      &#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">SubmitButton </span><span style="color:#D73A49;--shiki-dark:#F97583">/></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    &#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">form</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  );</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><h3 id="数据获取与缓存策略">数据获取与缓存策略</h3><div class="code-block-wrapper" data-lang="typescript" data-code="// 带缓存控制的数据获取
+// Next.js 16 Cache Components 统一缓存 API
+
+// 方式1: 使用 unstable_cache (Next.js 15+)
+import { unstable_cache } from 'next/cache';
+
+const getArticles = unstable_cache(
+  async (tag?: string) =&gt; {
+    return db.article.findMany({
+      where: tag ? { tags: { has: tag } } : undefined,
+      orderBy: { createdAt: 'desc' },
+    });
+  },
+  ['articles'], // cache key
+  { revalidate: 60, tags: ['articles'] } // 60秒过期，支持按 tag 清除
+);
+
+// 方式2: fetch with cache (自动去重)
+async function ProductInfo({ id }: { id: string }) {
+  // 同一渲染周期内相同 URL 的 fetch 会自动去重
+  const product = await fetch(`https://api.example.com/products/${id}`, {
+    next: { revalidate: 3600, tags: [`product-${id}`] },
+  }).then(r =&gt; r.json());
+
+  return &lt;ProductCard product={product} /&gt;;
+}
+
+// 手动清除缓存
+import { revalidateTag } from 'next/cache';
+export async function updateProduct(id: string, data: ProductData) {
+  await db.product.update({ where: { id }, data });
+  revalidateTag(`product-${id}`); // 清除特定产品缓存
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 带缓存控制的数据获取</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// Next.js 16 Cache Components 统一缓存 API</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 方式1: 使用 unstable_cache (Next.js 15+)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { unstable_cache } </span><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'next/cache'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> getArticles</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> unstable_cache</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  async</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">tag</span><span style="color:#D73A49;--shiki-dark:#F97583">?:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> db.article.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">findMany</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      where: tag </span><span style="color:#D73A49;--shiki-dark:#F97583">?</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { tags: { has: tag } } </span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> undefined</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      orderBy: { createdAt: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'desc'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    });</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'articles'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">], </span><span style="color:#6A737D;--shiki-dark:#6A737D">// cache key</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  { revalidate: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">60</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, tags: [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'articles'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] } </span><span style="color:#6A737D;--shiki-dark:#6A737D">// 60秒过期，支持按 tag 清除</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 方式2: fetch with cache (自动去重)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">async</span><span style="color:#D73A49;--shiki-dark:#F97583"> function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ProductInfo</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ </span><span style="color:#E36209;--shiki-dark:#FFAB70">id</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#E36209;--shiki-dark:#FFAB70">id</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }) {</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">  // 同一渲染周期内相同 URL 的 fetch 会自动去重</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> product</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> fetch</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`https://api.example.com/products/${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">id</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    next: { revalidate: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">3600</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, tags: [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`product-${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">id</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }).</span><span style="color:#6F42C1;--shiki-dark:#B392F0">then</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">r</span><span style="color:#D73A49;--shiki-dark:#F97583"> =></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> r.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">json</span><span style="color:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> &#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">ProductCard</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> product</span><span style="color:#24292E;--shiki-dark:#E1E4E8">={</span><span style="color:#E36209;--shiki-dark:#FFAB70">product</span><span style="color:#24292E;--shiki-dark:#E1E4E8">} />;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 手动清除缓存</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { revalidateTag } </span><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'next/cache'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">export</span><span style="color:#D73A49;--shiki-dark:#F97583"> async</span><span style="color:#D73A49;--shiki-dark:#F97583"> function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> updateProduct</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">id</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">data</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ProductData</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  await</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> db.product.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">update</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ where: { id }, data });</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  revalidateTag</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`product-${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">id</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">); </span><span style="color:#6A737D;--shiki-dark:#6A737D">// 清除特定产品缓存</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><h3 id="流式传输与-suspense-编排">流式传输与 Suspense 编排</h3><div class="code-block-wrapper" data-lang="typescript" data-code="// app/dashboard/page.tsx
+import { Suspense } from 'react';
+
+export default function DashboardPage() {
+  return (
+    &lt;main&gt;
+      {/* 立即显示 - 静态内容 */}
+      &lt;h1&gt;Dashboard&lt;/h1&gt;
+
+      {/* 第一波流式内容 - 关键数据优先 */}
+      &lt;Suspense fallback={&lt;MetricsSkeleton /&gt;}&gt;
+        &lt;KeyMetrics /&gt;
+      &lt;/Suspense&gt;
+
+      {/* 第二波 - 图表数据（通常较慢） */}
+      &lt;div className=&quot;grid grid-cols-2 gap-4&quot;&gt;
+        &lt;Suspense fallback={&lt;ChartSkeleton /&gt;}&gt;
+          &lt;RevenueChart /&gt;
+        &lt;/Suspense&gt;
+        &lt;Suspense fallback={&lt;ChartSkeleton /&gt;}&gt;
+          &lt;UserGrowthChart /&gt;
+        &lt;/Suspense&gt;
+      &lt;/div&gt;
+
+      {/* 第三波 - 非关键信息 */}
+      &lt;Suspense fallback={&lt;TableSkeleton /&gt;}&gt;
+        &lt;RecentActivity /&gt;
+      &lt;/Suspense&gt;
+    &lt;/main&gt;
+  );
+}
+
+// 每个异步 Server Component 独立流式传输
+async function KeyMetrics() {
+  const metrics = await getMetrics(); // 200ms
+  return &lt;MetricsGrid data={metrics} /&gt;;
+}
+
+async function RevenueChart() {
+  const data = await getRevenueData(); // 800ms - 不阻塞 KeyMetrics
+  return &lt;Chart data={data} type=&quot;revenue&quot; /&gt;;
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// app/dashboard/page.tsx</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { Suspense } </span><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'react'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">export</span><span style="color:#D73A49;--shiki-dark:#F97583"> default</span><span style="color:#D73A49;--shiki-dark:#F97583"> function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> DashboardPage</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">main</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      {</span><span style="color:#6A737D;--shiki-dark:#6A737D">/* 立即显示 - 静态内容 */</span><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">h1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>Dashboard</span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">h1</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      {</span><span style="color:#6A737D;--shiki-dark:#6A737D">/* 第一波流式内容 - 关键数据优先 */</span><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      &#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">Suspense fallback</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{&#x3C;MetricsSkeleton />}</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        &#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">KeyMetrics </span><span style="color:#D73A49;--shiki-dark:#F97583">/></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      &#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">Suspense</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      {</span><span style="color:#6A737D;--shiki-dark:#6A737D">/* 第二波 - 图表数据（通常较慢） */</span><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      &#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">div className</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"grid grid-cols-2 gap-4"</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        &#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">Suspense fallback</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{&#x3C;ChartSkeleton />}</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">          &#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">RevenueChart </span><span style="color:#D73A49;--shiki-dark:#F97583">/></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        &#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">Suspense</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        &#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">Suspense fallback</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{&#x3C;ChartSkeleton />}</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">          &#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">UserGrowthChart </span><span style="color:#D73A49;--shiki-dark:#F97583">/></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        &#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">Suspense</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      &#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">div</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      {</span><span style="color:#6A737D;--shiki-dark:#6A737D">/* 第三波 - 非关键信息 */</span><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      &#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">Suspense fallback</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{&#x3C;TableSkeleton />}</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        &#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">RecentActivity </span><span style="color:#D73A49;--shiki-dark:#F97583">/></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      &#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">Suspense</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    &#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">main</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  );</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 每个异步 Server Component 独立流式传输</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">async</span><span style="color:#D73A49;--shiki-dark:#F97583"> function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> KeyMetrics</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> metrics</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> getMetrics</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(); </span><span style="color:#6A737D;--shiki-dark:#6A737D">// 200ms</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> &#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">MetricsGrid</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> data</span><span style="color:#24292E;--shiki-dark:#E1E4E8">={</span><span style="color:#E36209;--shiki-dark:#FFAB70">metrics</span><span style="color:#24292E;--shiki-dark:#E1E4E8">} />;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">async</span><span style="color:#D73A49;--shiki-dark:#F97583"> function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> RevenueChart</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> data</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> getRevenueData</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(); </span><span style="color:#6A737D;--shiki-dark:#6A737D">// 800ms - 不阻塞 KeyMetrics</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> &#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Chart</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> data</span><span style="color:#24292E;--shiki-dark:#E1E4E8">={</span><span style="color:#E36209;--shiki-dark:#FFAB70">data</span><span style="color:#24292E;--shiki-dark:#E1E4E8">} </span><span style="color:#6F42C1;--shiki-dark:#B392F0">type</span><span style="color:#24292E;--shiki-dark:#E1E4E8">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"revenue"</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> />;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><h2 id="最佳实践">最佳实践</h2><h3 id="server-client-边界划分原则">Server/Client 边界划分原则</h3><pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[&quot;Component needs...&quot;] --&gt; B{&quot;User interaction?&quot;}&#10;    B --&gt;|Yes| C[&quot;Client Component&quot;]&#10;    B --&gt;|No| D{&quot;Browser API?&quot;}&#10;    D --&gt;|Yes| C&#10;    D --&gt;|No| E{&quot;useState/useEffect?&quot;}&#10;    E --&gt;|Yes| C&#10;    E --&gt;|No| F[&quot;Server Component&quot;]&#10;&#10;    F --&gt; G[&quot;Benefits: zero bundle, direct DB access, secrets safe&quot;]&#10;    C --&gt; H[&quot;Benefits: interactivity, local state, event handlers&quot;]"></pre><p><strong>Server Component 适用场景</strong>：</p>
+<ul>
+<li>数据获取和展示（文章列表、产品详情）</li>
+<li>使用大型第三方库（markdown 渲染、PDF 处理）</li>
+<li>访问敏感资源（数据库、API 密钥、文件系统）</li>
+<li>静态 UI 布局（导航栏结构、页脚）</li>
+</ul>
+<p><strong>Client Component 适用场景</strong>：</p>
+<ul>
+<li>事件处理（onClick, onChange, onSubmit）</li>
+<li>React Hooks（useState, useEffect, useRef）</li>
+<li>浏览器 API（localStorage, IntersectionObserver）</li>
+<li>实时更新（WebSocket, Server-Sent Events）</li>
+</ul>
+<h3 id="组合模式-在-server-component-中嵌入-client-component">组合模式：在 Server Component 中嵌入 Client Component</h3><div class="code-block-wrapper" data-lang="typescript" data-code="// ✅ 正确：Server Component 作为父级传递数据
+// app/articles/[id]/page.tsx (Server Component)
+async function ArticlePage({ params }: { params: { id: string } }) {
+  const article = await getArticle(params.id);
+  const comments = await getComments(params.id);
+
+  return (
+    &lt;article&gt;
+      &lt;h1&gt;{article.title}&lt;/h1&gt;
+      &lt;p&gt;{article.content}&lt;/p&gt;
+      {/* 将数据作为 props 传给 Client Component */}
+      &lt;CommentSection
+        initialComments={comments}
+        articleId={params.id}
+      /&gt;
+    &lt;/article&gt;
+  );
+}
+
+// ❌ 错误：在 Client Component 中导入 Server Component
+'use client';
+import ServerComponent from './ServerComponent'; // 会被当作 Client Component"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// ✅ 正确：Server Component 作为父级传递数据</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// app/articles/[id]/page.tsx (Server Component)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">async</span><span style="color:#D73A49;--shiki-dark:#F97583"> function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ArticlePage</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ </span><span style="color:#E36209;--shiki-dark:#FFAB70">params</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#E36209;--shiki-dark:#FFAB70">params</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#E36209;--shiki-dark:#FFAB70">id</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> } }) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> article</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> getArticle</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(params.id);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> comments</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> getComments</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(params.id);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">article</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">h1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>{article.title}</span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">h1</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">p</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>{article.content}</span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">p</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      {</span><span style="color:#6A737D;--shiki-dark:#6A737D">/* 将数据作为 props 传给 Client Component */</span><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      &#x3C;</span><span style="color:#E36209;--shiki-dark:#FFAB70">CommentSection</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        initialComments</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{comments}</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        articleId</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{params.id}</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      /></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    &#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">article</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  );</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// ❌ 错误：在 Client Component 中导入 Server Component</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">'use client'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ServerComponent </span><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> './ServerComponent'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; </span><span style="color:#6A737D;--shiki-dark:#6A737D">// 会被当作 Client Component</span></span></code></pre></div><h3 id="避免常见-rsc-陷阱">避免常见 RSC 陷阱</h3><table>
+<thead>
+<tr>
+<th>错误模式</th>
+<th>问题</th>
+<th>正确做法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>将所有组件标记为 <code>&#39;use client&#39;</code></td>
+<td>失去 RSC 优势</td>
+<td>仅在必要时添加</td>
+</tr>
+<tr>
+<td>在 Server Component 中使用 hooks</td>
+<td>编译报错</td>
+<td>抽取为 Client Component</td>
+</tr>
+<tr>
+<td>props 传递不可序列化数据</td>
+<td>运行时错误</td>
+<td>仅传 JSON 可序列化数据</td>
+</tr>
+<tr>
+<td>Server Action 中返回大对象</td>
+<td>传输开销大</td>
+<td>只返回必要数据</td>
+</tr>
+<tr>
+<td>过深的 Client 边界</td>
+<td>子树全部变为客户端</td>
+<td>将边界推到最近的需要点</td>
+</tr>
+</tbody></table>
+<h2 id="工具与生态">工具与生态</h2><h3 id="rsc-支持现状">RSC 支持现状</h3><table>
+<thead>
+<tr>
+<th>框架/工具</th>
+<th>RSC 支持</th>
+<th>Server Actions</th>
+<th>流式传输</th>
+<th>生产就绪</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Next.js 16</td>
+<td>✅ 原生</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Remix 3</td>
+<td>✅ (实验)</td>
+<td>✅ (loader/action)</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Waku</td>
+<td>✅ (轻量)</td>
+<td>✅</td>
+<td>✅</td>
+<td>⚠️</td>
+</tr>
+<tr>
+<td>Rspack</td>
+<td>✅ (构建支持)</td>
+<td>N/A (需框架)</td>
+<td>N/A</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Vite (react-server)</td>
+<td>✅ (社区)</td>
+<td>⚠️</td>
+<td>✅</td>
+<td>⚠️</td>
+</tr>
+</tbody></table>
+<h3 id="调试工具">调试工具</h3><ul>
+<li><strong>React DevTools</strong>：2026 版已支持标记 Server/Client Components</li>
+<li><strong>Next.js DevOverlay</strong>：显示每个组件的渲染位置和 bundle 贡献</li>
+<li><strong>RSC Payload Inspector</strong>：Chrome 扩展，解析流式传输内容</li>
+<li><strong>next build --analyze</strong>：可视化 client bundle 组成，识别意外打入客户端的服务端代码</li>
+</ul>
+<h2 id="总结">总结</h2><p>RSC 的架构意义在于将&quot;渲染位置决策&quot;从路由级别细化到组件级别。开发者不再需要在&quot;整个页面 SSR&quot;和&quot;整个页面 CSR&quot;之间做取舍，而是可以逐组件地决定执行环境。这带来了三个核心收益：更小的客户端 bundle（服务端依赖不打包）、更简单的数据获取（组件内直接 async/await）、更好的安全性（密钥永远不离开服务器）。2026 年，RSC 已从实验性特性演变为 React 生态的标准架构模式，Next.js 16 的 PPR + RSC 组合提供了目前最完整的生产级实现。</p>
+</article>
+    <nav class="pager"><a class="prev" href="../../../frontend-engineering/frontend-architecture-patterns/rendering-architecture/islands-architecture.html"><span class="label">Previous</span>Islands Architecture 实践</a><a class="next" href="../../../frontend-engineering/frontend-architecture-patterns/application-structure/index.html"><span class="label">Next</span>应用结构设计 简介</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#概述" data-outline-link="概述">概述</a></li><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-3"><a href="#rsc-与传统-ssr-的本质区别" data-outline-link="rsc-与传统-ssr-的本质区别">RSC 与传统 SSR 的本质区别</a></li><li class="depth-3"><a href="#server-components-vs-client-components" data-outline-link="server-components-vs-client-components">Server Components vs Client Components</a></li><li class="depth-3"><a href="#rsc-传输协议" data-outline-link="rsc-传输协议">RSC 传输协议</a></li><li class="depth-2"><a href="#实战指南" data-outline-link="实战指南">实战指南</a></li><li class="depth-3"><a href="#server-actions-与表单处理" data-outline-link="server-actions-与表单处理">Server Actions 与表单处理</a></li><li class="depth-3"><a href="#数据获取与缓存策略" data-outline-link="数据获取与缓存策略">数据获取与缓存策略</a></li><li class="depth-3"><a href="#流式传输与-suspense-编排" data-outline-link="流式传输与-suspense-编排">流式传输与 Suspense 编排</a></li><li class="depth-2"><a href="#最佳实践" data-outline-link="最佳实践">最佳实践</a></li><li class="depth-3"><a href="#server-client-边界划分原则" data-outline-link="server-client-边界划分原则">Server/Client 边界划分原则</a></li><li class="depth-3"><a href="#组合模式-在-server-component-中嵌入-client-component" data-outline-link="组合模式-在-server-component-中嵌入-client-component">组合模式：在 Server Component 中嵌入 Client Component</a></li><li class="depth-3"><a href="#避免常见-rsc-陷阱" data-outline-link="避免常见-rsc-陷阱">避免常见 RSC 陷阱</a></li><li class="depth-2"><a href="#工具与生态" data-outline-link="工具与生态">工具与生态</a></li><li class="depth-3"><a href="#rsc-支持现状" data-outline-link="rsc-支持现状">RSC 支持现状</a></li><li class="depth-3"><a href="#调试工具" data-outline-link="调试工具">调试工具</a></li><li class="depth-2"><a href="#总结" data-outline-link="总结">总结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

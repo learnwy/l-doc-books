@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Claude Code：CLAUDE.md 5 层加载与 path-scoped rules · AI 智能体工具完整手册</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:AI 智能体工具完整手册" data-pagefind-meta="slug:ai-coding-tools-handbook">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">AI 智能体工具完整手册</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item active" href="../../../ai-coding-tools-handbook/index.html" aria-current="page" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../ai-coding-tools-handbook/index.html">AI 智能体工具完整手册</a><a class="back-to-hubs" href="../../../ai-coding-tools-handbook/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../ai-coding-tools-handbook/prompt-engineering/index.html">提示工程与 AGENTS.md 统一标准 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="ai-coding-tools-handbook"><li class="chapter"><details class="folder-collapse" data-sb-key="ai-coding-tools-handbook:folder:prompt-engineering/agents-md-and-skills-standards"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-coding-tools-handbook/prompt-engineering/agents-md-and-skills-standards/index.html">开放标准：AGENTS.md 与 SKILL.md 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-coding-tools-handbook/prompt-engineering/agents-md-and-skills-standards/agents-md-spec-and-governance.html">AGENTS.md 规范本体与治理</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-coding-tools-handbook/prompt-engineering/agents-md-and-skills-standards/skills-progressive-disclosure.html">SKILL.md 与渐进披露机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-coding-tools-handbook:folder:prompt-engineering/per-tool-deep-dive" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-coding-tools-handbook/prompt-engineering/per-tool-deep-dive/index.html">三款工具的提示文件实现 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-coding-tools-handbook/prompt-engineering/per-tool-deep-dive/opencode-instructions-and-rules.html">OpenCode：`instructions` 字段与 AGENTS.md 早期采纳</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-coding-tools-handbook/prompt-engineering/per-tool-deep-dive/codex-agents-md-walkup-and-override.html">Codex CLI：walk-up 算法、override 与 admin 管控</a></li><li class="leaf"><a class="leaf-title active" href="../../../ai-coding-tools-handbook/prompt-engineering/per-tool-deep-dive/claude-md-imports-and-path-scoped-rules.html">Claude Code：CLAUDE.md 5 层加载与 path-scoped rules</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-coding-tools-handbook:folder:prompt-engineering/pitfalls-and-team-patterns"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-coding-tools-handbook/prompt-engineering/pitfalls-and-team-patterns/index.html">陷阱与团队模式 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-coding-tools-handbook/prompt-engineering/pitfalls-and-team-patterns/size-discipline-and-lazy-load-traps.html">大小纪律与 lazy-load 陷阱</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-coding-tools-handbook/prompt-engineering/pitfalls-and-team-patterns/team-conventions-and-migration.html">团队协议、symlink 模式与跨工具迁移</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Tier 1 · Coding Tools 工具栈</span><span>提示工程与 AGENTS.md 统一标准 简介</span><span>三款工具的提示文件实现 简介</span><span>Claude Code：CLAUDE.md 5 层加载与 path-scoped rules</span></nav>
+    <article class="content prose"><h1 id="claude-code-claude-md-5-层加载与-path-scoped-rules">Claude Code：CLAUDE.md 5 层加载与 path-scoped rules</h1><blockquote>
+<p>Claude Code 把&quot;提示文件&quot;做成了 5 层金字塔——global / project / personal / subdir lazy-load / path-scoped——但 AGENTS.md fallback 仍是公开 issue #6235 未解决，事实标准是 <code>ln -s AGENTS.md CLAUDE.md</code>。</p>
+</blockquote>
+<p>Claude Code 的提示文件系统是三款工具里最复杂、也最强大的：5 层加载顺序、subdir lazy-load 语义、<code>@path</code> imports 5 跳上限、path-scoped rules 通过 frontmatter <code>globs:</code> 限定。理解它需要先放下&quot;AGENTS.md 应该到处通用&quot;的预期——Anthropic 在 2026-04 docs 已建议 symlink 方案，但 Claude Code 本身并未把 AGENTS.md 当作 first-class 输入。</p>
+<h2 id="核心概念">核心概念</h2><p>5 层加载顺序与 subdir lazy-load 的交互可视化为：</p>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TD&#10;  A[Claude 启动 cwd=/repo] --&gt; B[Layer 1: 加载 ~/.claude/CLAUDE.md global]&#10;  B --&gt; C[Layer 2: 加载项目根 ./CLAUDE.md]&#10;  C --&gt; D[Layer 3: 加载 ./CLAUDE.local.md personal override]&#10;  D --&gt; E[Layer 4: 扫描 .claude/rules/*.md 含 frontmatter globs]&#10;  E --&gt; F[初始 system prompt 完成]&#10;  F --&gt; G[用户提问 修复 login bug]&#10;  G --&gt; H[Claude 决定打开 backend/auth/login.ts]&#10;  H --&gt; I{该目录有 CLAUDE.md?}&#10;  I --&gt;|是| J[Layer 5 lazy-load: 把 backend/CLAUDE.md 注入 context]&#10;  I --&gt;|否| K[沿路径向上找最近的子目录 CLAUDE.md]&#10;  J --&gt; L[继续任务]&#10;  K --&gt; L"></pre><table>
+<thead>
+<tr>
+<th>层</th>
+<th>路径</th>
+<th>时机</th>
+<th>是否进 git</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1. global</td>
+<td><code>~/.claude/CLAUDE.md</code></td>
+<td>启动加载，所有项目共享</td>
+<td>不进 git</td>
+</tr>
+<tr>
+<td>2. project</td>
+<td><code>./CLAUDE.md</code></td>
+<td>启动加载，团队共享</td>
+<td>进 git</td>
+</tr>
+<tr>
+<td>3. personal</td>
+<td><code>./CLAUDE.local.md</code></td>
+<td>启动加载，覆盖 project</td>
+<td><code>.gitignore</code> 默认包含</td>
+</tr>
+<tr>
+<td>4. path-scoped rules</td>
+<td><code>.claude/rules/*.md</code></td>
+<td>启动扫描 + 文件访问时激活</td>
+<td>进 git</td>
+</tr>
+<tr>
+<td>5. subdir</td>
+<td><code>&lt;subdir&gt;/CLAUDE.md</code></td>
+<td><strong>lazy-load</strong>，访问该目录文件才注入</td>
+<td>进 git</td>
+</tr>
+</tbody></table>
+<h2 id="5-层加载的执行细节">5 层加载的执行细节</h2><p>每一层都有独特语义，混淆会导致&quot;明明写了规则却不生效&quot;。</p>
+<p><strong>Layer 1 全局 <code>~/.claude/CLAUDE.md</code></strong>：跨项目共享的个人偏好——&quot;我用 zsh、偏好 pnpm、commit 用 conventional commits&quot;。所有项目启动都会读取，写得过长会消耗每个会话的 context 预算。</p>
+<p><strong>Layer 2 项目根 <code>./CLAUDE.md</code></strong>：团队共享，典型内容是项目命令、代码规范、架构约束。这是大部分内容应该放的地方。</p>
+<p><strong>Layer 3 personal override <code>./CLAUDE.local.md</code></strong>：与 project 同级、但 gitignored，用于个人对项目级规则的临时偏离。优先级高于 Layer 2、低于 chat prompt。</p>
+<p><strong>Layer 4 <code>.claude/rules/*.md</code></strong>：path-scoped，通过 frontmatter <code>globs:</code> 字段决定哪些文件访问时激活。详见下文专节。</p>
+<p><strong>Layer 5 subdir CLAUDE.md</strong>：<strong>lazy-load</strong>——只有 Claude 真的访问该子目录下的文件时，才会把对应 CLAUDE.md 注入当前 context。这条语义对 monorepo 极重要，但也是最常见的陷阱（见 chapter 3）。</p>
+<h2 id="path-imports-与-5-跳上限"><code>@path</code> Imports 与 5 跳上限</h2><p>Claude Code 支持在任何 CLAUDE.md 里通过 <code>@path</code> 语法引入其它文件：</p>
+<div class="code-block-wrapper" data-lang="markdown" data-code="# 项目级 CLAUDE.md
+
+## 常用命令
+
+@docs/commands.md
+
+## TypeScript 偏好
+
+@~/.claude/typescript-prefs.md
+
+## API key 处理（敏感，仅本地）
+
+@CLAUDE.local.md"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#005CC5;--shiki-light-font-weight:bold;--shiki-dark:#79B8FF;--shiki-dark-font-weight:bold"># 项目级 CLAUDE.md</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#005CC5;--shiki-light-font-weight:bold;--shiki-dark:#79B8FF;--shiki-dark-font-weight:bold">## 常用命令</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">@docs/commands.md</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#005CC5;--shiki-light-font-weight:bold;--shiki-dark:#79B8FF;--shiki-dark-font-weight:bold">## TypeScript 偏好</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">@~/.claude/typescript-prefs.md</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#005CC5;--shiki-light-font-weight:bold;--shiki-dark:#79B8FF;--shiki-dark-font-weight:bold">## API key 处理（敏感，仅本地）</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">@CLAUDE.local.md</span></span></code></pre></div><p>行为细节：</p>
+<ul>
+<li><code>@path</code> 路径可以是相对（基于当前文件所在目录）或绝对（含 <code>~/</code>）</li>
+<li>import 是<strong>编译时展开</strong>——加载 CLAUDE.md 时就把 <code>@docs/commands.md</code> 内容塞进去，不在运行时拉取</li>
+<li><strong>5 跳上限</strong>：A 引入 B、B 引入 C、C 引入 D、D 引入 E、E 引入 F，第 6 跳静默截断；环依赖（A → B → A）也由这个上限保护</li>
+<li>引入的文件本身没有 <code>@</code> 限制——可以是任意 Markdown</li>
+</ul>
+<p>实战用法：</p>
+<ul>
+<li>把长 CLAUDE.md 拆成话题文件、主文件用 <code>@imports</code> 聚合，便于维护</li>
+<li>在 <code>CLAUDE.local.md</code> 用 <code>@~/.claude/private.md</code> 引入敏感偏好（避免每个项目重复抄写）</li>
+<li>团队级&quot;规范库&quot;独立仓库 + git submodule，CLAUDE.md <code>@vendor/style-guide/main.md</code></li>
+</ul>
+<h2 id="agents-md-fallback-之争">AGENTS.md fallback 之争</h2><p>Claude Code 是否会把 AGENTS.md 当作 CLAUDE.md 缺失时的 fallback？这是个<strong>仍未盖棺定论</strong>的问题，截至 2026-05-14：</p>
+<ul>
+<li>官方 docs 在 2026-02 与 2026-04 两次更新存在矛盾说法：早期写&quot;在 CLAUDE.md 不存在时尝试 AGENTS.md&quot;，最新版改为&quot;建议使用 symlink&quot;</li>
+<li>GitHub <code>anthropics/claude-code</code> issue #6235 仍 open，社区诉求是&quot;原生 walk-up AGENTS.md，不要 symlink hack&quot;</li>
+<li>第三方评测站 HiveTrail 在 2026-04 实测 Claude Code 1.x 各版本——AGENTS.md fallback <strong>不可靠</strong>，部分版本读取、部分版本忽略，没有公开 changelog 解释行为</li>
+</ul>
+<p><strong>行业事实标准</strong>：</p>
+<div class="code-block-wrapper" data-lang="bash" data-code="ln -s AGENTS.md CLAUDE.md
+# 或在 Windows / 某些 CI 环境用 cp 镜像 + pre-commit 同步"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">ln</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> -s</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> AGENTS.md</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> CLAUDE.md</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 或在 Windows / 某些 CI 环境用 cp 镜像 + pre-commit 同步</span></span></code></pre></div><p>这样一份内容同时被 Codex / OpenCode / Cursor / Aider 等读取为 <code>AGENTS.md</code>，被 Claude Code 读取为 <code>CLAUDE.md</code>。Anthropic 在 2026-04 docs 已明确推荐此做法。</p>
+<p>注意：</p>
+<ul>
+<li>symlink 只在类 Unix 系统可靠，Windows 需要管理员权限或 WSL</li>
+<li>部分 IDE（VS Code Git 集成）对 symlink 的提交有 bug，建议提交时检查 <code>git diff</code> 确认指向正确</li>
+<li><code>CLAUDE.md</code> 是 symlink 时，Claude Code 仍能正常读取——它是基于 <code>fs.readFile</code> 而非 <code>fs.readlink</code></li>
+</ul>
+<h2 id="path-scoped-rules-实战">Path-scoped Rules 实战</h2><p>Layer 4 是 Claude Code 最独特的扩展，落到一个具体例子：</p>
+<div class="code-block-wrapper" data-lang="markdown" data-code="---
+description: TypeScript / TSX 编辑时激活的规则
+globs:
+  - '**/*.ts'
+  - '**/*.tsx'
+paths:
+  - 'src/'
+  - 'packages/web/'
+---
+
+# TypeScript 偏好
+
+- 优先 `const` over `let`，永远不用 `var`
+- React 函数组件用 `function Foo() {}` 不用 `const Foo = () =&gt; {}`
+- 错误处理用 Result 类型而非 try/catch
+- 文件长度建议 &lt; 300 行，超长拆分"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">---</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">description</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">TypeScript / TSX 编辑时激活的规则</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">globs</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  - </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'**/*.ts'</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  - </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'**/*.tsx'</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">paths</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  - </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'src/'</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  - </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'packages/web/'</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">---</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#005CC5;--shiki-light-font-weight:bold;--shiki-dark:#79B8FF;--shiki-dark-font-weight:bold"># TypeScript 偏好</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 优先 </span><span style="color:#005CC5;--shiki-dark:#79B8FF">`const`</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> over </span><span style="color:#005CC5;--shiki-dark:#79B8FF">`let`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">，永远不用 </span><span style="color:#005CC5;--shiki-dark:#79B8FF">`var`</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> React 函数组件用 </span><span style="color:#005CC5;--shiki-dark:#79B8FF">`function Foo() {}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 不用 </span><span style="color:#005CC5;--shiki-dark:#79B8FF">`const Foo = () => {}`</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 错误处理用 Result 类型而非 try/catch</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> 文件长度建议 &#x3C; 300 行，超长拆分</span></span></code></pre></div><p>文件名 <code>.claude/rules/typescript.md</code>。语义：</p>
+<ul>
+<li><code>globs:</code> 控制&quot;编辑哪些文件时激活&quot;——这里编辑任意 <code>.ts</code> 或 <code>.tsx</code> 时这条规则进 context</li>
+<li><code>paths:</code> 是更粗的过滤——<code>src/</code> 或 <code>packages/web/</code> 路径下才激活</li>
+<li>两者<strong>与运算</strong>：必须同时命中才激活</li>
+<li><code>description:</code> 用于 model 元数据展示，不影响激活</li>
+</ul>
+<p>落地建议：</p>
+<ul>
+<li>把&quot;常驻 context 会浪费 token&quot;的规则放到 <code>.claude/rules/</code> 切片</li>
+<li>命名按语言或子领域分：<code>typescript.md</code> / <code>python.md</code> / <code>database.md</code> / <code>security.md</code></li>
+<li>frontmatter <code>globs:</code> 优先精确（<code>**/*.ts</code> 比 <code>**/*</code> 好），减少误激活</li>
+</ul>
+<h2 id="陷阱与常见问题">陷阱与常见问题</h2><ul>
+<li><strong>AGENTS.md 不被读取</strong>：Claude Code 默认主读 <code>CLAUDE.md</code>，AGENTS.md fallback 不可靠。规避：用 symlink 或 pre-commit 镜像。</li>
+<li><strong>subdir CLAUDE.md 不进 context</strong>：用户说&quot;看下 frontend/ 然后改 backend/&quot;，但 Claude 没真访问 <code>frontend/</code>，<code>frontend/CLAUDE.md</code> 就不加载。下一章会详谈这条 lazy-load 陷阱。</li>
+<li><strong>globs 字段拼写错误</strong>：写成 <code>glob:</code> 或 <code>patterns:</code>，frontmatter parser 解析成功但语义不识别，规则永远不激活——没有运行时报错。<code>claude --check-rules</code> 命令可校验。</li>
+<li><strong>@imports 跳数错算</strong>：在多层引入链里写循环，第 6 跳被截断后部分内容缺失，但 Claude Code 不报错，导致 system prompt 不完整。控制嵌套层级 ≤ 3 是安全做法。</li>
+<li><strong>CLAUDE.local.md 误提交</strong>：项目 <code>.gitignore</code> 没显式列出 <code>CLAUDE.local.md</code> 时，新仓库可能误推。<code>claude /init</code> 默认会加，但手动新建需要确认。</li>
+<li><strong>path-scoped paths 与 globs 关系误解</strong>：以为是&quot;或&quot;，实际是&quot;与&quot;——配置 <code>paths: [&quot;src/&quot;]</code> + <code>globs: [&quot;**/*.md&quot;]</code> 时只有 <code>src/</code> 下的 <code>.md</code> 才激活，不是&quot;src/ 下所有 文件 + 任何 .md&quot;。</li>
+</ul>
+<h2 id="小结">小结</h2><ul>
+<li>Claude Code 的提示文件系统是 5 层金字塔：global → project → personal → path-scoped rules → subdir lazy-load</li>
+<li><code>@path</code> imports 编译时展开，最多 5 跳，环依赖由跳数上限保护</li>
+<li>AGENTS.md fallback 仍是开放 issue #6235，官方 docs 在 2026-04 推荐 symlink 模式（<code>ln -s AGENTS.md CLAUDE.md</code>）作为行业事实标准</li>
+<li>Path-scoped rules 通过 frontmatter <code>globs:</code> + <code>paths:</code> 限定激活范围，把&quot;非常驻&quot;规则切出去节省 context</li>
+<li>Layer 5 subdir CLAUDE.md 是 lazy-load——访问该目录文件才注入，是 monorepo 利器也是常见陷阱</li>
+<li>实战注意：AGENTS.md 不可靠、globs 字段拼写、imports 跳数、<code>.local.md</code> 误提交、paths 与 globs 是&quot;与&quot;关系</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../ai-coding-tools-handbook/prompt-engineering/per-tool-deep-dive/codex-agents-md-walkup-and-override.html"><span class="label">Previous</span>Codex CLI：walk-up 算法、override 与 admin 管控</a><a class="next" href="../../../ai-coding-tools-handbook/prompt-engineering/pitfalls-and-team-patterns/index.html"><span class="label">Next</span>陷阱与团队模式 简介</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#5-层加载的执行细节" data-outline-link="5-层加载的执行细节">5 层加载的执行细节</a></li><li class="depth-2"><a href="#path-imports-与-5-跳上限" data-outline-link="path-imports-与-5-跳上限">`@path` Imports 与 5 跳上限</a></li><li class="depth-2"><a href="#agents-md-fallback-之争" data-outline-link="agents-md-fallback-之争">AGENTS.md fallback 之争</a></li><li class="depth-2"><a href="#path-scoped-rules-实战" data-outline-link="path-scoped-rules-实战">Path-scoped Rules 实战</a></li><li class="depth-2"><a href="#陷阱与常见问题" data-outline-link="陷阱与常见问题">陷阱与常见问题</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

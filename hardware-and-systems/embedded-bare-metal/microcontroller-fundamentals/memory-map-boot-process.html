@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>存储器映射与启动流程 · 硬件、机器人与安全工程</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:硬件、机器人与安全工程" data-pagefind-meta="slug:hardware-and-systems">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">硬件、机器人与安全工程</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item active" href="../../../hardware-and-systems/index.html" aria-current="page" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../hardware-and-systems/index.html">硬件、机器人与安全工程</a><a class="back-to-hubs" href="../../../hardware-and-systems/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../hardware-and-systems/embedded-bare-metal/index.html">嵌入式裸机开发</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="hardware-and-systems"><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:embedded-bare-metal/microcontroller-fundamentals" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/embedded-bare-metal/microcontroller-fundamentals/index.html">微控制器基础</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/microcontroller-fundamentals/mcu-architecture-cortex-m.html">MCU 架构与 ARM Cortex-M 内核</a></li><li class="leaf"><a class="leaf-title active" href="../../../hardware-and-systems/embedded-bare-metal/microcontroller-fundamentals/memory-map-boot-process.html">存储器映射与启动流程</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/microcontroller-fundamentals/clock-system-power-management.html">时钟系统与电源管理</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:embedded-bare-metal/peripheral-programming"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/embedded-bare-metal/peripheral-programming/index.html">外设编程</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/peripheral-programming/gpio-interrupt-system.html">GPIO 与中断系统</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/peripheral-programming/timer-pwm-adc.html">定时器、PWM 与 ADC</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/peripheral-programming/communication-interface-drivers.html">通信接口驱动开发</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:embedded-bare-metal/rtos-basics"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/embedded-bare-metal/rtos-basics/index.html">RTOS 基础</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/rtos-basics/rtos-scheduling-principles.html">RTOS 调度原理</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/rtos-basics/task-management-synchronization.html">任务管理与同步机制</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/rtos-basics/freertos-practice.html">FreeRTOS 实践</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:embedded-bare-metal/debugging-optimization"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/embedded-bare-metal/debugging-optimization/index.html">调试与优化</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/debugging-optimization/jtag-swd-debugging.html">JTAG/SWD 调试原理</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/debugging-optimization/performance-power-optimization.html">性能分析与功耗优化</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/debugging-optimization/firmware-security-ota.html">固件安全与 OTA 更新</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part I · 硬件电子</span><span>嵌入式裸机开发</span><span>微控制器基础</span><span>存储器映射与启动流程</span></nav>
+    <article class="content prose"><h1 id="存储器映射与启动流程">存储器映射与启动流程</h1><h2 id="统一地址空间">统一地址空间</h2><p>ARM Cortex-M 采用 32 位统一编址的存储器映射模型，将 4 GB 地址空间划分为固定用途的区域。无论芯片厂商如何集成 Flash 和外设，其物理地址必须落在 ARM 定义的区域范围内，确保软件的可移植性。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[&quot;0x00000000 - 0x1FFFFFFF&lt;br/&gt;代码区 (512 MB)&quot;] --&gt; B[&quot;0x20000000 - 0x3FFFFFFF&lt;br/&gt;SRAM 区 (512 MB)&quot;]&#10;    B --&gt; C[&quot;0x40000000 - 0x5FFFFFFF&lt;br/&gt;外设区 (512 MB)&quot;]&#10;    C --&gt; D[&quot;0x60000000 - 0x9FFFFFFF&lt;br/&gt;外部 RAM (1 GB)&quot;]&#10;    D --&gt; E[&quot;0xA0000000 - 0xDFFFFFFF&lt;br/&gt;外部设备 (1 GB)&quot;]&#10;    E --&gt; F[&quot;0xE0000000 - 0xE00FFFFF&lt;br/&gt;系统外设 (1 MB)&quot;]&#10;    F --&gt; G[&quot;0xE0100000 - 0xFFFFFFFF&lt;br/&gt;厂商自定义&quot;]"></pre><table>
+<thead>
+<tr>
+<th>地址范围</th>
+<th>区域名称</th>
+<th>大小</th>
+<th>用途</th>
+<th>访问属性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0x00000000 - 0x1FFFFFFF</td>
+<td>Code</td>
+<td>512 MB</td>
+<td>Flash、Boot ROM</td>
+<td>可执行、可缓存</td>
+</tr>
+<tr>
+<td>0x20000000 - 0x3FFFFFFF</td>
+<td>SRAM</td>
+<td>512 MB</td>
+<td>内部 RAM、位带区</td>
+<td>可执行、可缓存</td>
+</tr>
+<tr>
+<td>0x40000000 - 0x5FFFFFFF</td>
+<td>Peripheral</td>
+<td>512 MB</td>
+<td>片上外设寄存器</td>
+<td>设备序、非缓存</td>
+</tr>
+<tr>
+<td>0x60000000 - 0x9FFFFFFF</td>
+<td>External RAM</td>
+<td>1 GB</td>
+<td>外部 SDRAM/PSRAM</td>
+<td>可缓存</td>
+</tr>
+<tr>
+<td>0xA0000000 - 0xDFFFFFFF</td>
+<td>External Device</td>
+<td>1 GB</td>
+<td>外部 FPGA/NOR Flash</td>
+<td>设备属性</td>
+</tr>
+<tr>
+<td>0xE0000000 - 0xE00FFFFF</td>
+<td>PPB</td>
+<td>1 MB</td>
+<td>NVIC、SysTick、SCB、MPU</td>
+<td>强序访问</td>
+</tr>
+</tbody></table>
+<p>系统外设区（PPB，Private Peripheral Bus）是 ARM 内核自带外设的固定映射区域：</p>
+<ul>
+<li><code>0xE000E010</code>：SysTick 控制与状态寄存器</li>
+<li><code>0xE000E100</code>：NVIC 中断使能寄存器组</li>
+<li><code>0xE000ED00</code>：SCB（System Control Block）起始地址</li>
+<li><code>0xE000EDF0</code>：调试控制寄存器（CoreSight）</li>
+</ul>
+<h2 id="向量表">向量表</h2><h3 id="结构定义">结构定义</h3><p>向量表位于存储器的起始位置（默认 <code>0x00000000</code>），包含初始栈指针值和所有异常处理函数的入口地址：</p>
+<table>
+<thead>
+<tr>
+<th>偏移</th>
+<th>内容</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0x00</td>
+<td>初始 MSP 值</td>
+<td>上电后 SP 的初始值</td>
+</tr>
+<tr>
+<td>0x04</td>
+<td>Reset_Handler 地址</td>
+<td>复位后第一条执行指令</td>
+</tr>
+<tr>
+<td>0x08</td>
+<td>NMI_Handler 地址</td>
+<td>不可屏蔽中断入口</td>
+</tr>
+<tr>
+<td>0x0C</td>
+<td>HardFault_Handler 地址</td>
+<td>硬件故障入口</td>
+</tr>
+<tr>
+<td>0x10</td>
+<td>MemManage_Handler</td>
+<td>存储器管理故障</td>
+</tr>
+<tr>
+<td>0x14</td>
+<td>BusFault_Handler</td>
+<td>总线故障</td>
+</tr>
+<tr>
+<td>0x18</td>
+<td>UsageFault_Handler</td>
+<td>用法故障</td>
+</tr>
+<tr>
+<td>0x2C</td>
+<td>SVCall_Handler</td>
+<td>系统调用</td>
+</tr>
+<tr>
+<td>0x38</td>
+<td>PendSV_Handler</td>
+<td>可挂起系统调用</td>
+</tr>
+<tr>
+<td>0x3C</td>
+<td>SysTick_Handler</td>
+<td>系统滴答中断</td>
+</tr>
+<tr>
+<td>0x40+</td>
+<td>IRQ0 - IRQn</td>
+<td>外设中断入口</td>
+</tr>
+</tbody></table>
+<p>向量表中存储的是函数地址（最低位置 1 表示 Thumb 模式），而非指令本身。硬件在响应异常时直接从表中读取地址加载到 PC。</p>
+<h3 id="向量表重定位">向量表重定位</h3><p>通过 SCB 的 VTOR（Vector Table Offset Register）寄存器可以将向量表重定位到 SRAM 或其他 Flash 区域：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>VTOR</mtext><mo>=</mo><mtext>新向量表基址（必须对齐到表大小的</mtext><mn>2</mn><mtext>的幂次边界）</mtext></mrow><annotation encoding="application/x-tex">\text{VTOR} = \text{新向量表基址}（必须对齐到表大小的 2 的幂次边界）</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord">VTOR</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">新向量表基址</span></span><span class="mord cjk_fallback">（必须对齐到表大小的</span><span class="mord">2</span><span class="mord cjk_fallback">的幂次边界）</span></span></span></span></span></div><p>重定位场景包括：</p>
+<ul>
+<li>Bootloader 跳转到应用程序时切换向量表</li>
+<li>运行时动态修改中断处理函数（向量表放 SRAM）</li>
+<li>多固件分区场景下各分区独立的向量表</li>
+</ul>
+<h2 id="启动流程详解">启动流程详解</h2><h3 id="硬件复位序列">硬件复位序列</h3><p>Cortex-M 的硬件复位遵循严格的确定性流程：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>上电</mtext><mo>→</mo><mtext>复位释放</mtext><mo>→</mo><mtext>读取 [0x00] 作为 SP</mtext><mo>→</mo><mtext>读取 [0x04] 作为 PC</mtext><mo>→</mo><mtext>开始执行</mtext></mrow><annotation encoding="application/x-tex">\text{上电} \rightarrow \text{复位释放} \rightarrow \text{读取 [0x00] 作为 SP} \rightarrow \text{读取 [0x04] 作为 PC} \rightarrow \text{开始执行}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">上电</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">复位释放</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord cjk_fallback">读取</span><span class="mord"> [0x00] </span><span class="mord cjk_fallback">作为</span><span class="mord"> SP</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord cjk_fallback">读取</span><span class="mord"> [0x04] </span><span class="mord cjk_fallback">作为</span><span class="mord"> PC</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">开始执行</span></span></span></span></span></span></div><pre class="mermaid" data-diagram-type="sequenceDiagram" data-source="sequenceDiagram&#10;    participant HW as 硬件&#10;    participant CPU as Cortex-M 内核&#10;    participant Flash as Flash 存储器&#10;&#10;    HW-&gt;&gt;CPU: 释放 RESET 信号&#10;    CPU-&gt;&gt;Flash: 读取地址 0x00000000&#10;    Flash--&gt;&gt;CPU: 返回初始 SP 值&#10;    CPU-&gt;&gt;CPU: 加载到 MSP&#10;    CPU-&gt;&gt;Flash: 读取地址 0x00000004&#10;    Flash--&gt;&gt;CPU: 返回 Reset_Handler 地址&#10;    CPU-&gt;&gt;CPU: 加载到 PC,开始执行&#10;    CPU-&gt;&gt;CPU: Reset_Handler 执行"></pre><h3 id="boot-引脚配置">Boot 引脚配置</h3><p>STM32 系列通过 BOOT0/BOOT1 引脚（或选项字节）决定启动地址映射：</p>
+<table>
+<thead>
+<tr>
+<th>BOOT1</th>
+<th>BOOT0</th>
+<th>启动区域</th>
+<th>映射到 0x00000000</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>X</td>
+<td>0</td>
+<td>主 Flash</td>
+<td>0x08000000</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>系统存储器</td>
+<td>0x1FFF0000（内置 Bootloader）</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>嵌入式 SRAM</td>
+<td>0x20000000</td>
+</tr>
+</tbody></table>
+<p>系统存储器中固化了 ST 出厂写入的 Bootloader 程序，支持通过 UART、USB、I2C、SPI 等接口进行固件下载，无需额外调试器。</p>
+<h3 id="c-运行时初始化">C 运行时初始化</h3><p>从 Reset_Handler 到 main() 之间的启动代码（通常称为 startup 文件或 crt0）完成以下初始化：</p>
+<ol>
+<li><strong>初始化 .data 段</strong>：将已初始化全局变量从 Flash（LMA）复制到 SRAM（VMA）</li>
+<li><strong>清零 .bss 段</strong>：将未初始化全局变量区域填充为 0</li>
+<li><strong>初始化堆栈</strong>：设置堆（heap）和栈（stack）的边界</li>
+<li><strong>调用 SystemInit()</strong>：配置时钟系统（可选，CMSIS 标准接口）</li>
+<li><strong>调用 __libc_init_array()</strong>：执行 C++ 全局构造函数（若使用 C++）</li>
+<li><strong>跳转 main()</strong>：进入用户应用代码</li>
+</ol>
+<h2 id="链接脚本">链接脚本</h2><h3 id="段与区域定义">段与区域定义</h3><p>链接脚本（.ld 文件）定义了代码和数据在存储器中的布局：</p>
+<div class="code-block-wrapper" data-lang="text" data-code="MEMORY {
+    FLASH (rx)  : ORIGIN = 0x08000000, LENGTH = 512K
+    SRAM  (rwx) : ORIGIN = 0x20000000, LENGTH = 128K
+}
+
+SECTIONS {
+    .isr_vector : { *(.isr_vector) } &gt; FLASH
+    .text       : { *(.text*) } &gt; FLASH
+    .rodata     : { *(.rodata*) } &gt; FLASH
+    .data       : { *(.data*) } &gt; SRAM AT&gt; FLASH
+    .bss        : { *(.bss*) } &gt; SRAM
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>MEMORY {</span></span>
+<span class="line"><span>    FLASH (rx)  : ORIGIN = 0x08000000, LENGTH = 512K</span></span>
+<span class="line"><span>    SRAM  (rwx) : ORIGIN = 0x20000000, LENGTH = 128K</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>SECTIONS {</span></span>
+<span class="line"><span>    .isr_vector : { *(.isr_vector) } > FLASH</span></span>
+<span class="line"><span>    .text       : { *(.text*) } > FLASH</span></span>
+<span class="line"><span>    .rodata     : { *(.rodata*) } > FLASH</span></span>
+<span class="line"><span>    .data       : { *(.data*) } > SRAM AT> FLASH</span></span>
+<span class="line"><span>    .bss        : { *(.bss*) } > SRAM</span></span>
+<span class="line"><span>}</span></span></code></pre></div><p>关键概念：</p>
+<ul>
+<li><strong>VMA（Virtual Memory Address）</strong>：运行时地址，程序访问时使用</li>
+<li><strong>LMA（Load Memory Address）</strong>：加载地址，固件烧写时的物理位置</li>
+<li><code>.data</code> 段的 VMA 在 SRAM 但 LMA 在 Flash，启动代码负责将内容从 LMA 复制到 VMA</li>
+</ul>
+<h3 id="栈与堆布局">栈与堆布局</h3><p>典型的嵌入式栈堆布局采用&quot;栈顶堆底&quot;模型：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>SRAM 布局</mtext><mo>=</mo><mo stretchy="false">[</mo><mtext>.data</mtext><mo stretchy="false">]</mo><mo stretchy="false">[</mo><mtext>.bss</mtext><mo stretchy="false">]</mo><mo stretchy="false">[</mo><mtext>heap</mtext><mo>↑</mo><mo>⋯</mo><mtext>空闲</mtext><mo>⋯</mo><mo>↓</mo><mtext>stack</mtext><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">\text{SRAM 布局} = [\text{.data}][\text{.bss}][\text{heap} \uparrow \cdots \text{空闲} \cdots \downarrow \text{stack}]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord">SRAM </span><span class="mord cjk_fallback">布局</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord text"><span class="mord">.data</span></span><span class="mclose">]</span><span class="mopen">[</span><span class="mord text"><span class="mord">.bss</span></span><span class="mclose">]</span><span class="mopen">[</span><span class="mord text"><span class="mord">heap</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">↑</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord text"><span class="mord cjk_fallback">空闲</span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">↓</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">stack</span></span><span class="mclose">]</span></span></span></span></span></div><p>栈向低地址增长，堆向高地址增长。两者相向生长意味着溢出时会互相覆盖，嵌入式系统中需要通过 MPU 或 canary 值检测栈溢出。</p>
+<h2 id="flash-等待状态">Flash 等待状态</h2><h3 id="等待状态与性能">等待状态与性能</h3><p>片内 Flash 的访问速度通常低于 CPU 主频，需要插入等待状态（Wait States）：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>等待状态数</mtext><mo>=</mo><mo stretchy="false">⌈</mo><mfrac><msub><mi>f</mi><mtext>HCLK</mtext></msub><msub><mi>f</mi><mtext>Flash_max</mtext></msub></mfrac><mo stretchy="false">⌉</mo><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\text{等待状态数} = \lceil \frac{f_{\text{HCLK}}}{f_{\text{Flash\_max}}} \rceil - 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">等待状态数</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.4244em;vertical-align:-1.053em;"></span><span class="mopen">⌈</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1076em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">Flash_max</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.367em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.1076em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">HCLK</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.053em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">⌉</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span></div><p>以 STM32F4 为例（Flash 最大无等待频率约 30 MHz）：</p>
+<table>
+<thead>
+<tr>
+<th>HCLK 频率</th>
+<th>等待状态</th>
+<th>有效带宽损失</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>≤ 30 MHz</td>
+<td>0 WS</td>
+<td>0%</td>
+</tr>
+<tr>
+<td>≤ 60 MHz</td>
+<td>1 WS</td>
+<td>~50%</td>
+</tr>
+<tr>
+<td>≤ 90 MHz</td>
+<td>2 WS</td>
+<td>~67%</td>
+</tr>
+<tr>
+<td>≤ 120 MHz</td>
+<td>3 WS</td>
+<td>~75%</td>
+</tr>
+<tr>
+<td>≤ 150 MHz</td>
+<td>4 WS</td>
+<td>~80%</td>
+</tr>
+<tr>
+<td>≤ 168 MHz</td>
+<td>5 WS</td>
+<td>~83%</td>
+</tr>
+</tbody></table>
+<h3 id="加速缓存机制">加速缓存机制</h3><p>为缓解等待状态的性能损失，STM32 引入 ART Accelerator（自适应实时加速器）：</p>
+<ul>
+<li><strong>预取缓冲</strong>：利用 128 位 Flash 数据宽度一次读取多条指令</li>
+<li><strong>指令缓存</strong>：64 行 × 128 位 = 1 KB 指令缓存</li>
+<li><strong>数据缓存</strong>：8 行 × 128 位 = 128 字节数据缓存</li>
+</ul>
+<p>启用 ART 加速器后，对于线性执行的代码，等效访问延迟接近 0 等待状态。</p>
+<h2 id="存储器保护单元">存储器保护单元</h2><p>MPU（Memory Protection Unit）允许将地址空间划分为若干区域并为每个区域设置访问权限和属性：</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>选项</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>访问权限</td>
+<td>No Access / RO / RW</td>
+<td>区分特权级和非特权级访问</td>
+</tr>
+<tr>
+<td>可执行</td>
+<td>XN（Execute Never）</td>
+<td>防止数据区域被执行（抵御代码注入）</td>
+</tr>
+<tr>
+<td>缓存策略</td>
+<td>Write-Back / Write-Through / Non-Cacheable</td>
+<td>控制数据一致性</td>
+</tr>
+<tr>
+<td>共享属性</td>
+<td>Shareable / Non-shareable</td>
+<td>多主设备一致性</td>
+</tr>
+</tbody></table>
+<p>MPU 在 RTOS 环境中实现任务间的内存隔离：每个任务切换时重新配置 MPU 区域，使任务只能访问自己的栈和全局数据段，越界访问触发 MemManage 异常。</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>区域大小约束</mtext><mo>=</mo><msup><mn>2</mn><mi>n</mi></msup><mtext> 字节（</mtext><mi>n</mi><mo>≥</mo><mn>5</mn><mtext>，即最小</mtext><mn>32</mn><mtext>字节）</mtext></mrow><annotation encoding="application/x-tex">\text{区域大小约束} = 2^n \text{ 字节}（n \geq 5，即最小 32 字节）</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">区域大小约束</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8504em;vertical-align:-0.136em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7144em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span><span class="mord text"><span class="mord"> </span><span class="mord cjk_fallback">字节</span></span><span class="mord cjk_fallback">（</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">5</span><span class="mord cjk_fallback">，即最小</span><span class="mord">32</span><span class="mord cjk_fallback">字节）</span></span></span></span></span></div><p>区域起始地址必须对齐到区域大小，子区域禁用（SRD）机制允许在大区域中禁用 1/8 的粒度块，提供更灵活的保护粒度。</p>
+</article>
+    <nav class="pager"><a class="prev" href="../../../hardware-and-systems/embedded-bare-metal/microcontroller-fundamentals/mcu-architecture-cortex-m.html"><span class="label">Previous</span>MCU 架构与 ARM Cortex-M 内核</a><a class="next" href="../../../hardware-and-systems/embedded-bare-metal/microcontroller-fundamentals/clock-system-power-management.html"><span class="label">Next</span>时钟系统与电源管理</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#统一地址空间" data-outline-link="统一地址空间">统一地址空间</a></li><li class="depth-2"><a href="#向量表" data-outline-link="向量表">向量表</a></li><li class="depth-3"><a href="#结构定义" data-outline-link="结构定义">结构定义</a></li><li class="depth-3"><a href="#向量表重定位" data-outline-link="向量表重定位">向量表重定位</a></li><li class="depth-2"><a href="#启动流程详解" data-outline-link="启动流程详解">启动流程详解</a></li><li class="depth-3"><a href="#硬件复位序列" data-outline-link="硬件复位序列">硬件复位序列</a></li><li class="depth-3"><a href="#boot-引脚配置" data-outline-link="boot-引脚配置">Boot 引脚配置</a></li><li class="depth-3"><a href="#c-运行时初始化" data-outline-link="c-运行时初始化">C 运行时初始化</a></li><li class="depth-2"><a href="#链接脚本" data-outline-link="链接脚本">链接脚本</a></li><li class="depth-3"><a href="#段与区域定义" data-outline-link="段与区域定义">段与区域定义</a></li><li class="depth-3"><a href="#栈与堆布局" data-outline-link="栈与堆布局">栈与堆布局</a></li><li class="depth-2"><a href="#flash-等待状态" data-outline-link="flash-等待状态">Flash 等待状态</a></li><li class="depth-3"><a href="#等待状态与性能" data-outline-link="等待状态与性能">等待状态与性能</a></li><li class="depth-3"><a href="#加速缓存机制" data-outline-link="加速缓存机制">加速缓存机制</a></li><li class="depth-2"><a href="#存储器保护单元" data-outline-link="存储器保护单元">存储器保护单元</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

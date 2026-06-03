@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>WebSocket 与 gRPC · 计算机科学基础</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:计算机科学基础" data-pagefind-meta="slug:cs-fundamentals">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">计算机科学基础</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item active" href="../../../cs-fundamentals/index.html" aria-current="page" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../cs-fundamentals/index.html">计算机科学基础</a><a class="back-to-hubs" href="../../../cs-fundamentals/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../cs-fundamentals/computer-networking/index.html">计算机网络 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="cs-fundamentals"><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:computer-networking/network-fundamentals"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/computer-networking/network-fundamentals/index.html">网络基础 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/computer-networking/network-fundamentals/osi-and-tcpip.html">OSI 与 TCP/IP 模型</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/computer-networking/network-fundamentals/ip-addressing.html">IP 寻址</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/computer-networking/network-fundamentals/routing-protocols.html">路由协议</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/computer-networking/network-fundamentals/switching-and-vlans.html">交换与 VLAN</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:computer-networking/transport-layer"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/computer-networking/transport-layer/index.html">传输层 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/computer-networking/transport-layer/tcp-deep-dive.html">TCP 深入</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/computer-networking/transport-layer/udp-and-realtime.html">UDP 与实时通信</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/computer-networking/transport-layer/socket-programming.html">Socket 编程</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/computer-networking/transport-layer/quic-protocol.html">QUIC 协议</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:computer-networking/application-layer" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/computer-networking/application-layer/index.html">应用层协议 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/computer-networking/application-layer/http-protocol.html">HTTP 协议</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/computer-networking/application-layer/dns-system.html">DNS 系统</a></li><li class="leaf"><a class="leaf-title active" href="../../../cs-fundamentals/computer-networking/application-layer/websocket-and-grpc.html">WebSocket 与 gRPC</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/computer-networking/application-layer/email-and-ftp.html">邮件与 FTP</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:computer-networking/network-security"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/computer-networking/network-security/index.html">网络安全 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/computer-networking/network-security/tls-and-https.html">TLS 与 HTTPS</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/computer-networking/network-security/firewall-and-ids.html">防火墙与 IDS</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/computer-networking/network-security/vpn-and-tunneling.html">VPN 与隧道</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/computer-networking/network-security/attack-defense.html">攻击与防御</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:computer-networking/modern-networking"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/computer-networking/modern-networking/index.html">现代网络架构 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/computer-networking/modern-networking/container-networking.html">容器网络</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/computer-networking/modern-networking/service-mesh.html">服务网格与 Service Mesh</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/computer-networking/modern-networking/cdn-and-edge.html">CDN 与边缘计算</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/computer-networking/modern-networking/network-monitoring.html">网络监控</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part IV · 网络与分布式 (Networks &amp; Distributed)</span><span>计算机网络 简介</span><span>应用层协议 简介</span><span>WebSocket 与 gRPC</span></nav>
+    <article class="content prose"><h1 id="websocket-与-grpc">WebSocket 与 gRPC</h1><h2 id="为什么需要实时通信">为什么需要实时通信</h2><p>传统 HTTP 是请求-响应模型，客户端必须主动发起请求才能获取数据。对于实时聊天、股票行情、协同编辑等场景，需要服务器能主动向客户端推送数据。</p>
+<pre class="mermaid" data-diagram-type="sequenceDiagram" data-source="sequenceDiagram&#10;    participant C as 客户端&#10;    participant S as 服务端&#10;    Note over C,S: HTTP 轮询(低效)&#10;    C-&gt;&gt;S: 有新消息吗?&#10;    S-&gt;&gt;C: 没有&#10;    C-&gt;&gt;S: 有新消息吗?&#10;    S-&gt;&gt;C: 没有&#10;    C-&gt;&gt;S: 有新消息吗?&#10;    S-&gt;&gt;C: 有! 这是消息"></pre><pre class="mermaid" data-diagram-type="sequenceDiagram" data-source="sequenceDiagram&#10;    participant C as 客户端&#10;    participant S as 服务端&#10;    Note over C,S: WebSocket(高效 - 全双工持久连接)&#10;    C-&gt;&gt;S: 建立 WebSocket 连接&#10;    S-&gt;&gt;C: 这是新消息!&#10;    S-&gt;&gt;C: 又有新消息!&#10;    C-&gt;&gt;S: 发送消息"></pre><hr>
+<h2 id="websocket-协议">WebSocket 协议</h2><h3 id="websocket-握手">WebSocket 握手</h3><p>WebSocket 通过 HTTP Upgrade 机制建立连接，握手后切换为 WebSocket 协议。</p>
+<div class="code-block-wrapper" data-lang="text" data-code="客户端请求：
+  GET /chat HTTP/1.1
+  Host: example.com
+  Upgrade: websocket
+  Connection: Upgrade
+  Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==
+  Sec-WebSocket-Version: 13
+
+服务端响应：
+  HTTP/1.1 101 Switching Protocols
+  Upgrade: websocket
+  Connection: Upgrade
+  Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo="><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>客户端请求：</span></span>
+<span class="line"><span>  GET /chat HTTP/1.1</span></span>
+<span class="line"><span>  Host: example.com</span></span>
+<span class="line"><span>  Upgrade: websocket</span></span>
+<span class="line"><span>  Connection: Upgrade</span></span>
+<span class="line"><span>  Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==</span></span>
+<span class="line"><span>  Sec-WebSocket-Version: 13</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>服务端响应：</span></span>
+<span class="line"><span>  HTTP/1.1 101 Switching Protocols</span></span>
+<span class="line"><span>  Upgrade: websocket</span></span>
+<span class="line"><span>  Connection: Upgrade</span></span>
+<span class="line"><span>  Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=</span></span></code></pre></div><p>握手完成后，连接从 HTTP 升级为 WebSocket，双方可以自由地双向发送消息。</p>
+<h3 id="websocket-帧格式">WebSocket 帧格式</h3><pre class="mermaid" data-diagram-type="block" data-source="block-beta&#10;    columns 1&#10;    block:flags:1&#10;        columns 4&#10;        FIN[&quot;FIN 1位&quot;] RSV[&quot;RSV1-3 3位&quot;] OP[&quot;opcode 4位&quot;] MASK[&quot;MASK 1位 + Payload len 7位&quot;]&#10;    end&#10;    EXT[&quot;Extended payload length 16/64位&quot;]&#10;    KEY[&quot;Masking-key 0或4字节&quot;]&#10;    DATA[&quot;Payload Data&quot;]"></pre><h3 id="websocket-客户端示例">WebSocket 客户端示例</h3><div class="code-block-wrapper" data-lang="javascript" data-code="const ws = new WebSocket('wss://example.com/chat');
+
+ws.onopen = () =&gt; {
+  ws.send(JSON.stringify({ type: 'join', room: 'general' }));
+};
+
+ws.onmessage = (event) =&gt; {
+  const data = JSON.parse(event.data);
+  console.log('收到消息:', data);
+};
+
+ws.onclose = (event) =&gt; {
+  console.log(`连接关闭: ${event.code} ${event.reason}`);
+};
+
+ws.onerror = (error) =&gt; {
+  console.error('WebSocket 错误:', error);
+};"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> ws</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> WebSocket</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'wss://example.com/chat'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">ws.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">onopen</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> () </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  ws.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">send</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">JSON</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">stringify</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'join'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, room: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'general'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }));</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">ws.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">onmessage</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">event</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> data</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> JSON</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">parse</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(event.data);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'收到消息:'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, data);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">ws.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">onclose</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">event</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`连接关闭: ${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">event</span><span style="color:#032F62;--shiki-dark:#9ECBFF">.</span><span style="color:#24292E;--shiki-dark:#E1E4E8">code</span><span style="color:#032F62;--shiki-dark:#9ECBFF">} ${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">event</span><span style="color:#032F62;--shiki-dark:#9ECBFF">.</span><span style="color:#24292E;--shiki-dark:#E1E4E8">reason</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">ws.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">onerror</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">error</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">error</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'WebSocket 错误:'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, error);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span></code></pre></div><hr>
+<h2 id="grpc-协议">gRPC 协议</h2><p>gRPC 是 Google 开发的高性能 RPC 框架，基于 HTTP/2 和 Protocol Buffers（Protobuf）。</p>
+<h3 id="protobuf-定义">Protobuf 定义</h3><div class="code-block-wrapper" data-lang="protobuf" data-code="syntax = &quot;proto3&quot;;
+
+package chat;
+
+service ChatService {
+  rpc SendMessage (MessageRequest) returns (MessageResponse);
+  rpc Subscribe (SubscribeRequest) returns (stream ChatMessage);
+  rpc Chat (stream ChatMessage) returns (stream ChatMessage);
+}
+
+message MessageRequest {
+  string room_id = 1;
+  string content = 2;
+  string sender = 3;
+}
+
+message MessageResponse {
+  string message_id = 1;
+  int64 timestamp = 2;
+}
+
+message ChatMessage {
+  string sender = 1;
+  string content = 2;
+  int64 timestamp = 3;
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>syntax = "proto3";</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>package chat;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>service ChatService {</span></span>
+<span class="line"><span>  rpc SendMessage (MessageRequest) returns (MessageResponse);</span></span>
+<span class="line"><span>  rpc Subscribe (SubscribeRequest) returns (stream ChatMessage);</span></span>
+<span class="line"><span>  rpc Chat (stream ChatMessage) returns (stream ChatMessage);</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>message MessageRequest {</span></span>
+<span class="line"><span>  string room_id = 1;</span></span>
+<span class="line"><span>  string content = 2;</span></span>
+<span class="line"><span>  string sender = 3;</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>message MessageResponse {</span></span>
+<span class="line"><span>  string message_id = 1;</span></span>
+<span class="line"><span>  int64 timestamp = 2;</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>message ChatMessage {</span></span>
+<span class="line"><span>  string sender = 1;</span></span>
+<span class="line"><span>  string content = 2;</span></span>
+<span class="line"><span>  int64 timestamp = 3;</span></span>
+<span class="line"><span>}</span></span></code></pre></div><h3 id="grpc-四种通信模式">gRPC 四种通信模式</h3><table>
+<thead>
+<tr>
+<th>模式</th>
+<th>描述</th>
+<th>使用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Unary</td>
+<td>一请求一响应</td>
+<td>普通 API 调用</td>
+</tr>
+<tr>
+<td>Server Streaming</td>
+<td>一请求多响应</td>
+<td>实时数据推送</td>
+</tr>
+<tr>
+<td>Client Streaming</td>
+<td>多请求一响应</td>
+<td>文件上传</td>
+</tr>
+<tr>
+<td>Bidirectional</td>
+<td>多请求多响应</td>
+<td>实时聊天</td>
+</tr>
+</tbody></table>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart LR&#10;    subgraph Unary&#10;        C1[&quot;Client&quot;] --&gt;|&quot;req&quot;| S1[&quot;Server&quot;] --&gt;|&quot;res&quot;| C1&#10;    end&#10;    subgraph Server Streaming&#10;        C2[&quot;Client&quot;] --&gt;|&quot;req&quot;| S2[&quot;Server&quot;] ==&gt;|&quot;res stream&quot;| C2&#10;    end&#10;    subgraph Client Streaming&#10;        C3[&quot;Client&quot;] ==&gt;|&quot;req stream&quot;| S3[&quot;Server&quot;] --&gt;|&quot;res&quot;| C3&#10;    end&#10;    subgraph Bidirectional&#10;        C4[&quot;Client&quot;] ==&gt;|&quot;req stream&quot;| S4[&quot;Server&quot;]&#10;        S4 ==&gt;|&quot;res stream&quot;| C4&#10;    end"></pre><hr>
+<h2 id="http-sse-vs-websocket-vs-grpc">HTTP SSE vs WebSocket vs gRPC</h2><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>SSE</th>
+<th>WebSocket</th>
+<th>gRPC</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>协议</td>
+<td>HTTP/1.1</td>
+<td>独立协议</td>
+<td>HTTP/2</td>
+</tr>
+<tr>
+<td>方向</td>
+<td>服务器→客户端</td>
+<td>双向</td>
+<td>双向</td>
+</tr>
+<tr>
+<td>数据格式</td>
+<td>文本</td>
+<td>文本/二进制</td>
+<td>Protobuf（二进制）</td>
+</tr>
+<tr>
+<td>浏览器支持</td>
+<td>✓</td>
+<td>✓</td>
+<td>需要 gRPC-Web</td>
+</tr>
+<tr>
+<td>自动重连</td>
+<td>内置</td>
+<td>需手动实现</td>
+<td>需手动实现</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>通知推送、日志流</td>
+<td>聊天、游戏</td>
+<td>微服务间通信</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>中</td>
+<td>高</td>
+<td>很高</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="流式处理">流式处理</h2><h3 id="websocket-流式处理">WebSocket 流式处理</h3><div class="code-block-wrapper" data-lang="javascript" data-code="const WebSocket = require('ws');
+const wss = new WebSocket.Server({ port: 8080 });
+
+wss.on('connection', (ws) =&gt; {
+  const interval = setInterval(() =&gt; {
+    if (ws.readyState === WebSocket.OPEN) {
+      ws.send(
+        JSON.stringify({
+          type: 'ticker',
+          price: (Math.random() * 1000).toFixed(2),
+          timestamp: Date.now(),
+        }),
+      );
+    }
+  }, 1000);
+
+  ws.on('close', () =&gt; clearInterval(interval));
+});"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> WebSocket</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> require</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'ws'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> wss</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> WebSocket.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Server</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ port: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">8080</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> });</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">wss.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">on</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'connection'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, (</span><span style="color:#E36209;--shiki-dark:#FFAB70">ws</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> interval</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> setInterval</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (ws.readyState </span><span style="color:#D73A49;--shiki-dark:#F97583">===</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> WebSocket.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">OPEN</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      ws.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">send</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        JSON</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">stringify</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'ticker'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          price: (Math.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">random</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1000</span><span style="color:#24292E;--shiki-dark:#E1E4E8">).</span><span style="color:#6F42C1;--shiki-dark:#B392F0">toFixed</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          timestamp: Date.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">now</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        }),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      );</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1000</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  ws.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">on</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'close'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, () </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> clearInterval</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(interval));</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre></div><h3 id="grpc-优势-强类型与代码生成">gRPC 优势：强类型与代码生成</h3><pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TD&#10;    PROTO[&quot;.proto 文件定义服务&quot;] --&gt; PROTOC[&quot;protoc 编译器&quot;]&#10;    PROTOC --&gt; GO[&quot;Go 代码\n客户端 + 服务端&quot;]&#10;    PROTOC --&gt; JS[&quot;JS 代码\n客户端 + 服务端&quot;]&#10;    PROTOC --&gt; JAVA[&quot;Java 代码\n客户端 + 服务端&quot;]"></pre><p>自动生成类型安全的客户端和服务端代码</p>
+<hr>
+<h2 id="选型建议">选型建议</h2><pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TD&#10;    Q{&quot;需要浏览器实时推送?&quot;} --&gt;|&quot;仅服务器推送&quot;| SSE[&quot;SSE&quot;]&#10;    Q --&gt;|&quot;双向通信&quot;| WS[&quot;WebSocket&quot;]&#10;    Q --&gt;|&quot;微服务通信&quot;| GRPC[&quot;gRPC&quot;]&#10;    Q2{&quot;需要高性能微服务间通信?&quot;} --&gt; GRPC&#10;    Q3{&quot;需要浏览器兼容性?&quot;} --&gt; WS&#10;    Q3 --&gt; SSE&#10;    Q4{&quot;需要强类型契约?&quot;} --&gt;|&quot;gRPC + Protobuf&quot;| GRPC&#10;    Q5{&quot;需要跨语言支持?&quot;} --&gt;|&quot;代码生成&quot;| GRPC"></pre><hr>
+<h2 id="小结">小结</h2><ul>
+<li>WebSocket 通过 HTTP Upgrade 建立全双工连接，适合浏览器端的实时双向通信。</li>
+<li>gRPC 基于 HTTP/2 和 Protobuf，提供高性能、强类型的 RPC 通信，适合微服务间调用。</li>
+<li>SSE 是最简单的服务器推送方案，内置自动重连，适合单向数据流场景。</li>
+<li>gRPC 的四种通信模式（Unary、流式）覆盖了各种通信需求。</li>
+<li>选型需综合考虑通信方向、浏览器兼容性、性能要求和类型安全需求。</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../cs-fundamentals/computer-networking/application-layer/dns-system.html"><span class="label">Previous</span>DNS 系统</a><a class="next" href="../../../cs-fundamentals/computer-networking/application-layer/email-and-ftp.html"><span class="label">Next</span>邮件与 FTP</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#为什么需要实时通信" data-outline-link="为什么需要实时通信">为什么需要实时通信</a></li><li class="depth-2"><a href="#websocket-协议" data-outline-link="websocket-协议">WebSocket 协议</a></li><li class="depth-3"><a href="#websocket-握手" data-outline-link="websocket-握手">WebSocket 握手</a></li><li class="depth-3"><a href="#websocket-帧格式" data-outline-link="websocket-帧格式">WebSocket 帧格式</a></li><li class="depth-3"><a href="#websocket-客户端示例" data-outline-link="websocket-客户端示例">WebSocket 客户端示例</a></li><li class="depth-2"><a href="#grpc-协议" data-outline-link="grpc-协议">gRPC 协议</a></li><li class="depth-3"><a href="#protobuf-定义" data-outline-link="protobuf-定义">Protobuf 定义</a></li><li class="depth-3"><a href="#grpc-四种通信模式" data-outline-link="grpc-四种通信模式">gRPC 四种通信模式</a></li><li class="depth-2"><a href="#http-sse-vs-websocket-vs-grpc" data-outline-link="http-sse-vs-websocket-vs-grpc">HTTP SSE vs WebSocket vs gRPC</a></li><li class="depth-2"><a href="#流式处理" data-outline-link="流式处理">流式处理</a></li><li class="depth-3"><a href="#websocket-流式处理" data-outline-link="websocket-流式处理">WebSocket 流式处理</a></li><li class="depth-3"><a href="#grpc-优势-强类型与代码生成" data-outline-link="grpc-优势-强类型与代码生成">gRPC 优势：强类型与代码生成</a></li><li class="depth-2"><a href="#选型建议" data-outline-link="选型建议">选型建议</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

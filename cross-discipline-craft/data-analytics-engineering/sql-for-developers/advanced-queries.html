@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>高级查询：窗口函数、CTE、子查询优化 · 跨学科工程师之道</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:跨学科工程师之道" data-pagefind-meta="slug:cross-discipline-craft">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">跨学科工程师之道</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item active" href="../../../cross-discipline-craft/index.html" aria-current="page" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../cross-discipline-craft/index.html">跨学科工程师之道</a><a class="back-to-hubs" href="../../../cross-discipline-craft/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../cross-discipline-craft/data-analytics-engineering/index.html">数据分析与工程 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="cross-discipline-craft"><li class="chapter"><details class="folder-collapse" data-sb-key="cross-discipline-craft:folder:data-analytics-engineering/sql-for-developers" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cross-discipline-craft/data-analytics-engineering/sql-for-developers/index.html">开发者 SQL 简介</a></summary><ul><li class="leaf"><a class="leaf-title active" href="../../../cross-discipline-craft/data-analytics-engineering/sql-for-developers/advanced-queries.html">高级查询：窗口函数、CTE、子查询优化</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/sql-for-developers/query-optimization.html">查询优化：执行计划分析、索引策略、慢查询诊断</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/sql-for-developers/data-modeling.html">数据建模：范式设计、星型/雪花模型、维度建模</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/sql-for-developers/sql-for-analytics.html">分析 SQL：留存分析、漏斗查询、队列分析</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cross-discipline-craft:folder:data-analytics-engineering/data-visualization"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-visualization/index.html">数据可视化 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-visualization/visualization-principles.html">可视化原则：Edward Tufte 原则、数据墨水比、图表选择决策树</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-visualization/chart-types.html">图表类型：柱状/折线/散点/热力图/桑基图的适用场景</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-visualization/dashboard-design.html">仪表盘设计：布局原则、信息密度、交互设计</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-visualization/visualization-tools.html">可视化工具：D3.js / ECharts / Grafana / Metabase / Superset 对比</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cross-discipline-craft:folder:data-analytics-engineering/event-tracking-design"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cross-discipline-craft/data-analytics-engineering/event-tracking-design/index.html">埋点设计 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/event-tracking-design/tracking-fundamentals.html">埋点基础：事件模型、属性设计、埋点分类</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/event-tracking-design/tracking-plan.html">埋点方案设计：埋点文档规范、命名规范、Review 流程</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/event-tracking-design/data-quality.html">数据质量：数据校验、异常检测、数据修复策略</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/event-tracking-design/privacy-compliance.html">隐私合规：GDPR/CCPA 合规、用户同意管理、数据脱敏</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cross-discipline-craft:folder:data-analytics-engineering/data-warehouse-basics"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-warehouse-basics/index.html">数据仓库基础 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-warehouse-basics/dw-architecture.html">数仓架构：Lambda/Kappa 架构、分层设计（ODS/DWD/DWS/ADS）</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-warehouse-basics/etl-pipeline.html">ETL 流水线：数据抽取/转换/加载、调度系统、增量处理</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-warehouse-basics/olap-basics.html">OLAP 基础：OLAP vs OLTP、多维分析、ClickHouse/Doris/StarRocks</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-warehouse-basics/data-lake.html">数据湖：数据湖 vs 数据仓库、Lakehouse 架构、Iceberg/Hudi</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cross-discipline-craft:folder:data-analytics-engineering/business-metrics"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cross-discipline-craft/data-analytics-engineering/business-metrics/index.html">业务指标 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/business-metrics/north-star-metrics.html">北极星指标：如何定义北极星指标、指标树分解、输入/输出指标</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/business-metrics/retention-analysis.html">留存分析：DAU/MAU/留存率计算、留存曲线、提升策略</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/business-metrics/monetization-metrics.html">变现指标：LTV/CAC/ARPU/ARPPU、付费率、ROI 分析</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/business-metrics/growth-metrics.html">增长指标：病毒系数、K-Factor、增长飞轮、增长实验框架</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cross-discipline-craft:folder:data-analytics-engineering/data-driven-culture"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-driven-culture/index.html">数据驱动文化 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-driven-culture/data-literacy.html">数据素养：全员数据素养培养、数据民主化、自助分析</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-driven-culture/experiment-culture.html">实验文化：假设驱动、实验框架、失败容忍度</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-driven-culture/data-governance.html">数据治理：数据目录、数据血缘、数据所有权、数据 SLA</a></li><li class="leaf"><a class="leaf-title" href="../../../cross-discipline-craft/data-analytics-engineering/data-driven-culture/analytics-organization.html">分析组织：集中式/嵌入式/混合式数据团队、数据中台</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part I · 相邻角色</span><span>数据分析与工程 简介</span><span>开发者 SQL 简介</span><span>高级查询：窗口函数、CTE、子查询优化</span></nav>
+    <article class="content prose"><h1 id="高级查询-窗口函数-cte-子查询优化">高级查询：窗口函数、CTE、子查询优化</h1><h2 id="窗口函数基础">窗口函数基础</h2><p>窗口函数是 SQL 分析中最强大的工具之一。与聚合函数不同，窗口函数在执行计算时不会折叠结果集的行数，每一行都保留其原始数据的同时获得计算结果。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    subgraph 聚合函数&#10;        A1[多行输入] --&gt; A2[单行输出]&#10;    end&#10;    subgraph 窗口函数&#10;        W1[多行输入] --&gt; W2[每行都有输出]&#10;    end"></pre><h3 id="窗口函数语法结构">窗口函数语法结构</h3><div class="code-block-wrapper" data-lang="sql" data-code="SELECT
+    column_name,
+    window_function() OVER (
+        PARTITION BY partition_column
+        ORDER BY order_column
+        ROWS BETWEEN frame_start AND frame_end
+    ) AS result
+FROM table_name;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    column_name,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    window_function() </span><span style="color:#D73A49;--shiki-dark:#F97583">OVER</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        PARTITION</span><span style="color:#D73A49;--shiki-dark:#F97583"> BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> partition_column</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        ORDER BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> order_column</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        ROWS</span><span style="color:#D73A49;--shiki-dark:#F97583"> BETWEEN</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> frame_start </span><span style="color:#D73A49;--shiki-dark:#F97583">AND</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> frame_end</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    ) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> result</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> table_name;</span></span></code></pre></div><p>窗口函数的三个核心组成部分：</p>
+<table>
+<thead>
+<tr>
+<th>组成部分</th>
+<th>作用</th>
+<th>是否必需</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PARTITION BY</td>
+<td>定义窗口的分区，类似 GROUP BY</td>
+<td>否</td>
+</tr>
+<tr>
+<td>ORDER BY</td>
+<td>定义窗口内的排序规则</td>
+<td>视函数而定</td>
+</tr>
+<tr>
+<td>窗口帧（ROWS/RANGE）</td>
+<td>定义参与计算的行范围</td>
+<td>否</td>
+</tr>
+</tbody></table>
+<h3 id="排名函数">排名函数</h3><p>排名函数是窗口函数中最常用的一类，用于给结果集中的行分配序号。</p>
+<div class="code-block-wrapper" data-lang="sql" data-code="SELECT
+    department,
+    employee_name,
+    salary,
+    ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC) AS row_num,
+    RANK()       OVER (PARTITION BY department ORDER BY salary DESC) AS rank_val,
+    DENSE_RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS dense_rank_val
+FROM employees;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    department,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    employee_name,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    salary,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    ROW_NUMBER</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() </span><span style="color:#D73A49;--shiki-dark:#F97583">OVER</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">PARTITION</span><span style="color:#D73A49;--shiki-dark:#F97583"> BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> department </span><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> salary </span><span style="color:#D73A49;--shiki-dark:#F97583">DESC</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> row_num,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    RANK</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()       </span><span style="color:#D73A49;--shiki-dark:#F97583">OVER</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">PARTITION</span><span style="color:#D73A49;--shiki-dark:#F97583"> BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> department </span><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> salary </span><span style="color:#D73A49;--shiki-dark:#F97583">DESC</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> rank_val,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    DENSE_RANK</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() </span><span style="color:#D73A49;--shiki-dark:#F97583">OVER</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">PARTITION</span><span style="color:#D73A49;--shiki-dark:#F97583"> BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> department </span><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> salary </span><span style="color:#D73A49;--shiki-dark:#F97583">DESC</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> dense_rank_val</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> employees;</span></span></code></pre></div><p>三种排名函数的行为差异：</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>并列处理</th>
+<th>序号间隔</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ROW_NUMBER()</td>
+<td>不并列</td>
+<td>无间隔</td>
+<td>去重、分页、Top-N</td>
+</tr>
+<tr>
+<td>RANK()</td>
+<td>并列</td>
+<td>有间隔</td>
+<td>排行榜（允许并列跳号）</td>
+</tr>
+<tr>
+<td>DENSE_RANK()</td>
+<td>并列</td>
+<td>无间隔</td>
+<td>排行榜（并列不跳号）</td>
+</tr>
+</tbody></table>
+<h3 id="偏移函数">偏移函数</h3><p>LAG 和 LEAD 函数可以访问当前行前后指定偏移量的行数据，在环比分析和同比分析中极为常用。</p>
+<div class="code-block-wrapper" data-lang="sql" data-code="SELECT
+    date,
+    daily_revenue,
+    LAG(daily_revenue, 1)  OVER (ORDER BY date) AS prev_day_revenue,
+    LEAD(daily_revenue, 1) OVER (ORDER BY date) AS next_day_revenue,
+    daily_revenue - LAG(daily_revenue, 1) OVER (ORDER BY date) AS day_over_day_change,
+    ROUND(
+        (daily_revenue - LAG(daily_revenue, 1) OVER (ORDER BY date))
+        / LAG(daily_revenue, 1) OVER (ORDER BY date) * 100, 2
+    ) AS dod_change_pct
+FROM daily_metrics;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    date</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    daily_revenue,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    LAG</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(daily_revenue, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)  </span><span style="color:#D73A49;--shiki-dark:#F97583">OVER</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#D73A49;--shiki-dark:#F97583"> date</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> prev_day_revenue,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    LEAD</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(daily_revenue, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">OVER</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#D73A49;--shiki-dark:#F97583"> date</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> next_day_revenue,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    daily_revenue </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> LAG</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(daily_revenue, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">OVER</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#D73A49;--shiki-dark:#F97583"> date</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> day_over_day_change,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    ROUND</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        (daily_revenue </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> LAG</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(daily_revenue, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">OVER</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#D73A49;--shiki-dark:#F97583"> date</span><span style="color:#24292E;--shiki-dark:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        /</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> LAG</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(daily_revenue, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">OVER</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#D73A49;--shiki-dark:#F97583"> date</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 100</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    ) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> dod_change_pct</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> daily_metrics;</span></span></code></pre></div><h3 id="聚合窗口函数">聚合窗口函数</h3><p>传统聚合函数加上 OVER 子句即成为窗口聚合函数，可以在不折叠行的前提下计算累计值、移动平均等。</p>
+<div class="code-block-wrapper" data-lang="sql" data-code="SELECT
+    date,
+    daily_revenue,
+    SUM(daily_revenue) OVER (ORDER BY date) AS cumulative_revenue,
+    AVG(daily_revenue) OVER (
+        ORDER BY date
+        ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
+    ) AS seven_day_moving_avg,
+    SUM(daily_revenue) OVER (
+        PARTITION BY DATE_TRUNC('month', date)
+        ORDER BY date
+    ) AS mtd_revenue
+FROM daily_metrics;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    date</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    daily_revenue,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    SUM</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(daily_revenue) </span><span style="color:#D73A49;--shiki-dark:#F97583">OVER</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#D73A49;--shiki-dark:#F97583"> date</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> cumulative_revenue,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    AVG</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(daily_revenue) </span><span style="color:#D73A49;--shiki-dark:#F97583">OVER</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        ORDER BY</span><span style="color:#D73A49;--shiki-dark:#F97583"> date</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        ROWS</span><span style="color:#D73A49;--shiki-dark:#F97583"> BETWEEN</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 6</span><span style="color:#D73A49;--shiki-dark:#F97583"> PRECEDING</span><span style="color:#D73A49;--shiki-dark:#F97583"> AND</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> CURRENT </span><span style="color:#D73A49;--shiki-dark:#F97583">ROW</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    ) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> seven_day_moving_avg,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    SUM</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(daily_revenue) </span><span style="color:#D73A49;--shiki-dark:#F97583">OVER</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        PARTITION</span><span style="color:#D73A49;--shiki-dark:#F97583"> BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> DATE_TRUNC(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'month'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">date</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        ORDER BY</span><span style="color:#D73A49;--shiki-dark:#F97583"> date</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    ) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> mtd_revenue</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> daily_metrics;</span></span></code></pre></div><h3 id="窗口帧详解">窗口帧详解</h3><p>窗口帧定义了参与计算的行范围，是窗口函数中最容易被忽视但最需要精确控制的部分。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[窗口帧类型] --&gt; B[ROWS]&#10;    A --&gt; C[RANGE]&#10;    A --&gt; D[GROUPS]&#10;    B --&gt; B1[基于物理行偏移]&#10;    C --&gt; C1[基于逻辑值范围]&#10;    D --&gt; D1[基于分组偏移]"></pre><table>
+<thead>
+<tr>
+<th>帧边界</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>UNBOUNDED PRECEDING</td>
+<td>分区的第一行</td>
+</tr>
+<tr>
+<td>N PRECEDING</td>
+<td>当前行前 N 行</td>
+</tr>
+<tr>
+<td>CURRENT ROW</td>
+<td>当前行</td>
+</tr>
+<tr>
+<td>N FOLLOWING</td>
+<td>当前行后 N 行</td>
+</tr>
+<tr>
+<td>UNBOUNDED FOLLOWING</td>
+<td>分区的最后一行</td>
+</tr>
+</tbody></table>
+<div class="code-block-wrapper" data-lang="sql" data-code="SELECT
+    date,
+    daily_revenue,
+    -- 累计总和（从分区起始到当前行）
+    SUM(daily_revenue) OVER (
+        ORDER BY date
+        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+    ) AS running_total,
+    -- 前后各一行的移动平均
+    AVG(daily_revenue) OVER (
+        ORDER BY date
+        ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING
+    ) AS centered_moving_avg,
+    -- 从当前行到分区末尾的总和
+    SUM(daily_revenue) OVER (
+        ORDER BY date
+        ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING
+    ) AS remaining_total
+FROM daily_metrics;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    date</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    daily_revenue,</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">    -- 累计总和（从分区起始到当前行）</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    SUM</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(daily_revenue) </span><span style="color:#D73A49;--shiki-dark:#F97583">OVER</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        ORDER BY</span><span style="color:#D73A49;--shiki-dark:#F97583"> date</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        ROWS</span><span style="color:#D73A49;--shiki-dark:#F97583"> BETWEEN</span><span style="color:#D73A49;--shiki-dark:#F97583"> UNBOUNDED</span><span style="color:#D73A49;--shiki-dark:#F97583"> PRECEDING</span><span style="color:#D73A49;--shiki-dark:#F97583"> AND</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> CURRENT </span><span style="color:#D73A49;--shiki-dark:#F97583">ROW</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    ) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> running_total,</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">    -- 前后各一行的移动平均</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    AVG</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(daily_revenue) </span><span style="color:#D73A49;--shiki-dark:#F97583">OVER</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        ORDER BY</span><span style="color:#D73A49;--shiki-dark:#F97583"> date</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        ROWS</span><span style="color:#D73A49;--shiki-dark:#F97583"> BETWEEN</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#D73A49;--shiki-dark:#F97583"> PRECEDING</span><span style="color:#D73A49;--shiki-dark:#F97583"> AND</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#D73A49;--shiki-dark:#F97583"> FOLLOWING</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    ) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> centered_moving_avg,</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">    -- 从当前行到分区末尾的总和</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    SUM</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(daily_revenue) </span><span style="color:#D73A49;--shiki-dark:#F97583">OVER</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        ORDER BY</span><span style="color:#D73A49;--shiki-dark:#F97583"> date</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        ROWS</span><span style="color:#D73A49;--shiki-dark:#F97583"> BETWEEN</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> CURRENT </span><span style="color:#D73A49;--shiki-dark:#F97583">ROW</span><span style="color:#D73A49;--shiki-dark:#F97583"> AND</span><span style="color:#D73A49;--shiki-dark:#F97583"> UNBOUNDED</span><span style="color:#D73A49;--shiki-dark:#F97583"> FOLLOWING</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    ) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> remaining_total</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> daily_metrics;</span></span></code></pre></div><hr>
+<h2 id="公用表表达式-cte">公用表表达式（CTE）</h2><p>CTE 通过 WITH 子句为复杂查询提供了命名的临时结果集，极大地提升了 SQL 的可读性和可维护性。</p>
+<h3 id="基础-cte">基础 CTE</h3><div class="code-block-wrapper" data-lang="sql" data-code="WITH monthly_revenue AS (
+    SELECT
+        DATE_TRUNC('month', order_date) AS month,
+        SUM(amount) AS revenue
+    FROM orders
+    WHERE order_date &gt;= '2025-01-01'
+    GROUP BY DATE_TRUNC('month', order_date)
+),
+monthly_growth AS (
+    SELECT
+        month,
+        revenue,
+        LAG(revenue) OVER (ORDER BY month) AS prev_month_revenue,
+        ROUND(
+            (revenue - LAG(revenue) OVER (ORDER BY month))
+            / LAG(revenue) OVER (ORDER BY month) * 100, 2
+        ) AS growth_rate
+    FROM monthly_revenue
+)
+SELECT * FROM monthly_growth ORDER BY month;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">WITH</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> monthly_revenue </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    SELECT</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        DATE_TRUNC(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'month'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, order_date) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#D73A49;--shiki-dark:#F97583"> month</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        SUM</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(amount) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> revenue</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> order_date </span><span style="color:#D73A49;--shiki-dark:#F97583">>=</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '2025-01-01'</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    GROUP BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> DATE_TRUNC(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'month'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, order_date)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">monthly_growth </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    SELECT</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        month</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        revenue,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        LAG</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(revenue) </span><span style="color:#D73A49;--shiki-dark:#F97583">OVER</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#D73A49;--shiki-dark:#F97583"> month</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> prev_month_revenue,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        ROUND</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            (revenue </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> LAG</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(revenue) </span><span style="color:#D73A49;--shiki-dark:#F97583">OVER</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#D73A49;--shiki-dark:#F97583"> month</span><span style="color:#24292E;--shiki-dark:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            /</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> LAG</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(revenue) </span><span style="color:#D73A49;--shiki-dark:#F97583">OVER</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#D73A49;--shiki-dark:#F97583"> month</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 100</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        ) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> growth_rate</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> monthly_revenue</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> monthly_growth </span><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#D73A49;--shiki-dark:#F97583"> month</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre></div><h3 id="递归-cte">递归 CTE</h3><p>递归 CTE 通过自引用实现层级数据的遍历，适用于组织架构、分类树等场景。</p>
+<div class="code-block-wrapper" data-lang="sql" data-code="WITH RECURSIVE org_tree AS (
+    SELECT
+        employee_id,
+        employee_name,
+        manager_id,
+        1 AS level,
+        employee_name::TEXT AS path
+    FROM employees
+    WHERE manager_id IS NULL
+
+    UNION ALL
+
+    SELECT
+        e.employee_id,
+        e.employee_name,
+        e.manager_id,
+        t.level + 1,
+        t.path || ' &gt; ' || e.employee_name
+    FROM employees e
+    INNER JOIN org_tree t ON e.manager_id = t.employee_id
+)
+SELECT * FROM org_tree ORDER BY path;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">WITH</span><span style="color:#D73A49;--shiki-dark:#F97583"> RECURSIVE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> org_tree </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    SELECT</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        employee_id,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        employee_name,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        manager_id,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        1</span><span style="color:#D73A49;--shiki-dark:#F97583"> AS</span><span style="color:#D73A49;--shiki-dark:#F97583"> level</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        employee_name::</span><span style="color:#D73A49;--shiki-dark:#F97583">TEXT</span><span style="color:#D73A49;--shiki-dark:#F97583"> AS</span><span style="color:#D73A49;--shiki-dark:#F97583"> path</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> employees</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> manager_id </span><span style="color:#D73A49;--shiki-dark:#F97583">IS</span><span style="color:#D73A49;--shiki-dark:#F97583"> NULL</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    UNION ALL</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    SELECT</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        e</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">employee_id</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        e</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">employee_name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        e</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">manager_id</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        t</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">level</span><span style="color:#D73A49;--shiki-dark:#F97583"> +</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        t</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">path</span><span style="color:#D73A49;--shiki-dark:#F97583"> ||</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> ' > '</span><span style="color:#D73A49;--shiki-dark:#F97583"> ||</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> e</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">employee_name</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> employees e</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    INNER JOIN</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> org_tree t </span><span style="color:#D73A49;--shiki-dark:#F97583">ON</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> e</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">manager_id</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> t</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">employee_id</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> org_tree </span><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#D73A49;--shiki-dark:#F97583"> path</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre></div><h3 id="cte-vs-子查询对比">CTE vs 子查询对比</h3><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>CTE</th>
+<th>子查询</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>可读性</td>
+<td>高，命名清晰</td>
+<td>低，嵌套深时难以理解</td>
+</tr>
+<tr>
+<td>复用性</td>
+<td>同一查询内可多次引用</td>
+<td>每次使用需重复编写</td>
+</tr>
+<tr>
+<td>递归支持</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>取决于数据库优化器</td>
+<td>取决于数据库优化器</td>
+</tr>
+<tr>
+<td>调试便利性</td>
+<td>高，可逐个 CTE 检查</td>
+<td>低，需逐层剥离</td>
+</tr>
+<tr>
+<td>物化行为</td>
+<td>PostgreSQL 12+ 可控</td>
+<td>由优化器决定</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="子查询优化">子查询优化</h2><p>子查询是 SQL 中常见的查询模式，但不当使用可能导致严重的性能问题。</p>
+<h3 id="关联子查询与非关联子查询">关联子查询与非关联子查询</h3><pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[子查询类型] --&gt; B[非关联子查询]&#10;    A --&gt; C[关联子查询]&#10;    B --&gt; B1[独立执行一次]&#10;    B --&gt; B2[结果被外层查询引用]&#10;    C --&gt; C1[每行执行一次]&#10;    C --&gt; C2[引用外层查询的列]"></pre><p>非关联子查询只执行一次，性能通常可接受：</p>
+<div class="code-block-wrapper" data-lang="sql" data-code="SELECT employee_name, salary
+FROM employees
+WHERE salary &gt; (SELECT AVG(salary) FROM employees);"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> employee_name, salary</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> employees</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> salary </span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> AVG</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(salary) </span><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> employees);</span></span></code></pre></div><p>关联子查询对外层查询的每一行都执行一次，是性能瓶颈的常见来源：</p>
+<div class="code-block-wrapper" data-lang="sql" data-code="-- 关联子查询（性能较差）
+SELECT
+    d.department_name,
+    (SELECT COUNT(*) FROM employees e WHERE e.department_id = d.department_id) AS emp_count
+FROM departments d;
+
+-- 改写为 JOIN（性能更优）
+SELECT
+    d.department_name,
+    COUNT(e.employee_id) AS emp_count
+FROM departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_name;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 关联子查询（性能较差）</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    d</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">department_name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    (</span><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> COUNT</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> employees e </span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> e</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">department_id</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> d</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">department_id</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> emp_count</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> departments d;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 改写为 JOIN（性能更优）</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    d</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">department_name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    COUNT</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">e</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">employee_id</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> emp_count</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> departments d</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">LEFT JOIN</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> employees e </span><span style="color:#D73A49;--shiki-dark:#F97583">ON</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> d</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">department_id</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> e</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">department_id</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">GROUP BY</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> d</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">department_name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre></div><h3 id="exists-vs-in-优化">EXISTS vs IN 优化</h3><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐方式</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>子查询结果集小</td>
+<td>IN</td>
+<td>优化器可以高效处理小结果集</td>
+</tr>
+<tr>
+<td>子查询结果集大</td>
+<td>EXISTS</td>
+<td>EXISTS 在找到第一个匹配后即停止</td>
+</tr>
+<tr>
+<td>子查询含 NULL 值</td>
+<td>EXISTS</td>
+<td>IN 遇到 NULL 时的三值逻辑行为不直观</td>
+</tr>
+<tr>
+<td>需要反向匹配</td>
+<td>NOT EXISTS</td>
+<td>NOT IN 遇到 NULL 会返回空结果集</td>
+</tr>
+</tbody></table>
+<div class="code-block-wrapper" data-lang="sql" data-code="-- NOT IN 的 NULL 陷阱
+SELECT * FROM orders
+WHERE customer_id NOT IN (SELECT customer_id FROM blacklist);
+-- 如果 blacklist.customer_id 含有 NULL，上述查询返回空结果
+
+-- 安全的写法
+SELECT * FROM orders o
+WHERE NOT EXISTS (
+    SELECT 1 FROM blacklist b WHERE b.customer_id = o.customer_id
+);"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- NOT IN 的 NULL 陷阱</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> customer_id </span><span style="color:#D73A49;--shiki-dark:#F97583">NOT</span><span style="color:#D73A49;--shiki-dark:#F97583"> IN</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> customer_id </span><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> blacklist);</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 如果 blacklist.customer_id 含有 NULL，上述查询返回空结果</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 安全的写法</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders o</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#D73A49;--shiki-dark:#F97583"> NOT</span><span style="color:#D73A49;--shiki-dark:#F97583"> EXISTS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    SELECT</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> blacklist b </span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> b</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">customer_id</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> o</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">customer_id</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span></code></pre></div><h3 id="子查询改写为-join-的常见模式">子查询改写为 JOIN 的常见模式</h3><div class="code-block-wrapper" data-lang="sql" data-code="-- 原始：子查询获取每个部门薪资最高的员工
+SELECT * FROM employees
+WHERE (department_id, salary) IN (
+    SELECT department_id, MAX(salary)
+    FROM employees
+    GROUP BY department_id
+);
+
+-- 优化：使用窗口函数
+WITH ranked AS (
+    SELECT
+        *,
+        ROW_NUMBER() OVER (PARTITION BY department_id ORDER BY salary DESC) AS rn
+    FROM employees
+)
+SELECT * FROM ranked WHERE rn = 1;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 原始：子查询获取每个部门薪资最高的员工</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> employees</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (department_id, salary) </span><span style="color:#D73A49;--shiki-dark:#F97583">IN</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    SELECT</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> department_id, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">MAX</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(salary)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> employees</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    GROUP BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> department_id</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">-- 优化：使用窗口函数</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">WITH</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ranked </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    SELECT</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        *</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        ROW_NUMBER</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() </span><span style="color:#D73A49;--shiki-dark:#F97583">OVER</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">PARTITION</span><span style="color:#D73A49;--shiki-dark:#F97583"> BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> department_id </span><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> salary </span><span style="color:#D73A49;--shiki-dark:#F97583">DESC</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> rn</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> employees</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#D73A49;--shiki-dark:#F97583"> FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ranked </span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> rn </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre></div><hr>
+<h2 id="实战-sql-模式">实战 SQL 模式</h2><h3 id="grouping-sets-多维分析">GROUPING SETS 多维分析</h3><div class="code-block-wrapper" data-lang="sql" data-code="SELECT
+    COALESCE(region, '全部') AS region,
+    COALESCE(product_category, '全部') AS category,
+    SUM(revenue) AS total_revenue,
+    COUNT(DISTINCT customer_id) AS customer_count
+FROM sales
+GROUP BY GROUPING SETS (
+    (region, product_category),
+    (region),
+    (product_category),
+    ()
+)
+ORDER BY region, category;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    COALESCE</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(region, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'全部'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> region,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    COALESCE</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(product_category, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'全部'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> category,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    SUM</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(revenue) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> total_revenue,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    COUNT</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">DISTINCT</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> customer_id) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> customer_count</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> sales</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">GROUP BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> GROUPING </span><span style="color:#D73A49;--shiki-dark:#F97583">SETS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    (region, product_category),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    (region),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    (product_category),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    ()</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> region, category;</span></span></code></pre></div><h3 id="lateral-join-行级子查询">LATERAL JOIN 行级子查询</h3><div class="code-block-wrapper" data-lang="sql" data-code="SELECT
+    u.user_id,
+    u.user_name,
+    recent_orders.order_id,
+    recent_orders.order_date,
+    recent_orders.amount
+FROM users u
+CROSS JOIN LATERAL (
+    SELECT order_id, order_date, amount
+    FROM orders o
+    WHERE o.user_id = u.user_id
+    ORDER BY order_date DESC
+    LIMIT 3
+) AS recent_orders;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    u</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">user_id</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    u</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">user_name</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    recent_orders</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">order_id</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    recent_orders</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">order_date</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    recent_orders</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">amount</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> users u</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">CROSS JOIN</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> LATERAL (</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    SELECT</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> order_id, order_date, amount</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders o</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    WHERE</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> o</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">user_id</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> u</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">user_id</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    ORDER BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> order_date </span><span style="color:#D73A49;--shiki-dark:#F97583">DESC</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    LIMIT</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 3</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> recent_orders;</span></span></code></pre></div><h3 id="filter-子句条件聚合">FILTER 子句条件聚合</h3><div class="code-block-wrapper" data-lang="sql" data-code="SELECT
+    DATE_TRUNC('month', order_date) AS month,
+    COUNT(*) AS total_orders,
+    COUNT(*) FILTER (WHERE status = 'completed') AS completed_orders,
+    COUNT(*) FILTER (WHERE status = 'refunded') AS refunded_orders,
+    SUM(amount) FILTER (WHERE status = 'completed') AS completed_revenue,
+    ROUND(
+        COUNT(*) FILTER (WHERE status = 'completed')::NUMERIC / COUNT(*) * 100, 2
+    ) AS completion_rate
+FROM orders
+GROUP BY DATE_TRUNC('month', order_date)
+ORDER BY month;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">SELECT</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    DATE_TRUNC(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'month'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, order_date) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#D73A49;--shiki-dark:#F97583"> month</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    COUNT</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> total_orders,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    COUNT</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">FILTER</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#D73A49;--shiki-dark:#F97583"> status</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'completed'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> completed_orders,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    COUNT</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">FILTER</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#D73A49;--shiki-dark:#F97583"> status</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'refunded'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> refunded_orders,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    SUM</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(amount) </span><span style="color:#D73A49;--shiki-dark:#F97583">FILTER</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#D73A49;--shiki-dark:#F97583"> status</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'completed'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> completed_revenue,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    ROUND</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        COUNT</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">FILTER</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">WHERE</span><span style="color:#D73A49;--shiki-dark:#F97583"> status</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'completed'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)::</span><span style="color:#D73A49;--shiki-dark:#F97583">NUMERIC</span><span style="color:#D73A49;--shiki-dark:#F97583"> /</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> COUNT</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 100</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    ) </span><span style="color:#D73A49;--shiki-dark:#F97583">AS</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> completion_rate</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">FROM</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> orders</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">GROUP BY</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> DATE_TRUNC(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'month'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, order_date)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">ORDER BY</span><span style="color:#D73A49;--shiki-dark:#F97583"> month</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre></div><hr>
+<h2 id="小结">小结</h2><ul>
+<li>窗口函数通过 OVER 子句在不折叠行的前提下完成排名、偏移、聚合计算，是数据分析 SQL 的核心工具</li>
+<li>CTE 通过命名临时结果集提升复杂查询的可读性，递归 CTE 可处理层级数据遍历</li>
+<li>关联子查询是常见的性能瓶颈，应优先考虑改写为 JOIN 或窗口函数</li>
+<li>EXISTS 在处理大结果集和 NULL 值时比 IN 更安全高效</li>
+<li>GROUPING SETS、LATERAL JOIN、FILTER 子句是高级分析场景中的实用模式</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../cross-discipline-craft/data-analytics-engineering/sql-for-developers/index.html"><span class="label">Previous</span>开发者 SQL 简介</a><a class="next" href="../../../cross-discipline-craft/data-analytics-engineering/sql-for-developers/query-optimization.html"><span class="label">Next</span>查询优化：执行计划分析、索引策略、慢查询诊断</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#窗口函数基础" data-outline-link="窗口函数基础">窗口函数基础</a></li><li class="depth-3"><a href="#窗口函数语法结构" data-outline-link="窗口函数语法结构">窗口函数语法结构</a></li><li class="depth-3"><a href="#排名函数" data-outline-link="排名函数">排名函数</a></li><li class="depth-3"><a href="#偏移函数" data-outline-link="偏移函数">偏移函数</a></li><li class="depth-3"><a href="#聚合窗口函数" data-outline-link="聚合窗口函数">聚合窗口函数</a></li><li class="depth-3"><a href="#窗口帧详解" data-outline-link="窗口帧详解">窗口帧详解</a></li><li class="depth-2"><a href="#公用表表达式-cte" data-outline-link="公用表表达式-cte">公用表表达式（CTE）</a></li><li class="depth-3"><a href="#基础-cte" data-outline-link="基础-cte">基础 CTE</a></li><li class="depth-3"><a href="#递归-cte" data-outline-link="递归-cte">递归 CTE</a></li><li class="depth-3"><a href="#cte-vs-子查询对比" data-outline-link="cte-vs-子查询对比">CTE vs 子查询对比</a></li><li class="depth-2"><a href="#子查询优化" data-outline-link="子查询优化">子查询优化</a></li><li class="depth-3"><a href="#关联子查询与非关联子查询" data-outline-link="关联子查询与非关联子查询">关联子查询与非关联子查询</a></li><li class="depth-3"><a href="#exists-vs-in-优化" data-outline-link="exists-vs-in-优化">EXISTS vs IN 优化</a></li><li class="depth-3"><a href="#子查询改写为-join-的常见模式" data-outline-link="子查询改写为-join-的常见模式">子查询改写为 JOIN 的常见模式</a></li><li class="depth-2"><a href="#实战-sql-模式" data-outline-link="实战-sql-模式">实战 SQL 模式</a></li><li class="depth-3"><a href="#grouping-sets-多维分析" data-outline-link="grouping-sets-多维分析">GROUPING SETS 多维分析</a></li><li class="depth-3"><a href="#lateral-join-行级子查询" data-outline-link="lateral-join-行级子查询">LATERAL JOIN 行级子查询</a></li><li class="depth-3"><a href="#filter-子句条件聚合" data-outline-link="filter-子句条件聚合">FILTER 子句条件聚合</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

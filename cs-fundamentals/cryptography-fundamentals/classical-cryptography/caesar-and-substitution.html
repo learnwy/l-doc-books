@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Caesar 与 Substitution Cipher · 计算机科学基础</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:计算机科学基础" data-pagefind-meta="slug:cs-fundamentals">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">计算机科学基础</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item active" href="../../../cs-fundamentals/index.html" aria-current="page" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../cs-fundamentals/index.html">计算机科学基础</a><a class="back-to-hubs" href="../../../cs-fundamentals/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../cs-fundamentals/cryptography-fundamentals/index.html">密码学基础</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="cs-fundamentals"><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:cryptography-fundamentals/classical-cryptography" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/cryptography-fundamentals/classical-cryptography/index.html">古典密码学</a></summary><ul><li class="leaf"><a class="leaf-title active" href="../../../cs-fundamentals/cryptography-fundamentals/classical-cryptography/caesar-and-substitution.html">Caesar 与 Substitution Cipher</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/classical-cryptography/vigenere-cipher.html">Vigenère Cipher 维吉尼亚密码</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/classical-cryptography/frequency-analysis.html">频率分析</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/classical-cryptography/one-time-pad.html">One-Time Pad 一次性密码本</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:cryptography-fundamentals/symmetric-cryptography"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/cryptography-fundamentals/symmetric-cryptography/index.html">对称密码学</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/symmetric-cryptography/block-ciphers-aes.html">Block Cipher 与 AES</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/symmetric-cryptography/stream-ciphers.html">流密码</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/symmetric-cryptography/modes-of-operation.html">运行模式</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/symmetric-cryptography/hash-functions-and-mac.html">Hash 函数与 MAC</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:cryptography-fundamentals/asymmetric-cryptography"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/cryptography-fundamentals/asymmetric-cryptography/index.html">非对称密码学</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/asymmetric-cryptography/rsa-fundamentals.html">RSA 基础</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/asymmetric-cryptography/diffie-hellman-and-ecc.html">Diffie-Hellman 与椭圆曲线密码</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/asymmetric-cryptography/digital-signatures.html">数字签名</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/asymmetric-cryptography/public-key-infrastructure.html">公钥基础设施（PKI）</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:cryptography-fundamentals/applied-cryptography"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/cryptography-fundamentals/applied-cryptography/index.html">应用密码学</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/applied-cryptography/tls-and-https.html">TLS 与 HTTPS</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/applied-cryptography/password-hashing.html">密码 Hash 与存储</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/applied-cryptography/modern-protocols-and-zkp.html">现代协议与零知识证明</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part V · 安全与密码学 (Security &amp; Cryptography)</span><span>密码学基础</span><span>古典密码学</span><span>Caesar 与 Substitution Cipher</span></nav>
+    <article class="content prose"><h1 id="caesar-与-substitution-cipher">Caesar 与 Substitution Cipher</h1><h2 id="核心概念">核心概念</h2><p>Caesar Cipher 是历史上记载最早的密码——古罗马凯撒大帝用它加密军令，把每个字母按字母表向后移动 3 位（A → D, B → E, ..., Z → C）。它是 Substitution Cipher（替换密码）的最简单形式，也是密码学的&quot;Hello World&quot;——任何想理解 modern crypto 的人都应从此开始。本节介绍 Caesar、Atbash、Affine、General Substitution 四种 substitution，分析它们的密钥空间（key space）、攻击方式（暴力穷举、频率分析）、以及它们暴露的核心教训——任何把&quot;算法保密&quot;作为安全前提的方案最终都会失败（Kerckhoffs 原则）。</p>
+<table>
+<thead>
+<tr>
+<th>Cipher</th>
+<th>Key</th>
+<th>Key space</th>
+<th>安全性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Caesar</td>
+<td>移位数（0-25）</td>
+<td>26（≈ 2^4.7）</td>
+<td>暴力穷举</td>
+</tr>
+<tr>
+<td>Atbash</td>
+<td>无（固定逆字母表）</td>
+<td>1</td>
+<td>完全公开</td>
+</tr>
+<tr>
+<td>Affine</td>
+<td>(a, b)，gcd(a,26)=1</td>
+<td>312</td>
+<td>暴力穷举</td>
+</tr>
+<tr>
+<td>General Substitution</td>
+<td>26 个字符的排列</td>
+<td>26! ≈ 4×10^26</td>
+<td>频率分析破</td>
+</tr>
+</tbody></table>
+<h2 id="caesar-cipher-的数学">Caesar Cipher 的数学</h2><p>Caesar 把字母表看作 Z₂₆（模 26 的整数环）：</p>
+<p><strong>加密</strong>：c = (m + k) mod 26<br><strong>解密</strong>：m = (c - k) mod 26</p>
+<p>其中 m 是明文字母索引（A=0, B=1, ..., Z=25），c 是密文字母索引，k 是 key（0-25 的整数）。</p>
+<div class="code-block-wrapper" data-lang="python" data-code="def caesar_encrypt(plaintext, key):
+    result = []
+    for ch in plaintext.upper():
+        if ch.isalpha():
+            result.append(chr((ord(ch) - ord('A') + key) % 26 + ord('A')))
+        else:
+            result.append(ch)
+    return ''.join(result)
+
+# caesar_encrypt(&quot;HELLO&quot;, 3) =&gt; &quot;KHOOR&quot;
+# caesar_encrypt(&quot;ATTACK AT DAWN&quot;, 13) =&gt; &quot;NGGNPX NG QNJA&quot;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> caesar_encrypt</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(plaintext, key):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    result </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> []</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ch </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> plaintext.upper():</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ch.isalpha():</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            result.append(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">chr</span><span style="color:#24292E;--shiki-dark:#E1E4E8">((</span><span style="color:#005CC5;--shiki-dark:#79B8FF">ord</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(ch) </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> ord</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'A'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> key) </span><span style="color:#D73A49;--shiki-dark:#F97583">%</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 26</span><span style="color:#D73A49;--shiki-dark:#F97583"> +</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> ord</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'A'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)))</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        else</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            result.append(ch)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> ''</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.join(result)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># caesar_encrypt("HELLO", 3) => "KHOOR"</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># caesar_encrypt("ATTACK AT DAWN", 13) => "NGGNPX NG QNJA"</span></span></code></pre></div><h2 id="攻击-caesar-暴力穷举">攻击 Caesar：暴力穷举</h2><p>Caesar 只有 26 种可能的 key——人类几秒就能 try 完所有 26 个：</p>
+<div class="code-block-wrapper" data-lang="text" data-code="ciphertext: KHOOR
+key=0: KHOOR
+key=1: JGNNQ
+key=2: IFMMP
+key=3: HELLO  ← 看到合理英文，找到 key
+..."><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>ciphertext: KHOOR</span></span>
+<span class="line"><span>key=0: KHOOR</span></span>
+<span class="line"><span>key=1: JGNNQ</span></span>
+<span class="line"><span>key=2: IFMMP</span></span>
+<span class="line"><span>key=3: HELLO  ← 看到合理英文，找到 key</span></span>
+<span class="line"><span>...</span></span></code></pre></div><p><strong>教训</strong>：key space 太小是致命弱点。现代密码学要求 key space ≥ 2^128（即使全球所有计算机一起也要 ~10^21 年）。</p>
+<h2 id="atbash-与-rot13">Atbash 与 ROT13</h2><p><strong>Atbash</strong>（希伯来圣经使用的密码）把字母表完全反转：A ↔ Z, B ↔ Y, C ↔ X...</p>
+<p><strong>ROT13</strong> 是 Caesar 的特例——key=13。因为 13 + 13 = 26 ≡ 0 (mod 26)，加密与解密是同一操作。常用于 Usenet 隐藏剧透——不是为了 security，而是 convention。</p>
+<h2 id="affine-cipher">Affine Cipher</h2><p>Affine 是 Caesar 的推广：c = (a·m + b) mod 26，其中 a 必须与 26 互素（gcd(a, 26) = 1），否则不可逆。</p>
+<p><strong>a 的合法值</strong>：1, 3, 5, 7, 9, 11, 15, 17, 19, 21, 23, 25（共 12 个，欧拉函数 φ(26) = 12）。</p>
+<p><strong>Key space</strong>：12 × 26 = 312。仍可暴力穷举。</p>
+<p><strong>解密</strong>：m = a⁻¹ · (c - b) mod 26，需求 a 在 Z₂₆ 中的乘法逆元。</p>
+<h2 id="general-substitution-cipher">General Substitution Cipher</h2><p>General Substitution 把每个字母独立映射到另一个字母——key 是字母表的一个 permutation。</p>
+<p><strong>Key space</strong>：26! ≈ 4 × 10^26 ≈ 2^88。看似巨大，但仍能被频率分析攻破（见下一节）。</p>
+<p><strong>例</strong>：</p>
+<div class="code-block-wrapper" data-lang="text" data-code="plain:  A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+cipher: Q W E R T Y U I O P A S D F G H J K L Z X C V B N M"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>plain:  A B C D E F G H I J K L M N O P Q R S T U V W X Y Z</span></span>
+<span class="line"><span>cipher: Q W E R T Y U I O P A S D F G H J K L Z X C V B N M</span></span></code></pre></div><p>&quot;HELLO&quot; → &quot;ITSSG&quot;</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    A[Plaintext] --&gt; B[Substitution Table]&#10;    B --&gt; C[Ciphertext]&#10;    D[Key 26 letter permutation] --&gt; B&#10;    A --&gt; E[Frequency profile]&#10;    C --&gt; F[Frequency profile preserved]&#10;    E --&gt; G[Frequency Analysis Attack]&#10;    F --&gt; G"></pre><h2 id="为什么-substitution-cipher-不安全">为什么 Substitution Cipher 不安全</h2><p>虽然 26! 的 key space 看似巨大，但 substitution cipher 有致命弱点——<strong>它保留了明文的频率特征</strong>。英语 E 占 12.7%，T 占 9%，A 占 8.2%。即使经过 substitution，密文最频繁的字母仍对应英语最频繁的字母。</p>
+<p>具体：</p>
+<ul>
+<li>单字母频率分析（找 E, T, A）。</li>
+<li>双字母分析（TH、HE、IN 等 bigram）。</li>
+<li>三字母分析（THE、AND 等 trigram）。</li>
+<li>短词分析（A, I, IS, AT, OF, TO 等 stop words）。</li>
+</ul>
+<p>只需 ~50 字母的密文，频率分析就能破解 substitution cipher。我们在下节具体展开。</p>
+<h2 id="kerckhoffs-原则">Kerckhoffs 原则</h2><p>19 世纪荷兰密码学家 Auguste Kerckhoffs 提出：<strong>密码系统的安全应只依赖于 key 的保密，而不是算法的保密</strong>。</p>
+<p><strong>为什么</strong>：</p>
+<ul>
+<li>算法迟早会泄露（逆向工程、间谍、内部叛变）。</li>
+<li>算法泄露后整个系统崩溃（如果安全依赖算法）。</li>
+<li>如果只依赖 key，泄露后只需换 key。</li>
+<li>公开算法允许公众审查、发现弱点。</li>
+</ul>
+<p><strong>现代实践</strong>：所有现代密码（AES、RSA、SHA-2 等）都是公开算法。任何&quot;自创&quot;的&quot;秘密&quot;算法几乎一定不安全（DON&#39;T ROLL YOUR OWN CRYPTO）。</p>
+<p><strong>反例（违反 Kerckhoffs）</strong>：</p>
+<ul>
+<li>Enigma：算法部分公开，但 Wehrmacht 也依赖 rotor 配置秘密。Bletchley Park 破译。</li>
+<li>ROT13：算法本身是 key（=13）。完全没有安全性。</li>
+<li>早期 GSM 的 A5/1：算法保密设计，被 reverse-engineer 后被破解。</li>
+</ul>
+<h2 id="substitution-cipher-的工程教训">Substitution Cipher 的工程教训</h2><p>虽然 substitution cipher 已不再实战，它教会我们的工程教训仍适用：</p>
+<ol>
+<li><strong>Key space 必须巨大</strong>：现代要求 ≥ 2^128。</li>
+<li><strong>不能保留 plaintext 统计结构</strong>：现代密码追求&quot;密文与随机字符串不可区分&quot;（IND-CPA 安全）。</li>
+<li><strong>算法公开 + key 保密</strong>：Kerckhoffs 原则。</li>
+<li><strong>不要自创</strong>：用经过学术界审查的标准算法（AES、ChaCha20 等）。</li>
+</ol>
+<h2 id="现代密码如何避免这些弱点">现代密码如何避免这些弱点</h2><ul>
+<li><strong>Block cipher（如 AES）</strong>：一个 block（16 byte）一起加密，破坏字符级统计。每个 block 加密结果依赖前一 block（CBC）或 counter（CTR），相同 plaintext 产生不同 ciphertext。</li>
+<li><strong>Mode of operation</strong>：避免 ECB 模式（保留 block 级 pattern）。</li>
+<li><strong>Authenticated encryption（AES-GCM）</strong>：除了保密还提供完整性验证。</li>
+<li><strong>大 key space</strong>：AES-128 即 2^128。</li>
+</ul>
+<h2 id="小结">小结</h2><p>Caesar 与 Substitution Cipher 是密码学的&quot;原型&quot;——简单但暴露了密码学的核心问题。Caesar 用 c = (m + k) mod 26，key space 仅 26，暴力穷举即破。Atbash 是固定逆字母表，无 key。Affine 是 Caesar 推广，key space 312。General Substitution 让 26 个字母独立映射，key space 26! ≈ 2^88——看似巨大但被频率分析破解（明文统计结构保留）。Kerckhoffs 原则——密码系统安全应只依赖 key 保密而非算法保密；现代所有标准算法（AES、RSA、SHA-2）都是公开的。Substitution cipher 教给我们的工程教训：key space 必须巨大（≥ 2^128）、不能保留 plaintext 统计、算法公开 key 保密、绝不自创密码。一个简单的检验：你能否说出&quot;为什么 26! 的 key space 仍不安全&quot;？如果不能，substitution cipher 的核心教训还没完全 internalize。下一节展开频率分析攻击的具体方法。</p>
+</article>
+    <nav class="pager"><a class="prev" href="../../../cs-fundamentals/cryptography-fundamentals/classical-cryptography/index.html"><span class="label">Previous</span>古典密码学</a><a class="next" href="../../../cs-fundamentals/cryptography-fundamentals/classical-cryptography/vigenere-cipher.html"><span class="label">Next</span>Vigenère Cipher 维吉尼亚密码</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#caesar-cipher-的数学" data-outline-link="caesar-cipher-的数学">Caesar Cipher 的数学</a></li><li class="depth-2"><a href="#攻击-caesar-暴力穷举" data-outline-link="攻击-caesar-暴力穷举">攻击 Caesar：暴力穷举</a></li><li class="depth-2"><a href="#atbash-与-rot13" data-outline-link="atbash-与-rot13">Atbash 与 ROT13</a></li><li class="depth-2"><a href="#affine-cipher" data-outline-link="affine-cipher">Affine Cipher</a></li><li class="depth-2"><a href="#general-substitution-cipher" data-outline-link="general-substitution-cipher">General Substitution Cipher</a></li><li class="depth-2"><a href="#为什么-substitution-cipher-不安全" data-outline-link="为什么-substitution-cipher-不安全">为什么 Substitution Cipher 不安全</a></li><li class="depth-2"><a href="#kerckhoffs-原则" data-outline-link="kerckhoffs-原则">Kerckhoffs 原则</a></li><li class="depth-2"><a href="#substitution-cipher-的工程教训" data-outline-link="substitution-cipher-的工程教训">Substitution Cipher 的工程教训</a></li><li class="depth-2"><a href="#现代密码如何避免这些弱点" data-outline-link="现代密码如何避免这些弱点">现代密码如何避免这些弱点</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

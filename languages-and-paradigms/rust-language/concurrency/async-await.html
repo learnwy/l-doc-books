@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>async/await 与异步运行时 · 编程语言与范式</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:编程语言与范式" data-pagefind-meta="slug:languages-and-paradigms">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">编程语言与范式</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item active" href="../../../languages-and-paradigms/index.html" aria-current="page" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../languages-and-paradigms/index.html">编程语言与范式</a><a class="back-to-hubs" href="../../../languages-and-paradigms/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../languages-and-paradigms/rust-language/index.html">Rust 语言 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="languages-and-paradigms"><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:rust-language/ownership-and-borrowing"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/rust-language/ownership-and-borrowing/index.html">所有权与借用 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/ownership-and-borrowing/ownership-rules.html">所有权规则与移动语义</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/ownership-and-borrowing/references-and-borrowing.html">引用与借用规则</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/ownership-and-borrowing/lifetimes.html">生命周期标注</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/ownership-and-borrowing/smart-pointers.html">智能指针</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:rust-language/type-system"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/rust-language/type-system/index.html">类型系统 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/type-system/traits-and-generics.html">Trait 与泛型</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/type-system/enums-and-pattern-matching.html">枚举与模式匹配</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/type-system/error-handling.html">错误处理 Result 与 Option</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/type-system/typestate-pattern.html">类型状态模式</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:rust-language/concurrency" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/rust-language/concurrency/index.html">并发编程 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/concurrency/threads-and-channels.html">线程与消息传递</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/concurrency/shared-state.html">共享状态与 Mutex</a></li><li class="leaf"><a class="leaf-title active" href="../../../languages-and-paradigms/rust-language/concurrency/async-await.html">async/await 与异步运行时</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/concurrency/lock-free.html">无锁编程与原子操作</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:rust-language/systems-programming"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/rust-language/systems-programming/index.html">系统编程 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/systems-programming/unsafe-and-ffi.html">unsafe Rust 与 FFI</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/systems-programming/memory-layout.html">内存布局与零成本抽象</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/systems-programming/embedded-and-nostd.html">嵌入式与 no_std</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/systems-programming/performance-benchmarking.html">性能优化与基准测试</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:rust-language/ecosystem"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/rust-language/ecosystem/index.html">Rust 生态实战 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/ecosystem/cargo.html">Cargo 与包管理</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/ecosystem/wasm.html">WebAssembly 与 Rust</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/ecosystem/web-backend.html">Web 后端 Actix/Axum</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/ecosystem/cli-tools.html">CLI 工具开发</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part II · 系统级语言</span><span>Rust 语言 简介</span><span>并发编程 简介</span><span>async/await 与异步运行时</span></nav>
+    <article class="content prose"><h1 id="async-await-与异步运行时">async/await 与异步运行时</h1><h2 id="异步编程模型">异步编程模型</h2><p>Rust 的异步编程基于 <code>Future</code> trait，通过 <code>async/await</code> 语法实现零成本的协作式多任务。异步代码在逻辑上是并发的，但可以在单个线程上运行。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[&quot;async fn&quot;] --&gt;|编译为| B[&quot;impl Future&quot;]&#10;    B --&gt;|注册到| C[&quot;异步运行时 Runtime&quot;]&#10;    C --&gt;|调度| D[&quot;Executor 执行器&quot;]&#10;    D --&gt;|就绪时| E[&quot;poll() → Poll::Ready&quot;]&#10;    D --&gt;|未就绪| F[&quot;poll() → Poll::Pending&quot;]&#10;    F --&gt;|Waker 唤醒| D"></pre><hr>
+<h2 id="future-trait">Future Trait</h2><p><code>Future</code> 是 Rust 异步编程的核心抽象。与 JavaScript 的 Promise 不同，Rust 的 Future 是惰性的——创建后不会立即执行，必须被 <code>.await</code> 或提交给运行时。</p>
+<div class="code-block-wrapper" data-lang="rust" data-code="use std::future::Future;
+use std::pin::Pin;
+use std::task::{Context, Poll};
+
+struct Delay {
+    duration: std::time::Duration,
+    started: Option&lt;std::time::Instant&gt;,
+}
+
+impl Future for Delay {
+    type Output = ();
+
+    fn poll(mut self: Pin&lt;&amp;mut Self&gt;, cx: &amp;mut Context&lt;'_&gt;) -&gt; Poll&lt;()&gt; {
+        let started = self.started.get_or_insert_with(std::time::Instant::now);
+        if started.elapsed() &gt;= self.duration {
+            Poll::Ready(())
+        } else {
+            let waker = cx.waker().clone();
+            let remaining = self.duration - started.elapsed();
+            std::thread::spawn(move || {
+                std::thread::sleep(remaining);
+                waker.wake();
+            });
+            Poll::Pending
+        }
+    }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>use std::future::Future;</span></span>
+<span class="line"><span>use std::pin::Pin;</span></span>
+<span class="line"><span>use std::task::{Context, Poll};</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>struct Delay {</span></span>
+<span class="line"><span>    duration: std::time::Duration,</span></span>
+<span class="line"><span>    started: Option&#x3C;std::time::Instant>,</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>impl Future for Delay {</span></span>
+<span class="line"><span>    type Output = ();</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    fn poll(mut self: Pin&#x3C;&#x26;mut Self>, cx: &#x26;mut Context&#x3C;'_>) -> Poll&#x3C;()> {</span></span>
+<span class="line"><span>        let started = self.started.get_or_insert_with(std::time::Instant::now);</span></span>
+<span class="line"><span>        if started.elapsed() >= self.duration {</span></span>
+<span class="line"><span>            Poll::Ready(())</span></span>
+<span class="line"><span>        } else {</span></span>
+<span class="line"><span>            let waker = cx.waker().clone();</span></span>
+<span class="line"><span>            let remaining = self.duration - started.elapsed();</span></span>
+<span class="line"><span>            std::thread::spawn(move || {</span></span>
+<span class="line"><span>                std::thread::sleep(remaining);</span></span>
+<span class="line"><span>                waker.wake();</span></span>
+<span class="line"><span>            });</span></span>
+<span class="line"><span>            Poll::Pending</span></span>
+<span class="line"><span>        }</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span>}</span></span></code></pre></div><hr>
+<h2 id="async-await-语法">async/await 语法</h2><p><code>async fn</code> 返回一个实现 <code>Future</code> 的匿名类型。<code>.await</code> 挂起当前任务，等待 Future 完成。</p>
+<div class="code-block-wrapper" data-lang="rust" data-code="async fn fetch_data(url: &amp;str) -&gt; Result&lt;String, reqwest::Error&gt; {
+    let response = reqwest::get(url).await?;
+    let body = response.text().await?;
+    Ok(body)
+}
+
+async fn process() {
+    match fetch_data(&quot;https://httpbin.org/get&quot;).await {
+        Ok(data) =&gt; println!(&quot;数据长度: {}&quot;, data.len()),
+        Err(e) =&gt; eprintln!(&quot;请求失败: {}&quot;, e),
+    }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>async fn fetch_data(url: &#x26;str) -> Result&#x3C;String, reqwest::Error> {</span></span>
+<span class="line"><span>    let response = reqwest::get(url).await?;</span></span>
+<span class="line"><span>    let body = response.text().await?;</span></span>
+<span class="line"><span>    Ok(body)</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>async fn process() {</span></span>
+<span class="line"><span>    match fetch_data("https://httpbin.org/get").await {</span></span>
+<span class="line"><span>        Ok(data) => println!("数据长度: {}", data.len()),</span></span>
+<span class="line"><span>        Err(e) => eprintln!("请求失败: {}", e),</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span>}</span></span></code></pre></div><hr>
+<h2 id="tokio-运行时">Tokio 运行时</h2><p>Tokio 是 Rust 最流行的异步运行时，提供多线程调度器、异步 I/O、定时器等基础设施。</p>
+<div class="code-block-wrapper" data-lang="rust" data-code="#[tokio::main]
+async fn main() {
+    let handle1 = tokio::spawn(async {
+        tokio::time::sleep(std::time::Duration::from_secs(1)).await;
+        println!(&quot;任务 1 完成&quot;);
+        42
+    });
+
+    let handle2 = tokio::spawn(async {
+        tokio::time::sleep(std::time::Duration::from_millis(500)).await;
+        println!(&quot;任务 2 完成&quot;);
+        &quot;hello&quot;
+    });
+
+    let (r1, r2) = tokio::join!(handle1, handle2);
+    println!(&quot;结果: {:?}, {:?}&quot;, r1.unwrap(), r2.unwrap());
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>#[tokio::main]</span></span>
+<span class="line"><span>async fn main() {</span></span>
+<span class="line"><span>    let handle1 = tokio::spawn(async {</span></span>
+<span class="line"><span>        tokio::time::sleep(std::time::Duration::from_secs(1)).await;</span></span>
+<span class="line"><span>        println!("任务 1 完成");</span></span>
+<span class="line"><span>        42</span></span>
+<span class="line"><span>    });</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    let handle2 = tokio::spawn(async {</span></span>
+<span class="line"><span>        tokio::time::sleep(std::time::Duration::from_millis(500)).await;</span></span>
+<span class="line"><span>        println!("任务 2 完成");</span></span>
+<span class="line"><span>        "hello"</span></span>
+<span class="line"><span>    });</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    let (r1, r2) = tokio::join!(handle1, handle2);</span></span>
+<span class="line"><span>    println!("结果: {:?}, {:?}", r1.unwrap(), r2.unwrap());</span></span>
+<span class="line"><span>}</span></span></code></pre></div><h3 id="tokio-运行时配置">Tokio 运行时配置</h3><table>
+<thead>
+<tr>
+<th>模式</th>
+<th>宏</th>
+<th>线程数</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>多线程</td>
+<td><code>#[tokio::main]</code></td>
+<td>默认 CPU 核心数</td>
+<td>生产环境</td>
+</tr>
+<tr>
+<td>当前线程</td>
+<td><code>#[tokio::main(flavor = &quot;current_thread&quot;)]</code></td>
+<td>1</td>
+<td>测试、嵌入式</td>
+</tr>
+<tr>
+<td>手动构建</td>
+<td><code>Runtime::new()</code></td>
+<td>自定义</td>
+<td>精细控制</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="并发执行模式">并发执行模式</h2><h3 id="join-并行等待多个-future">join!：并行等待多个 Future</h3><div class="code-block-wrapper" data-lang="rust" data-code="use tokio::time::{sleep, Duration};
+
+async fn task_a() -&gt; i32 {
+    sleep(Duration::from_secs(2)).await;
+    1
+}
+
+async fn task_b() -&gt; i32 {
+    sleep(Duration::from_secs(1)).await;
+    2
+}
+
+#[tokio::main]
+async fn main() {
+    let (a, b) = tokio::join!(task_a(), task_b());
+    println!(&quot;结果: {} + {} = {}&quot;, a, b, a + b);
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>use tokio::time::{sleep, Duration};</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>async fn task_a() -> i32 {</span></span>
+<span class="line"><span>    sleep(Duration::from_secs(2)).await;</span></span>
+<span class="line"><span>    1</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>async fn task_b() -> i32 {</span></span>
+<span class="line"><span>    sleep(Duration::from_secs(1)).await;</span></span>
+<span class="line"><span>    2</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>#[tokio::main]</span></span>
+<span class="line"><span>async fn main() {</span></span>
+<span class="line"><span>    let (a, b) = tokio::join!(task_a(), task_b());</span></span>
+<span class="line"><span>    println!("结果: {} + {} = {}", a, b, a + b);</span></span>
+<span class="line"><span>}</span></span></code></pre></div><h3 id="select-竞争执行">select!：竞争执行</h3><div class="code-block-wrapper" data-lang="rust" data-code="use tokio::time::{sleep, Duration};
+
+#[tokio::main]
+async fn main() {
+    tokio::select! {
+        _ = sleep(Duration::from_secs(1)) =&gt; {
+            println!(&quot;定时器到期&quot;);
+        }
+        _ = async {
+            sleep(Duration::from_millis(500)).await;
+        } =&gt; {
+            println!(&quot;快速任务完成&quot;);
+        }
+    }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>use tokio::time::{sleep, Duration};</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>#[tokio::main]</span></span>
+<span class="line"><span>async fn main() {</span></span>
+<span class="line"><span>    tokio::select! {</span></span>
+<span class="line"><span>        _ = sleep(Duration::from_secs(1)) => {</span></span>
+<span class="line"><span>            println!("定时器到期");</span></span>
+<span class="line"><span>        }</span></span>
+<span class="line"><span>        _ = async {</span></span>
+<span class="line"><span>            sleep(Duration::from_millis(500)).await;</span></span>
+<span class="line"><span>        } => {</span></span>
+<span class="line"><span>            println!("快速任务完成");</span></span>
+<span class="line"><span>        }</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span>}</span></span></code></pre></div><table>
+<thead>
+<tr>
+<th>模式</th>
+<th>行为</th>
+<th>使用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>join!</code></td>
+<td>等待所有 Future 完成</td>
+<td>并行获取多个资源</td>
+</tr>
+<tr>
+<td><code>select!</code></td>
+<td>等待第一个完成的 Future</td>
+<td>超时控制、取消</td>
+</tr>
+<tr>
+<td><code>spawn</code></td>
+<td>在后台执行</td>
+<td>不需要等待结果</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="异步-stream">异步 Stream</h2><p>Stream 是异步版本的 Iterator，逐步产出值。</p>
+<div class="code-block-wrapper" data-lang="rust" data-code="use tokio_stream::{self as stream, StreamExt};
+
+#[tokio::main]
+async fn main() {
+    let mut stream = stream::iter(vec![1, 2, 3, 4, 5])
+        .filter(|x| x % 2 == 0)
+        .map(|x| x * 10);
+
+    while let Some(value) = stream.next().await {
+        println!(&quot;值: {}&quot;, value);
+    }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>use tokio_stream::{self as stream, StreamExt};</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>#[tokio::main]</span></span>
+<span class="line"><span>async fn main() {</span></span>
+<span class="line"><span>    let mut stream = stream::iter(vec![1, 2, 3, 4, 5])</span></span>
+<span class="line"><span>        .filter(|x| x % 2 == 0)</span></span>
+<span class="line"><span>        .map(|x| x * 10);</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    while let Some(value) = stream.next().await {</span></span>
+<span class="line"><span>        println!("值: {}", value);</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span>}</span></span></code></pre></div><hr>
+<h2 id="async-trait">async Trait</h2><p><code>async fn</code> 在 trait 中的支持从 Rust 1.75 开始稳定（需要 <code>impl Trait in return position</code>）：</p>
+<div class="code-block-wrapper" data-lang="rust" data-code="trait HttpClient {
+    async fn get(&amp;self, url: &amp;str) -&gt; Result&lt;String, Box&lt;dyn std::error::Error&gt;&gt;;
+}
+
+struct MyClient;
+
+impl HttpClient for MyClient {
+    async fn get(&amp;self, url: &amp;str) -&gt; Result&lt;String, Box&lt;dyn std::error::Error&gt;&gt; {
+        let resp = reqwest::get(url).await?;
+        Ok(resp.text().await?)
+    }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>trait HttpClient {</span></span>
+<span class="line"><span>    async fn get(&#x26;self, url: &#x26;str) -> Result&#x3C;String, Box&#x3C;dyn std::error::Error>>;</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>struct MyClient;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>impl HttpClient for MyClient {</span></span>
+<span class="line"><span>    async fn get(&#x26;self, url: &#x26;str) -> Result&#x3C;String, Box&#x3C;dyn std::error::Error>> {</span></span>
+<span class="line"><span>        let resp = reqwest::get(url).await?;</span></span>
+<span class="line"><span>        Ok(resp.text().await?)</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span>}</span></span></code></pre></div><hr>
+<h2 id="常见陷阱与最佳实践">常见陷阱与最佳实践</h2><table>
+<thead>
+<tr>
+<th>陷阱</th>
+<th>说明</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>在 async 中使用 <code>std::sync::Mutex</code></td>
+<td>持有锁期间 <code>.await</code> 会阻塞运行时</td>
+<td>使用 <code>tokio::sync::Mutex</code></td>
+</tr>
+<tr>
+<td>阻塞调用进入异步运行时</td>
+<td>CPU 密集或阻塞 I/O 占据线程</td>
+<td>使用 <code>spawn_blocking()</code></td>
+</tr>
+<tr>
+<td>Future 未 <code>.await</code></td>
+<td>Future 是惰性的，不 await 不执行</td>
+<td>确保所有 Future 被 await 或 spawn</td>
+</tr>
+<tr>
+<td>Send 约束</td>
+<td><code>tokio::spawn</code> 要求 Future 为 <code>Send</code></td>
+<td>避免在 <code>.await</code> 点持有非 Send 类型</td>
+</tr>
+</tbody></table>
+</article>
+    <nav class="pager"><a class="prev" href="../../../languages-and-paradigms/rust-language/concurrency/shared-state.html"><span class="label">Previous</span>共享状态与 Mutex</a><a class="next" href="../../../languages-and-paradigms/rust-language/concurrency/lock-free.html"><span class="label">Next</span>无锁编程与原子操作</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#异步编程模型" data-outline-link="异步编程模型">异步编程模型</a></li><li class="depth-2"><a href="#future-trait" data-outline-link="future-trait">Future Trait</a></li><li class="depth-2"><a href="#async-await-语法" data-outline-link="async-await-语法">async/await 语法</a></li><li class="depth-2"><a href="#tokio-运行时" data-outline-link="tokio-运行时">Tokio 运行时</a></li><li class="depth-3"><a href="#tokio-运行时配置" data-outline-link="tokio-运行时配置">Tokio 运行时配置</a></li><li class="depth-2"><a href="#并发执行模式" data-outline-link="并发执行模式">并发执行模式</a></li><li class="depth-3"><a href="#join-并行等待多个-future" data-outline-link="join-并行等待多个-future">join!：并行等待多个 Future</a></li><li class="depth-3"><a href="#select-竞争执行" data-outline-link="select-竞争执行">select!：竞争执行</a></li><li class="depth-2"><a href="#异步-stream" data-outline-link="异步-stream">异步 Stream</a></li><li class="depth-2"><a href="#async-trait" data-outline-link="async-trait">async Trait</a></li><li class="depth-2"><a href="#常见陷阱与最佳实践" data-outline-link="常见陷阱与最佳实践">常见陷阱与最佳实践</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

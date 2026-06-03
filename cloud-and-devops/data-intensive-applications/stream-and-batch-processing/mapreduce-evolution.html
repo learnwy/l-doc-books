@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MapReduce 演进：从批处理到统一计算 · 云与 DevOps 工程</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:云与 DevOps 工程" data-pagefind-meta="slug:cloud-and-devops">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">云与 DevOps 工程</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item active" href="../../../cloud-and-devops/index.html" aria-current="page" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../cloud-and-devops/index.html">云与 DevOps 工程</a><a class="back-to-hubs" href="../../../cloud-and-devops/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../cloud-and-devops/data-intensive-applications/index.html">数据密集型应用设计 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="cloud-and-devops"><li class="chapter"><details class="folder-collapse" data-sb-key="cloud-and-devops:folder:data-intensive-applications/data-storage-retrieval"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cloud-and-devops/data-intensive-applications/data-storage-retrieval/index.html">数据存储与检索 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/data-storage-retrieval/storage-engine-comparison.html">存储引擎对比：LSM-Tree 与 B-Tree</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/data-storage-retrieval/index-structures.html">索引结构与查询优化</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/data-storage-retrieval/columnar-storage.html">列式存储与 OLAP 优化</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cloud-and-devops:folder:data-intensive-applications/replication-and-partitioning"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cloud-and-devops/data-intensive-applications/replication-and-partitioning/index.html">复制与分区 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/replication-and-partitioning/replication-models.html">主从复制与多主复制</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/replication-and-partitioning/partitioning-strategies.html">分区策略与再平衡</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/replication-and-partitioning/consistency-and-consensus.html">复制一致性与共识算法</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cloud-and-devops:folder:data-intensive-applications/transactions-and-consistency"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cloud-and-devops/data-intensive-applications/transactions-and-consistency/index.html">事务与一致性 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/transactions-and-consistency/acid-vs-base.html">ACID 与 BASE：事务语义对比</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/transactions-and-consistency/distributed-transactions.html">分布式事务实现机制</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/transactions-and-consistency/consistency-models.html">分布式一致性模型</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cloud-and-devops:folder:data-intensive-applications/stream-and-batch-processing" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cloud-and-devops/data-intensive-applications/stream-and-batch-processing/index.html">流处理与批处理 简介</a></summary><ul><li class="leaf"><a class="leaf-title active" href="../../../cloud-and-devops/data-intensive-applications/stream-and-batch-processing/mapreduce-evolution.html">MapReduce 演进：从批处理到统一计算</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/stream-and-batch-processing/stream-processing-architecture.html">流处理架构与实时计算</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/stream-and-batch-processing/event-sourcing-cqrs.html">事件溯源与 CQRS 模式</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part VII · 数据与伸缩</span><span>数据密集型应用设计 简介</span><span>流处理与批处理 简介</span><span>MapReduce 演进：从批处理到统一计算</span></nav>
+    <article class="content prose"><h1 id="mapreduce-演进-从批处理到统一计算">MapReduce 演进：从批处理到统一计算</h1><h2 id="概述">概述</h2><p>MapReduce 是大数据批处理的开山之作，其&quot;分而治之&quot;的计算模型奠定了分布式数据处理的基础范式。从 2004 年 Google 发表论文到 2026 年的今天，批处理技术经历了从 Hadoop MapReduce 到 Apache Spark 再到现代统一计算引擎的三代演进。尽管流处理在实时场景中崭露头角，批处理在大规模历史数据分析、模型训练和数据仓库 ETL 中仍然不可替代。</p>
+<p>本文回顾批处理技术的演进脉络，深入分析各代计算引擎的架构差异，帮助工程师理解现代数据处理系统的设计根源。</p>
+<h2 id="核心概念">核心概念</h2><h3 id="mapreduce-编程模型">MapReduce 编程模型</h3><p>MapReduce 将任意分布式计算抽象为两个函数：</p>
+<div class="code-block-wrapper" data-lang="python" data-code="# Map: 将输入拆分为键值对
+def map(key, value):
+    # 输入: 一行文本
+    for word in value.split():
+        emit(word, 1)
+
+# Reduce: 按键聚合值
+def reduce(key, values):
+    # 输入: 一个词和它的计数列表
+    emit(key, sum(values))"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># Map: 将输入拆分为键值对</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> map</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(key, value):</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">    # 输入: 一行文本</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> word </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> value.split():</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        emit(word, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># Reduce: 按键聚合值</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">def</span><span style="color:#E36209;--shiki-dark:#FFAB70"> reduce</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(key, values):</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">    # 输入: 一个词和它的计数列表</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    emit(key, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">sum</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(values))</span></span></code></pre></div><p><strong>MapReduce 执行流程：</strong></p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    A[&quot;Input Splits&quot;] --&gt; B[&quot;Map Phase&quot;]&#10;    B --&gt; C[&quot;Shuffle and Sort&quot;]&#10;    C --&gt; D[&quot;Reduce Phase&quot;]&#10;    D --&gt; E[&quot;Output&quot;]"></pre><table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>操作</th>
+<th>I/O 模式</th>
+<th>并行度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Input Split</td>
+<td>将输入分为固定大小块</td>
+<td>顺序读 HDFS</td>
+<td>由数据块数决定</td>
+</tr>
+<tr>
+<td>Map</td>
+<td>对每条记录执行 map 函数</td>
+<td>内存处理</td>
+<td>与 Split 数相同</td>
+</tr>
+<tr>
+<td>Shuffle</td>
+<td>按 key 重新分发到 Reducer</td>
+<td>网络传输 + 磁盘写</td>
+<td>全量</td>
+</tr>
+<tr>
+<td>Sort</td>
+<td>按 key 排序</td>
+<td>外部排序</td>
+<td>每个 Reducer 独立</td>
+</tr>
+<tr>
+<td>Reduce</td>
+<td>按 key 聚合</td>
+<td>顺序读排序结果</td>
+<td>由分区数决定</td>
+</tr>
+<tr>
+<td>Output</td>
+<td>写入 HDFS</td>
+<td>顺序写</td>
+<td>与 Reducer 数相同</td>
+</tr>
+</tbody></table>
+<h3 id="mapreduce-的局限性">MapReduce 的局限性</h3><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>原因</th>
+<th>影响</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>多轮磁盘 I/O</td>
+<td>每个 Job 的中间结果写入 HDFS</td>
+<td>迭代算法极慢</td>
+</tr>
+<tr>
+<td>高延迟</td>
+<td>Job 调度开销 + 磁盘 I/O</td>
+<td>不适合交互式查询</td>
+</tr>
+<tr>
+<td>表达力不足</td>
+<td>只有 Map 和 Reduce 两个算子</td>
+<td>复杂 ETL 需要多个 Job 串联</td>
+</tr>
+<tr>
+<td>无内存缓存</td>
+<td>中间结果不驻留内存</td>
+<td>相同数据重复读取</td>
+</tr>
+<tr>
+<td>容错开销大</td>
+<td>细粒度任务重执行</td>
+<td>慢任务拖累整体</td>
+</tr>
+</tbody></table>
+<h3 id="apache-spark-的革命">Apache Spark 的革命</h3><p>Spark 通过 RDD（弹性分布式数据集）和内存计算解决了 MapReduce 的核心问题：</p>
+<div class="code-block-wrapper" data-lang="python" data-code="from pyspark.sql import SparkSession
+
+spark = SparkSession.builder.appName(&quot;WordCount&quot;).getOrCreate()
+
+# Spark 的声明式 API (DataFrame)
+df = spark.read.text(&quot;hdfs:///data/logs/*.txt&quot;)
+word_counts = (
+    df.selectExpr(&quot;explode(split(value, ' ')) as word&quot;)
+      .groupBy(&quot;word&quot;)
+      .count()
+      .orderBy(&quot;count&quot;, ascending=False)
+)
+word_counts.show(20)"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> pyspark.sql </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> SparkSession</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">spark </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> SparkSession.builder.appName(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"WordCount"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">).getOrCreate()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># Spark 的声明式 API (DataFrame)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">df </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> spark.read.text(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"hdfs:///data/logs/*.txt"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">word_counts </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    df.selectExpr(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"explode(split(value, ' ')) as word"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      .groupBy(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"word"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      .count()</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      .orderBy(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"count"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">ascending</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">False</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">word_counts.show(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">20</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span></code></pre></div><p><strong>Spark vs MapReduce 架构对比：</strong></p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>MapReduce</th>
+<th>Spark</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>执行模型</td>
+<td>多个独立 Job，每个 Job 写 HDFS</td>
+<td>单个 DAG，中间结果驻留内存</td>
+</tr>
+<tr>
+<td>中间数据</td>
+<td>磁盘（HDFS）</td>
+<td>内存（溢出到磁盘）</td>
+</tr>
+<tr>
+<td>延迟</td>
+<td>分钟级</td>
+<td>秒级</td>
+</tr>
+<tr>
+<td>容错</td>
+<td>重新执行 Map/Reduce 任务</td>
+<td>基于 RDD Lineage 重算</td>
+</tr>
+<tr>
+<td>调度</td>
+<td>按 Job 调度</td>
+<td>按 Stage/Task 调度</td>
+</tr>
+<tr>
+<td>API</td>
+<td>Map + Reduce</td>
+<td>丰富的转换和动作算子</td>
+</tr>
+<tr>
+<td>迭代计算</td>
+<td>每轮迭代一个 Job</td>
+<td>数据驻留内存，迭代极快</td>
+</tr>
+</tbody></table>
+<p><strong>Spark 的 DAG 执行引擎：</strong></p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[&quot;Read Parquet&quot;] --&gt; B[&quot;Filter age &gt; 30&quot;]&#10;    B --&gt; C[&quot;Map: extract fields&quot;]&#10;    C --&gt; D[&quot;Shuffle: groupBy city&quot;]&#10;    D --&gt; E[&quot;Aggregate: count, avg&quot;]&#10;    E --&gt; F[&quot;Write Result&quot;]&#10;&#10;    subgraph &quot;Stage 1 - No Shuffle&quot;&#10;        A&#10;        B&#10;        C&#10;    end&#10;    subgraph &quot;Stage 2 - After Shuffle&quot;&#10;        D&#10;        E&#10;        F&#10;    end"></pre><h3 id="现代统一计算引擎">现代统一计算引擎</h3><p>2026 年的批处理格局已经从&quot;Spark 一统天下&quot;演变为多引擎竞争：</p>
+<table>
+<thead>
+<tr>
+<th>引擎</th>
+<th>语言</th>
+<th>定位</th>
+<th>核心优势</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Apache Spark</td>
+<td>Scala/Python</td>
+<td>通用批处理 + ML</td>
+<td>生态最完整</td>
+</tr>
+<tr>
+<td>Apache Flink (Batch)</td>
+<td>Java</td>
+<td>批流统一</td>
+<td>真正的流处理统一批处理</td>
+</tr>
+<tr>
+<td>DuckDB</td>
+<td>C++</td>
+<td>嵌入式分析</td>
+<td>零配置，单机极致性能</td>
+</tr>
+<tr>
+<td>Polars</td>
+<td>Rust</td>
+<td>DataFrame 分析</td>
+<td>内存效率，比 Pandas 快 10-100x</td>
+</tr>
+<tr>
+<td>Daft</td>
+<td>Rust/Python</td>
+<td>分布式 DataFrame</td>
+<td>本地到集群无缝扩展</td>
+</tr>
+<tr>
+<td>Databricks Photon</td>
+<td>C++</td>
+<td>Spark 加速</td>
+<td>向量化 C++ 执行 Spark SQL</td>
+</tr>
+<tr>
+<td>Trino (Presto)</td>
+<td>Java</td>
+<td>交互式查询</td>
+<td>联邦查询多数据源</td>
+</tr>
+</tbody></table>
+<h2 id="实战指南">实战指南</h2><h3 id="spark-性能优化实践">Spark 性能优化实践</h3><div class="code-block-wrapper" data-lang="python" data-code="# 1. 避免数据倾斜: 使用 salting 技术
+from pyspark.sql.functions import col, concat, lit, rand
+
+# 热点键 salting
+num_salts = 10
+salted_df = (
+    large_df
+    .withColumn(&quot;salt&quot;, (rand() * num_salts).cast(&quot;int&quot;))
+    .withColumn(&quot;salted_key&quot;, concat(col(&quot;join_key&quot;), lit(&quot;_&quot;), col(&quot;salt&quot;)))
+)
+
+# 小表 explode salts
+salted_small = (
+    small_df
+    .crossJoin(spark.range(num_salts).withColumnRenamed(&quot;id&quot;, &quot;salt&quot;))
+    .withColumn(&quot;salted_key&quot;, concat(col(&quot;join_key&quot;), lit(&quot;_&quot;), col(&quot;salt&quot;)))
+)
+
+result = salted_df.join(salted_small, &quot;salted_key&quot;)
+
+# 2. 使用 Adaptive Query Execution (AQE)
+spark.conf.set(&quot;spark.sql.adaptive.enabled&quot;, &quot;true&quot;)
+spark.conf.set(&quot;spark.sql.adaptive.coalescePartitions.enabled&quot;, &quot;true&quot;)
+spark.conf.set(&quot;spark.sql.adaptive.skewJoin.enabled&quot;, &quot;true&quot;)
+
+# 3. 选择合适的 Join 策略
+# 小表 &lt; 10MB → Broadcast Hash Join (避免 Shuffle)
+spark.conf.set(&quot;spark.sql.autoBroadcastJoinThreshold&quot;, &quot;10485760&quot;)"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 1. 避免数据倾斜: 使用 salting 技术</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> pyspark.sql.functions </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> col, concat, lit, rand</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 热点键 salting</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">num_salts </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 10</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">salted_df </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    large_df</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    .withColumn(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"salt"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, (rand() </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> num_salts).cast(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"int"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    .withColumn(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"salted_key"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, concat(col(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"join_key"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">), lit(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"_"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">), col(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"salt"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)))</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 小表 explode salts</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">salted_small </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    small_df</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    .crossJoin(spark.range(num_salts).withColumnRenamed(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"id"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"salt"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    .withColumn(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"salted_key"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, concat(col(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"join_key"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">), lit(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"_"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">), col(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"salt"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)))</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">result </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> salted_df.join(salted_small, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"salted_key"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 2. 使用 Adaptive Query Execution (AQE)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">spark.conf.set(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"spark.sql.adaptive.enabled"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"true"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">spark.conf.set(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"spark.sql.adaptive.coalescePartitions.enabled"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"true"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">spark.conf.set(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"spark.sql.adaptive.skewJoin.enabled"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"true"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 3. 选择合适的 Join 策略</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 小表 &#x3C; 10MB → Broadcast Hash Join (避免 Shuffle)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">spark.conf.set(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"spark.sql.autoBroadcastJoinThreshold"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"10485760"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span></code></pre></div><h3 id="批处理管道编排">批处理管道编排</h3><div class="code-block-wrapper" data-lang="python" data-code="# Airflow DAG: 典型 ETL 管道
+from airflow import DAG
+from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
+from datetime import datetime, timedelta
+
+with DAG(
+    'daily_etl_pipeline',
+    schedule_interval='@daily',
+    start_date=datetime(2026, 1, 1),
+    catchup=False,
+    default_args={'retries': 2, 'retry_delay': timedelta(minutes=5)}
+) as dag:
+
+    extract = SparkSubmitOperator(
+        task_id='extract_raw_events',
+        application='s3://code/extract_events.py',
+        conf={'spark.executor.memory': '8g', 'spark.executor.cores': '4'},
+        application_args=['--date', '{{ ds }}']
+    )
+
+    transform = SparkSubmitOperator(
+        task_id='transform_dimensions',
+        application='s3://code/transform.py',
+        conf={'spark.sql.adaptive.enabled': 'true'}
+    )
+
+    load = SparkSubmitOperator(
+        task_id='load_to_warehouse',
+        application='s3://code/load_warehouse.py',
+        conf={'spark.sql.sources.partitionOverwriteMode': 'dynamic'}
+    )
+
+    extract &gt;&gt; transform &gt;&gt; load"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># Airflow DAG: 典型 ETL 管道</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> airflow </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> DAG</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> airflow.providers.apache.spark.operators.spark_submit </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> SparkSubmitOperator</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> datetime </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> datetime, timedelta</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">with</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> DAG(</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">    'daily_etl_pipeline'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    schedule_interval</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'@daily'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    start_date</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">datetime(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2026</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    catchup</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">False</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    default_args</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'retries'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'retry_delay'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: timedelta(</span><span style="color:#E36209;--shiki-dark:#FFAB70">minutes</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">5</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)}</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">as</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> dag:</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    extract </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> SparkSubmitOperator(</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        task_id</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'extract_raw_events'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        application</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'s3://code/extract_events.py'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        conf</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'spark.executor.memory'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'8g'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'spark.executor.cores'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'4'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">},</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        application_args</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'--date'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'</span><span style="color:#005CC5;--shiki-dark:#79B8FF">{{</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> ds </span><span style="color:#005CC5;--shiki-dark:#79B8FF">}}</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    transform </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> SparkSubmitOperator(</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        task_id</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'transform_dimensions'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        application</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'s3://code/transform.py'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        conf</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'spark.sql.adaptive.enabled'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'true'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    load </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> SparkSubmitOperator(</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        task_id</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'load_to_warehouse'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        application</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'s3://code/load_warehouse.py'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">        conf</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'spark.sql.sources.partitionOverwriteMode'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'dynamic'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    extract </span><span style="color:#D73A49;--shiki-dark:#F97583">>></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> transform </span><span style="color:#D73A49;--shiki-dark:#F97583">>></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> load</span></span></code></pre></div><h3 id="批处理不可替代的场景-2026">批处理不可替代的场景（2026）</h3><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>为何需要批处理</th>
+<th>典型工具</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>全量历史回溯</td>
+<td>需要扫描 PB 级历史数据</td>
+<td>Spark + Parquet</td>
+</tr>
+<tr>
+<td>ML 模型训练</td>
+<td>需要完整数据集的多轮迭代</td>
+<td>Spark MLlib, PyTorch</td>
+</tr>
+<tr>
+<td>数据仓库 ETL</td>
+<td>T+1 精确度要求高于实时性</td>
+<td>dbt + Spark</td>
+</tr>
+<tr>
+<td>数据质量校验</td>
+<td>全量比对检测异常</td>
+<td>Great Expectations</td>
+</tr>
+<tr>
+<td>月度/年度报表</td>
+<td>聚合大时间窗口不适合流式</td>
+<td>Trino, Spark SQL</td>
+</tr>
+<tr>
+<td>数据湖维护</td>
+<td>Compaction, Vacuum, Z-Order</td>
+<td>Delta Lake, Iceberg</td>
+</tr>
+</tbody></table>
+<h2 id="最佳实践">最佳实践</h2><h3 id="批处理引擎选型">批处理引擎选型</h3><pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[&quot;Data Size?&quot;] --&gt; B{&quot;&lt; 100GB?&quot;}&#10;    B --&gt;|Yes| C{&quot;Single Machine OK?&quot;}&#10;    B --&gt;|No| D[&quot;Spark / Flink Batch&quot;]&#10;    C --&gt;|Yes| E[&quot;DuckDB / Polars&quot;]&#10;    C --&gt;|No| D&#10;    D --&gt; F{&quot;Need ML?&quot;}&#10;    F --&gt;|Yes| G[&quot;Spark + MLlib / Ray&quot;]&#10;    F --&gt;|No| H{&quot;Interactive Query?&quot;}&#10;    H --&gt;|Yes| I[&quot;Trino / Presto&quot;]&#10;    H --&gt;|No| J[&quot;Spark Batch&quot;]"></pre><h3 id="数据存储格式选择">数据存储格式选择</h3><table>
+<thead>
+<tr>
+<th>格式</th>
+<th>压缩比</th>
+<th>读取速度</th>
+<th>生态兼容</th>
+<th>推荐场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Parquet</td>
+<td>高</td>
+<td>快</td>
+<td>极广</td>
+<td>默认选择</td>
+</tr>
+<tr>
+<td>ORC</td>
+<td>高</td>
+<td>快</td>
+<td>Hive 生态</td>
+<td>已有 Hive 投入</td>
+</tr>
+<tr>
+<td>Delta Lake</td>
+<td>高</td>
+<td>快</td>
+<td>Spark/Flink</td>
+<td>需要 ACID + 时间旅行</td>
+</tr>
+<tr>
+<td>Apache Iceberg</td>
+<td>高</td>
+<td>快</td>
+<td>多引擎</td>
+<td>引擎无关的表格式</td>
+</tr>
+<tr>
+<td>Apache Hudi</td>
+<td>高</td>
+<td>快</td>
+<td>增量场景</td>
+<td>需要 Upsert</td>
+</tr>
+</tbody></table>
+<h3 id="成本优化策略">成本优化策略</h3><ol>
+<li><strong>Spot/Preemptible 实例</strong>：批处理可容忍中断，用 70-90% 折扣的抢占式实例</li>
+<li><strong>数据分区裁剪</strong>：按日期分区，查询时只扫描需要的分区</li>
+<li><strong>列式裁剪</strong>：只读取查询涉及的列</li>
+<li><strong>增量处理</strong>：不重算全量，只处理新增/变更数据</li>
+<li><strong>合理设置并行度</strong>：过多 executor 浪费资源，过少执行太慢</li>
+</ol>
+<h2 id="工具与生态">工具与生态</h2><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>类型</th>
+<th>典型用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Apache Airflow</td>
+<td>调度器</td>
+<td>ETL DAG 编排</td>
+</tr>
+<tr>
+<td>Dagster</td>
+<td>调度器</td>
+<td>数据资产感知的编排</td>
+</tr>
+<tr>
+<td>Prefect</td>
+<td>调度器</td>
+<td>Python 原生工作流</td>
+</tr>
+<tr>
+<td>dbt</td>
+<td>转换框架</td>
+<td>SQL-first 数据转换</td>
+</tr>
+<tr>
+<td>Great Expectations</td>
+<td>数据质量</td>
+<td>批处理输出验证</td>
+</tr>
+<tr>
+<td>Delta Lake</td>
+<td>表格式</td>
+<td>ACID 事务 + 时间旅行</td>
+</tr>
+<tr>
+<td>Apache Iceberg</td>
+<td>表格式</td>
+<td>引擎无关的开放格式</td>
+</tr>
+</tbody></table>
+<h2 id="总结">总结</h2><p>批处理技术从 MapReduce 的磁盘密集型模型，经过 Spark 的内存计算革命，演进到 2026 年多引擎共存的格局。MapReduce 的核心贡献不是性能而是抽象——它证明了复杂的分布式计算可以被简化为 Map 和 Reduce 两个纯函数的组合。Spark 在此基础上引入了内存计算、DAG 执行和丰富的算子库，成为通用批处理的事实标准。</p>
+<p>2026 年的关键趋势是&quot;流批统一&quot;和&quot;引擎下沉&quot;：Apache Flink 将批处理视为流处理的特例（有界流），DuckDB 和 Polars 将分析能力下沉到开发者的笔记本电脑。工程师应当理解批处理的不可替代性（全量精确计算、ML 训练、回溯分析），同时关注增量处理和流批融合带来的效率提升。</p>
+</article>
+    <nav class="pager"><a class="prev" href="../../../cloud-and-devops/data-intensive-applications/stream-and-batch-processing/index.html"><span class="label">Previous</span>流处理与批处理 简介</a><a class="next" href="../../../cloud-and-devops/data-intensive-applications/stream-and-batch-processing/stream-processing-architecture.html"><span class="label">Next</span>流处理架构与实时计算</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#概述" data-outline-link="概述">概述</a></li><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-3"><a href="#mapreduce-编程模型" data-outline-link="mapreduce-编程模型">MapReduce 编程模型</a></li><li class="depth-3"><a href="#mapreduce-的局限性" data-outline-link="mapreduce-的局限性">MapReduce 的局限性</a></li><li class="depth-3"><a href="#apache-spark-的革命" data-outline-link="apache-spark-的革命">Apache Spark 的革命</a></li><li class="depth-3"><a href="#现代统一计算引擎" data-outline-link="现代统一计算引擎">现代统一计算引擎</a></li><li class="depth-2"><a href="#实战指南" data-outline-link="实战指南">实战指南</a></li><li class="depth-3"><a href="#spark-性能优化实践" data-outline-link="spark-性能优化实践">Spark 性能优化实践</a></li><li class="depth-3"><a href="#批处理管道编排" data-outline-link="批处理管道编排">批处理管道编排</a></li><li class="depth-3"><a href="#批处理不可替代的场景-2026" data-outline-link="批处理不可替代的场景-2026">批处理不可替代的场景（2026）</a></li><li class="depth-2"><a href="#最佳实践" data-outline-link="最佳实践">最佳实践</a></li><li class="depth-3"><a href="#批处理引擎选型" data-outline-link="批处理引擎选型">批处理引擎选型</a></li><li class="depth-3"><a href="#数据存储格式选择" data-outline-link="数据存储格式选择">数据存储格式选择</a></li><li class="depth-3"><a href="#成本优化策略" data-outline-link="成本优化策略">成本优化策略</a></li><li class="depth-2"><a href="#工具与生态" data-outline-link="工具与生态">工具与生态</a></li><li class="depth-2"><a href="#总结" data-outline-link="总结">总结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

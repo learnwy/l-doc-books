@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>OTel 协议本体与 stream-json wrapper 模式 · AI 智能体工具完整手册</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:AI 智能体工具完整手册" data-pagefind-meta="slug:ai-coding-tools-handbook">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">AI 智能体工具完整手册</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item active" href="../../../ai-coding-tools-handbook/index.html" aria-current="page" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../ai-coding-tools-handbook/index.html">AI 智能体工具完整手册</a><a class="back-to-hubs" href="../../../ai-coding-tools-handbook/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../ai-coding-tools-handbook/observability/index.html">可观测：OTel 与 Session 检索 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="ai-coding-tools-handbook"><li class="chapter"><details class="folder-collapse" data-sb-key="ai-coding-tools-handbook:folder:observability/otel-fundamentals" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-coding-tools-handbook/observability/otel-fundamentals/index.html">OTel 协议本体与三家 export 配置 简介</a></summary><ul><li class="leaf"><a class="leaf-title active" href="../../../ai-coding-tools-handbook/observability/otel-fundamentals/otel-and-stream-json-protocols.html">OTel 协议本体与 stream-json wrapper 模式</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-coding-tools-handbook/observability/otel-fundamentals/per-tool-otel-export-config.html">三家 CLI 的 OTel export 配置</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-coding-tools-handbook:folder:observability/backends-and-session-search"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-coding-tools-handbook/observability/backends-and-session-search/index.html">Backend 选型与 Session 检索 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-coding-tools-handbook/observability/backends-and-session-search/backend-comparison.html">Backend 横向比较与典型部署组合</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-coding-tools-handbook/observability/backends-and-session-search/session-search-and-agent-loop.html">Session 检索与 closed-loop agent observation</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Tier 1 · Coding Tools 工具栈</span><span>可观测：OTel 与 Session 检索 简介</span><span>OTel 协议本体与三家 export 配置 简介</span><span>OTel 协议本体与 stream-json wrapper 模式</span></nav>
+    <article class="content prose"><h1 id="otel-协议本体与-stream-json-wrapper-模式">OTel 协议本体与 stream-json wrapper 模式</h1><p>OpenTelemetry 在 2026 年成为 AI 编程代理的事实可观测协议。Claude Code、Codex CLI、Gemini CLI 三家同时把 OTel instrumentation 内置进 CLI 主循环，按 span / metric / log 三信号导出 OTLP 数据。本文先把&quot;协议本身长什么样&quot;讲清，再说 wrapper 模式如何与 native OTel 互补。</p>
+<h2 id="核心概念">核心概念</h2><p>OTel 在 AI coding agent 上下文里有三层结构。第一层是 <strong>三信号模型</strong>——span 描述请求生命周期（model request、tool execution）；metric 是聚合计数器（token、cost、retry）；log 是离散事件（prompt 文本、tool result、error）。第二层是 <strong>跨工具一致的标准 event schema</strong>——5 类 event 跨 Claude / Codex / Gemini 字段几乎完全相同。第三层是 <strong>content vs structural 二分</strong>——默认只记结构（duration、model、tool 名），内容（prompt 文本、tool 参数）opt-in 才记。</p>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart LR&#10;    A[CLI agent] --&gt; B[OTel SDK]&#10;    B --&gt; C[span trace]&#10;    B --&gt; D[metric counter]&#10;    B --&gt; E[log event]&#10;    C --&gt; F[OTLP exporter]&#10;    D --&gt; F&#10;    E --&gt; F&#10;    F --&gt; G[OTel Collector]&#10;    G --&gt; H[backend]"></pre><p>三信号在 AI agent 场景的分工见下表。</p>
+<table>
+<thead>
+<tr>
+<th>信号</th>
+<th>典型记录对象</th>
+<th>字段示例</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>span</td>
+<td>一次 model request / 一次 tool execution</td>
+<td>duration、model、status</td>
+<td>性能 / 错误链路追踪</td>
+</tr>
+<tr>
+<td>metric</td>
+<td>token 累计、cost 累计、retry 次数</td>
+<td>counter / histogram / gauge</td>
+<td>配额告警、cost burn-down</td>
+</tr>
+<tr>
+<td>log</td>
+<td>prompt 文本（opt-in）、tool args、result</td>
+<td>event.body / attributes</td>
+<td>审计、问题复盘</td>
+</tr>
+</tbody></table>
+<h2 id="五类标准-event-跨三家一致">五类标准 event 跨三家一致</h2><p>OTel 在 GenAI 子规范里定义了一组面向 AI agent 的 event 名，Claude / Codex / Gemini 在 2026 年都按这套 schema 发送。</p>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TB&#10;    S[session start] --&gt; P[prompt event]&#10;    P --&gt; R[api_request event]&#10;    R --&gt; T[tool_result event]&#10;    T -.再次循环.-&gt; P&#10;    R --&gt; N[event.sequence]&#10;    T --&gt; N"></pre><p>五类 event 的核心字段如下。</p>
+<table>
+<thead>
+<tr>
+<th>event 名</th>
+<th>触发时机</th>
+<th>关键 attribute</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>gen_ai.client.session</code></td>
+<td>session 开始 / 结束</td>
+<td>session.id、cwd、tool.allowed_list</td>
+</tr>
+<tr>
+<td><code>gen_ai.client.prompt</code></td>
+<td>user 输入到达</td>
+<td>prompt.id、role、content（opt-in）</td>
+</tr>
+<tr>
+<td><code>gen_ai.client.api_request</code></td>
+<td>调用 model API</td>
+<td>model、token.input、token.output、cost.usd</td>
+</tr>
+<tr>
+<td><code>gen_ai.client.tool_result</code></td>
+<td>tool 执行完成</td>
+<td>tool.name、tool.duration_ms、result（opt-in）</td>
+</tr>
+<tr>
+<td><code>gen_ai.client.event.sequence</code></td>
+<td>任意事件</td>
+<td>event.sequence、parent.span_id</td>
+</tr>
+</tbody></table>
+<p>每条 event 都带一组 <strong>resource attribute</strong>：<code>user.email</code>、<code>organization.id</code>、<code>session.id</code>、<code>prompt.id</code>、<code>event.sequence</code>、<code>host.name</code>、<code>service.version</code>。这些字段保证跨工具 join 同一个用户、同一个 prompt 链路。</p>
+<h2 id="content-vs-structural-隐私默认">Content vs structural 隐私默认</h2><p>OTel SDK 默认只记 <strong>structural</strong> 字段：span duration、tool 名、token 数、HTTP status code。这套数据足以做性能监控与配额告警，但不足以做问题复盘——复盘要看 prompt 原文与 tool 参数。</p>
+<p>要开启 content 字段，需 opt-in 两个环境变量。</p>
+<div class="code-block-wrapper" data-lang="bash" data-code="export OTEL_LOG_USER_PROMPTS=1
+export OTEL_LOG_TOOL_DETAILS=1"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">export</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> OTEL_LOG_USER_PROMPTS</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">export</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> OTEL_LOG_TOOL_DETAILS</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span></span></code></pre></div><p>打开后会多记三类内容：</p>
+<ul>
+<li><code>gen_ai.client.prompt.content</code>：完整 user prompt 文本</li>
+<li><code>gen_ai.client.tool_result.arguments</code>：tool 入参 JSON</li>
+<li><code>gen_ai.client.tool_result.output</code>：tool 返回内容</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>默认状态</th>
+<th>GDPR / SOC2 友好</th>
+<th>复盘能力</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>structural-only</td>
+<td>默认开启</td>
+<td>是（无 PII）</td>
+<td>弱（看不到 prompt 内容）</td>
+</tr>
+<tr>
+<td>content opt-in</td>
+<td>关闭</td>
+<td>需 DPIA 评估</td>
+<td>强（可重现完整对话）</td>
+</tr>
+</tbody></table>
+<p>合规友好的设计哲学：<strong>默认安全</strong>，只有团队明确签署数据处理协议、做完 DPIA（Data Protection Impact Assessment）才开启 content 字段。Anthropic、OpenAI、Google 三家文档都强调这是 &quot;privacy by default&quot; 的实现。</p>
+<h2 id="stream-json-wrapper-模式作为补充">Stream-json wrapper 模式作为补充</h2><p>OTel native instrumentation 抓的是结构化信号，但有时候团队需要拿到 <strong>完整的原始 streaming payload</strong>——比如调试某个 model response 在哪一帧丢字、审计某次 tool 返回的全文。这时候 wrapper-level 抓取登场。</p>
+<p>代表工具是 <code>claudia</code>。它的设计：以二进制 wrapper 身份替代 <code>claude</code> CLI，把 stream-json 协议（Claude / Codex 内部用的 NDJSON 协议）逐帧捕获，再 push 到 Logfire、Sentry、Honeycomb、Datadog 等。</p>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart LR&#10;    U[user] --&gt; W[claudia wrapper]&#10;    W --&gt; C[claude binary]&#10;    C -.stream-json.-&gt; W&#10;    W --&gt; O[OTel native]&#10;    W --&gt; L[Logfire raw]&#10;    O --&gt; B1[unified backend]&#10;    L --&gt; B2[full-fidelity backend]"></pre><p>两条路径互补关系：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>OTel native</th>
+<th>stream-json wrapper</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据形态</td>
+<td>结构化 span / metric / log</td>
+<td>原始 NDJSON 帧</td>
+</tr>
+<tr>
+<td>跨工具一致</td>
+<td>是（5 类 event 通用）</td>
+<td>否（各家 stream-json schema 不同）</td>
+</tr>
+<tr>
+<td>安装方式</td>
+<td>启用 env var</td>
+<td>替换二进制</td>
+</tr>
+<tr>
+<td>适用</td>
+<td>长期监控、告警</td>
+<td>调试、审计、复盘</td>
+</tr>
+<tr>
+<td>隐私态度</td>
+<td>content opt-in</td>
+<td>默认抓全部 payload</td>
+</tr>
+</tbody></table>
+<p>实际部署建议：<strong>90% 场景用 OTel native，留 1 台机器配 wrapper 做 spot check</strong>。Wrapper 抓全量 payload 体积大、且默认就记 PII，长期不可控。</p>
+<h2 id="性能开销与故障隔离">性能开销与故障隔离</h2><p>OTel SDK 默认 async export——span 写入 in-memory queue，后台批量推送到 Collector。这设计保证 agent 主循环不阻塞。</p>
+<p>实测开销（2026 年三家官方文档披露的数字）：</p>
+<ul>
+<li>单 event 写入 queue：约 50 微秒</li>
+<li>单次 API request span 全链路开销：&lt; 10 毫秒</li>
+<li>queue 满（backend 挂）行为：drop 老数据、不阻塞写入</li>
+</ul>
+<p>故障隔离三层：</p>
+<ol>
+<li><strong>Exporter 失败</strong>：不重试到失败，drop 后写本地 log warn</li>
+<li><strong>Collector 不可达</strong>：retry 3 次后 drop，agent 继续工作</li>
+<li><strong>OTel SDK 自己 panic</strong>：try-catch 包裹，绝不传播到 agent 主线</li>
+</ol>
+<p>这种&quot;telemetry 永远不能阻挡 agent 工作&quot;的设计是 OTel 在 2026 年获得三家厂商集体采用的核心原因之一。</p>
+<h2 id="陷阱与常见问题">陷阱与常见问题</h2><ul>
+<li><strong>以为 OTel 默认抓 prompt 内容</strong>：默认不抓，需 opt-in；忘了开会导致复盘时只看到 span 没看到内容</li>
+<li><strong>用 user.email 做 metric label</strong>：cardinality 爆炸；user 维度应放 resource attribute 或 log event，不放 metric label</li>
+<li><strong>wrapper 与 native 双开记重了</strong>：两条路径都进同一 backend，同一事件会被记两次；要么各进各家 backend，要么 wrapper 关掉 native export</li>
+<li><strong>OTel Collector 没配 retry queue</strong>：backend 短暂挂时 drop 数据；生产环境必须配 persistent queue（disk-backed）</li>
+<li><strong>stream-json wrapper 拦截 stdin/stdout</strong>：与 <code>claude --print</code> 这种 non-interactive 模式冲突，CI 跑会卡</li>
+</ul>
+<h2 id="小结">小结</h2><ul>
+<li>OTel 三信号（span / metric / log）覆盖 AI agent 全生命周期</li>
+<li>5 类标准 event（session / prompt / api_request / tool_result / event.sequence）跨 Claude / Codex / Gemini 一致</li>
+<li>Content 字段默认关闭，opt-in <code>OTEL_LOG_USER_PROMPTS=1</code> / <code>OTEL_LOG_TOOL_DETAILS=1</code></li>
+<li>stream-json wrapper（<code>claudia</code> 等）与 OTel native 互补：wrapper 抓 raw payload，native 抓 structural unified</li>
+<li>async export + 三层故障隔离保证 telemetry 永远不阻塞 agent 主线</li>
+</ul>
+<p>下篇 <a href="per-tool-otel-export-config.html"><code>./2_per-tool-otel-export-config.md</code></a> 讲三家 CLI 各自的 env var、exporter、admin 中央化配置。Backend 选型见 <a href="../backends-and-session-search/backend-comparison.html"><code>../2_backends-and-session-search/1_backend-comparison.md</code></a>。</p>
+</article>
+    <nav class="pager"><a class="prev" href="../../../ai-coding-tools-handbook/observability/otel-fundamentals/index.html"><span class="label">Previous</span>OTel 协议本体与三家 export 配置 简介</a><a class="next" href="../../../ai-coding-tools-handbook/observability/otel-fundamentals/per-tool-otel-export-config.html"><span class="label">Next</span>三家 CLI 的 OTel export 配置</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#五类标准-event-跨三家一致" data-outline-link="五类标准-event-跨三家一致">五类标准 event 跨三家一致</a></li><li class="depth-2"><a href="#content-vs-structural-隐私默认" data-outline-link="content-vs-structural-隐私默认">Content vs structural 隐私默认</a></li><li class="depth-2"><a href="#stream-json-wrapper-模式作为补充" data-outline-link="stream-json-wrapper-模式作为补充">Stream-json wrapper 模式作为补充</a></li><li class="depth-2"><a href="#性能开销与故障隔离" data-outline-link="性能开销与故障隔离">性能开销与故障隔离</a></li><li class="depth-2"><a href="#陷阱与常见问题" data-outline-link="陷阱与常见问题">陷阱与常见问题</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

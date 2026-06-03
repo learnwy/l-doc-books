@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>RSA 算法的数学原理 · 数学与逻辑</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:数学与逻辑" data-pagefind-meta="slug:mathematics-and-logic">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">数学与逻辑</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item active" href="../../../mathematics-and-logic/index.html" aria-current="page" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../mathematics-and-logic/index.html">数学与逻辑</a><a class="back-to-hubs" href="../../../mathematics-and-logic/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../mathematics-and-logic/number-theory/index.html">数论 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="mathematics-and-logic"><li class="chapter"><details class="folder-collapse" data-sb-key="mathematics-and-logic:folder:number-theory/divisibility-primes"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../mathematics-and-logic/number-theory/divisibility-primes/index.html">整除性与素数 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../mathematics-and-logic/number-theory/divisibility-primes/divisibility-rules.html">整除规则与带余除法</a></li><li class="leaf"><a class="leaf-title" href="../../../mathematics-and-logic/number-theory/divisibility-primes/prime-numbers.html">素数与素数分布</a></li><li class="leaf"><a class="leaf-title" href="../../../mathematics-and-logic/number-theory/divisibility-primes/fundamental-theorem-arithmetic.html">算术基本定理</a></li><li class="leaf"><a class="leaf-title" href="../../../mathematics-and-logic/number-theory/divisibility-primes/gcd-lcm.html">最大公因数与最小公倍数</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="mathematics-and-logic:folder:number-theory/congruence-modular"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../mathematics-and-logic/number-theory/congruence-modular/index.html">同余与模运算 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../mathematics-and-logic/number-theory/congruence-modular/congruence-basics.html">同余的定义与基本性质</a></li><li class="leaf"><a class="leaf-title" href="../../../mathematics-and-logic/number-theory/congruence-modular/modular-arithmetic.html">模运算与线性同余方程</a></li><li class="leaf"><a class="leaf-title" href="../../../mathematics-and-logic/number-theory/congruence-modular/chinese-remainder.html">中国剩余定理</a></li><li class="leaf"><a class="leaf-title" href="../../../mathematics-and-logic/number-theory/congruence-modular/fermat-euler.html">费马小定理与欧拉定理</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="mathematics-and-logic:folder:number-theory/number-theoretic-functions"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../mathematics-and-logic/number-theory/number-theoretic-functions/index.html">数论函数 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../mathematics-and-logic/number-theory/number-theoretic-functions/euler-totient.html">欧拉函数</a></li><li class="leaf"><a class="leaf-title" href="../../../mathematics-and-logic/number-theory/number-theoretic-functions/mobius-function.html">莫比乌斯函数与反演</a></li><li class="leaf"><a class="leaf-title" href="../../../mathematics-and-logic/number-theory/number-theoretic-functions/divisor-functions.html">除数函数与积性函数</a></li><li class="leaf"><a class="leaf-title" href="../../../mathematics-and-logic/number-theory/number-theoretic-functions/dirichlet-convolution.html">狄利克雷卷积与数论变换</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="mathematics-and-logic:folder:number-theory/cryptography-number-theory" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../mathematics-and-logic/number-theory/cryptography-number-theory/index.html">密码学中的数论 简介</a></summary><ul><li class="leaf"><a class="leaf-title active" href="../../../mathematics-and-logic/number-theory/cryptography-number-theory/rsa-algorithm.html">RSA 算法的数学原理</a></li><li class="leaf"><a class="leaf-title" href="../../../mathematics-and-logic/number-theory/cryptography-number-theory/discrete-logarithm.html">离散对数问题</a></li><li class="leaf"><a class="leaf-title" href="../../../mathematics-and-logic/number-theory/cryptography-number-theory/elliptic-curve.html">椭圆曲线密码学</a></li><li class="leaf"><a class="leaf-title" href="../../../mathematics-and-logic/number-theory/cryptography-number-theory/quantum-threat.html">素性检验与大数算法</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part IV · 离散数学与逻辑</span><span>数论 简介</span><span>密码学中的数论 简介</span><span>RSA 算法的数学原理</span></nav>
+    <article class="content prose"><h1 id="rsa-算法的数学原理">RSA 算法的数学原理</h1><h2 id="核心概念">核心概念</h2><p>RSA（Rivest-Shamir-Adleman）是第一个实用的公钥密码体制，于 1977 年提出，至今仍是互联网安全的基石。RSA 的数学基础完全建立在数论之上：大素数生成、欧拉定理、模逆运算、大整数分解的计算困难性。理解 RSA 不仅需要掌握这些数论工具，更需要理解&quot;单向陷门函数&quot;的思想——一个方向计算容易（加密），反方向计算困难（破解），但拥有&quot;陷门&quot;（私钥）时反方向也变得容易（解密）。</p>
+<p>RSA 的安全性假设是：给定 n = p·q（p, q 是大素数），从 n 分解出 p 和 q 在计算上是不可行的。目前已知最高效的经典分解算法（通用数域筛法）对 2048 位的 n 需要的计算量远超人类当前算力。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[RSA 密码体制] --&gt; B[密钥生成]&#10;    A --&gt; C[加密过程]&#10;    A --&gt; D[解密过程]&#10;    A --&gt; E[安全性基础]&#10;    B --&gt; F[&quot;选择大素数 p, q&quot;]&#10;    B --&gt; G[&quot;计算 n = pq&quot;]&#10;    B --&gt; H[&quot;计算 φ(n) = (p-1)(q-1)&quot;]&#10;    B --&gt; I[&quot;选择 e, 计算 d&quot;]&#10;    C --&gt; J[&quot;c = m^e mod n&quot;]&#10;    D --&gt; K[&quot;m = c^d mod n&quot;]&#10;    E --&gt; L[大整数分解困难]&#10;    E --&gt; M[欧拉定理保证正确性]&#10;    I --&gt; N[&quot;ed ≡ 1 mod φ(n)&quot;]"></pre><table>
+<thead>
+<tr>
+<th>组件</th>
+<th>数学基础</th>
+<th>计算复杂度</th>
+<th>安全要求</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>素数生成 (p, q)</td>
+<td>素性检验 (Miller-Rabin)</td>
+<td>O(k·log²n) 概率检验</td>
+<td>各 ≥ 1024 位</td>
+</tr>
+<tr>
+<td>模数 n = p·q</td>
+<td>整数乘法</td>
+<td>O(log²n)</td>
+<td>≥ 2048 位</td>
+</tr>
+<tr>
+<td>φ(n) = (p-1)(q-1)</td>
+<td>欧拉函数</td>
+<td>O(1)（已知 p,q）</td>
+<td>必须保密</td>
+</tr>
+<tr>
+<td>公钥 e</td>
+<td>gcd(e, φ(n)) = 1</td>
+<td>O(log n)</td>
+<td>通常 65537</td>
+</tr>
+<tr>
+<td>私钥 d = e⁻¹ mod φ(n)</td>
+<td>扩展欧几里得</td>
+<td>O(log²n)</td>
+<td>必须保密</td>
+</tr>
+<tr>
+<td>加密 c = m^e mod n</td>
+<td>快速模幂</td>
+<td>O(log e · log²n)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>解密 m = c^d mod n</td>
+<td>快速模幂</td>
+<td>O(log d · log²n)</td>
+<td>—</td>
+</tr>
+</tbody></table>
+<h2 id="密钥生成过程">密钥生成过程</h2><p>RSA 密钥生成是整个算法的核心步骤，直接决定了系统的安全性。生成过程涉及四个关键数论操作：大素数生成、欧拉函数计算、互素性检验、模逆计算。</p>
+<p>步骤一：随机选择两个大素数 p 和 q。实际中通过生成随机奇数再用 Miller-Rabin 素性检验确认。p 和 q 的位长应大致相等（各约 1024 位），且 |p - q| 应足够大以防止费马分解法。</p>
+<p>步骤二：计算 n = p · q 和 φ(n) = (p-1)(q-1)。注意 φ(n) 必须保密——知道 φ(n) 等价于知道 p 和 q（因为 p+q = n - φ(n) + 1 且 p·q = n，联立即可解出 p 和 q）。</p>
+<p>步骤三：选择公钥指数 e，满足 1 &lt; e &lt; φ(n) 且 gcd(e, φ(n)) = 1。工业标准选择 e = 65537 = 2¹⁶ + 1（费马素数），因为二进制表示中只有两个 1，使得模幂运算只需 17 次平方和 1 次乘法，非常高效。</p>
+<p>步骤四：通过扩展欧几里得算法计算 d = e⁻¹ mod φ(n)，即 e·d ≡ 1 (mod φ(n))。</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="const gcd = (a: number, b: number): number =&gt; (b === 0 ? a : gcd(b, a % b));
+
+const extGcd = (a: number, b: number): { g: number; x: number; y: number } =&gt; {
+  if (b === 0) return { g: a, x: 1, y: 0 };
+  const { g, x, y } = extGcd(b, a % b);
+  return { g, x: y, y: x - Math.floor(a / b) * y };
+};
+
+const modInverse = (a: number, m: number): number =&gt; {
+  const { g, x } = extGcd(a, m);
+  if (g !== 1) throw new Error('逆元不存在');
+  return ((x % m) + m) % m;
+};
+
+const modPow = (base: number, exp: number, mod: number): number =&gt; {
+  let result = 1;
+  base = ((base % mod) + mod) % mod;
+  while (exp &gt; 0) {
+    if (exp &amp; 1) result = (result * base) % mod;
+    exp &gt;&gt;= 1;
+    base = (base * base) % mod;
+  }
+  return result;
+};
+
+const generateRSAKeys = (p: number, q: number) =&gt; {
+  const n = p * q;
+  const phiN = (p - 1) * (q - 1);
+  const e = 65537 &lt; phiN &amp;&amp; gcd(65537, phiN) === 1 ? 65537 : 17;
+  const d = modInverse(e, phiN);
+
+  return {
+    publicKey: { e, n },
+    privateKey: { d, n },
+    params: { p, q, phiN },
+  };
+};
+
+const keys = generateRSAKeys(61, 53);
+console.log('公钥 (e, n):', keys.publicKey);
+console.log('私钥 (d, n):', keys.privateKey);
+console.log('参数:', keys.params);
+console.log('验证 e·d mod φ(n):', (keys.publicKey.e * keys.privateKey.d) % keys.params.phiN);"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> gcd</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">a</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">b</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#D73A49;--shiki-dark:#F97583"> =></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (b </span><span style="color:#D73A49;--shiki-dark:#F97583">===</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#D73A49;--shiki-dark:#F97583"> ?</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> a </span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> gcd</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(b, a </span><span style="color:#D73A49;--shiki-dark:#F97583">%</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> b));</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> extGcd</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">a</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">b</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#E36209;--shiki-dark:#FFAB70">g</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; </span><span style="color:#E36209;--shiki-dark:#FFAB70">x</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; </span><span style="color:#E36209;--shiki-dark:#FFAB70">y</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> } </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (b </span><span style="color:#D73A49;--shiki-dark:#F97583">===</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { g: a, x: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, y: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> };</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#005CC5;--shiki-dark:#79B8FF">g</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">x</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">y</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> } </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> extGcd</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(b, a </span><span style="color:#D73A49;--shiki-dark:#F97583">%</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> b);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { g, x: y, y: x </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Math.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">floor</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(a </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> b) </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> y };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> modInverse</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">a</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">m</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#D73A49;--shiki-dark:#F97583"> =></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#005CC5;--shiki-dark:#79B8FF">g</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">x</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> } </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> extGcd</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(a, m);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (g </span><span style="color:#D73A49;--shiki-dark:#F97583">!==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">throw</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Error</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'逆元不存在'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ((x </span><span style="color:#D73A49;--shiki-dark:#F97583">%</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> m) </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> m) </span><span style="color:#D73A49;--shiki-dark:#F97583">%</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> m;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> modPow</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">base</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">exp</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">mod</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#D73A49;--shiki-dark:#F97583"> =></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  let</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> result </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  base </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ((base </span><span style="color:#D73A49;--shiki-dark:#F97583">%</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> mod) </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> mod) </span><span style="color:#D73A49;--shiki-dark:#F97583">%</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> mod;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  while</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (exp </span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (exp </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x26;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) result </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (result </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> base) </span><span style="color:#D73A49;--shiki-dark:#F97583">%</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> mod;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    exp </span><span style="color:#D73A49;--shiki-dark:#F97583">>>=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    base </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (base </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> base) </span><span style="color:#D73A49;--shiki-dark:#F97583">%</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> mod;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> result;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> generateRSAKeys</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">p</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">q</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> n</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> p </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> q;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> phiN</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (p </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (q </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> e</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 65537</span><span style="color:#D73A49;--shiki-dark:#F97583"> &#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> phiN </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x26;&#x26;</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> gcd</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">65537</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, phiN) </span><span style="color:#D73A49;--shiki-dark:#F97583">===</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#D73A49;--shiki-dark:#F97583"> ?</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 65537</span><span style="color:#D73A49;--shiki-dark:#F97583"> :</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 17</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> d</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> modInverse</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(e, phiN);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    publicKey: { e, n },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    privateKey: { d, n },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    params: { p, q, phiN },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> keys</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> generateRSAKeys</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">61</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">53</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'公钥 (e, n):'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, keys.publicKey);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'私钥 (d, n):'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, keys.privateKey);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'参数:'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, keys.params);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'验证 e·d mod φ(n):'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, (keys.publicKey.e </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> keys.privateKey.d) </span><span style="color:#D73A49;--shiki-dark:#F97583">%</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> keys.params.phiN);</span></span></code></pre></div><h2 id="加密解密与正确性证明">加密解密与正确性证明</h2><p>加密：持有公钥 (e, n) 的任何人可以将明文 m（0 ≤ m &lt; n）加密为密文 c = m^e mod n。解密：持有私钥 (d, n) 的人可以恢复明文 m = c^d mod n。</p>
+<p>正确性证明依赖欧拉定理。需要证明 (m^e)^d ≡ m (mod n)，即 m^{ed} ≡ m (mod n)。</p>
+<p>因为 ed ≡ 1 (mod φ(n))，所以 ed = 1 + k·φ(n)。当 gcd(m, n) = 1 时，由欧拉定理 m^{φ(n)} ≡ 1 (mod n)，得 m^{ed} = m^{1+k·φ(n)} = m · (m^{φ(n)})^k ≡ m · 1^k = m (mod n)。</p>
+<p>当 gcd(m, n) &gt; 1 时（即 m 是 p 或 q 的倍数），需要分别用 p 和 q 作为模数验证。若 p | m，则 m^{ed} ≡ 0 ≡ m (mod p)。若 p ∤ m，由费马小定理 m^{p-1} ≡ 1 (mod p)，因此 m^{ed} = m^{1+k(p-1)(q-1)} ≡ m · (m^{p-1})^{k(q-1)} ≡ m (mod p)。同理对 q 成立。由中国剩余定理，m^{ed} ≡ m (mod n)。</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="const rsaEncrypt = (m: number, e: number, n: number): number =&gt; modPow(m, e, n);
+const rsaDecrypt = (c: number, d: number, n: number): number =&gt; modPow(c, d, n);
+
+const { publicKey, privateKey } = generateRSAKeys(61, 53);
+const testMessages = [0, 1, 42, 100, 1000, 3000];
+
+for (const m of testMessages) {
+  if (m &gt;= publicKey.n) continue;
+  const c = rsaEncrypt(m, publicKey.e, publicKey.n);
+  const decrypted = rsaDecrypt(c, privateKey.d, privateKey.n);
+  console.log(`m=${m} → c=${c} → m'=${decrypted} ${m === decrypted ? '✓' : '✗'}`);
+}
+
+const p = 61,
+  q = 53,
+  n = p * q;
+const edgeCaseM = p;
+const c = rsaEncrypt(edgeCaseM, publicKey.e, publicKey.n);
+const recovered = rsaDecrypt(c, privateKey.d, privateKey.n);
+console.log(`边界情况 m=${edgeCaseM}(=p): c=${c}, 解密=${recovered} ${edgeCaseM === recovered ? '✓' : '✗'}`);"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> rsaEncrypt</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">m</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">e</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">n</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#D73A49;--shiki-dark:#F97583"> =></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> modPow</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(m, e, n);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> rsaDecrypt</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">c</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">d</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">n</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#D73A49;--shiki-dark:#F97583"> =></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> modPow</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(c, d, n);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#005CC5;--shiki-dark:#79B8FF">publicKey</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">privateKey</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> } </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> generateRSAKeys</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">61</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">53</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> testMessages</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">42</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">100</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1000</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">3000</span><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> m</span><span style="color:#D73A49;--shiki-dark:#F97583"> of</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> testMessages) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (m </span><span style="color:#D73A49;--shiki-dark:#F97583">>=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> publicKey.n) </span><span style="color:#D73A49;--shiki-dark:#F97583">continue</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> c</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> rsaEncrypt</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(m, publicKey.e, publicKey.n);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> decrypted</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> rsaDecrypt</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(c, privateKey.d, privateKey.n);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`m=${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">m</span><span style="color:#032F62;--shiki-dark:#9ECBFF">} → c=${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">c</span><span style="color:#032F62;--shiki-dark:#9ECBFF">} → m'=${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">decrypted</span><span style="color:#032F62;--shiki-dark:#9ECBFF">} ${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">m</span><span style="color:#D73A49;--shiki-dark:#F97583"> ===</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> decrypted</span><span style="color:#D73A49;--shiki-dark:#F97583"> ?</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '✓'</span><span style="color:#D73A49;--shiki-dark:#F97583"> :</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '✗'}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> p</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 61</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">  q</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 53</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">  n</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> p </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> q;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> edgeCaseM</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> p;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> c</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> rsaEncrypt</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(edgeCaseM, publicKey.e, publicKey.n);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> recovered</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> rsaDecrypt</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(c, privateKey.d, privateKey.n);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`边界情况 m=${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">edgeCaseM</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}(=p): c=${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">c</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}, 解密=${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">recovered</span><span style="color:#032F62;--shiki-dark:#9ECBFF">} ${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">edgeCaseM</span><span style="color:#D73A49;--shiki-dark:#F97583"> ===</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> recovered</span><span style="color:#D73A49;--shiki-dark:#F97583"> ?</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '✓'</span><span style="color:#D73A49;--shiki-dark:#F97583"> :</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '✗'}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span></code></pre></div><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>公式</th>
+<th>所需密钥</th>
+<th>数学基础</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>加密</td>
+<td>c = m^e mod n</td>
+<td>公钥 (e, n)</td>
+<td>模幂运算</td>
+</tr>
+<tr>
+<td>解密</td>
+<td>m = c^d mod n</td>
+<td>私钥 (d, n)</td>
+<td>欧拉定理</td>
+</tr>
+<tr>
+<td>签名</td>
+<td>s = m^d mod n</td>
+<td>私钥 (d, n)</td>
+<td>与解密同构</td>
+</tr>
+<tr>
+<td>验签</td>
+<td>m = s^e mod n</td>
+<td>公钥 (e, n)</td>
+<td>与加密同构</td>
+</tr>
+</tbody></table>
+<h2 id="rsa-数字签名">RSA 数字签名</h2><p>RSA 不仅能加密，还能实现数字签名。签名的思路是&quot;用私钥加密&quot;：签名者用私钥 d 对消息哈希 h(m) 计算签名 s = h(m)^d mod n，验证者用公钥 e 验证 s^e mod n = h(m)。</p>
+<p>数字签名提供了三个安全属性：认证性（只有私钥持有者能生成有效签名）、完整性（消息被篡改后签名验证失败）、不可否认性（签名者无法否认曾签署过的消息）。</p>
+<p>实际中不直接对消息签名，而是对消息的哈希值签名（如 SHA-256），因为哈希值长度固定且远小于 n。PKCS#1 v2.1 标准定义了 RSA-PSS 签名方案，增加了随机填充以提供更强的安全证明。</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="const simpleHash = (message: string): number =&gt; {
+  let hash = 0;
+  for (let i = 0; i &lt; message.length; i++) {
+    hash = ((hash &lt;&lt; 5) - hash + message.charCodeAt(i)) &amp; 0x7fffffff;
+  }
+  return hash;
+};
+
+const rsaSign = (messageHash: number, d: number, n: number): number =&gt; modPow(messageHash % n, d, n);
+
+const rsaVerify = (messageHash: number, signature: number, e: number, n: number): boolean =&gt;
+  modPow(signature, e, n) === messageHash % n;
+
+const message = 'Hello RSA';
+const hash = simpleHash(message) % publicKey.n;
+const signature = rsaSign(hash, privateKey.d, privateKey.n);
+const isValid = rsaVerify(hash, signature, publicKey.e, publicKey.n);
+
+console.log(`消息: &quot;${message}&quot;`);
+console.log(`哈希: ${hash}`);
+console.log(`签名: ${signature}`);
+console.log(`验证: ${isValid ? '有效' : '无效'}`);
+
+const tamperedHash = simpleHash('Hello RSB') % publicKey.n;
+const tamperedValid = rsaVerify(tamperedHash, signature, publicKey.e, publicKey.n);
+console.log(`篡改验证: ${tamperedValid ? '有效(危险!)' : '无效(正确拒绝)'}`);"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> simpleHash</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">message</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#D73A49;--shiki-dark:#F97583"> =></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  let</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> hash </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">let</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; i </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> message.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">length</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; i</span><span style="color:#D73A49;--shiki-dark:#F97583">++</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    hash </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ((hash </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;&#x3C;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 5</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> hash </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> message.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">charCodeAt</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(i)) </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x26;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0x7fffffff</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> hash;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> rsaSign</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">messageHash</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">d</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">n</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#D73A49;--shiki-dark:#F97583"> =></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> modPow</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(messageHash </span><span style="color:#D73A49;--shiki-dark:#F97583">%</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> n, d, n);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> rsaVerify</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">messageHash</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">signature</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">e</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">n</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> boolean</span><span style="color:#D73A49;--shiki-dark:#F97583"> =></span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  modPow</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(signature, e, n) </span><span style="color:#D73A49;--shiki-dark:#F97583">===</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> messageHash </span><span style="color:#D73A49;--shiki-dark:#F97583">%</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> n;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> message</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'Hello RSA'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> hash</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> simpleHash</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(message) </span><span style="color:#D73A49;--shiki-dark:#F97583">%</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> publicKey.n;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> signature</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> rsaSign</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(hash, privateKey.d, privateKey.n);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> isValid</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> rsaVerify</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(hash, signature, publicKey.e, publicKey.n);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`消息: "${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">message</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}"`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`哈希: ${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">hash</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`签名: ${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">signature</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`验证: ${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">isValid</span><span style="color:#D73A49;--shiki-dark:#F97583"> ?</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '有效'</span><span style="color:#D73A49;--shiki-dark:#F97583"> :</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '无效'}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> tamperedHash</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> simpleHash</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Hello RSB'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">%</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> publicKey.n;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> tamperedValid</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> rsaVerify</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(tamperedHash, signature, publicKey.e, publicKey.n);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`篡改验证: ${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">tamperedValid</span><span style="color:#D73A49;--shiki-dark:#F97583"> ?</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '有效(危险!)'</span><span style="color:#D73A49;--shiki-dark:#F97583"> :</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '无效(正确拒绝)'}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span></code></pre></div><pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    subgraph 签名流程&#10;        A[消息 m] --&gt; B[&quot;哈希 h = H(m)&quot;]&#10;        B --&gt; C[&quot;签名 s = h^d mod n&quot;]&#10;        C --&gt; D[发送 m, s]&#10;    end&#10;    subgraph 验证流程&#10;        D --&gt; E[&quot;计算 h' = H(m)&quot;]&#10;        D --&gt; F[&quot;恢复 h'' = s^e mod n&quot;]&#10;        E --&gt; G{&quot;h' = h'' ?&quot;}&#10;        F --&gt; G&#10;        G --&gt;|是| H[签名有效]&#10;        G --&gt;|否| I[签名无效]&#10;    end"></pre><h2 id="安全性分析与攻击向量">安全性分析与攻击向量</h2><p>RSA 的安全性归结为大整数分解问题（Integer Factorization Problem）：给定 n = p·q，找到 p 和 q。目前没有已知的经典多项式时间算法能解决这个问题。</p>
+<p>主要攻击方式和防御措施：</p>
+<p>小公钥指数攻击：若 e 过小（如 e=3）且消息未填充，攻击者可以直接开 e 次根恢复明文。防御：使用标准填充方案（OAEP）。</p>
+<p>共模攻击：如果两个用户共享同一个 n 但使用不同的 e₁、e₂（且 gcd(e₁,e₂)=1），攻击者可以通过扩展欧几里得算法从两个密文恢复明文。防御：每个用户使用独立的 n。</p>
+<p>时序攻击：通过测量解密时间推断私钥位。防御：恒定时间实现 + RSA 盲化。</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="const trialDivision = (n: number): { p: number; q: number } | null =&gt; {
+  for (let i = 2; i * i &lt;= n; i++) {
+    if (n % i === 0) return { p: i, q: Math.floor(n / i) };
+  }
+  return null;
+};
+
+const fermatFactor = (n: number): { p: number; q: number } | null =&gt; {
+  let a = Math.ceil(Math.sqrt(n));
+  let b2 = a * a - n;
+  const maxIter = 10000;
+  for (let i = 0; i &lt; maxIter; i++) {
+    const b = Math.sqrt(b2);
+    if (Math.abs(b - Math.round(b)) &lt; 1e-6) {
+      const bInt = Math.round(b);
+      return { p: a + bInt, q: a - bInt };
+    }
+    a++;
+    b2 = a * a - n;
+  }
+  return null;
+};
+
+const n = 61 * 53;
+console.log(`n = ${n}`);
+console.log('试除法分解:', trialDivision(n));
+console.log('费马分解:', fermatFactor(n));
+
+const closeN = 101 * 103;
+console.log(`\n近似素数 n = ${closeN}`);
+console.log('费马分解:', fermatFactor(closeN));"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> trialDivision</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">n</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#E36209;--shiki-dark:#FFAB70">p</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; </span><span style="color:#E36209;--shiki-dark:#FFAB70">q</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> } </span><span style="color:#D73A49;--shiki-dark:#F97583">|</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> null</span><span style="color:#D73A49;--shiki-dark:#F97583"> =></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">let</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; i </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> n; i</span><span style="color:#D73A49;--shiki-dark:#F97583">++</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (n </span><span style="color:#D73A49;--shiki-dark:#F97583">%</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i </span><span style="color:#D73A49;--shiki-dark:#F97583">===</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { p: i, q: Math.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">floor</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(n </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i) };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> null</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> fermatFactor</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">n</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#E36209;--shiki-dark:#FFAB70">p</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; </span><span style="color:#E36209;--shiki-dark:#FFAB70">q</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> } </span><span style="color:#D73A49;--shiki-dark:#F97583">|</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> null</span><span style="color:#D73A49;--shiki-dark:#F97583"> =></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  let</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> a </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Math.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">ceil</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(Math.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">sqrt</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(n));</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  let</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> b2 </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> a </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> a </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> n;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> maxIter</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 10000</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">let</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; i </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> maxIter; i</span><span style="color:#D73A49;--shiki-dark:#F97583">++</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> b</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Math.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">sqrt</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(b2);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (Math.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">abs</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(b </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Math.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">round</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(b)) </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1e-6</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> bInt</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Math.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">round</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(b);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { p: a </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> bInt, q: a </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> bInt };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    a</span><span style="color:#D73A49;--shiki-dark:#F97583">++</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    b2 </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> a </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> a </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> n;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> null</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> n</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 61</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 53</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`n = ${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">n</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'试除法分解:'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">trialDivision</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(n));</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'费马分解:'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">fermatFactor</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(n));</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> closeN</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 101</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 103</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`</span><span style="color:#005CC5;--shiki-dark:#79B8FF">\n</span><span style="color:#032F62;--shiki-dark:#9ECBFF">近似素数 n = ${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">closeN</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'费马分解:'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">fermatFactor</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(closeN));</span></span></code></pre></div><table>
+<thead>
+<tr>
+<th>攻击方式</th>
+<th>原理</th>
+<th>条件</th>
+<th>防御</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>试除法</td>
+<td>逐一试除小素数</td>
+<td>n 有小因子</td>
+<td>选择大素数</td>
+</tr>
+<tr>
+<td>费马分解</td>
+<td>n = a²-b² = (a+b)(a-b)</td>
+<td>p ≈ q</td>
+<td>确保 |p-q| 足够大</td>
+</tr>
+<tr>
+<td>Pollard ρ</td>
+<td>生日悖论找碰撞</td>
+<td>p 相对较小</td>
+<td>确保 p,q 位长相近</td>
+</tr>
+<tr>
+<td>通用数域筛</td>
+<td>亚指数时间分解</td>
+<td>通用</td>
+<td>增大密钥长度</td>
+</tr>
+<tr>
+<td>量子算法 (Shor)</td>
+<td>多项式时间分解</td>
+<td>量子计算机</td>
+<td>后量子密码迁移</td>
+</tr>
+</tbody></table>
+<h2 id="小结">小结</h2><ul>
+<li>RSA 是基于大整数分解困难性的公钥密码体制，密钥生成依赖素数选择和欧拉函数</li>
+<li>加密 c = m^e mod n 和解密 m = c^d mod n 的正确性由欧拉定理保证</li>
+<li>数字签名利用 RSA 的对称结构：私钥签名 s = h^d mod n，公钥验证 s^e mod n = h</li>
+<li>工业标准选择 e = 65537 兼顾安全性和计算效率，密钥长度至少 2048 位</li>
+<li>RSA 面临多种攻击向量，合理的参数选择和标准填充方案（OAEP/PSS）是安全使用的前提</li>
+<li>量子计算机的 Shor 算法可在多项式时间内分解大整数，是 RSA 的长期威胁</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../mathematics-and-logic/number-theory/cryptography-number-theory/index.html"><span class="label">Previous</span>密码学中的数论 简介</a><a class="next" href="../../../mathematics-and-logic/number-theory/cryptography-number-theory/discrete-logarithm.html"><span class="label">Next</span>离散对数问题</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#密钥生成过程" data-outline-link="密钥生成过程">密钥生成过程</a></li><li class="depth-2"><a href="#加密解密与正确性证明" data-outline-link="加密解密与正确性证明">加密解密与正确性证明</a></li><li class="depth-2"><a href="#rsa-数字签名" data-outline-link="rsa-数字签名">RSA 数字签名</a></li><li class="depth-2"><a href="#安全性分析与攻击向量" data-outline-link="安全性分析与攻击向量">安全性分析与攻击向量</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>串口与 CAN 总线通信 · 硬件、机器人与安全工程</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:硬件、机器人与安全工程" data-pagefind-meta="slug:hardware-and-systems">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">硬件、机器人与安全工程</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item active" href="../../../hardware-and-systems/index.html" aria-current="page" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../hardware-and-systems/index.html">硬件、机器人与安全工程</a><a class="back-to-hubs" href="../../../hardware-and-systems/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../hardware-and-systems/ros-and-middleware/index.html">ROS 与机器人中间件 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="hardware-and-systems"><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:ros-and-middleware/ros2-fundamentals"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-fundamentals/index.html">ROS2 基础 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-fundamentals/nodes-and-topics.html">ROS2 节点与话题</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-fundamentals/launch-and-params.html">ROS2 启动系统与参数管理</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-fundamentals/parameters-and-lifecycle.html">ROS2 参数与生命周期</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-fundamentals/launch-system.html">ROS2 Launch 系统</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-fundamentals/services-and-actions.html">ROS2 服务与动作</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-fundamentals/tf2-transforms.html">ROS2 坐标变换（TF2）</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:ros-and-middleware/ros2-advanced"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-advanced/index.html">ROS2 进阶 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-advanced/component-architecture.html">ROS 2 组件架构</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-advanced/nav2-framework.html">Nav2 导航框架</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-advanced/moveit2-planning.html">MoveIt2 运动规划</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-advanced/qos-and-realtime.html">ROS2 QoS 与实时通信</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-advanced/qos-policies.html">ROS 2 QoS 策略</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/ros2-advanced/ros2-navigation-stack.html">ROS 2 导航栈</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:ros-and-middleware/communication-protocols" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/ros-and-middleware/communication-protocols/index.html">通信协议 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/communication-protocols/dds-realtime.html">DDS 与实时通信</a></li><li class="leaf"><a class="leaf-title active" href="../../../hardware-and-systems/ros-and-middleware/communication-protocols/serial-can-bus.html">串口与 CAN 总线通信</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/communication-protocols/multi-robot-comm.html">多机器人通信架构</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:ros-and-middleware/simulation-tools"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/ros-and-middleware/simulation-tools/index.html">仿真工具 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/simulation-tools/gazebo-simulation.html">Gazebo 仿真环境</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/simulation-tools/urdf-modeling.html">URDF 与机器人建模</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/simulation-tools/digital-twin.html">数字孪生与 Sim-to-Real</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:ros-and-middleware/robot-simulation"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/ros-and-middleware/robot-simulation/index.html">机器人仿真 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/robot-simulation/gazebo-environment.html">Gazebo 仿真环境</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/robot-simulation/isaac-sim.html">NVIDIA Isaac Sim 机器人仿真</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/robot-simulation/digital-twin.html">数字孪生技术</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/robot-simulation/gazebo-fundamentals.html">Gazebo 仿真基础</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/robot-simulation/urdf-modeling.html">URDF 与机器人建模</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/ros-and-middleware/robot-simulation/ros2-control.html">ros2_control 框架</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part II · 机器人与自动化</span><span>ROS 与机器人中间件 简介</span><span>通信协议 简介</span><span>串口与 CAN 总线通信</span></nav>
+    <article class="content prose"><h1 id="串口与-can-总线通信">串口与 CAN 总线通信</h1><h2 id="核心概念">核心概念</h2><p>串口通信（Serial Communication）和 CAN 总线（Controller Area Network）是机器人底层硬件通信的两大主力协议。串口协议简单直观，广泛用于传感器、GPS 模块和微控制器的数据交换；CAN 总线以其高可靠性和多节点仲裁能力，成为工业机器人和移动机器人底盘控制的标准总线。</p>
+<p>在机器人系统架构中，串口和 CAN 通常作为 ROS2 节点与底层硬件之间的&quot;最后一公里&quot;通信手段，由专门的硬件驱动节点负责协议转换。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    subgraph ROS2 层&#10;        NAV[导航节点] --&gt;|/cmd_vel| BRIDGE[硬件桥接节点]&#10;    end&#10;    subgraph 硬件通信层&#10;        BRIDGE --&gt;|串口| MCU1[传感器 MCU]&#10;        BRIDGE --&gt;|CAN 总线| MCU2[电机驱动器]&#10;        BRIDGE --&gt;|CAN 总线| MCU3[电池管理]&#10;        MCU2 --&gt; M1[左电机]&#10;        MCU2 --&gt; M2[右电机]&#10;    end"></pre><table>
+<thead>
+<tr>
+<th>协议</th>
+<th>速率</th>
+<th>距离</th>
+<th>节点数</th>
+<th>实时性</th>
+<th>抗干扰</th>
+<th>典型应用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>UART 串口</td>
+<td>9.6K-3M bps</td>
+<td>&lt;15m</td>
+<td>2(点对点)</td>
+<td>低</td>
+<td>低</td>
+<td>传感器接口</td>
+</tr>
+<tr>
+<td>RS-485</td>
+<td>100K-10M bps</td>
+<td>&lt;1200m</td>
+<td>32-256</td>
+<td>中</td>
+<td>高</td>
+<td>工业传感器网络</td>
+</tr>
+<tr>
+<td>CAN 2.0</td>
+<td>1M bps</td>
+<td>&lt;40m(1M)</td>
+<td>110+</td>
+<td>高</td>
+<td>极高</td>
+<td>底盘控制</td>
+</tr>
+<tr>
+<td>CAN FD</td>
+<td>8M bps</td>
+<td>&lt;40m</td>
+<td>110+</td>
+<td>极高</td>
+<td>极高</td>
+<td>新型机器人</td>
+</tr>
+<tr>
+<td>EtherCAT</td>
+<td>100M bps</td>
+<td>&lt;100m</td>
+<td>65535</td>
+<td>极高</td>
+<td>高</td>
+<td>工业伺服控制</td>
+</tr>
+</tbody></table>
+<h2 id="串口通信实现">串口通信实现</h2><p>串口通信在机器人系统中主要用于连接 GPS、IMU、激光雷达等外部设备。Python 的 <code>pyserial</code> 库提供了跨平台的串口操作接口。</p>
+<div class="code-block-wrapper" data-lang="python" data-code="import serial
+import struct
+import threading
+from collections import deque
+
+class RobotSerialInterface:
+    def __init__(self, port='/dev/ttyUSB0', baudrate=115200):
+        self.serial = serial.Serial(
+            port=port,
+            baudrate=baudrate,
+            bytesize=serial.EIGHTBITS,
+            parity=serial.PARITY_NONE,
+            stopbits=serial.STOPBITS_ONE,
+            timeout=0.01
+        )
+
+        self.rx_buffer = deque(maxlen=4096)
+        self.running = False
+        self.callbacks = {}
+
+    def start(self):
+        self.running = True
+        self.rx_thread = threading.Thread(target=self._read_loop, daemon=True)
+        self.rx_thread.start()
+
+    def _read_loop(self):
+        while self.running:
+            if self.serial.in_waiting:
+                data = self.serial.read(self.serial.in_waiting)
+                self.rx_buffer.extend(data)
+                self._parse_frames()
+
+    def _parse_frames(self):
+        while len(self.rx_buffer) &gt;= 4:
+            if self.rx_buffer[0] != 0xAA or self.rx_buffer[1] != 0x55:
+                self.rx_buffer.popleft()
+                continue
+
+            if len(self.rx_buffer) &lt; 4:
+                break
+
+            msg_id = self.rx_buffer[2]
+            payload_len = self.rx_buffer[3]
+
+            total_len = 4 + payload_len + 1
+            if len(self.rx_buffer) &lt; total_len:
+                break
+
+            frame = [self.rx_buffer.popleft() for _ in range(total_len)]
+
+            checksum = sum(frame[:-1]) &amp; 0xFF
+            if checksum != frame[-1]:
+                continue
+
+            payload = bytes(frame[4:4+payload_len])
+
+            if msg_id in self.callbacks:
+                self.callbacks[msg_id](payload)
+
+    def send_command(self, msg_id, payload):
+        frame = bytearray([0xAA, 0x55, msg_id, len(payload)])
+        frame.extend(payload)
+        checksum = sum(frame) &amp; 0xFF
+        frame.append(checksum)
+        self.serial.write(frame)
+
+    def register_callback(self, msg_id, callback):
+        self.callbacks[msg_id] = callback
+
+    def close(self):
+        self.running = False
+        if hasattr(self, 'rx_thread'):
+            self.rx_thread.join(timeout=1.0)
+        self.serial.close()
+
+class OdometryParser:
+    def __init__(self, serial_interface):
+        self.serial = serial_interface
+        self.serial.register_callback(0x01, self.parse_odometry)
+        self.latest_odom = None
+
+    def parse_odometry(self, payload):
+        if len(payload) == 24:
+            x, y, theta, vx, vy, omega = struct.unpack('&lt;ffffff', payload)
+            self.latest_odom = {
+                'x': x, 'y': y, 'theta': theta,
+                'vx': vx, 'vy': vy, 'omega': omega
+            }
+
+    def send_velocity(self, linear, angular):
+        payload = struct.pack('&lt;ff', linear, angular)
+        self.serial.send_command(0x10, payload)"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> serial</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> struct</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> threading</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> collections </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> deque</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> RobotSerialInterface</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, port</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'/dev/ttyUSB0'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, baudrate</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">115200</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.serial </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> serial.Serial(</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">            port</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">port,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">            baudrate</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">baudrate,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">            bytesize</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">serial.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">EIGHTBITS</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">            parity</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">serial.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">PARITY_NONE</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">            stopbits</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">serial.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">STOPBITS_ONE</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">            timeout</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0.01</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.rx_buffer </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> deque(</span><span style="color:#E36209;--shiki-dark:#FFAB70">maxlen</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">4096</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.running </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> False</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.callbacks </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> start</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.running </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> True</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.rx_thread </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> threading.Thread(</span><span style="color:#E36209;--shiki-dark:#FFAB70">target</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._read_loop, </span><span style="color:#E36209;--shiki-dark:#FFAB70">daemon</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">True</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.rx_thread.start()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> _read_loop</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        while</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.running:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            if</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.serial.in_waiting:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                data </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.serial.read(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.serial.in_waiting)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">                self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.rx_buffer.extend(data)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">                self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._parse_frames()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> _parse_frames</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        while</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> len</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.rx_buffer) </span><span style="color:#D73A49;--shiki-dark:#F97583">>=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 4</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            if</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.rx_buffer[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">!=</span><span style="color:#D73A49;--shiki-dark:#F97583"> 0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">AA</span><span style="color:#D73A49;--shiki-dark:#F97583"> or</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.rx_buffer[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">!=</span><span style="color:#D73A49;--shiki-dark:#F97583"> 0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">55</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">                self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.rx_buffer.popleft()</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">                continue</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            if</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> len</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.rx_buffer) </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 4</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">                break</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            msg_id </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.rx_buffer[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            payload_len </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.rx_buffer[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            total_len </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 4</span><span style="color:#D73A49;--shiki-dark:#F97583"> +</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> payload_len </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            if</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> len</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.rx_buffer) </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> total_len:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">                break</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            frame </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.rx_buffer.popleft() </span><span style="color:#D73A49;--shiki-dark:#F97583">for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> _ </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> range</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(total_len)]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            checksum </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> sum</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(frame[:</span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]) </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x26;</span><span style="color:#D73A49;--shiki-dark:#F97583"> 0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">FF</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> checksum </span><span style="color:#D73A49;--shiki-dark:#F97583">!=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> frame[</span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">                continue</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            payload </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> bytes</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(frame[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">4</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">4</span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8">payload_len])</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> msg_id </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.callbacks:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">                self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.callbacks[msg_id](payload)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> send_command</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, msg_id, payload):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        frame </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> bytearray</span><span style="color:#24292E;--shiki-dark:#E1E4E8">([</span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">AA</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">55</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, msg_id, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">len</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(payload)])</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        frame.extend(payload)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        checksum </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> sum</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(frame) </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x26;</span><span style="color:#D73A49;--shiki-dark:#F97583"> 0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">FF</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        frame.append(checksum)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.serial.write(frame)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> register_callback</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, msg_id, callback):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.callbacks[msg_id] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> callback</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> close</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.running </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> False</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> hasattr</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'rx_thread'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.rx_thread.join(</span><span style="color:#E36209;--shiki-dark:#FFAB70">timeout</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1.0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.serial.close()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> OdometryParser</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, serial_interface):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.serial </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> serial_interface</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.serial.register_callback(</span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">01</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.parse_odometry)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.latest_odom </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> None</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> parse_odometry</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, payload):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> len</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(payload) </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 24</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            x, y, theta, vx, vy, omega </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> struct.unpack(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'&#x3C;ffffff'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, payload)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.latest_odom </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">                'x'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: x, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'y'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: y, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'theta'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: theta,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">                'vx'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: vx, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'vy'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: vy, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'omega'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: omega</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> send_velocity</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, linear, angular):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        payload </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> struct.pack(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'&#x3C;ff'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, linear, angular)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.serial.send_command(</span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">10</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, payload)</span></span></code></pre></div><h2 id="can-总线通信">CAN 总线通信</h2><p>CAN 总线是机器人底盘控制的首选协议。其核心优势包括：基于优先级的消息仲裁（无需主从）、错误检测和故障隔离、以及确定性的消息传输延迟。</p>
+<div class="code-block-wrapper" data-lang="python" data-code="import can
+import struct
+import threading
+
+class RobotCANBus:
+    def __init__(self, channel='can0', bitrate=500000):
+        self.bus = can.interface.Bus(
+            channel=channel,
+            interface='socketcan',
+            bitrate=bitrate
+        )
+        self.callbacks = {}
+        self.running = False
+
+    def start(self):
+        self.running = True
+        self.rx_thread = threading.Thread(target=self._receive_loop, daemon=True)
+        self.rx_thread.start()
+
+    def _receive_loop(self):
+        while self.running:
+            msg = self.bus.recv(timeout=0.01)
+            if msg:
+                self._dispatch(msg)
+
+    def _dispatch(self, msg):
+        arb_id = msg.arbitration_id
+
+        if arb_id in self.callbacks:
+            self.callbacks[arb_id](msg.data)
+
+        base_id = arb_id &amp; 0xFF80
+        if base_id in self.callbacks:
+            self.callbacks[base_id](msg.data, arb_id &amp; 0x7F)
+
+    def send(self, arb_id, data, is_extended=False):
+        msg = can.Message(
+            arbitration_id=arb_id,
+            data=data,
+            is_extended_id=is_extended
+        )
+        self.bus.send(msg)
+
+    def register_callback(self, arb_id, callback):
+        self.callbacks[arb_id] = callback
+
+    def close(self):
+        self.running = False
+        self.bus.shutdown()
+
+class CANMotorDriver:
+    CMD_VELOCITY = 0x200
+    CMD_POSITION = 0x201
+    CMD_TORQUE = 0x202
+    FEEDBACK_STATUS = 0x280
+
+    def __init__(self, can_bus, motor_id):
+        self.bus = can_bus
+        self.motor_id = motor_id
+        self.feedback = {'position': 0, 'velocity': 0, 'current': 0}
+
+        feedback_id = self.FEEDBACK_STATUS + motor_id
+        self.bus.register_callback(feedback_id, self._parse_feedback)
+
+    def set_velocity(self, rpm):
+        data = struct.pack('&lt;hHxxxx', int(rpm * 10), 0)
+        self.bus.send(self.CMD_VELOCITY + self.motor_id, data)
+
+    def set_position(self, angle_deg):
+        data = struct.pack('&lt;ixxxx', int(angle_deg * 100))
+        self.bus.send(self.CMD_POSITION + self.motor_id, data)
+
+    def _parse_feedback(self, data):
+        pos_raw, vel_raw, cur_raw = struct.unpack('&lt;hhh', data[:6])
+        self.feedback = {
+            'position': pos_raw * 0.01,
+            'velocity': vel_raw * 0.1,
+            'current': cur_raw * 0.001
+        }"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> can</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> struct</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> threading</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> RobotCANBus</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, channel</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'can0'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, bitrate</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">500000</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.bus </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> can.interface.Bus(</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">            channel</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">channel,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">            interface</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'socketcan'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">            bitrate</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">bitrate</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        )</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.callbacks </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {}</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.running </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> False</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> start</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.running </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> True</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.rx_thread </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> threading.Thread(</span><span style="color:#E36209;--shiki-dark:#FFAB70">target</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._receive_loop, </span><span style="color:#E36209;--shiki-dark:#FFAB70">daemon</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">True</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.rx_thread.start()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> _receive_loop</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        while</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.running:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            msg </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.bus.recv(</span><span style="color:#E36209;--shiki-dark:#FFAB70">timeout</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0.01</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> msg:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">                self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._dispatch(msg)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> _dispatch</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, msg):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        arb_id </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> msg.arbitration_id</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> arb_id </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.callbacks:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.callbacks[arb_id](msg.data)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        base_id </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> arb_id </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x26;</span><span style="color:#D73A49;--shiki-dark:#F97583"> 0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">FF80</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> base_id </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.callbacks:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.callbacks[base_id](msg.data, arb_id </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x26;</span><span style="color:#D73A49;--shiki-dark:#F97583"> 0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">7F</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> send</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, arb_id, data, is_extended</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">False</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        msg </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> can.Message(</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">            arbitration_id</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">arb_id,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">            data</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">data,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">            is_extended_id</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">is_extended</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        )</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.bus.send(msg)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> register_callback</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, arb_id, callback):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.callbacks[arb_id] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> callback</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> close</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.running </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> False</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.bus.shutdown()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> CANMotorDriver</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    CMD_VELOCITY</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> 0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">200</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    CMD_POSITION</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> 0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">201</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    CMD_TORQUE</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> 0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">202</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    FEEDBACK_STATUS</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> 0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">280</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, can_bus, motor_id):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.bus </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> can_bus</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.motor_id </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> motor_id</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.feedback </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'position'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'velocity'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'current'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        feedback_id </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">FEEDBACK_STATUS</span><span style="color:#D73A49;--shiki-dark:#F97583"> +</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> motor_id</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.bus.register_callback(feedback_id, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._parse_feedback)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> set_velocity</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, rpm):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        data </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> struct.pack(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'&#x3C;hHxxxx'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">int</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(rpm </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 10</span><span style="color:#24292E;--shiki-dark:#E1E4E8">), </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.bus.send(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">CMD_VELOCITY</span><span style="color:#D73A49;--shiki-dark:#F97583"> +</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.motor_id, data)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> set_position</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, angle_deg):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        data </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> struct.pack(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'&#x3C;ixxxx'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">int</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(angle_deg </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 100</span><span style="color:#24292E;--shiki-dark:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.bus.send(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">CMD_POSITION</span><span style="color:#D73A49;--shiki-dark:#F97583"> +</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.motor_id, data)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> _parse_feedback</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, data):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        pos_raw, vel_raw, cur_raw </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> struct.unpack(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'&#x3C;hhh'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, data[:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">6</span><span style="color:#24292E;--shiki-dark:#E1E4E8">])</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.feedback </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            'position'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: pos_raw </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.01</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            'velocity'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: vel_raw </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            'current'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: cur_raw </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.001</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        }</span></span></code></pre></div><h2 id="canopen-协议栈">CANopen 协议栈</h2><p>CANopen 是建立在 CAN 总线之上的高层应用协议，定义了设备通信模型、对象字典和设备配置文件（Device Profile），广泛应用于工业自动化和机器人领域。</p>
+<div class="code-block-wrapper" data-lang="python" data-code="class CANopenNode:
+    NMT_START = 0x01
+    NMT_STOP = 0x02
+    NMT_RESET = 0x81
+
+    def __init__(self, can_bus, node_id):
+        self.bus = can_bus
+        self.node_id = node_id
+        self.object_dictionary = {}
+        self.pdo_mappings = {}
+
+    def nmt_command(self, command):
+        data = bytes([command, self.node_id])
+        self.bus.send(0x000, data)
+
+    def sdo_read(self, index, subindex):
+        data = struct.pack('&lt;BHBBBBB', 0x40, index, subindex, 0, 0, 0, 0)
+        self.bus.send(0x600 + self.node_id, data)
+
+    def sdo_write(self, index, subindex, value, size=4):
+        cmd_byte = {1: 0x2F, 2: 0x2B, 4: 0x23}[size]
+        data = struct.pack('&lt;BHB', cmd_byte, index, subindex)
+        data += struct.pack('&lt;I', value)[:size]
+        data += b'\x00' * (8 - len(data))
+        self.bus.send(0x600 + self.node_id, data)
+
+    def configure_tpdo(self, pdo_num, cob_id, mappings):
+        comm_index = 0x1800 + pdo_num - 1
+        map_index = 0x1A00 + pdo_num - 1
+
+        self.sdo_write(comm_index, 0x01, cob_id | 0x80000000)
+
+        self.sdo_write(map_index, 0x00, 0)
+        for i, (index, subindex, bits) in enumerate(mappings):
+            mapping_value = (index &lt;&lt; 16) | (subindex &lt;&lt; 8) | bits
+            self.sdo_write(map_index, i + 1, mapping_value)
+        self.sdo_write(map_index, 0x00, len(mappings))
+
+        self.sdo_write(comm_index, 0x01, cob_id)
+
+class CANopenMotorController(CANopenNode):
+    MODE_VELOCITY = 3
+    MODE_POSITION = 1
+    MODE_TORQUE = 4
+
+    def __init__(self, can_bus, node_id):
+        super().__init__(can_bus, node_id)
+
+    def set_operation_mode(self, mode):
+        self.sdo_write(0x6060, 0x00, mode, size=1)
+
+    def enable_motor(self):
+        self.sdo_write(0x6040, 0x00, 0x06, size=2)
+        self.sdo_write(0x6040, 0x00, 0x07, size=2)
+        self.sdo_write(0x6040, 0x00, 0x0F, size=2)
+
+    def set_target_velocity(self, rpm):
+        self.sdo_write(0x60FF, 0x00, int(rpm))
+
+    def set_target_position(self, counts):
+        self.sdo_write(0x607A, 0x00, int(counts))
+        self.sdo_write(0x6040, 0x00, 0x3F, size=2)"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> CANopenNode</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    NMT_START</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> 0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">01</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    NMT_STOP</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> 0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">02</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    NMT_RESET</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> 0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">81</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, can_bus, node_id):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.bus </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> can_bus</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.node_id </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> node_id</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.object_dictionary </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {}</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.pdo_mappings </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> nmt_command</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, command):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        data </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> bytes</span><span style="color:#24292E;--shiki-dark:#E1E4E8">([command, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.node_id])</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.bus.send(</span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">000</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, data)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> sdo_read</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, index, subindex):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        data </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> struct.pack(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'&#x3C;BHBBBBB'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">40</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, index, subindex, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.bus.send(</span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">600</span><span style="color:#D73A49;--shiki-dark:#F97583"> +</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.node_id, data)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> sdo_write</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, index, subindex, value, size</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">4</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        cmd_byte </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2F</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2B</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">4</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">23</span><span style="color:#24292E;--shiki-dark:#E1E4E8">}[size]</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        data </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> struct.pack(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'&#x3C;BHB'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, cmd_byte, index, subindex)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        data </span><span style="color:#D73A49;--shiki-dark:#F97583">+=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> struct.pack(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'&#x3C;I'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, value)[:size]</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        data </span><span style="color:#D73A49;--shiki-dark:#F97583">+=</span><span style="color:#D73A49;--shiki-dark:#F97583"> b</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'</span><span style="color:#005CC5;--shiki-dark:#79B8FF">\x00</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">8</span><span style="color:#D73A49;--shiki-dark:#F97583"> -</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> len</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(data))</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.bus.send(</span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">600</span><span style="color:#D73A49;--shiki-dark:#F97583"> +</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.node_id, data)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> configure_tpdo</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, pdo_num, cob_id, mappings):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        comm_index </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#D73A49;--shiki-dark:#F97583"> 0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1800</span><span style="color:#D73A49;--shiki-dark:#F97583"> +</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> pdo_num </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        map_index </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#D73A49;--shiki-dark:#F97583"> 0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1A00</span><span style="color:#D73A49;--shiki-dark:#F97583"> +</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> pdo_num </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.sdo_write(comm_index, </span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">01</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, cob_id </span><span style="color:#D73A49;--shiki-dark:#F97583">|</span><span style="color:#D73A49;--shiki-dark:#F97583"> 0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">80000000</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.sdo_write(map_index, </span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">00</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i, (index, subindex, bits) </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> enumerate</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(mappings):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            mapping_value </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (index </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;&#x3C;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 16</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">|</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (subindex </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;&#x3C;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 8</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">|</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> bits</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.sdo_write(map_index, i </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, mapping_value)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.sdo_write(map_index, </span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">00</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">len</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(mappings))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.sdo_write(comm_index, </span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">01</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, cob_id)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> CANopenMotorController</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">CANopenNode</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    MODE_VELOCITY</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 3</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    MODE_POSITION</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    MODE_TORQUE</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 4</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, can_bus, node_id):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        super</span><span style="color:#24292E;--shiki-dark:#E1E4E8">().</span><span style="color:#005CC5;--shiki-dark:#79B8FF">__init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(can_bus, node_id)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> set_operation_mode</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, mode):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.sdo_write(</span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">6060</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">00</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, mode, </span><span style="color:#E36209;--shiki-dark:#FFAB70">size</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> enable_motor</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.sdo_write(</span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">6040</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">00</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">06</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">size</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.sdo_write(</span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">6040</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">00</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">07</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">size</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.sdo_write(</span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">6040</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">00</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0F</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">size</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> set_target_velocity</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, rpm):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.sdo_write(</span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">60FF</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">00</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">int</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(rpm))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> set_target_position</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, counts):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.sdo_write(</span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">607A</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">00</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">int</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(counts))</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.sdo_write(</span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">6040</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">00</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">0x</span><span style="color:#005CC5;--shiki-dark:#79B8FF">3F</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">size</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span></code></pre></div><table>
+<thead>
+<tr>
+<th>CANopen 通信类型</th>
+<th>COB-ID</th>
+<th>方向</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NMT</td>
+<td>0x000</td>
+<td>主→从</td>
+<td>网络管理</td>
+</tr>
+<tr>
+<td>SYNC</td>
+<td>0x080</td>
+<td>主→全体</td>
+<td>同步触发</td>
+</tr>
+<tr>
+<td>SDO (tx)</td>
+<td>0x580+ID</td>
+<td>从→主</td>
+<td>参数读写</td>
+</tr>
+<tr>
+<td>SDO (rx)</td>
+<td>0x600+ID</td>
+<td>主→从</td>
+<td>参数读写</td>
+</tr>
+<tr>
+<td>TPDO1</td>
+<td>0x180+ID</td>
+<td>从→主</td>
+<td>实时数据</td>
+</tr>
+<tr>
+<td>RPDO1</td>
+<td>0x200+ID</td>
+<td>主→从</td>
+<td>实时指令</td>
+</tr>
+<tr>
+<td>Heartbeat</td>
+<td>0x700+ID</td>
+<td>从→主</td>
+<td>存活检测</td>
+</tr>
+</tbody></table>
+<h2 id="ros2-硬件驱动集成">ROS2 硬件驱动集成</h2><p>将串口和 CAN 通信封装为 ROS2 节点是机器人开发的标准实践。ros2_control 框架提供了硬件抽象层（Hardware Interface），使控制算法与硬件通信解耦。</p>
+<div class="code-block-wrapper" data-lang="python" data-code="import rclpy
+from rclpy.node import Node
+from geometry_msgs.msg import Twist
+from nav_msgs.msg import Odometry
+from sensor_msgs.msg import JointState
+
+class ChassisDriverNode(Node):
+    def __init__(self):
+        super().__init__('chassis_driver')
+
+        self.declare_parameter('can_channel', 'can0')
+        self.declare_parameter('wheel_radius', 0.08)
+        self.declare_parameter('wheel_separation', 0.4)
+
+        channel = self.get_parameter('can_channel').value
+        self.can = RobotCANBus(channel=channel)
+        self.left_motor = CANMotorDriver(self.can, motor_id=1)
+        self.right_motor = CANMotorDriver(self.can, motor_id=2)
+
+        self.cmd_sub = self.create_subscription(
+            Twist, '/cmd_vel', self.cmd_callback, 10
+        )
+
+        self.odom_pub = self.create_publisher(Odometry, '/odom', 10)
+        self.joint_pub = self.create_publisher(JointState, '/joint_states', 10)
+
+        self.can.start()
+        self.create_timer(0.02, self.publish_feedback)
+
+    def cmd_callback(self, msg):
+        R = self.get_parameter('wheel_radius').value
+        L = self.get_parameter('wheel_separation').value
+
+        v = msg.linear.x
+        omega = msg.angular.z
+
+        v_left = (v - omega * L / 2) / R
+        v_right = (v + omega * L / 2) / R
+
+        left_rpm = v_left * 60 / (2 * 3.14159)
+        right_rpm = v_right * 60 / (2 * 3.14159)
+
+        self.left_motor.set_velocity(left_rpm)
+        self.right_motor.set_velocity(right_rpm)
+
+    def publish_feedback(self):
+        joint_msg = JointState()
+        joint_msg.header.stamp = self.get_clock().now().to_msg()
+        joint_msg.name = ['left_wheel_joint', 'right_wheel_joint']
+        joint_msg.position = [
+            self.left_motor.feedback['position'],
+            self.right_motor.feedback['position']
+        ]
+        joint_msg.velocity = [
+            self.left_motor.feedback['velocity'],
+            self.right_motor.feedback['velocity']
+        ]
+        self.joint_pub.publish(joint_msg)"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> rclpy</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> rclpy.node </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Node</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> geometry_msgs.msg </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Twist</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> nav_msgs.msg </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Odometry</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> sensor_msgs.msg </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> JointState</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ChassisDriverNode</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Node</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        super</span><span style="color:#24292E;--shiki-dark:#E1E4E8">().</span><span style="color:#005CC5;--shiki-dark:#79B8FF">__init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'chassis_driver'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.declare_parameter(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'can_channel'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'can0'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.declare_parameter(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'wheel_radius'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0.08</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.declare_parameter(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'wheel_separation'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0.4</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        channel </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.get_parameter(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'can_channel'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">).value</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.can </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> RobotCANBus(</span><span style="color:#E36209;--shiki-dark:#FFAB70">channel</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">channel)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.left_motor </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> CANMotorDriver(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.can, </span><span style="color:#E36209;--shiki-dark:#FFAB70">motor_id</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.right_motor </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> CANMotorDriver(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.can, </span><span style="color:#E36209;--shiki-dark:#FFAB70">motor_id</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.cmd_sub </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.create_subscription(</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            Twist, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'/cmd_vel'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.cmd_callback, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">10</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.odom_pub </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.create_publisher(Odometry, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'/odom'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">10</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.joint_pub </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.create_publisher(JointState, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'/joint_states'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">10</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.can.start()</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.create_timer(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0.02</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.publish_feedback)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> cmd_callback</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, msg):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        R </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.get_parameter(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'wheel_radius'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">).value</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        L </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.get_parameter(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'wheel_separation'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">).value</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        v </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> msg.linear.x</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        omega </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> msg.angular.z</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        v_left </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (v </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> omega </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> L </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> R</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        v_right </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (v </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> omega </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> L </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> R</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        left_rpm </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> v_left </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 60</span><span style="color:#D73A49;--shiki-dark:#F97583"> /</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 3.14159</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        right_rpm </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> v_right </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 60</span><span style="color:#D73A49;--shiki-dark:#F97583"> /</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#D73A49;--shiki-dark:#F97583"> *</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 3.14159</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.left_motor.set_velocity(left_rpm)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.right_motor.set_velocity(right_rpm)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> publish_feedback</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        joint_msg </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> JointState()</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        joint_msg.header.stamp </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.get_clock().now().to_msg()</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        joint_msg.name </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'left_wheel_joint'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'right_wheel_joint'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        joint_msg.position </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.left_motor.feedback[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'position'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.right_motor.feedback[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'position'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        ]</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        joint_msg.velocity </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.left_motor.feedback[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'velocity'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.right_motor.feedback[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'velocity'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        ]</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.joint_pub.publish(joint_msg)</span></span></code></pre></div><h2 id="小结">小结</h2><ul>
+<li>串口通信简单直观，适合传感器和低速设备接口，帧协议设计需考虑同步和校验</li>
+<li>CAN 总线提供优先级仲裁、错误检测和多节点支持，是机器人底盘控制的首选协议</li>
+<li>CANopen 在 CAN 之上定义了标准化的设备通信模型，简化了多设备集成</li>
+<li>硬件驱动节点将底层通信协议封装为 ROS2 话题和服务，实现控制算法与硬件解耦</li>
+<li>通信协议选择需综合考虑速率、距离、节点数量和实时性要求</li>
+<li>工业级部署建议使用 CAN FD 或 EtherCAT 以获得更高的带宽和实时性</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../hardware-and-systems/ros-and-middleware/communication-protocols/dds-realtime.html"><span class="label">Previous</span>DDS 与实时通信</a><a class="next" href="../../../hardware-and-systems/ros-and-middleware/communication-protocols/multi-robot-comm.html"><span class="label">Next</span>多机器人通信架构</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#串口通信实现" data-outline-link="串口通信实现">串口通信实现</a></li><li class="depth-2"><a href="#can-总线通信" data-outline-link="can-总线通信">CAN 总线通信</a></li><li class="depth-2"><a href="#canopen-协议栈" data-outline-link="canopen-协议栈">CANopen 协议栈</a></li><li class="depth-2"><a href="#ros2-硬件驱动集成" data-outline-link="ros2-硬件驱动集成">ROS2 硬件驱动集成</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

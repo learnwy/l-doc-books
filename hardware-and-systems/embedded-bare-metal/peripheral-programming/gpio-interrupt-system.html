@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>GPIO 与中断系统 · 硬件、机器人与安全工程</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:硬件、机器人与安全工程" data-pagefind-meta="slug:hardware-and-systems">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">硬件、机器人与安全工程</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item active" href="../../../hardware-and-systems/index.html" aria-current="page" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../hardware-and-systems/index.html">硬件、机器人与安全工程</a><a class="back-to-hubs" href="../../../hardware-and-systems/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../hardware-and-systems/embedded-bare-metal/index.html">嵌入式裸机开发</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="hardware-and-systems"><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:embedded-bare-metal/microcontroller-fundamentals"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/embedded-bare-metal/microcontroller-fundamentals/index.html">微控制器基础</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/microcontroller-fundamentals/mcu-architecture-cortex-m.html">MCU 架构与 ARM Cortex-M 内核</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/microcontroller-fundamentals/memory-map-boot-process.html">存储器映射与启动流程</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/microcontroller-fundamentals/clock-system-power-management.html">时钟系统与电源管理</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:embedded-bare-metal/peripheral-programming" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/embedded-bare-metal/peripheral-programming/index.html">外设编程</a></summary><ul><li class="leaf"><a class="leaf-title active" href="../../../hardware-and-systems/embedded-bare-metal/peripheral-programming/gpio-interrupt-system.html">GPIO 与中断系统</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/peripheral-programming/timer-pwm-adc.html">定时器、PWM 与 ADC</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/peripheral-programming/communication-interface-drivers.html">通信接口驱动开发</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:embedded-bare-metal/rtos-basics"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/embedded-bare-metal/rtos-basics/index.html">RTOS 基础</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/rtos-basics/rtos-scheduling-principles.html">RTOS 调度原理</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/rtos-basics/task-management-synchronization.html">任务管理与同步机制</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/rtos-basics/freertos-practice.html">FreeRTOS 实践</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:embedded-bare-metal/debugging-optimization"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/embedded-bare-metal/debugging-optimization/index.html">调试与优化</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/debugging-optimization/jtag-swd-debugging.html">JTAG/SWD 调试原理</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/debugging-optimization/performance-power-optimization.html">性能分析与功耗优化</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/debugging-optimization/firmware-security-ota.html">固件安全与 OTA 更新</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part I · 硬件电子</span><span>嵌入式裸机开发</span><span>外设编程</span><span>GPIO 与中断系统</span></nav>
+    <article class="content prose"><h1 id="gpio-与中断系统">GPIO 与中断系统</h1><h2 id="gpio-基本概念">GPIO 基本概念</h2><p>通用输入输出（GPIO）是 MCU 与外部世界交互的最基础接口。每个 GPIO 引脚都是一个可编程的数字 I/O 端口，通过配置其模式、速度和上下拉电阻来适应不同的硬件连接需求。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    PIN[物理引脚] --&gt; PAD[焊盘保护电路]&#10;    PAD --&gt; MUX{复用选择器}&#10;    MUX --&gt;|GPIO| GPIO_BLOCK[GPIO 功能块]&#10;    MUX --&gt;|AF0-AF15| PERIPH[外设功能]&#10;    GPIO_BLOCK --&gt; INPUT[输入驱动器]&#10;    GPIO_BLOCK --&gt; OUTPUT[输出驱动器]&#10;    INPUT --&gt; IDR[输入数据寄存器 IDR]&#10;    OUTPUT --&gt; ODR[输出数据寄存器 ODR]&#10;    OUTPUT --&gt; BSRR[位设置/复位寄存器 BSRR]"></pre><table>
+<thead>
+<tr>
+<th>寄存器</th>
+<th>名称</th>
+<th>功能</th>
+<th>位宽</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GPIOx_MODER</td>
+<td>模式寄存器</td>
+<td>输入/输出/复用/模拟（每引脚 2 位）</td>
+<td>32 位</td>
+</tr>
+<tr>
+<td>GPIOx_OTYPER</td>
+<td>输出类型</td>
+<td>推挽/开漏（每引脚 1 位）</td>
+<td>16 位</td>
+</tr>
+<tr>
+<td>GPIOx_OSPEEDR</td>
+<td>输出速度</td>
+<td>低/中/高/极高（每引脚 2 位）</td>
+<td>32 位</td>
+</tr>
+<tr>
+<td>GPIOx_PUPDR</td>
+<td>上下拉</td>
+<td>无/上拉/下拉（每引脚 2 位）</td>
+<td>32 位</td>
+</tr>
+<tr>
+<td>GPIOx_IDR</td>
+<td>输入数据</td>
+<td>读取引脚电平（只读）</td>
+<td>16 位</td>
+</tr>
+<tr>
+<td>GPIOx_ODR</td>
+<td>输出数据</td>
+<td>设置输出电平</td>
+<td>16 位</td>
+</tr>
+<tr>
+<td>GPIOx_BSRR</td>
+<td>位设置/复位</td>
+<td>原子操作设置或清除引脚（只写）</td>
+<td>32 位</td>
+</tr>
+<tr>
+<td>GPIOx_AFRL/H</td>
+<td>复用功能</td>
+<td>选择 AF0-AF15（每引脚 4 位）</td>
+<td>32 位 ×2</td>
+</tr>
+</tbody></table>
+<h2 id="gpio-工作模式">GPIO 工作模式</h2><h3 id="输入模式">输入模式</h3><p>输入模式下引脚通过施密特触发器读取外部电平：</p>
+<ul>
+<li><strong>浮空输入</strong>：无内部上下拉，引脚电平完全由外部决定，未连接时呈现不确定状态</li>
+<li><strong>上拉输入</strong>：内部上拉电阻（约 40 kΩ）使悬空引脚呈高电平</li>
+<li><strong>下拉输入</strong>：内部下拉电阻使悬空引脚呈低电平</li>
+</ul>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>V</mi><mtext>IH_min</mtext></msub><mo>≈</mo><mn>0.7</mn><mo>×</mo><msub><mi>V</mi><mtext>DD</mtext></msub><mo separator="true">,</mo><mspace width="1em"/><msub><mi>V</mi><mtext>IL_max</mtext></msub><mo>≈</mo><mn>0.3</mn><mo>×</mo><msub><mi>V</mi><mtext>DD</mtext></msub></mrow><annotation encoding="application/x-tex">V_{\text{IH\_min}} \approx 0.7 \times V_{\text{DD}}, \quad V_{\text{IL\_max}} \approx 0.3 \times V_{\text{DD}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0503em;vertical-align:-0.367em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.2222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.2222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">IH_min</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.367em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">0.7</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.0503em;vertical-align:-0.367em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.2222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.2222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">DD</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.2222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.2222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">IL_max</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.367em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">0.3</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.2222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.2222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">DD</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></div><h3 id="输出模式">输出模式</h3><p>输出模式配置引脚驱动外部负载：</p>
+<ul>
+<li><strong>推挽输出</strong>：P-MOS 和 N-MOS 交替导通，能主动驱动高电平和低电平</li>
+<li><strong>开漏输出</strong>：仅有 N-MOS 下拉能力，高电平需外部上拉电阻，适用于&quot;线与&quot;逻辑和电平转换</li>
+</ul>
+<p>输出速度配置影响引脚的压摆率（Slew Rate）和 EMI：</p>
+<table>
+<thead>
+<tr>
+<th>速度设置</th>
+<th>最大翻转频率</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>低速</td>
+<td>2 MHz</td>
+<td>LED、继电器</td>
+</tr>
+<tr>
+<td>中速</td>
+<td>25 MHz</td>
+<td>通用 I/O</td>
+</tr>
+<tr>
+<td>高速</td>
+<td>50 MHz</td>
+<td>SPI、I2S</td>
+</tr>
+<tr>
+<td>极高速</td>
+<td>100 MHz</td>
+<td>SDIO、高速外设</td>
+</tr>
+</tbody></table>
+<h3 id="复用功能模式">复用功能模式</h3><p>当引脚用作外设功能时（如 UART_TX、SPI_CLK），需配置为复用模式并选择对应的 AF 编号：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>GPIO 复用配置</mtext><mo>=</mo><mtext>MODER[AF]</mtext><mo>+</mo><mtext>AFR[AF_NUM]</mtext><mo>+</mo><mtext>OTYPER + OSPEEDR + PUPDR</mtext></mrow><annotation encoding="application/x-tex">\text{GPIO 复用配置} = \text{MODER[AF]} + \text{AFR[AF\_NUM]} + \text{OTYPER + OSPEEDR + PUPDR}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord">GPIO </span><span class="mord cjk_fallback">复用配置</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">MODER[AF]</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.06em;vertical-align:-0.31em;"></span><span class="mord text"><span class="mord">AFR[AF_NUM]</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord text"><span class="mord">OTYPER + OSPEEDR + PUPDR</span></span></span></span></span></span></div><p>每个引脚可映射多达 16 种复用功能（AF0-AF15），具体映射关系由芯片数据手册的&quot;Alternate Function Mapping&quot;表给出。</p>
+<h2 id="bsrr-原子操作">BSRR 原子操作</h2><p>GPIOx_BSRR（Bit Set/Reset Register）是 GPIO 编程中最重要的寄存器之一，它提供了无需关中断即可原子修改引脚电平的能力：</p>
+<ul>
+<li>低 16 位（BS[15:0]）：写 1 置位对应引脚（写 0 无效果）</li>
+<li>高 16 位（BR[15:0]）：写 1 清除对应引脚（写 0 无效果）</li>
+</ul>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>GPIOA-&gt;BSRR</mtext><mo>=</mo><mo stretchy="false">(</mo><mn>1</mn><mo>&lt;</mo><mo>&lt;</mo><mn>5</mn><mo stretchy="false">)</mo><mspace width="1em"/><mtext>→ PA5 置高</mtext></mrow><annotation encoding="application/x-tex">\text{GPIOA-&gt;BSRR} = (1 &lt;&lt; 5) \quad \text{→ PA5 置高}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7224em;vertical-align:-0.0391em;"></span><span class="mord text"><span class="mord">GPIOA-&gt;BSRR</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">5</span><span class="mclose">)</span><span class="mspace" style="margin-right:1em;"></span><span class="mord text"><span class="mord">→ PA5 </span><span class="mord cjk_fallback">置高</span></span></span></span></span></span></div><p> </p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>GPIOA-&gt;BSRR</mtext><mo>=</mo><mo stretchy="false">(</mo><mn>1</mn><mo>&lt;</mo><mo>&lt;</mo><mo stretchy="false">(</mo><mn>5</mn><mo>+</mo><mn>16</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mspace width="1em"/><mtext>→ PA5 置低</mtext></mrow><annotation encoding="application/x-tex">\text{GPIOA-&gt;BSRR} = (1 &lt;&lt; (5+16)) \quad \text{→ PA5 置低}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7224em;vertical-align:-0.0391em;"></span><span class="mord text"><span class="mord">GPIOA-&gt;BSRR</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">16</span><span class="mclose">))</span><span class="mspace" style="margin-right:1em;"></span><span class="mord text"><span class="mord">→ PA5 </span><span class="mord cjk_fallback">置低</span></span></span></span></span></span></div><p>相比直接操作 ODR（需要&quot;读-改-写&quot;三步），BSRR 的单次写入保证原子性，即使在中断嵌套场景下也不会出现数据竞争。</p>
+<h2 id="外部中断系统">外部中断系统</h2><h3 id="exti-架构">EXTI 架构</h3><p>外部中断/事件控制器（EXTI）监听 GPIO 引脚的电平变化并触发中断或事件：</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    PA0[PA0] --&gt; MUX0[SYSCFG_EXTICR&lt;br/&gt;引脚选择]&#10;    PB0[PB0] --&gt; MUX0&#10;    PC0[PC0] --&gt; MUX0&#10;    MUX0 --&gt; EXTI0[EXTI Line 0]&#10;    EXTI0 --&gt; EDGE[边沿检测&lt;br/&gt;上升/下降/双边沿]&#10;    EDGE --&gt; MASK{中断屏蔽?}&#10;    MASK --&gt;|未屏蔽| NVIC_IRQ[NVIC → CPU]&#10;    MASK --&gt;|事件模式| PULSE[事件脉冲 → 外设]"></pre><p>关键配置要素：</p>
+<ul>
+<li><strong>引脚映射</strong>：每条 EXTI 线只能连接一个端口的同编号引脚（PA0 或 PB0 或 PC0，不能同时选）</li>
+<li><strong>触发边沿</strong>：上升沿（RTSR）、下降沿（FTSR）、双边沿（两者都使能）</li>
+<li><strong>中断/事件选择</strong>：中断模式触发 CPU 响应，事件模式仅产生硬件脉冲（可唤醒 ADC 等外设）</li>
+</ul>
+<h3 id="exti-中断线分组">EXTI 中断线分组</h3><p>STM32 的 EXTI 中断在 NVIC 中的映射并非一一对应：</p>
+<table>
+<thead>
+<tr>
+<th>EXTI 线</th>
+<th>NVIC IRQ 编号</th>
+<th>共享情况</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>EXTI0</td>
+<td>EXTI0_IRQn</td>
+<td>独立</td>
+</tr>
+<tr>
+<td>EXTI1</td>
+<td>EXTI1_IRQn</td>
+<td>独立</td>
+</tr>
+<tr>
+<td>EXTI2</td>
+<td>EXTI2_IRQn</td>
+<td>独立</td>
+</tr>
+<tr>
+<td>EXTI3</td>
+<td>EXTI3_IRQn</td>
+<td>独立</td>
+</tr>
+<tr>
+<td>EXTI4</td>
+<td>EXTI4_IRQn</td>
+<td>独立</td>
+</tr>
+<tr>
+<td>EXTI5-9</td>
+<td>EXTI9_5_IRQn</td>
+<td>共享</td>
+</tr>
+<tr>
+<td>EXTI10-15</td>
+<td>EXTI15_10_IRQn</td>
+<td>共享</td>
+</tr>
+</tbody></table>
+<p>共享中断线的 ISR 内需通过检查 EXTI_PR（挂起寄存器）确定具体是哪条线触发了中断。</p>
+<h2 id="nvic-优先级管理">NVIC 优先级管理</h2><h3 id="优先级配置">优先级配置</h3><p>NVIC 支持可编程优先级，优先级数值越小优先级越高：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>有效优先级位</mtext><mo>=</mo><mn>4</mn><mtext>（STM32F4 实现）</mtext></mrow><annotation encoding="application/x-tex">\text{有效优先级位} = 4 \text{（STM32F4 实现）}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">有效优先级位</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">4</span><span class="mord text"><span class="mord cjk_fallback">（</span><span class="mord">STM32F4 </span><span class="mord cjk_fallback">实现）</span></span></span></span></span></span></div><div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>可用优先级数</mtext><mo>=</mo><msup><mn>2</mn><mn>4</mn></msup><mo>=</mo><mn>16</mn><mtext> 级</mtext></mrow><annotation encoding="application/x-tex">\text{可用优先级数} = 2^4 = 16 \text{ 级}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">可用优先级数</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8641em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">4</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">16</span><span class="mord text"><span class="mord"> </span><span class="mord cjk_fallback">级</span></span></span></span></span></span></div><p>优先级分组通过 AIRCR.PRIGROUP 字段配置：</p>
+<table>
+<thead>
+<tr>
+<th>分组方案</th>
+<th>抢占位数</th>
+<th>子优先位数</th>
+<th>抢占级数</th>
+<th>子优先级数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Group 0</td>
+<td>0</td>
+<td>4</td>
+<td>1</td>
+<td>16</td>
+</tr>
+<tr>
+<td>Group 1</td>
+<td>1</td>
+<td>3</td>
+<td>2</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Group 2</td>
+<td>2</td>
+<td>2</td>
+<td>4</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Group 3</td>
+<td>3</td>
+<td>1</td>
+<td>8</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Group 4</td>
+<td>4</td>
+<td>0</td>
+<td>16</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<h3 id="中断嵌套">中断嵌套</h3><p>抢占优先级不同的中断可以嵌套执行：高抢占优先级中断到来时，低优先级 ISR 被压栈暂停。设计嵌套中断时需注意：</p>
+<ul>
+<li>栈深度需足够容纳最大嵌套层数（每层约 32 字节自动压栈 + ISR 局部变量）</li>
+<li>ISR 执行时间应尽量短，长操作推迟到主循环或低优先级任务</li>
+<li>共享数据的访问需使用临界区保护或原子操作</li>
+</ul>
+<h2 id="中断响应流程">中断响应流程</h2><h3 id="硬件自动操作">硬件自动操作</h3><p>当中断被接受时，Cortex-M 硬件自动完成以下操作：</p>
+<ol>
+<li>压栈 8 个寄存器：xPSR、PC、LR、R12、R3、R2、R1、R0（8 × 4 = 32 字节）</li>
+<li>从向量表获取 ISR 入口地址加载到 PC</li>
+<li>更新 LR 为 EXC_RETURN 魔数值</li>
+<li>更新 IPSR 为当前异常编号</li>
+<li>切换到 Handler Mode</li>
+</ol>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>中断延迟</mtext><mo>=</mo><mtext>压栈时间</mtext><mo>+</mo><mtext>向量表读取</mtext><mo>=</mo><mn>12</mn><mtext> 周期（</mtext><mi>M</mi><mn>3</mn><mi mathvariant="normal">/</mi><mi>M</mi><mn>4</mn><mo separator="true">,</mo><mtext>零等待</mtext><mi>F</mi><mi>l</mi><mi>a</mi><mi>s</mi><mi>h</mi><mtext>）</mtext></mrow><annotation encoding="application/x-tex">\text{中断延迟} = \text{压栈时间} + \text{向量表读取} = 12 \text{ 周期}（M3/M4, 零等待 Flash）</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">中断延迟</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord text"><span class="mord cjk_fallback">压栈时间</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">向量表读取</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">12</span><span class="mord text"><span class="mord"> </span><span class="mord cjk_fallback">周期</span></span><span class="mord cjk_fallback">（</span><span class="mord mathnormal" style="margin-right:0.109em;">M</span><span class="mord">3/</span><span class="mord mathnormal" style="margin-right:0.109em;">M</span><span class="mord">4</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord cjk_fallback">零等待</span><span class="mord mathnormal" style="margin-right:0.1389em;">F</span><span class="mord mathnormal" style="margin-right:0.0197em;">l</span><span class="mord mathnormal">a</span><span class="mord mathnormal">s</span><span class="mord mathnormal">h</span><span class="mord cjk_fallback">）</span></span></span></span></span></div><h3 id="isr-编写规范">ISR 编写规范</h3><p>嵌入式 ISR 遵循&quot;快进快出&quot;原则：</p>
+<ul>
+<li><strong>禁止</strong>在 ISR 中使用阻塞操作（delay、等待信号量）</li>
+<li><strong>禁止</strong>调用非可重入的库函数（如 printf、malloc）</li>
+<li><strong>必须</strong>清除中断挂起标志（否则退出后立即重入）</li>
+<li><strong>推荐</strong>仅设置标志位或写入环形缓冲区，将处理逻辑延迟到主循环</li>
+</ul>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>ISR 时间预算</mtext><mo>≤</mo><mfrac><mn>1</mn><msub><mi>f</mi><mtext>中断频率</mtext></msub></mfrac><mo>−</mo><mtext>上下文切换开销</mtext></mrow><annotation encoding="application/x-tex">\text{ISR 时间预算} \leq \frac{1}{f_{\text{中断频率}}} - \text{上下文切换开销}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8193em;vertical-align:-0.136em;"></span><span class="mord text"><span class="mord">ISR </span><span class="mord cjk_fallback">时间预算</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.2019em;vertical-align:-0.8804em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.1076em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord cjk_fallback mtight">中断频率</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8804em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">上下文切换开销</span></span></span></span></span></span></div><h2 id="防抖与滤波">防抖与滤波</h2><p>物理按键的机械弹跳会在数毫秒内产生多次电平翻转，直接使用 EXTI 会触发多次中断：</p>
+<table>
+<thead>
+<tr>
+<th>防抖方法</th>
+<th>原理</th>
+<th>延迟</th>
+<th>CPU 开销</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>软件延时</td>
+<td>检测边沿后等待 10-50 ms 再确认</td>
+<td>高</td>
+<td>低</td>
+</tr>
+<tr>
+<td>定时器采样</td>
+<td>每 5 ms 采样引脚，连续 N 次一致视为有效</td>
+<td>中</td>
+<td>低</td>
+</tr>
+<tr>
+<td>RC 滤波</td>
+<td>硬件 RC 低通滤波器消除高频抖动</td>
+<td>取决于 RC 常数</td>
+<td>零</td>
+</tr>
+<tr>
+<td>施密特触发</td>
+<td>迟滞比较器消除噪声边沿</td>
+<td>极低</td>
+<td>零</td>
+</tr>
+</tbody></table>
+<p>推荐的软件防抖策略结合定时器中断实现非阻塞采样，每次采样记录引脚状态到移位寄存器，当连续多次采样值相同时确认状态变化。</p>
+</article>
+    <nav class="pager"><a class="prev" href="../../../hardware-and-systems/embedded-bare-metal/peripheral-programming/index.html"><span class="label">Previous</span>外设编程</a><a class="next" href="../../../hardware-and-systems/embedded-bare-metal/peripheral-programming/timer-pwm-adc.html"><span class="label">Next</span>定时器、PWM 与 ADC</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#gpio-基本概念" data-outline-link="gpio-基本概念">GPIO 基本概念</a></li><li class="depth-2"><a href="#gpio-工作模式" data-outline-link="gpio-工作模式">GPIO 工作模式</a></li><li class="depth-3"><a href="#输入模式" data-outline-link="输入模式">输入模式</a></li><li class="depth-3"><a href="#输出模式" data-outline-link="输出模式">输出模式</a></li><li class="depth-3"><a href="#复用功能模式" data-outline-link="复用功能模式">复用功能模式</a></li><li class="depth-2"><a href="#bsrr-原子操作" data-outline-link="bsrr-原子操作">BSRR 原子操作</a></li><li class="depth-2"><a href="#外部中断系统" data-outline-link="外部中断系统">外部中断系统</a></li><li class="depth-3"><a href="#exti-架构" data-outline-link="exti-架构">EXTI 架构</a></li><li class="depth-3"><a href="#exti-中断线分组" data-outline-link="exti-中断线分组">EXTI 中断线分组</a></li><li class="depth-2"><a href="#nvic-优先级管理" data-outline-link="nvic-优先级管理">NVIC 优先级管理</a></li><li class="depth-3"><a href="#优先级配置" data-outline-link="优先级配置">优先级配置</a></li><li class="depth-3"><a href="#中断嵌套" data-outline-link="中断嵌套">中断嵌套</a></li><li class="depth-2"><a href="#中断响应流程" data-outline-link="中断响应流程">中断响应流程</a></li><li class="depth-3"><a href="#硬件自动操作" data-outline-link="硬件自动操作">硬件自动操作</a></li><li class="depth-3"><a href="#isr-编写规范" data-outline-link="isr-编写规范">ISR 编写规范</a></li><li class="depth-2"><a href="#防抖与滤波" data-outline-link="防抖与滤波">防抖与滤波</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>PPO 与 TRPO · AI 系统深度剖析</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:AI 系统深度剖析" data-pagefind-meta="slug:ai-systems-deep-dive">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">AI 系统深度剖析</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item active" href="../../../ai-systems-deep-dive/index.html" aria-current="page" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../ai-systems-deep-dive/index.html">AI 系统深度剖析</a><a class="back-to-hubs" href="../../../ai-systems-deep-dive/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../ai-systems-deep-dive/reinforcement-learning/index.html">强化学习 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="ai-systems-deep-dive"><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:reinforcement-learning/rl-foundations"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/reinforcement-learning/rl-foundations/index.html">强化学习基础 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/rl-foundations/rl-problem-formulation.html">强化学习问题建模</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/rl-foundations/markov-decision-process.html">马尔可夫决策过程</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/rl-foundations/reward-design.html">奖励设计</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/rl-foundations/exploration-exploitation.html">探索与利用</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:reinforcement-learning/value-based-methods"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/reinforcement-learning/value-based-methods/index.html">基于值的方法 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/value-based-methods/dynamic-programming.html">动态规划</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/value-based-methods/monte-carlo-methods.html">蒙特卡洛方法</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/value-based-methods/temporal-difference.html">时序差分学习</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/value-based-methods/q-learning-sarsa.html">Q-learning 与 SARSA</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:reinforcement-learning/policy-based-methods" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/reinforcement-learning/policy-based-methods/index.html">基于策略的方法 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/policy-based-methods/policy-gradient.html">策略梯度</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/policy-based-methods/actor-critic.html">Actor-Critic 架构</a></li><li class="leaf"><a class="leaf-title active" href="../../../ai-systems-deep-dive/reinforcement-learning/policy-based-methods/ppo-and-trpo.html">PPO 与 TRPO</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/policy-based-methods/soft-actor-critic.html">Soft Actor-Critic 柔性演员-评论家算法</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:reinforcement-learning/deep-reinforcement-learning"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/reinforcement-learning/deep-reinforcement-learning/index.html">深度强化学习 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/deep-reinforcement-learning/dqn-and-variants.html">DQN 及其变体</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/deep-reinforcement-learning/continuous-control.html">连续控制</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/deep-reinforcement-learning/model-based-rl.html">基于模型的强化学习</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/deep-reinforcement-learning/offline-rl.html">离线强化学习</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:reinforcement-learning/multi-agent-rl"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/reinforcement-learning/multi-agent-rl/index.html">多智能体强化学习 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/multi-agent-rl/marl-foundations.html">MARL 基础</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/multi-agent-rl/cooperative-rl.html">合作强化学习</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/multi-agent-rl/competitive-rl.html">竞争强化学习</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/multi-agent-rl/emergent-behavior.html">涌现行为</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:reinforcement-learning/rl-applications"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/reinforcement-learning/rl-applications/index.html">强化学习应用 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/rl-applications/game-ai.html">游戏 AI</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/rl-applications/robotics-control.html">机器人控制</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/rl-applications/rlhf-connection.html">RLHF 与大模型对齐</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/rl-applications/autonomous-decision.html">自主决策系统</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part I · 机器学习与深度学习 (ML &amp; Deep Learning)</span><span>强化学习 简介</span><span>基于策略的方法 简介</span><span>PPO 与 TRPO</span></nav>
+    <article class="content prose"><h1 id="ppo-与-trpo">PPO 与 TRPO</h1><h2 id="核心概念">核心概念</h2><p>PPO（Proximal Policy Optimization）和 TRPO（Trust Region Policy Optimization）是当前最主流的策略优化算法，它们解决了策略梯度方法中的一个核心问题：如何控制策略更新的步幅？朴素的策略梯度可能因为一步过大的更新而导致策略性能崩溃——新策略在某些状态上的行为完全偏离，产生的数据质量急剧下降，形成恶性循环。TRPO 和 PPO 通过不同的机制限制策略变化幅度，确保每次更新都是&quot;安全&quot;的。</p>
+<p>TRPO 提出了信赖域（Trust Region）的思想，通过 KL 散度约束新旧策略的距离。PPO 则用更简单的裁剪（Clipping）机制实现了类似的效果，在保持 TRPO 稳定性的同时大幅简化了实现和计算。PPO 因其优秀的性能-复杂度平衡，成为了工业界和学术界最广泛使用的策略优化算法。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[策略梯度的步幅问题] --&gt; B{解决方案}&#10;    B --&gt; C[TRPO: KL 约束优化]&#10;    B --&gt; D[PPO: 裁剪替代目标]&#10;    C --&gt; E[二阶优化]&#10;    C --&gt; F[共轭梯度法]&#10;    D --&gt; G[一阶优化]&#10;    D --&gt; H[简单高效]&#10;    E --&gt; I[计算成本高]&#10;    H --&gt; J[工业标准]"></pre><p>TRPO 和 PPO 的对比：</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>TRPO</th>
+<th>PPO-Clip</th>
+<th>PPO-Penalty</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>约束方式</td>
+<td>硬 KL 约束</td>
+<td>裁剪比率</td>
+<td>自适应 KL 惩罚</td>
+</tr>
+<tr>
+<td>优化方法</td>
+<td>共轭梯度 + 线搜索</td>
+<td>SGD</td>
+<td>SGD</td>
+</tr>
+<tr>
+<td>实现复杂度</td>
+<td>高</td>
+<td>低</td>
+<td>中</td>
+</tr>
+<tr>
+<td>每步计算量</td>
+<td>高（二阶信息）</td>
+<td>低（一阶梯度）</td>
+<td>低</td>
+</tr>
+<tr>
+<td>单调改进保证</td>
+<td>理论保证</td>
+<td>经验有效</td>
+<td>近似保证</td>
+</tr>
+<tr>
+<td>实际采用度</td>
+<td>较少</td>
+<td>非常广泛</td>
+<td>较少</td>
+</tr>
+</tbody></table>
+<h2 id="trpo-信赖域优化">TRPO 信赖域优化</h2><p>TRPO 的理论基础是<strong>单调改进定理（Monotonic Improvement Theorem）</strong>。该定理证明：如果新策略 π&#39; 在所有状态上的优势函数 A^π(s,a) 的期望为非负，则新策略的性能不低于旧策略。但直接优化这一条件需要遍历所有状态，不可行。</p>
+<p>TRPO 将其转化为一个有约束优化问题：最大化替代目标函数 L^{CPI}(θ) = E<em>t[π</em>θ(a<em>t|s_t)/π</em>{θ<em>old}(a_t|s_t) · A_t]，受约束 E_t[KL(π</em>{θ<em>old}(·|s_t) || π</em>θ(·|s_t))] ≤ δ。</p>
+<p>替代目标函数中的概率比 r<em>t(θ) = π</em>θ(a<em>t|s_t)/π</em>{θ_old}(a_t|s_t) 使得可以用旧策略收集的数据来评估新策略（离策略评估）。KL 散度约束确保新旧策略不会差距太大，保证替代目标是真实目标的良好近似。</p>
+<p>TRPO 使用<strong>共轭梯度法（Conjugate Gradient）</strong> 近似求解约束优化问题，避免了显式计算和存储 Fisher 信息矩阵（Hessian 矩阵的自然梯度版本）。然后通过<strong>线搜索（Line Search）</strong> 回退到满足 KL 约束的步长。</p>
+<p>虽然 TRPO 有严格的理论保证，但共轭梯度和线搜索的实现复杂度高，且不容易与多 GPU 并行训练结合。这些实际限制催生了 PPO 的诞生。</p>
+<h2 id="ppo-裁剪目标函数">PPO 裁剪目标函数</h2><p>PPO-Clip 是 PPO 的核心变体，通过裁剪概率比来限制策略更新幅度：</p>
+<p>L^{CLIP}(θ) = E_t[min(r_t(θ)·A_t, clip(r_t(θ), 1-ε, 1+ε)·A_t)]</p>
+<p>其中 ε 是裁剪参数（通常为 0.2）。这个目标函数的精妙之处在于：</p>
+<p>当 A_t &gt; 0（动作优于平均）时，目标鼓励增加该动作的概率（r_t 增大），但 r_t 被裁剪在 1+ε 以内，防止概率增加过多。当 A_t &lt; 0（动作差于平均）时，目标鼓励降低该动作的概率（r_t 减小），但 r_t 被裁剪在 1-ε 以上，防止概率降低过多。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    A[概率比 r_t] --&gt; B{A_t &gt; 0?}&#10;    B --&gt;|是| C[min: r_t 被上界 1+ε 裁剪]&#10;    B --&gt;|否| D[min: r_t 被下界 1-ε 裁剪]&#10;    C --&gt; E[防止贪心增加]&#10;    D --&gt; F[防止过度惩罚]&#10;    E --&gt; G[稳定策略更新]&#10;    F --&gt; G"></pre><p>PPO 的完整训练流程包括：用当前策略收集一批经验 → 计算 GAE 优势估计 → 对同一批数据进行多个 epoch 的小批量 SGD 更新（通常 3-10 个 epoch）→ 丢弃旧数据，用更新后的策略重新采样。多 epoch 复用数据是 PPO 的一个重要实践——虽然数据来自旧策略，但裁剪机制限制了更新幅度，使得旧数据仍然有效。</p>
+<table>
+<thead>
+<tr>
+<th>PPO 超参数</th>
+<th>典型值</th>
+<th>影响</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>裁剪参数 ε</td>
+<td>0.1-0.3</td>
+<td>控制策略变化幅度</td>
+</tr>
+<tr>
+<td>GAE λ</td>
+<td>0.95-0.99</td>
+<td>偏差-方差权衡</td>
+</tr>
+<tr>
+<td>折扣因子 γ</td>
+<td>0.99</td>
+<td>长期视野</td>
+</tr>
+<tr>
+<td>小批量大小</td>
+<td>64-4096</td>
+<td>梯度估计质量</td>
+</tr>
+<tr>
+<td>训练 epoch 数</td>
+<td>3-10</td>
+<td>数据复用程度</td>
+</tr>
+<tr>
+<td>学习率</td>
+<td>3e-4</td>
+<td>参数更新步幅</td>
+</tr>
+</tbody></table>
+<h2 id="ppo-实践与调优">PPO 实践与调优</h2><p>PPO 的实际性能高度依赖于正确的实现细节和超参数调优。以下是经过大量实践验证的关键技巧。</p>
+<p><strong>优势标准化</strong>：对每个小批量内的优势估计进行标准化（减均值除标准差），使梯度幅度与任务奖励尺度无关。这是 PPO 稳定训练最重要的技巧之一。</p>
+<p><strong>价值函数裁剪</strong>：类似于策略裁剪，对 Critic 的价值函数更新也进行裁剪，防止价值估计的剧烈变化。但实际效果存在争议，部分研究显示这一技巧并不总是有益的。</p>
+<p><strong>梯度范数裁剪</strong>：将梯度的 L2 范数限制在最大值（通常 0.5）以内，防止梯度爆炸导致的不稳定更新。</p>
+<p><strong>学习率退火</strong>：线性衰减学习率到零，在训练后期使策略更新越来越保守，有助于最终策略的精细调优。</p>
+<p><strong>正交初始化</strong>：用正交矩阵初始化网络权重（增益因子为 √2），策略输出层使用较小的增益（0.01），价值输出层使用增益 1。这种初始化使得初始策略接近均匀随机，有利于早期探索。</p>
+<p>PPO 在 Atari 游戏、MuJoCo 连续控制、RLHF（大语言模型对齐）等众多领域都展现了强大的性能。它的成功在于找到了理论严谨性和实现简洁性之间的最佳平衡点。</p>
+<h2 id="小结">小结</h2><pre class="mermaid" data-diagram-type="mindmap" data-source="mindmap&#10;  root((PPO 与 TRPO))&#10;    TRPO&#10;      信赖域&#10;      KL 约束&#10;      单调改进&#10;    PPO-Clip&#10;      裁剪目标&#10;      一阶优化&#10;      多 epoch 复用&#10;    实践技巧&#10;      优势标准化&#10;      梯度裁剪&#10;      学习率退火&#10;    应用广度&#10;      游戏 AI&#10;      机器人&#10;      RLHF"></pre><ul>
+<li>TRPO 通过 KL 散度约束保证策略更新的单调改进，但实现复杂</li>
+<li>PPO-Clip 通过裁剪概率比实现类似的更新约束，极大简化了实现</li>
+<li>PPO 的核心超参数是裁剪参数 ε（控制更新幅度）和 GAE λ（偏差-方差权衡）</li>
+<li>多 epoch 复用数据是 PPO 高样本效率的关键，裁剪机制保证了旧数据的有效性</li>
+<li>优势标准化、梯度裁剪和正交初始化是 PPO 稳定训练的核心实践技巧</li>
+<li>PPO 是当前最广泛使用的策略优化算法，在游戏、控制和 RLHF 中均表现优秀</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../ai-systems-deep-dive/reinforcement-learning/policy-based-methods/actor-critic.html"><span class="label">Previous</span>Actor-Critic 架构</a><a class="next" href="../../../ai-systems-deep-dive/reinforcement-learning/policy-based-methods/soft-actor-critic.html"><span class="label">Next</span>Soft Actor-Critic 柔性演员-评论家算法</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#trpo-信赖域优化" data-outline-link="trpo-信赖域优化">TRPO 信赖域优化</a></li><li class="depth-2"><a href="#ppo-裁剪目标函数" data-outline-link="ppo-裁剪目标函数">PPO 裁剪目标函数</a></li><li class="depth-2"><a href="#ppo-实践与调优" data-outline-link="ppo-实践与调优">PPO 实践与调优</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>LLM 如何处理 Prompt · AI 工程师 L2 → L3+ 路线</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:AI 工程师 L2 → L3+ 路线" data-pagefind-meta="slug:ai-engineering-l3">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">AI 工程师 L2 → L3+ 路线</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item active" href="../../../ai-engineering-l3/index.html" aria-current="page" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../ai-engineering-l3/index.html">AI 工程师 L2 → L3+ 路线</a><a class="back-to-hubs" href="../../../ai-engineering-l3/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../ai-engineering-l3/prompt-engineering/index.html">Prompt Engineering &amp; Design 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="ai-engineering-l3"><li class="chapter"><details class="folder-collapse" data-sb-key="ai-engineering-l3:folder:prompt-engineering/prompt-fundamentals" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-engineering-l3/prompt-engineering/prompt-fundamentals/index.html">Prompt 基础原理 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/prompt-engineering/prompt-fundamentals/what-is-prompt-engineering.html">什么是 Prompt Engineering</a></li><li class="leaf"><a class="leaf-title active" href="../../../ai-engineering-l3/prompt-engineering/prompt-fundamentals/how-llms-process-prompts.html">LLM 如何处理 Prompt</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/prompt-engineering/prompt-fundamentals/token-and-context-window.html">Token 与上下文窗口</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/prompt-engineering/prompt-fundamentals/prompt-anatomy.html">Prompt 解剖学</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-engineering-l3:folder:prompt-engineering/core-techniques"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-engineering-l3/prompt-engineering/core-techniques/index.html">核心提示技巧 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/prompt-engineering/core-techniques/zero-shot-and-few-shot.html">Zero-Shot 与 Few-Shot</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/prompt-engineering/core-techniques/chain-of-thought.html">思维链 (Chain of Thought)</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/prompt-engineering/core-techniques/role-playing-and-persona.html">角色扮演与人设</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/prompt-engineering/core-techniques/output-format-control.html">输出格式控制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-engineering-l3:folder:prompt-engineering/system-prompt-design"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-engineering-l3/prompt-engineering/system-prompt-design/index.html">系统提示词设计 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/prompt-engineering/system-prompt-design/system-prompt-architecture.html">系统提示词架构</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/prompt-engineering/system-prompt-design/instruction-hierarchy.html">指令层级与优先级</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/prompt-engineering/system-prompt-design/constraint-and-guardrails.html">约束与护栏</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/prompt-engineering/system-prompt-design/dynamic-context-injection.html">动态上下文注入</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-engineering-l3:folder:prompt-engineering/advanced-patterns"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-engineering-l3/prompt-engineering/advanced-patterns/index.html">高级 Prompt 模式 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/prompt-engineering/advanced-patterns/decomposition-and-planning.html">任务分解与规划</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/prompt-engineering/advanced-patterns/self-reflection-and-critique.html">自我反思与批判</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/prompt-engineering/advanced-patterns/multi-turn-conversation-design.html">多轮对话设计</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/prompt-engineering/advanced-patterns/tool-use-prompting.html">工具调用提示</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-engineering-l3:folder:prompt-engineering/evaluation-and-iteration"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-engineering-l3/prompt-engineering/evaluation-and-iteration/index.html">评估与迭代 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/prompt-engineering/evaluation-and-iteration/prompt-evaluation-methods.html">Prompt 评估方法</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/prompt-engineering/evaluation-and-iteration/ab-testing-and-comparison.html">A/B 测试与对比</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/prompt-engineering/evaluation-and-iteration/prompt-versioning.html">Prompt 版本管理</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/prompt-engineering/evaluation-and-iteration/production-prompt-ops.html">生产环境 Prompt 运维</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part I · Foundations</span><span>Prompt Engineering &amp; Design 简介</span><span>Prompt 基础原理 简介</span><span>LLM 如何处理 Prompt</span></nav>
+    <article class="content prose"><h1 id="llm-如何处理-prompt">LLM 如何处理 Prompt</h1><h2 id="核心概念">核心概念</h2><p>大语言模型（LLM）接收到 Prompt 后，并不像人类一样&quot;理解&quot;语义，而是通过一系列精密的数学运算将输入文本转化为输出文本。理解这个处理过程，是有效设计 Prompt 的理论基础——你不需要成为机器学习专家，但需要建立足够的直觉来指导实践决策。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    A[原始文本] --&gt; B[Tokenization&lt;br/&gt;分词]&#10;    B --&gt; C[Embedding&lt;br/&gt;向量化]&#10;    C --&gt; D[Transformer&lt;br/&gt;注意力计算]&#10;    D --&gt; E[Logits&lt;br/&gt;概率分布]&#10;    E --&gt; F[Sampling&lt;br/&gt;采样]&#10;    F --&gt; G[输出 Token]&#10;    G --&gt;|循环| D"></pre><p>从宏观上看，LLM 处理 Prompt 的流程可以概括为：<strong>将文本切分为 Token → 将 Token 转化为数字向量 → 通过注意力机制计算 Token 之间的关系 → 生成下一个 Token 的概率分布 → 通过采样策略选择输出 Token → 将输出 Token 拼接回输入，重复以上过程</strong>。</p>
+<p>这个过程中的每一步都对 Prompt 的设计产生直接影响。</p>
+<hr>
+<h2 id="tokenization-文本的-数字化">Tokenization：文本的&quot;数字化&quot;</h2><h3 id="什么是-tokenization">什么是 Tokenization</h3><p>LLM 无法直接处理文字，它需要先将文字转化为数字。<strong>Tokenization</strong>（分词）就是这个转化过程——将原始文本拆分为一个个 <strong>Token</strong>（词元），每个 Token 对应一个整数 ID。</p>
+<div class="code-block-wrapper" data-lang="text" data-code="输入文本: &quot;Prompt Engineering 是一门新兴技能&quot;
+
+Tokenization 结果（示意）:
+[&quot;Prompt&quot;, &quot; Engineering&quot;, &quot; 是&quot;, &quot;一&quot;, &quot;门&quot;, &quot;新&quot;, &quot;兴&quot;, &quot;技&quot;, &quot;能&quot;]
+
+Token IDs（示意）:
+[42059, 17009, 11571, 1002, 8421, 3789, 5510, 2390, 4800]"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>输入文本: "Prompt Engineering 是一门新兴技能"</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Tokenization 结果（示意）:</span></span>
+<span class="line"><span>["Prompt", " Engineering", " 是", "一", "门", "新", "兴", "技", "能"]</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Token IDs（示意）:</span></span>
+<span class="line"><span>[42059, 17009, 11571, 1002, 8421, 3789, 5510, 2390, 4800]</span></span></code></pre></div><p>需要注意的关键点：</p>
+<p><strong>Token ≠ 词</strong>：一个英文单词可能被拆成多个 Token（如 &quot;tokenization&quot; → &quot;token&quot; + &quot;ization&quot;），而一个常见短语可能被合并为一个 Token。中文通常每 1-2 个字对应一个 Token。</p>
+<p><strong>空格和标点也是 Token 的一部分</strong>：空格通常被编码进后续 Token 的前缀中，标点符号独立成 Token。这意味着 Prompt 中的空行、缩进、标点都会消耗 Token 配额。</p>
+<p><strong>不同模型的 Tokenizer 不同</strong>：GPT-4 使用 cl100k_base，Claude 使用自己的 Tokenizer，Llama 使用 SentencePiece。同一段文本在不同模型上的 Token 数量可能不同。</p>
+<h3 id="对-prompt-设计的影响">对 Prompt 设计的影响</h3><p>Tokenization 的机制直接影响你的 Prompt 策略：</p>
+<table>
+<thead>
+<tr>
+<th>影响维度</th>
+<th>具体表现</th>
+<th>设计启示</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>成本</td>
+<td>Token 数量决定 API 调用费用</td>
+<td>精简 Prompt，避免冗余表述</td>
+</tr>
+<tr>
+<td>上下文容量</td>
+<td>Token 总数受上下文窗口限制</td>
+<td>合理分配 Prompt 和 Response 的 Token 预算</td>
+</tr>
+<tr>
+<td>中英文差异</td>
+<td>中文每字约 1-2 Token，英文每词约 1-1.5 Token</td>
+<td>中文 Prompt 在 Token 效率上可能略低于英文</td>
+</tr>
+<tr>
+<td>特殊字符</td>
+<td>代码、数学公式、特殊符号可能产生意外的 Token 拆分</td>
+<td>注意代码块和特殊格式对 Token 消耗的影响</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="注意力机制-token-如何-看到-彼此">注意力机制：Token 如何&quot;看到&quot;彼此</h2><h3 id="自注意力的工作原理">自注意力的工作原理</h3><p>Transformer 架构的核心是<strong>自注意力机制</strong>（Self-Attention）。它让模型中的每一个 Token 都能&quot;关注&quot;到输入序列中的所有其他 Token，并根据相关性分配不同的权重。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    subgraph 输入序列&#10;        T1[&quot;请&quot;]&#10;        T2[&quot;用&quot;]&#10;        T3[&quot;Python&quot;]&#10;        T4[&quot;写&quot;]&#10;        T5[&quot;一个&quot;]&#10;        T6[&quot;排序&quot;]&#10;        T7[&quot;函数&quot;]&#10;    end&#10;&#10;    T7 --&gt;|高权重| T6&#10;    T7 --&gt;|高权重| T4&#10;    T7 --&gt;|中权重| T3&#10;    T7 --&gt;|低权重| T1&#10;    T7 --&gt;|低权重| T2&#10;    T7 --&gt;|低权重| T5"></pre><p>上图是一个简化示意：当模型处理到&quot;函数&quot;这个 Token 时，它会回头&quot;看&quot;序列中的所有其他 Token。&quot;排序&quot;和&quot;写&quot;获得较高的注意力权重（因为它们与&quot;函数&quot;语义关联度高），而&quot;请&quot;和&quot;用&quot;获得较低的权重。</p>
+<p>在实际的 Transformer 中，这个过程通过 <strong>Query-Key-Value</strong>（QKV）矩阵运算实现：</p>
+<ol>
+<li>每个 Token 生成三个向量：<strong>Query</strong>（我在找什么）、<strong>Key</strong>（我是什么）、<strong>Value</strong>（我的内容是什么）</li>
+<li>通过 Query 和所有 Key 的点积计算注意力分数</li>
+<li>分数经过 Softmax 归一化后作为权重</li>
+<li>用权重对所有 Value 加权求和，得到该 Token 的最终表示</li>
+</ol>
+<h3 id="多头注意力">多头注意力</h3><p>实际的 LLM 不止有一个注意力&quot;头&quot;，而是有数十甚至上百个并行运行的注意力头。每个头关注不同维度的模式：</p>
+<ul>
+<li>某些头关注<strong>语法结构</strong>（主语-谓语-宾语的关系）</li>
+<li>某些头关注<strong>语义相似性</strong>（近义词、同主题词汇）</li>
+<li>某些头关注<strong>位置模式</strong>（相邻 Token、段落首尾）</li>
+<li>某些头关注<strong>指令跟随</strong>（识别&quot;请&quot;、&quot;要求&quot;等指令标记）</li>
+</ul>
+<h3 id="对-prompt-设计的影响">对 Prompt 设计的影响</h3><p>注意力机制的工作方式解释了许多 Prompt 设计经验：</p>
+<p><strong>词序很重要</strong>：注意力权重受位置影响。将最重要的指令放在 Prompt 的开头或结尾（而非中间），通常能获得更好的遵循度。这与&quot;Lost in the Middle&quot;现象直接相关。</p>
+<p><strong>结构化格式有效</strong>：使用标题、列表、分隔线等结构化元素，帮助注意力机制更容易识别和区分不同的语义单元。</p>
+<div class="code-block-wrapper" data-lang="text" data-code="低效（连续文本）：
+我需要你帮我写一个 Python 函数它的功能是对列表进行排序要求使用快速排序算法并且支持自定义比较函数输出要包含类型注解
+
+高效（结构化）：
+## 任务
+编写一个 Python 排序函数
+
+## 要求
+- 算法：快速排序
+- 支持自定义比较函数
+- 包含类型注解
+
+## 输入
+- 列表类型：List[T]
+- 比较函数：Callable[[T, T], int]（可选）"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>低效（连续文本）：</span></span>
+<span class="line"><span>我需要你帮我写一个 Python 函数它的功能是对列表进行排序要求使用快速排序算法并且支持自定义比较函数输出要包含类型注解</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>高效（结构化）：</span></span>
+<span class="line"><span>## 任务</span></span>
+<span class="line"><span>编写一个 Python 排序函数</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>## 要求</span></span>
+<span class="line"><span>- 算法：快速排序</span></span>
+<span class="line"><span>- 支持自定义比较函数</span></span>
+<span class="line"><span>- 包含类型注解</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>## 输入</span></span>
+<span class="line"><span>- 列表类型：List[T]</span></span>
+<span class="line"><span>- 比较函数：Callable[[T, T], int]（可选）</span></span></code></pre></div><p><strong>上下文长度影响注意力分布</strong>：当 Prompt 很长时，注意力资源被稀释。模型可能无法同等程度地关注所有内容。精简 Prompt 能让注意力更集中。</p>
+<hr>
+<h2 id="next-token-prediction-生成的核心机制">Next-Token Prediction：生成的核心机制</h2><h3 id="工作原理">工作原理</h3><p>LLM 的核心能力——文本生成——本质上是一个不断重复的 <strong>Next-Token Prediction</strong>（下一个 Token 预测）过程：</p>
+<pre class="mermaid" data-diagram-type="sequenceDiagram" data-source="sequenceDiagram&#10;    participant P as Prompt&#10;    participant M as 模型&#10;    participant O as 输出&#10;&#10;    P-&gt;&gt;M: &quot;天气晴朗,适合&quot;&#10;    M-&gt;&gt;M: 计算词表中每个 Token 的概率&#10;    M-&gt;&gt;O: 选择 &quot;出&quot; (p=0.35)&#10;    Note over M,O: 输入变为 &quot;天气晴朗,适合出&quot;&#10;    M-&gt;&gt;M: 再次计算概率&#10;    M-&gt;&gt;O: 选择 &quot;去&quot; (p=0.42)&#10;    Note over M,O: 输入变为 &quot;天气晴朗,适合出去&quot;&#10;    M-&gt;&gt;M: 继续...&#10;    M-&gt;&gt;O: 选择 &quot;散步&quot; (p=0.28)"></pre><p>每一步，模型都会：</p>
+<ol>
+<li>将当前所有 Token（原始 Prompt + 已生成的 Token）作为输入</li>
+<li>通过 Transformer 的多层注意力计算</li>
+<li>输出词表中每一个 Token 的概率分布（logits）</li>
+<li>根据采样策略从概率分布中选择一个 Token</li>
+<li>将选中的 Token 追加到序列末尾，重复步骤 1</li>
+</ol>
+<p>这个过程持续进行，直到模型生成一个特殊的结束标记（End-of-Sequence Token）或达到最大长度限制。</p>
+<h3 id="自回归的关键含义">自回归的关键含义</h3><p><strong>模型只能向前生成，无法&quot;回头修改&quot;</strong>。一旦某个 Token 被选中并追加到序列中，后续的所有生成都会基于这个 Token。如果第一个 Token 选错了方向，后续可能越走越偏。</p>
+<p>这对 Prompt 设计的启示是深远的：</p>
+<ul>
+<li><strong>引导模型&quot;先思考再回答&quot;</strong>（Chain-of-Thought）可以显著提升输出质量，因为思考过程中生成的 Token 为后续推理提供了正确的上下文基础。</li>
+<li><strong>要求模型输出结构化格式</strong>（如 JSON）时，模型的生成顺序会影响正确性——先生成的字段可以被后续字段参考。</li>
+<li><strong>Prompt 的最后一句话尤为重要</strong>，因为它直接影响模型生成的第一个 Token，而第一个 Token 会影响后续所有 Token。</li>
+</ul>
+<hr>
+<h2 id="temperature-与采样策略">Temperature 与采样策略</h2><h3 id="temperature-的作用">Temperature 的作用</h3><p>模型在每一步生成的并不是一个确定的 Token，而是一个概率分布。<strong>Temperature</strong> 参数控制这个概率分布的&quot;尖锐程度&quot;：</p>
+<table>
+<thead>
+<tr>
+<th>Temperature 值</th>
+<th>概率分布特征</th>
+<th>输出特征</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>始终选择最高概率</td>
+<td>确定性、可复现</td>
+<td>代码生成、数据提取</td>
+</tr>
+<tr>
+<td>0.1 - 0.3</td>
+<td>接近贪心，偶有变化</td>
+<td>高度一致、略有创造性</td>
+<td>翻译、摘要</td>
+</tr>
+<tr>
+<td>0.5 - 0.7</td>
+<td>中等随机性</td>
+<td>平衡一致性与多样性</td>
+<td>通用对话、写作辅助</td>
+</tr>
+<tr>
+<td>0.8 - 1.0</td>
+<td>较高随机性</td>
+<td>多样、富有创造性</td>
+<td>创意写作、头脑风暴</td>
+</tr>
+<tr>
+<td>&gt; 1.0</td>
+<td>高度随机</td>
+<td>不可预测、可能不连贯</td>
+<td>极少使用</td>
+</tr>
+</tbody></table>
+<div class="code-block-wrapper" data-lang="text" data-code="Temperature = 0 时：
+输入: &quot;最好的编程语言是&quot;
+输出: &quot;Python，因为它简洁、易学、生态丰富。&quot; （每次相同）
+
+Temperature = 1.0 时：
+输入: &quot;最好的编程语言是&quot;
+输出 1: &quot;一个永远没有定论的话题，每种语言都有其独特的魅力。&quot;
+输出 2: &quot;取决于你的使用场景——Web 开发选 JavaScript，数据科学选 Python。&quot;
+输出 3: &quot;Rust，因为它在安全性和性能之间取得了完美平衡。&quot;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>Temperature = 0 时：</span></span>
+<span class="line"><span>输入: "最好的编程语言是"</span></span>
+<span class="line"><span>输出: "Python，因为它简洁、易学、生态丰富。" （每次相同）</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Temperature = 1.0 时：</span></span>
+<span class="line"><span>输入: "最好的编程语言是"</span></span>
+<span class="line"><span>输出 1: "一个永远没有定论的话题，每种语言都有其独特的魅力。"</span></span>
+<span class="line"><span>输出 2: "取决于你的使用场景——Web 开发选 JavaScript，数据科学选 Python。"</span></span>
+<span class="line"><span>输出 3: "Rust，因为它在安全性和性能之间取得了完美平衡。"</span></span></code></pre></div><h3 id="top-p-核采样">Top-p（核采样）</h3><p><strong>Top-p</strong> 是另一种控制采样的策略。它不直接调整概率分布，而是设定一个累积概率阈值，只从累积概率达到阈值的最小 Token 集合中采样：</p>
+<div class="code-block-wrapper" data-lang="text" data-code="模型输出的 Token 概率分布：
+  &quot;Python&quot;   → 0.35
+  &quot;JavaScript&quot; → 0.25
+  &quot;Rust&quot;     → 0.15
+  &quot;Go&quot;       → 0.10
+  &quot;Java&quot;     → 0.08
+  &quot;C++&quot;      → 0.04
+  &quot;Ruby&quot;     → 0.03
+
+Top-p = 0.75 时：
+  候选集 = {&quot;Python&quot;, &quot;JavaScript&quot;, &quot;Rust&quot;} (0.35 + 0.25 + 0.15 = 0.75)
+  从这三个中按归一化概率采样
+
+Top-p = 0.5 时：
+  候选集 = {&quot;Python&quot;, &quot;JavaScript&quot;} (0.35 + 0.25 = 0.60 ≥ 0.5)
+  从这两个中按归一化概率采样"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>模型输出的 Token 概率分布：</span></span>
+<span class="line"><span>  "Python"   → 0.35</span></span>
+<span class="line"><span>  "JavaScript" → 0.25</span></span>
+<span class="line"><span>  "Rust"     → 0.15</span></span>
+<span class="line"><span>  "Go"       → 0.10</span></span>
+<span class="line"><span>  "Java"     → 0.08</span></span>
+<span class="line"><span>  "C++"      → 0.04</span></span>
+<span class="line"><span>  "Ruby"     → 0.03</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Top-p = 0.75 时：</span></span>
+<span class="line"><span>  候选集 = {"Python", "JavaScript", "Rust"} (0.35 + 0.25 + 0.15 = 0.75)</span></span>
+<span class="line"><span>  从这三个中按归一化概率采样</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Top-p = 0.5 时：</span></span>
+<span class="line"><span>  候选集 = {"Python", "JavaScript"} (0.35 + 0.25 = 0.60 ≥ 0.5)</span></span>
+<span class="line"><span>  从这两个中按归一化概率采样</span></span></code></pre></div><h3 id="对-prompt-设计的影响">对 Prompt 设计的影响</h3><p>Temperature 和 Top-p 的选择应该与 Prompt 的设计目标相匹配：</p>
+<p><strong>需要确定性输出时</strong>：Temperature 设为 0，同时在 Prompt 中给出明确的输出格式约束。这在 API 调用、数据提取等场景中至关重要。</p>
+<p><strong>需要创造性输出时</strong>：Temperature 设为 0.7-1.0，同时在 Prompt 中鼓励多样性（如&quot;请提供多个不同角度的观点&quot;）。Temperature 和 Prompt 指令应该协同工作，而非互相矛盾。</p>
+<p><strong>Temperature 和 Prompt 的交互</strong>：即使 Temperature = 0，不同的 Prompt 仍然会产生不同的输出。Temperature 控制的是在给定 Prompt 下的输出变异性，而 Prompt 控制的是输出的方向性。</p>
+<hr>
+<h2 id="词序为什么重要">词序为什么重要</h2><h3 id="位置编码">位置编码</h3><p>Transformer 本身没有序列顺序的概念——它通过<strong>位置编码</strong>（Positional Encoding）来感知 Token 的先后关系。不同的位置编码方案（绝对位置编码、旋转位置编码 RoPE、ALiBi 等）赋予模型不同的位置感知能力。</p>
+<p>核心启示是：<strong>Prompt 中信息的排列顺序会影响模型对信息的权重分配</strong>。</p>
+<div class="code-block-wrapper" data-lang="text" data-code="Prompt A：
+先写代码，然后解释你的设计思路。
+任务：实现一个 LRU 缓存。
+
+Prompt B：
+任务：实现一个 LRU 缓存。
+先解释你的设计思路，然后写代码。"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>Prompt A：</span></span>
+<span class="line"><span>先写代码，然后解释你的设计思路。</span></span>
+<span class="line"><span>任务：实现一个 LRU 缓存。</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Prompt B：</span></span>
+<span class="line"><span>任务：实现一个 LRU 缓存。</span></span>
+<span class="line"><span>先解释你的设计思路，然后写代码。</span></span></code></pre></div><p>这两个 Prompt 的信息内容相同，但排列顺序不同，输出也会不同。Prompt A 倾向于先生成代码，Prompt B 倾向于先生成解释。模型会遵循<strong>最近的指令</strong>和<strong>最后的指令</strong>的倾向性。</p>
+<h3 id="为什么措辞变化会影响输出">为什么措辞变化会影响输出</h3><p>同义但不同措辞的 Prompt 可能产出不同质量的结果：</p>
+<div class="code-block-wrapper" data-lang="text" data-code="Prompt A: &quot;列出 5 个提高代码质量的方法&quot;
+Prompt B: &quot;作为一名资深软件工程师，请分析并列出 5 个经过实践验证的提高代码质量的策略，每个策略附带一个简短的理由&quot;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>Prompt A: "列出 5 个提高代码质量的方法"</span></span>
+<span class="line"><span>Prompt B: "作为一名资深软件工程师，请分析并列出 5 个经过实践验证的提高代码质量的策略，每个策略附带一个简短的理由"</span></span></code></pre></div><p>Prompt B 更好的原因不仅在于它更详细，还在于它触发了模型训练数据中不同的知识区域。&quot;资深软件工程师&quot;触发了专业知识模式，&quot;经过实践验证&quot;触发了实证模式，&quot;策略&quot;比&quot;方法&quot;触发了更系统化的思维模式。</p>
+<hr>
+<h2 id="随机鹦鹉-vs-推理能力">&quot;随机鹦鹉&quot; vs &quot;推理能力&quot;</h2><p>关于 LLM 是否真正&quot;理解&quot;语言，学术界存在持续的争论：</p>
+<h3 id="随机鹦鹉-观点">&quot;随机鹦鹉&quot;观点</h3><p>LLM 本质上是一个极其复杂的模式匹配系统。它通过在海量文本上训练，学会了文本序列的统计规律。它不&quot;理解&quot;含义，只是在概率上预测&quot;什么 Token 最可能出现在这里&quot;。所谓的&quot;推理&quot;只是对训练数据中推理模式的模仿。</p>
+<h3 id="涌现推理-观点">&quot;涌现推理&quot;观点</h3><p>当模型规模达到一定阈值后，涌现出了训练数据中未直接存在的能力。GPT-4 能解决从未在训练数据中出现过的数学问题，Claude 能在复杂的多步推理任务中表现出类似逻辑推演的行为。这些能力似乎超越了简单的模式匹配。</p>
+<h3 id="对-prompt-设计的实际意义">对 Prompt 设计的实际意义</h3><p>无论哪种观点正确，对 Prompt 设计者来说，实际意义是明确的：</p>
+<table>
+<thead>
+<tr>
+<th>原则</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>不要假设模型&quot;理解&quot;你的意图</td>
+<td>即使模型表现得像在理解，也应该通过明确的指令来消除歧义</td>
+</tr>
+<tr>
+<td>利用模式匹配的优势</td>
+<td>提供示例（Few-Shot）让模型&quot;模仿&quot;正确的模式，比抽象描述更有效</td>
+</tr>
+<tr>
+<td>引导推理过程</td>
+<td>通过 Chain-of-Thought 让模型逐步展示推理，减少跳步带来的错误</td>
+</tr>
+<tr>
+<td>验证而非信任</td>
+<td>模型可能自信地输出错误答案（幻觉），始终需要验证关键信息</td>
+</tr>
+<tr>
+<td>利用结构化输出</td>
+<td>结构化格式（JSON、表格）迫使模型在模式匹配层面保持一致性</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="小结">小结</h2><pre class="mermaid" data-diagram-type="mindmap" data-source="mindmap&#10;  root((LLM 如何处理 Prompt))&#10;    Tokenization&#10;      文本 → Token → ID&#10;      Token 不等于词&#10;      中英文 Token 效率不同&#10;    注意力机制&#10;      自注意力 QKV 运算&#10;      多头并行关注不同模式&#10;      词序和结构影响注意力分布&#10;    Next-Token Prediction&#10;      自回归生成&#10;      逐 Token 向前推进&#10;      无法回头修改&#10;    Temperature 与采样&#10;      Temperature 控制随机性&#10;      Top-p 控制候选范围&#10;      与 Prompt 指令协同工作&#10;    实际启示&#10;      结构化 Prompt 比连续文本更有效&#10;      词序影响输出方向&#10;      先思考再回答提升质量&#10;      始终验证模型输出"></pre><ul>
+<li>LLM 通过 <strong>Tokenization → Embedding → Attention → Prediction → Sampling</strong> 的流水线处理 Prompt。</li>
+<li><strong>Tokenization</strong> 将文本切分为 Token，Token 数量决定成本和上下文容量，中英文的 Token 效率存在差异。</li>
+<li><strong>注意力机制</strong>让每个 Token 关注序列中所有其他 Token，结构化格式和合理的信息排列能帮助注意力更有效地工作。</li>
+<li><strong>Next-Token Prediction</strong> 是自回归过程——模型只能向前生成，无法回头修改，因此引导模型&quot;先思考再回答&quot;至关重要。</li>
+<li><strong>Temperature</strong> 控制输出的随机性，应根据任务性质选择合适的值，并与 Prompt 指令协同设计。</li>
+<li>无论 LLM 是否真正&quot;理解&quot;语言，Prompt 设计者都应该<strong>明确指令、提供示例、引导推理、验证输出</strong>。</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../ai-engineering-l3/prompt-engineering/prompt-fundamentals/what-is-prompt-engineering.html"><span class="label">Previous</span>什么是 Prompt Engineering</a><a class="next" href="../../../ai-engineering-l3/prompt-engineering/prompt-fundamentals/token-and-context-window.html"><span class="label">Next</span>Token 与上下文窗口</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#tokenization-文本的-数字化" data-outline-link="tokenization-文本的-数字化">Tokenization：文本的"数字化"</a></li><li class="depth-3"><a href="#什么是-tokenization" data-outline-link="什么是-tokenization">什么是 Tokenization</a></li><li class="depth-3"><a href="#对-prompt-设计的影响" data-outline-link="对-prompt-设计的影响">对 Prompt 设计的影响</a></li><li class="depth-2"><a href="#注意力机制-token-如何-看到-彼此" data-outline-link="注意力机制-token-如何-看到-彼此">注意力机制：Token 如何"看到"彼此</a></li><li class="depth-3"><a href="#自注意力的工作原理" data-outline-link="自注意力的工作原理">自注意力的工作原理</a></li><li class="depth-3"><a href="#多头注意力" data-outline-link="多头注意力">多头注意力</a></li><li class="depth-3"><a href="#对-prompt-设计的影响" data-outline-link="对-prompt-设计的影响">对 Prompt 设计的影响</a></li><li class="depth-2"><a href="#next-token-prediction-生成的核心机制" data-outline-link="next-token-prediction-生成的核心机制">Next-Token Prediction：生成的核心机制</a></li><li class="depth-3"><a href="#工作原理" data-outline-link="工作原理">工作原理</a></li><li class="depth-3"><a href="#自回归的关键含义" data-outline-link="自回归的关键含义">自回归的关键含义</a></li><li class="depth-2"><a href="#temperature-与采样策略" data-outline-link="temperature-与采样策略">Temperature 与采样策略</a></li><li class="depth-3"><a href="#temperature-的作用" data-outline-link="temperature-的作用">Temperature 的作用</a></li><li class="depth-3"><a href="#top-p-核采样" data-outline-link="top-p-核采样">Top-p（核采样）</a></li><li class="depth-3"><a href="#对-prompt-设计的影响" data-outline-link="对-prompt-设计的影响">对 Prompt 设计的影响</a></li><li class="depth-2"><a href="#词序为什么重要" data-outline-link="词序为什么重要">词序为什么重要</a></li><li class="depth-3"><a href="#位置编码" data-outline-link="位置编码">位置编码</a></li><li class="depth-3"><a href="#为什么措辞变化会影响输出" data-outline-link="为什么措辞变化会影响输出">为什么措辞变化会影响输出</a></li><li class="depth-2"><a href="#随机鹦鹉-vs-推理能力" data-outline-link="随机鹦鹉-vs-推理能力">"随机鹦鹉" vs "推理能力"</a></li><li class="depth-3"><a href="#随机鹦鹉-观点" data-outline-link="随机鹦鹉-观点">"随机鹦鹉"观点</a></li><li class="depth-3"><a href="#涌现推理-观点" data-outline-link="涌现推理-观点">"涌现推理"观点</a></li><li class="depth-3"><a href="#对-prompt-设计的实际意义" data-outline-link="对-prompt-设计的实际意义">对 Prompt 设计的实际意义</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

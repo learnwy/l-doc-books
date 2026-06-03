@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>存储引擎对比：LSM-Tree 与 B-Tree · 云与 DevOps 工程</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:云与 DevOps 工程" data-pagefind-meta="slug:cloud-and-devops">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">云与 DevOps 工程</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item active" href="../../../cloud-and-devops/index.html" aria-current="page" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../cloud-and-devops/index.html">云与 DevOps 工程</a><a class="back-to-hubs" href="../../../cloud-and-devops/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../cloud-and-devops/data-intensive-applications/index.html">数据密集型应用设计 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="cloud-and-devops"><li class="chapter"><details class="folder-collapse" data-sb-key="cloud-and-devops:folder:data-intensive-applications/data-storage-retrieval" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cloud-and-devops/data-intensive-applications/data-storage-retrieval/index.html">数据存储与检索 简介</a></summary><ul><li class="leaf"><a class="leaf-title active" href="../../../cloud-and-devops/data-intensive-applications/data-storage-retrieval/storage-engine-comparison.html">存储引擎对比：LSM-Tree 与 B-Tree</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/data-storage-retrieval/index-structures.html">索引结构与查询优化</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/data-storage-retrieval/columnar-storage.html">列式存储与 OLAP 优化</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cloud-and-devops:folder:data-intensive-applications/replication-and-partitioning"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cloud-and-devops/data-intensive-applications/replication-and-partitioning/index.html">复制与分区 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/replication-and-partitioning/replication-models.html">主从复制与多主复制</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/replication-and-partitioning/partitioning-strategies.html">分区策略与再平衡</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/replication-and-partitioning/consistency-and-consensus.html">复制一致性与共识算法</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cloud-and-devops:folder:data-intensive-applications/transactions-and-consistency"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cloud-and-devops/data-intensive-applications/transactions-and-consistency/index.html">事务与一致性 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/transactions-and-consistency/acid-vs-base.html">ACID 与 BASE：事务语义对比</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/transactions-and-consistency/distributed-transactions.html">分布式事务实现机制</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/transactions-and-consistency/consistency-models.html">分布式一致性模型</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cloud-and-devops:folder:data-intensive-applications/stream-and-batch-processing"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cloud-and-devops/data-intensive-applications/stream-and-batch-processing/index.html">流处理与批处理 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/stream-and-batch-processing/mapreduce-evolution.html">MapReduce 演进：从批处理到统一计算</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/stream-and-batch-processing/stream-processing-architecture.html">流处理架构与实时计算</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/stream-and-batch-processing/event-sourcing-cqrs.html">事件溯源与 CQRS 模式</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part VII · 数据与伸缩</span><span>数据密集型应用设计 简介</span><span>数据存储与检索 简介</span><span>存储引擎对比：LSM-Tree 与 B-Tree</span></nav>
+    <article class="content prose"><h1 id="存储引擎对比-lsm-tree-与-b-tree">存储引擎对比：LSM-Tree 与 B-Tree</h1><h2 id="概述">概述</h2><p>存储引擎是数据库的心脏，决定了数据如何被写入磁盘、如何被检索、以及系统在不同工作负载下的性能表现。当前主流的两种存储引擎架构——LSM-Tree（Log-Structured Merge-Tree）和 B-Tree——代表了两种截然不同的设计哲学：前者为写优化而生，后者为读优化而设计。</p>
+<p>理解两者的内部机制和工程权衡，是做出正确数据库选型的前提。MySQL（InnoDB）、PostgreSQL 默认使用 B-Tree；RocksDB、LevelDB、Cassandra、ScyllaDB 使用 LSM-Tree；而 TiDB、CockroachDB 等 NewSQL 系统则在 LSM-Tree 之上构建分布式事务层。</p>
+<h2 id="核心概念">核心概念</h2><h3 id="b-tree-的工作原理">B-Tree 的工作原理</h3><p>B-Tree（及其变体 B+ Tree）是自 1970 年以来最广泛使用的数据库索引结构。其核心思想是将数据组织为固定大小的页（通常 4KB-16KB），形成平衡的树形结构：</p>
+<div class="code-block-wrapper" data-lang="text" data-code="          [Root Page: 30 | 70]
+         /         |          \
+   [10|20]      [40|50|60]     [80|90]
+   /  |  \      / | | \       /  |  \
+ [数据页]  [数据页]  ...    [数据页]"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>          [Root Page: 30 | 70]</span></span>
+<span class="line"><span>         /         |          \</span></span>
+<span class="line"><span>   [10|20]      [40|50|60]     [80|90]</span></span>
+<span class="line"><span>   /  |  \      / | | \       /  |  \</span></span>
+<span class="line"><span> [数据页]  [数据页]  ...    [数据页]</span></span></code></pre></div><p><strong>关键特性：</strong></p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>就地更新（Update-in-place）</td>
+<td>修改数据时直接覆写对应页</td>
+</tr>
+<tr>
+<td>WAL（Write-Ahead Log）</td>
+<td>写入前先记录日志，保证崩溃恢复</td>
+</tr>
+<tr>
+<td>页分裂与合并</td>
+<td>节点满时分裂，空闲时合并</td>
+</tr>
+<tr>
+<td>排序存储</td>
+<td>叶节点按键顺序链接，支持高效范围查询</td>
+</tr>
+</tbody></table>
+<p><strong>写入流程：</strong></p>
+<ol>
+<li>通过 WAL 记录变更意图（顺序写）</li>
+<li>定位目标页（树遍历，O(log N) 次 I/O）</li>
+<li>在内存中修改页内容</li>
+<li>异步将脏页刷回磁盘（随机写）</li>
+</ol>
+<h3 id="lsm-tree-的工作原理">LSM-Tree 的工作原理</h3><p>LSM-Tree 由 O&#39;Neil 等人在 1996 年提出，其核心理念是将随机写转化为顺序写，通过分层合并实现高写入吞吐：</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[&quot;Write Request&quot;] --&gt; B[&quot;MemTable - sorted in memory&quot;]&#10;    B --&gt;|&quot;flush when full&quot;| C[&quot;Level 0 SSTable&quot;]&#10;    C --&gt;|&quot;compaction&quot;| D[&quot;Level 1 SSTable&quot;]&#10;    D --&gt;|&quot;compaction&quot;| E[&quot;Level 2 SSTable&quot;]&#10;    E --&gt;|&quot;compaction&quot;| F[&quot;Level N SSTable&quot;]"></pre><p><strong>关键组件：</strong></p>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>功能</th>
+<th>数据结构</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MemTable</td>
+<td>内存中的写缓冲区</td>
+<td>跳表或红黑树</td>
+</tr>
+<tr>
+<td>WAL</td>
+<td>崩溃恢复日志</td>
+<td>追加写日志</td>
+</tr>
+<tr>
+<td>SSTable</td>
+<td>不可变的有序磁盘文件</td>
+<td>排序键值对 + 稀疏索引</td>
+</tr>
+<tr>
+<td>Bloom Filter</td>
+<td>快速判断键是否存在</td>
+<td>概率性数据结构</td>
+</tr>
+</tbody></table>
+<p><strong>写入流程：</strong></p>
+<ol>
+<li>写入 WAL（顺序追加）</li>
+<li>插入 MemTable（内存操作）</li>
+<li>MemTable 满后冻结，刷写为 SSTable（顺序写磁盘）</li>
+<li>后台 Compaction 合并多层 SSTable</li>
+</ol>
+<h3 id="压实-compaction-策略">压实（Compaction）策略</h3><p>LSM-Tree 的压实策略直接决定了读写放大和空间放大的权衡：</p>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>原理</th>
+<th>写放大</th>
+<th>读放大</th>
+<th>空间放大</th>
+<th>典型系统</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Size-Tiered (STCS)</td>
+<td>相近大小的 SSTable 合并</td>
+<td>低</td>
+<td>高</td>
+<td>高</td>
+<td>Cassandra 默认</td>
+</tr>
+<tr>
+<td>Leveled (LCS)</td>
+<td>按层级组织，键范围不重叠</td>
+<td>高</td>
+<td>低</td>
+<td>低</td>
+<td>RocksDB 默认</td>
+</tr>
+<tr>
+<td>FIFO</td>
+<td>按时间过期删除</td>
+<td>极低</td>
+<td>中</td>
+<td>低</td>
+<td>时序数据场景</td>
+</tr>
+<tr>
+<td>Universal</td>
+<td>动态选择策略</td>
+<td>中</td>
+<td>中</td>
+<td>中</td>
+<td>RocksDB 可选</td>
+</tr>
+</tbody></table>
+<h2 id="实战指南">实战指南</h2><h3 id="量化对比-写放大分析">量化对比：写放大分析</h3><p>写放大（Write Amplification）是衡量存储引擎效率的核心指标，定义为实际写入磁盘的数据量与应用层写入量的比值。</p>
+<p><strong>B-Tree 写放大分析：</strong></p>
+<div class="code-block-wrapper" data-lang="text" data-code="应用写入 1 byte →
+  WAL 写入: ~1x (含元数据开销)
+  页写入: 至少写一整页 (4KB-16KB)
+  → 最坏情况写放大: 16KB / 1B = 16,384x
+  → 典型情况 (批量写入): 2-5x"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>应用写入 1 byte →</span></span>
+<span class="line"><span>  WAL 写入: ~1x (含元数据开销)</span></span>
+<span class="line"><span>  页写入: 至少写一整页 (4KB-16KB)</span></span>
+<span class="line"><span>  → 最坏情况写放大: 16KB / 1B = 16,384x</span></span>
+<span class="line"><span>  → 典型情况 (批量写入): 2-5x</span></span></code></pre></div><p><strong>LSM-Tree 写放大分析（Leveled Compaction）：</strong></p>
+<div class="code-block-wrapper" data-lang="text" data-code="假设放大因子 T=10, 层数 L:
+  每层 Compaction 写入约 T 倍数据
+  总写放大 ≈ T * L (理论上界)
+  → RocksDB 默认: 10 * 5-7 层 ≈ 50-70x
+  → 实际测量 (含压缩): 10-30x"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>假设放大因子 T=10, 层数 L:</span></span>
+<span class="line"><span>  每层 Compaction 写入约 T 倍数据</span></span>
+<span class="line"><span>  总写放大 ≈ T * L (理论上界)</span></span>
+<span class="line"><span>  → RocksDB 默认: 10 * 5-7 层 ≈ 50-70x</span></span>
+<span class="line"><span>  → 实际测量 (含压缩): 10-30x</span></span></code></pre></div><h3 id="读路径对比">读路径对比</h3><div class="code-block-wrapper" data-lang="python" data-code="# B-Tree 读路径 (伪代码)
+def btree_read(key):
+    page = root_page
+    while not page.is_leaf:
+        # 二分查找定位子页 - 1次磁盘 I/O
+        page = page.find_child(key)
+    return page.find_value(key)
+    # 总 I/O: O(log_B N), 通常 3-4 次
+
+# LSM-Tree 读路径 (伪代码)
+def lsm_read(key):
+    # 1. 查 MemTable (内存)
+    if result := memtable.get(key):
+        return result
+    # 2. 逐层查 SSTable (磁盘)
+    for level in levels:
+        if level.bloom_filter.may_contain(key):
+            if result := level.search(key):
+                return result
+    return NOT_FOUND
+    # 最坏 I/O: 每层 1 次, 共 L 层"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># B-Tree 读路径 (伪代码)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> btree_read</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(key):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    page </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> root_page</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    while</span><span style="color:#D73A49;--shiki-dark:#F97583"> not</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> page.is_leaf:</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">        # 二分查找定位子页 - 1次磁盘 I/O</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        page </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> page.find_child(key)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> page.find_value(key)</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">    # 总 I/O: O(log_B N), 通常 3-4 次</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># LSM-Tree 读路径 (伪代码)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> lsm_read</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(key):</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">    # 1. 查 MemTable (内存)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> result </span><span style="color:#D73A49;--shiki-dark:#F97583">:=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> memtable.get(key):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> result</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">    # 2. 逐层查 SSTable (磁盘)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> level </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> levels:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> level.bloom_filter.may_contain(key):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> result </span><span style="color:#D73A49;--shiki-dark:#F97583">:=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> level.search(key):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">                return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> result</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> NOT_FOUND</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">    # 最坏 I/O: 每层 1 次, 共 L 层</span></span></code></pre></div><h3 id="实际基准测试参考">实际基准测试参考</h3><p>以下数据基于 2024-2026 年的公开基准测试：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>B-Tree (InnoDB)</th>
+<th>LSM-Tree (RocksDB)</th>
+<th>优势方</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>随机写入 (100B value)</td>
+<td>~15K ops/s</td>
+<td>~80K ops/s</td>
+<td>LSM-Tree 5x</td>
+</tr>
+<tr>
+<td>随机读取 (热数据)</td>
+<td>~50K ops/s</td>
+<td>~45K ops/s</td>
+<td>B-Tree 微优</td>
+</tr>
+<tr>
+<td>随机读取 (冷数据)</td>
+<td>~20K ops/s</td>
+<td>~8K ops/s</td>
+<td>B-Tree 2.5x</td>
+</tr>
+<tr>
+<td>范围扫描 (1000 keys)</td>
+<td>~5K ops/s</td>
+<td>~3K ops/s</td>
+<td>B-Tree 1.7x</td>
+</tr>
+<tr>
+<td>混合 (50% 读 50% 写)</td>
+<td>~12K ops/s</td>
+<td>~35K ops/s</td>
+<td>LSM-Tree 3x</td>
+</tr>
+<tr>
+<td>磁盘空间利用率</td>
+<td>60-75%</td>
+<td>85-95%</td>
+<td>LSM-Tree</td>
+</tr>
+</tbody></table>
+<h2 id="最佳实践">最佳实践</h2><h3 id="选型决策框架">选型决策框架</h3><pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[&quot;What is your workload?&quot;] --&gt; B{&quot;Write-heavy &gt; 70%?&quot;}&#10;    B --&gt;|Yes| C{&quot;Need range scans?&quot;}&#10;    B --&gt;|No| D{&quot;Read latency critical?&quot;}&#10;    C --&gt;|Yes| E[&quot;LSM-Tree with Leveled Compaction&quot;]&#10;    C --&gt;|No| F[&quot;LSM-Tree with Size-Tiered&quot;]&#10;    D --&gt;|Yes| G[&quot;B-Tree&quot;]&#10;    D --&gt;|No| H{&quot;Space efficiency matters?&quot;}&#10;    H --&gt;|Yes| I[&quot;LSM-Tree&quot;]&#10;    H --&gt;|No| J[&quot;B-Tree - simpler operations&quot;]"></pre><h3 id="调优建议">调优建议</h3><p><strong>B-Tree 调优：</strong></p>
+<ul>
+<li>增大 Buffer Pool 减少磁盘 I/O（推荐分配 70-80% 可用内存）</li>
+<li>调整页大小匹配工作负载（大页适合顺序扫描，小页适合随机点查）</li>
+<li>启用 Change Buffer 优化二级索引写入（InnoDB）</li>
+<li>关注页分裂频率，必要时预分配空间</li>
+</ul>
+<p><strong>LSM-Tree 调优：</strong></p>
+<ul>
+<li>合理设置 MemTable 大小（过小导致频繁 flush，过大增加恢复时间）</li>
+<li>选择匹配工作负载的 Compaction 策略</li>
+<li>配置 Bloom Filter 位数（通常 10 bits/key，假阳性率 ~1%）</li>
+<li>限制 L0 文件数防止读放大</li>
+<li>启用 Rate Limiter 避免 Compaction 风暴影响前台请求</li>
+</ul>
+<h3 id="2026-年趋势-混合引擎">2026 年趋势：混合引擎</h3><p>现代系统越来越倾向于混合使用两种引擎：</p>
+<ul>
+<li><strong>TiDB</strong>：TiKV 使用 RocksDB（LSM-Tree），但 TiFlash 使用列式存储</li>
+<li><strong>CockroachDB</strong>：底层 Pebble（LSM-Tree），上层 SQL 接口</li>
+<li><strong>MongoDB WiredTiger</strong>：同时支持 B-Tree 和 LSM-Tree 存储格式</li>
+<li><strong>ClickHouse</strong>：MergeTree 引擎基于 LSM-Tree 思想，但针对列式 OLAP 优化</li>
+</ul>
+<h2 id="工具与生态">工具与生态</h2><table>
+<thead>
+<tr>
+<th>引擎/系统</th>
+<th>类型</th>
+<th>语言</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RocksDB</td>
+<td>LSM-Tree</td>
+<td>C++</td>
+<td>嵌入式 KV，被多个分布式系统使用</td>
+</tr>
+<tr>
+<td>LevelDB</td>
+<td>LSM-Tree</td>
+<td>C++</td>
+<td>轻量级嵌入式场景</td>
+</tr>
+<tr>
+<td>InnoDB</td>
+<td>B-Tree</td>
+<td>C/C++</td>
+<td>MySQL 默认，OLTP</td>
+</tr>
+<tr>
+<td>WiredTiger</td>
+<td>混合</td>
+<td>C</td>
+<td>MongoDB 默认存储引擎</td>
+</tr>
+<tr>
+<td>Pebble</td>
+<td>LSM-Tree</td>
+<td>Go</td>
+<td>CockroachDB 底层引擎</td>
+</tr>
+<tr>
+<td>LMDB</td>
+<td>B+ Tree</td>
+<td>C</td>
+<td>嵌入式只读密集场景</td>
+</tr>
+<tr>
+<td>BadgerDB</td>
+<td>LSM-Tree (KV 分离)</td>
+<td>Go</td>
+<td>Go 生态嵌入式 KV</td>
+</tr>
+<tr>
+<td>BoltDB</td>
+<td>B+ Tree</td>
+<td>Go</td>
+<td>轻量级只读优先嵌入式</td>
+</tr>
+</tbody></table>
+<h2 id="总结">总结</h2><p>LSM-Tree 和 B-Tree 的选择本质上是<strong>写优化 vs 读优化</strong>的工程权衡。没有绝对更好的存储引擎，只有更匹配工作负载的选择。关键决策维度包括：读写比例、延迟敏感度、空间效率需求、运维复杂度容忍度。</p>
+<p>在 2026 年的技术格局中，存算分离架构使得存储引擎的选择更加灵活——对象存储成为通用持久层，LSM-Tree 和 B-Tree 的角色正在从&quot;数据存储&quot;演变为&quot;数据组织与索引&quot;，这一趋势在 DDIA 第二版中被深入讨论。工程师应当建立对两种引擎内部机制的深入理解，在实际架构设计中做出有据可依的选型决策。</p>
+</article>
+    <nav class="pager"><a class="prev" href="../../../cloud-and-devops/data-intensive-applications/data-storage-retrieval/index.html"><span class="label">Previous</span>数据存储与检索 简介</a><a class="next" href="../../../cloud-and-devops/data-intensive-applications/data-storage-retrieval/index-structures.html"><span class="label">Next</span>索引结构与查询优化</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#概述" data-outline-link="概述">概述</a></li><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-3"><a href="#b-tree-的工作原理" data-outline-link="b-tree-的工作原理">B-Tree 的工作原理</a></li><li class="depth-3"><a href="#lsm-tree-的工作原理" data-outline-link="lsm-tree-的工作原理">LSM-Tree 的工作原理</a></li><li class="depth-3"><a href="#压实-compaction-策略" data-outline-link="压实-compaction-策略">压实（Compaction）策略</a></li><li class="depth-2"><a href="#实战指南" data-outline-link="实战指南">实战指南</a></li><li class="depth-3"><a href="#量化对比-写放大分析" data-outline-link="量化对比-写放大分析">量化对比：写放大分析</a></li><li class="depth-3"><a href="#读路径对比" data-outline-link="读路径对比">读路径对比</a></li><li class="depth-3"><a href="#实际基准测试参考" data-outline-link="实际基准测试参考">实际基准测试参考</a></li><li class="depth-2"><a href="#最佳实践" data-outline-link="最佳实践">最佳实践</a></li><li class="depth-3"><a href="#选型决策框架" data-outline-link="选型决策框架">选型决策框架</a></li><li class="depth-3"><a href="#调优建议" data-outline-link="调优建议">调优建议</a></li><li class="depth-3"><a href="#2026-年趋势-混合引擎" data-outline-link="2026-年趋势-混合引擎">2026 年趋势：混合引擎</a></li><li class="depth-2"><a href="#工具与生态" data-outline-link="工具与生态">工具与生态</a></li><li class="depth-2"><a href="#总结" data-outline-link="总结">总结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

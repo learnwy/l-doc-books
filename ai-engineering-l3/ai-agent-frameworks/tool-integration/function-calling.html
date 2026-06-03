@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Function Calling 机制 · AI 工程师 L2 → L3+ 路线</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:AI 工程师 L2 → L3+ 路线" data-pagefind-meta="slug:ai-engineering-l3">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">AI 工程师 L2 → L3+ 路线</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item active" href="../../../ai-engineering-l3/index.html" aria-current="page" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../ai-engineering-l3/index.html">AI 工程师 L2 → L3+ 路线</a><a class="back-to-hubs" href="../../../ai-engineering-l3/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../ai-engineering-l3/ai-agent-frameworks/index.html">AI Agent 框架与平台 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="ai-engineering-l3"><li class="chapter"><details class="folder-collapse" data-sb-key="ai-engineering-l3:folder:ai-agent-frameworks/langchain-ecosystem"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-engineering-l3/ai-agent-frameworks/langchain-ecosystem/index.html">LangChain 生态 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/ai-agent-frameworks/langchain-ecosystem/langchain-overview.html">LangChain 框架全景</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/ai-agent-frameworks/langchain-ecosystem/chains-and-agents.html">链与代理模式</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/ai-agent-frameworks/langchain-ecosystem/langchain-tools.html">LangChain 工具系统</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/ai-agent-frameworks/langchain-ecosystem/langgraph.html">LangGraph 状态化工作流</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-engineering-l3:folder:ai-agent-frameworks/multi-agent-frameworks"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-engineering-l3/ai-agent-frameworks/multi-agent-frameworks/index.html">多智能体框架 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/ai-agent-frameworks/multi-agent-frameworks/crewai.html">CrewAI 多代理协作</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/ai-agent-frameworks/multi-agent-frameworks/autogen.html">AutoGen 对话式多代理</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/ai-agent-frameworks/multi-agent-frameworks/multi-agent-patterns.html">多代理协作模式</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-engineering-l3:folder:ai-agent-frameworks/tool-integration" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-engineering-l3/ai-agent-frameworks/tool-integration/index.html">工具集成 简介</a></summary><ul><li class="leaf"><a class="leaf-title active" href="../../../ai-engineering-l3/ai-agent-frameworks/tool-integration/function-calling.html">Function Calling 机制</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/ai-agent-frameworks/tool-integration/mcp-protocol.html">MCP 协议</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/ai-agent-frameworks/tool-integration/tool-orchestration.html">工具编排与调度</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/ai-agent-frameworks/tool-integration/custom-tools.html">自定义工具开发</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-engineering-l3:folder:ai-agent-frameworks/production-deployment"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-engineering-l3/ai-agent-frameworks/production-deployment/index.html">生产部署 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/ai-agent-frameworks/production-deployment/agent-monitoring.html">Agent 监控与可观测性</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/ai-agent-frameworks/production-deployment/scaling-agents.html">Agent 扩展与性能优化</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-engineering-l3/ai-agent-frameworks/production-deployment/agent-security.html">Agent 安全工程</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part II · Agent Engineering</span><span>AI Agent 框架与平台 简介</span><span>工具集成 简介</span><span>Function Calling 机制</span></nav>
+    <article class="content prose"><h1 id="function-calling-机制">Function Calling 机制</h1><h2 id="核心概念">核心概念</h2><p>Function Calling 是 LLM 与外部系统交互的标准化接口。它允许开发者向 LLM 描述一组可调用的函数，LLM 根据用户请求自主决定调用哪个函数以及传入什么参数。这种机制不是 LLM 直接执行函数，而是 LLM 输出结构化的调用意图，由应用层负责实际执行。这种&quot;意图-执行分离&quot;的设计是构建安全可控 Agent 系统的基础。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    A[用户请求] --&gt; B[LLM 推理]&#10;    B --&gt;|生成调用意图| C[Function Call JSON]&#10;    C --&gt; D[应用层执行]&#10;    D --&gt;|执行结果| E[LLM 整合]&#10;    E --&gt; F[最终回答]"></pre><table>
+<thead>
+<tr>
+<th>模型提供商</th>
+<th>接口名称</th>
+<th>并行调用</th>
+<th>强制调用</th>
+<th>结构化输出</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OpenAI</td>
+<td>Function Calling / Tools</td>
+<td>支持</td>
+<td>tool_choice</td>
+<td>JSON Schema</td>
+</tr>
+<tr>
+<td>Anthropic</td>
+<td>Tool Use</td>
+<td>支持</td>
+<td>tool_choice</td>
+<td>JSON Schema</td>
+</tr>
+<tr>
+<td>Google</td>
+<td>Function Calling</td>
+<td>支持</td>
+<td>function_calling_config</td>
+<td>JSON Schema</td>
+</tr>
+<tr>
+<td>Ollama/本地</td>
+<td>部分支持</td>
+<td>视模型</td>
+<td>视模型</td>
+<td>视模型</td>
+</tr>
+</tbody></table>
+<h2 id="openai-function-calling-实现">OpenAI Function Calling 实现</h2><p>OpenAI 的 Function Calling 通过 <code>tools</code> 参数定义可用函数，LLM 返回 <code>tool_calls</code> 字段表示调用意图。应用层需要在执行函数后将结果作为 <code>tool</code> 类型消息反馈给 LLM：</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="import OpenAI from 'openai';
+
+const client = new OpenAI();
+
+const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
+  {
+    type: 'function',
+    function: {
+      name: 'get_stock_price',
+      description: '获取指定股票的实时价格和涨跌幅',
+      parameters: {
+        type: 'object',
+        properties: {
+          symbol: {
+            type: 'string',
+            description: '股票代码，如 AAPL、GOOGL',
+          },
+          market: {
+            type: 'string',
+            enum: ['US', 'HK', 'CN'],
+            description: '交易市场',
+          },
+        },
+        required: ['symbol'],
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'calculate_portfolio',
+      description: '计算投资组合的收益率和风险指标',
+      parameters: {
+        type: 'object',
+        properties: {
+          holdings: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                symbol: { type: 'string' },
+                shares: { type: 'number' },
+                avgCost: { type: 'number' },
+              },
+            },
+            description: '持仓列表',
+          },
+        },
+        required: ['holdings'],
+      },
+    },
+  },
+];
+
+const messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
+  { role: 'user', content: '帮我查一下苹果和谷歌的股价，然后计算我的组合收益' },
+];
+
+const response = await client.chat.completions.create({
+  model: 'gpt-4-turbo',
+  messages,
+  tools,
+  tool_choice: 'auto',
+});
+
+const toolCalls = response.choices[0].message.tool_calls;
+if (toolCalls) {
+  messages.push(response.choices[0].message);
+
+  for (const call of toolCalls) {
+    const args = JSON.parse(call.function.arguments);
+    let result: string;
+
+    if (call.function.name === 'get_stock_price') {
+      result = JSON.stringify({ symbol: args.symbol, price: 185.5, change: '+2.3%' });
+    } else {
+      result = JSON.stringify({ totalReturn: '12.5%', sharpeRatio: 1.8 });
+    }
+
+    messages.push({ role: 'tool', tool_call_id: call.id, content: result });
+  }
+
+  const finalResponse = await client.chat.completions.create({
+    model: 'gpt-4-turbo',
+    messages,
+  });
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> OpenAI </span><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'openai'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> client</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> OpenAI</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> tools</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> OpenAI</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Chat</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Completions</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">ChatCompletionTool</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'function'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    function: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      name: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'get_stock_price'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      description: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'获取指定股票的实时价格和涨跌幅'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      parameters: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'object'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        properties: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          symbol: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'string'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            description: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'股票代码，如 AAPL、GOOGL'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          market: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'string'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            enum: [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'US'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'HK'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'CN'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            description: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'交易市场'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        required: [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'symbol'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'function'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    function: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      name: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'calculate_portfolio'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      description: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'计算投资组合的收益率和风险指标'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      parameters: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'object'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        properties: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          holdings: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'array'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            items: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">              type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'object'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">              properties: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                symbol: { type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'string'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                shares: { type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'number'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                avgCost: { type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'number'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">              },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            description: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'持仓列表'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        required: [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'holdings'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> messages</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> OpenAI</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Chat</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Completions</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">ChatCompletionMessageParam</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  { role: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'user'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, content: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'帮我查一下苹果和谷歌的股价，然后计算我的组合收益'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> response</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> client.chat.completions.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">create</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  model: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'gpt-4-turbo'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  messages,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  tools,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  tool_choice: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'auto'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> toolCalls</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> response.choices[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">].message.tool_calls;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (toolCalls) {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  messages.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">push</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(response.choices[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">].message);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> call</span><span style="color:#D73A49;--shiki-dark:#F97583"> of</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> toolCalls) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> args</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> JSON</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">parse</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(call.function.arguments);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    let</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> result</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (call.function.name </span><span style="color:#D73A49;--shiki-dark:#F97583">===</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'get_stock_price'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      result </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> JSON</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">stringify</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ symbol: args.symbol, price: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">185.5</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, change: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'+2.3%'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> });</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    } </span><span style="color:#D73A49;--shiki-dark:#F97583">else</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      result </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> JSON</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">stringify</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ totalReturn: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'12.5%'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, sharpeRatio: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1.8</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> });</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    messages.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">push</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ role: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'tool'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, tool_call_id: call.id, content: result });</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> finalResponse</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> client.chat.completions.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">create</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    model: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'gpt-4-turbo'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    messages,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  });</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><p>并行 Function Calling 是 OpenAI 的重要能力——LLM 可以在单次响应中返回多个 <code>tool_calls</code>，应用层并行执行后统一反馈结果。这大幅减少了多工具场景下的交互轮次。</p>
+<h2 id="anthropic-tool-use-对比">Anthropic Tool Use 对比</h2><p>Anthropic 的 Tool Use 接口在概念上与 OpenAI 类似，但在实现细节上有显著差异。理解这些差异对于构建跨模型的 Agent 系统至关重要：</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="import Anthropic from '@anthropic-ai/sdk';
+
+const anthropic = new Anthropic();
+
+const response = await anthropic.messages.create({
+  model: 'claude-3-sonnet-20240229',
+  max_tokens: 1024,
+  tools: [
+    {
+      name: 'search_database',
+      description: '在产品数据库中搜索匹配的商品',
+      input_schema: {
+        type: 'object',
+        properties: {
+          query: { type: 'string', description: '搜索关键词' },
+          category: { type: 'string', description: '商品类目' },
+          maxPrice: { type: 'number', description: '最高价格' },
+        },
+        required: ['query'],
+      },
+    },
+  ],
+  messages: [{ role: 'user', content: '搜索价格在 500 元以内的蓝牙耳机' }],
+});
+
+for (const block of response.content) {
+  if (block.type === 'tool_use') {
+    const toolResult = await executeFunction(block.name, block.input);
+    const followUp = await anthropic.messages.create({
+      model: 'claude-3-sonnet-20240229',
+      max_tokens: 1024,
+      tools: [
+        /* same tools */
+      ],
+      messages: [
+        { role: 'user', content: '搜索价格在 500 元以内的蓝牙耳机' },
+        { role: 'assistant', content: response.content },
+        {
+          role: 'user',
+          content: [{ type: 'tool_result', tool_use_id: block.id, content: toolResult }],
+        },
+      ],
+    });
+  }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Anthropic </span><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '@anthropic-ai/sdk'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> anthropic</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Anthropic</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> response</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> anthropic.messages.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">create</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  model: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'claude-3-sonnet-20240229'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  max_tokens: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1024</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  tools: [</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      name: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'search_database'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      description: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'在产品数据库中搜索匹配的商品'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      input_schema: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'object'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        properties: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          query: { type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'string'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, description: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'搜索关键词'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          category: { type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'string'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, description: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'商品类目'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          maxPrice: { type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'number'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, description: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'最高价格'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        required: [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'query'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  ],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  messages: [{ role: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'user'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, content: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'搜索价格在 500 元以内的蓝牙耳机'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> block</span><span style="color:#D73A49;--shiki-dark:#F97583"> of</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> response.content) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (block.type </span><span style="color:#D73A49;--shiki-dark:#F97583">===</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'tool_use'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> toolResult</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> executeFunction</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(block.name, block.input);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> followUp</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> anthropic.messages.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">create</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      model: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'claude-3-sonnet-20240229'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      max_tokens: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1024</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      tools: [</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">        /* same tools */</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      ],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      messages: [</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        { role: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'user'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, content: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'搜索价格在 500 元以内的蓝牙耳机'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        { role: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'assistant'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, content: response.content },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          role: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'user'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          content: [{ type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'tool_result'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, tool_use_id: block.id, content: toolResult }],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      ],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    });</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><table>
+<thead>
+<tr>
+<th>差异点</th>
+<th>OpenAI</th>
+<th>Anthropic</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>参数定义字段</td>
+<td><code>parameters</code></td>
+<td><code>input_schema</code></td>
+</tr>
+<tr>
+<td>调用结果角色</td>
+<td><code>role: &quot;tool&quot;</code></td>
+<td>嵌套在 user 消息中</td>
+</tr>
+<tr>
+<td>强制调用</td>
+<td><code>tool_choice: { type: &quot;function&quot;, function: { name } }</code></td>
+<td><code>tool_choice: { type: &quot;tool&quot;, name }</code></td>
+</tr>
+<tr>
+<td>内容块类型</td>
+<td><code>message.tool_calls</code> 数组</td>
+<td><code>content</code> 中 <code>tool_use</code> 块</td>
+</tr>
+<tr>
+<td>停止原因</td>
+<td><code>finish_reason: &quot;tool_calls&quot;</code></td>
+<td><code>stop_reason: &quot;tool_use&quot;</code></td>
+</tr>
+</tbody></table>
+<h2 id="函数描述优化">函数描述优化</h2><p>函数描述的质量直接决定了 LLM 的调用准确性。优秀的描述应当清晰、具体、无歧义，并包含边界条件说明：</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="const wellDesignedTools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
+  {
+    type: 'function',
+    function: {
+      name: 'create_jira_ticket',
+      description: `创建 Jira 工单。使用场景：用户明确要求创建任务、Bug 或需求时调用。
+        不要在用户只是讨论问题但未明确要求创建工单时调用。
+        成功返回工单 ID，失败返回错误信息。`,
+      parameters: {
+        type: 'object',
+        properties: {
+          title: {
+            type: 'string',
+            description: '工单标题，应简洁描述问题或需求，不超过 100 字符',
+          },
+          type: {
+            type: 'string',
+            enum: ['Bug', 'Task', 'Story', 'Epic'],
+            description: '工单类型：Bug（缺陷）、Task（任务）、Story（用户故事）、Epic（史诗）',
+          },
+          priority: {
+            type: 'string',
+            enum: ['Critical', 'High', 'Medium', 'Low'],
+            description: '优先级。Critical 用于线上故障，High 用于影响核心功能的问题',
+          },
+          description: {
+            type: 'string',
+            description: '详细描述，包括复现步骤（Bug）或验收标准（Story）',
+          },
+          assignee: {
+            type: 'string',
+            description: '指派人的用户名。如未指定，留空由项目负责人分配',
+          },
+        },
+        required: ['title', 'type', 'priority'],
+      },
+    },
+  },
+];"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> wellDesignedTools</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> OpenAI</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Chat</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Completions</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">ChatCompletionTool</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'function'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    function: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      name: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'create_jira_ticket'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      description: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">`创建 Jira 工单。使用场景：用户明确要求创建任务、Bug 或需求时调用。</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        不要在用户只是讨论问题但未明确要求创建工单时调用。</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        成功返回工单 ID，失败返回错误信息。`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      parameters: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'object'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        properties: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          title: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'string'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            description: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'工单标题，应简洁描述问题或需求，不超过 100 字符'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          type: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'string'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            enum: [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Bug'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Task'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Story'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Epic'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            description: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'工单类型：Bug（缺陷）、Task（任务）、Story（用户故事）、Epic（史诗）'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          priority: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'string'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            enum: [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Critical'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'High'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Medium'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Low'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            description: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'优先级。Critical 用于线上故障，High 用于影响核心功能的问题'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          description: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'string'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            description: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'详细描述，包括复现步骤（Bug）或验收标准（Story）'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          assignee: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'string'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            description: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'指派人的用户名。如未指定，留空由项目负责人分配'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        required: [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'title'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'type'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'priority'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span></code></pre></div><p>函数描述的关键原则：说明&quot;何时调用&quot;和&quot;何时不调用&quot;，为枚举值提供中文释义，为可选参数说明默认行为，描述返回值的格式和可能的错误情况。</p>
+<h2 id="多轮工具调用循环">多轮工具调用循环</h2><p>复杂任务通常需要多轮工具调用——LLM 根据前一轮工具的返回结果决定下一步操作。实现健壮的多轮循环需要处理最大轮次限制、错误恢复和上下文管理：</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="const runToolLoop = async (
+  client: OpenAI,
+  initialMessages: OpenAI.Chat.Completions.ChatCompletionMessageParam[],
+  tools: OpenAI.Chat.Completions.ChatCompletionTool[],
+  maxIterations = 10,
+): Promise&lt;string&gt; =&gt; {
+  const messages = [...initialMessages];
+
+  for (let i = 0; i &lt; maxIterations; i++) {
+    const response = await client.chat.completions.create({
+      model: 'gpt-4-turbo',
+      messages,
+      tools,
+    });
+
+    const choice = response.choices[0];
+    messages.push(choice.message);
+
+    if (choice.finish_reason !== 'tool_calls' || !choice.message.tool_calls) {
+      return choice.message.content ?? '';
+    }
+
+    const toolResults = await Promise.all(
+      choice.message.tool_calls.map(async (call) =&gt; {
+        try {
+          const result = await executeFunction(call.function.name, JSON.parse(call.function.arguments));
+          return { role: 'tool' as const, tool_call_id: call.id, content: JSON.stringify(result) };
+        } catch (error) {
+          return { role: 'tool' as const, tool_call_id: call.id, content: `执行错误: ${(error as Error).message}` };
+        }
+      }),
+    );
+
+    messages.push(...toolResults);
+  }
+
+  return '达到最大迭代次数限制';
+};"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> runToolLoop</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> async</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  client</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> OpenAI</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  initialMessages</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> OpenAI</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Chat</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Completions</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">ChatCompletionMessageParam</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[],</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  tools</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> OpenAI</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Chat</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Completions</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">ChatCompletionTool</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  maxIterations </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 10</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#005CC5;--shiki-dark:#79B8FF">string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> messages</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#D73A49;--shiki-dark:#F97583">...</span><span style="color:#24292E;--shiki-dark:#E1E4E8">initialMessages];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">let</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; i </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> maxIterations; i</span><span style="color:#D73A49;--shiki-dark:#F97583">++</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> response</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> client.chat.completions.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">create</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      model: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'gpt-4-turbo'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      messages,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      tools,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    });</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> choice</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> response.choices[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    messages.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">push</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(choice.message);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (choice.finish_reason </span><span style="color:#D73A49;--shiki-dark:#F97583">!==</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'tool_calls'</span><span style="color:#D73A49;--shiki-dark:#F97583"> ||</span><span style="color:#D73A49;--shiki-dark:#F97583"> !</span><span style="color:#24292E;--shiki-dark:#E1E4E8">choice.message.tool_calls) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> choice.message.content </span><span style="color:#D73A49;--shiki-dark:#F97583">??</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> ''</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> toolResults</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">all</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      choice.message.tool_calls.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">map</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">async</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">call</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        try</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">          const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> result</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> executeFunction</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(call.function.name, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">JSON</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">parse</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(call.function.arguments));</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">          return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { role: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'tool'</span><span style="color:#D73A49;--shiki-dark:#F97583"> as</span><span style="color:#D73A49;--shiki-dark:#F97583"> const</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, tool_call_id: call.id, content: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">JSON</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">stringify</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(result) };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        } </span><span style="color:#D73A49;--shiki-dark:#F97583">catch</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (error) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">          return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { role: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'tool'</span><span style="color:#D73A49;--shiki-dark:#F97583"> as</span><span style="color:#D73A49;--shiki-dark:#F97583"> const</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, tool_call_id: call.id, content: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">`执行错误: ${</span><span style="color:#032F62;--shiki-dark:#9ECBFF">(</span><span style="color:#24292E;--shiki-dark:#E1E4E8">error</span><span style="color:#D73A49;--shiki-dark:#F97583"> as</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Error</span><span style="color:#032F62;--shiki-dark:#9ECBFF">).</span><span style="color:#24292E;--shiki-dark:#E1E4E8">message</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      }),</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    );</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    messages.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">push</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">...</span><span style="color:#24292E;--shiki-dark:#E1E4E8">toolResults);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '达到最大迭代次数限制'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span></code></pre></div><h2 id="小结">小结</h2><ul>
+<li>Function Calling 是 LLM 与外部系统的标准化接口，实现了&quot;意图-执行分离&quot;</li>
+<li>OpenAI 和 Anthropic 的接口设计理念相同但实现细节不同，跨模型系统需要适配层</li>
+<li>函数描述的质量直接决定调用准确性，应包含调用时机、参数释义和返回值说明</li>
+<li>并行 Function Calling 显著减少多工具场景的交互轮次</li>
+<li>多轮工具循环需要设置最大迭代、错误处理和上下文管理机制</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../ai-engineering-l3/ai-agent-frameworks/tool-integration/index.html"><span class="label">Previous</span>工具集成 简介</a><a class="next" href="../../../ai-engineering-l3/ai-agent-frameworks/tool-integration/mcp-protocol.html"><span class="label">Next</span>MCP 协议</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#openai-function-calling-实现" data-outline-link="openai-function-calling-实现">OpenAI Function Calling 实现</a></li><li class="depth-2"><a href="#anthropic-tool-use-对比" data-outline-link="anthropic-tool-use-对比">Anthropic Tool Use 对比</a></li><li class="depth-2"><a href="#函数描述优化" data-outline-link="函数描述优化">函数描述优化</a></li><li class="depth-2"><a href="#多轮工具调用循环" data-outline-link="多轮工具调用循环">多轮工具调用循环</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

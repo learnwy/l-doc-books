@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>状态机与 XState · 前端工程化全景</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:前端工程化全景" data-pagefind-meta="slug:frontend-engineering">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">前端工程化全景</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item active" href="../../../frontend-engineering/index.html" aria-current="page" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../frontend-engineering/index.html">前端工程化全景</a><a class="back-to-hubs" href="../../../frontend-engineering/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../frontend-engineering/state-management-patterns/index.html">状态管理模式 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="frontend-engineering"><li class="chapter"><details class="folder-collapse" data-sb-key="frontend-engineering:folder:state-management-patterns/fundamentals"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../frontend-engineering/state-management-patterns/fundamentals/index.html">基础概念 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/state-management-patterns/fundamentals/what-is-state.html">什么是状态</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/state-management-patterns/fundamentals/state-categories.html">状态分类</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/state-management-patterns/fundamentals/reactivity-models.html">响应式模型</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/state-management-patterns/fundamentals/immutability-vs-mutability.html">不可变 vs 可变</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="frontend-engineering:folder:state-management-patterns/local-state" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../frontend-engineering/state-management-patterns/local-state/index.html">局部状态 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/state-management-patterns/local-state/component-state-patterns.html">组件状态模式</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/state-management-patterns/local-state/derived-state.html">派生状态</a></li><li class="leaf"><a class="leaf-title active" href="../../../frontend-engineering/state-management-patterns/local-state/state-machines-xstate.html">状态机与 XState</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/state-management-patterns/local-state/form-state-management.html">表单状态管理</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="frontend-engineering:folder:state-management-patterns/global-state"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../frontend-engineering/state-management-patterns/global-state/index.html">全局状态 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/state-management-patterns/global-state/flux-redux-pattern.html">Flux &amp; Redux 模式</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/state-management-patterns/global-state/atomic-state-jotai-recoil.html">原子状态：Jotai &amp; Recoil</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/state-management-patterns/global-state/proxy-state-mobx-valtio.html">代理状态：MobX &amp; Valtio</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/state-management-patterns/global-state/signals-pattern.html">Signals 模式</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="frontend-engineering:folder:state-management-patterns/server-state"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../frontend-engineering/state-management-patterns/server-state/index.html">服务端状态 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/state-management-patterns/server-state/tanstack-query-patterns.html">TanStack Query 模式</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/state-management-patterns/server-state/swr-and-caching.html">SWR 与缓存</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/state-management-patterns/server-state/optimistic-updates.html">乐观更新</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/state-management-patterns/server-state/real-time-sync.html">实时同步</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="frontend-engineering:folder:state-management-patterns/cross-framework"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../frontend-engineering/state-management-patterns/cross-framework/index.html">跨框架方案 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/state-management-patterns/cross-framework/zustand-deep-dive.html">Zustand 深入</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/state-management-patterns/cross-framework/redux-toolkit-modern.html">Redux Toolkit 现代实践</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/state-management-patterns/cross-framework/pinia-vue-state.html">Pinia Vue 状态管理</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/state-management-patterns/cross-framework/framework-agnostic-stores.html">框架无关的 Store</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="frontend-engineering:folder:state-management-patterns/advanced-patterns"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../frontend-engineering/state-management-patterns/advanced-patterns/index.html">高级模式 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/state-management-patterns/advanced-patterns/state-normalization.html">状态规范化</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/state-management-patterns/advanced-patterns/undo-redo-patterns.html">撤销重做模式</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/state-management-patterns/advanced-patterns/persistence-and-hydration.html">持久化与水合</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/state-management-patterns/advanced-patterns/testing-state-logic.html">测试状态逻辑</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part II · 框架 (Frameworks)</span><span>状态管理模式 简介</span><span>局部状态 简介</span><span>状态机与 XState</span></nav>
+    <article class="content prose"><h1 id="状态机与-xstate">状态机与 XState</h1><h2 id="核心概念">核心概念</h2><p>状态机（State Machine）是一种数学模型，用于描述系统在不同状态之间的转换规则。XState 是一个强大的 JavaScript/TypeScript 状态机库。</p>
+<h3 id="为什么使用状态机">为什么使用状态机</h3><ul>
+<li><strong>消除不确定状态</strong>：明确规定系统只能处于有限个状态之一</li>
+<li><strong>可视化理解</strong>：状态图可以直观地展示系统行为</li>
+<li><strong>易于测试</strong>：每个状态和转换都可以独立测试</li>
+<li><strong>防止 bugs</strong>：避免状态不一致导致的问题</li>
+</ul>
+<h3 id="状态机基本要素">状态机基本要素</h3><table>
+<thead>
+<tr>
+<th>要素</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>状态 (State)</td>
+<td>系统在某一时刻的条件</td>
+</tr>
+<tr>
+<td>事件 (Event)</td>
+<td>触发状态转换的输入</td>
+</tr>
+<tr>
+<td>转换 (Transition)</td>
+<td>从一个状态到另一个状态的规则</td>
+</tr>
+<tr>
+<td>动作 (Action)</td>
+<td>状态转换时执行的副作用</td>
+</tr>
+<tr>
+<td>守卫 (Guard)</td>
+<td>决定是否执行转换的条件</td>
+</tr>
+</tbody></table>
+<h2 id="基础状态机">基础状态机</h2><h3 id="简单开关状态机">简单开关状态机</h3><pre class="mermaid" data-diagram-type="stateDiagram-v2" data-source="stateDiagram-v2&#10;    [*] --&gt; Off&#10;    Off --&gt; On: TOGGLE&#10;    On --&gt; Off: TOGGLE"></pre><div class="code-block-wrapper" data-lang="typescript" data-code="import { createMachine, interpret } from 'xstate';
+
+const toggleMachine = createMachine({
+  id: 'toggle',
+  initial: 'off',
+  states: {
+    off: {
+      on: {
+        TOGGLE: 'on',
+      },
+    },
+    on: {
+      on: {
+        TOGGLE: 'off',
+      },
+    },
+  },
+});
+
+const service = interpret(toggleMachine).start();
+
+service.subscribe((state) =&gt; {
+  console.log('Current state:', state.value);
+});
+
+service.send({ type: 'TOGGLE' });
+service.send({ type: 'TOGGLE' });"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { createMachine, interpret } </span><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'xstate'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> toggleMachine</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> createMachine</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  id: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'toggle'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  initial: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'off'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  states: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    off: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      on: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        TOGGLE: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'on'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    on: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      on: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        TOGGLE: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'off'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> service</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> interpret</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(toggleMachine).</span><span style="color:#6F42C1;--shiki-dark:#B392F0">start</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">service.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">subscribe</span><span style="color:#24292E;--shiki-dark:#E1E4E8">((</span><span style="color:#E36209;--shiki-dark:#FFAB70">state</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Current state:'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, state.value);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">service.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">send</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'TOGGLE'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> });</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">service.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">send</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'TOGGLE'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> });</span></span></code></pre></div><h3 id="在-react-中使用">在 React 中使用</h3><div class="code-block-wrapper" data-lang="typescript" data-code="import { useMachine } from '@xstate/react'
+import { createMachine } from 'xstate'
+
+const toggleMachine = createMachine({
+  id: 'toggle',
+  initial: 'inactive',
+  states: {
+    inactive: {
+      on: { TOGGLE: 'active' }
+    },
+    active: {
+      on: { TOGGLE: 'inactive' }
+    }
+  }
+})
+
+function ToggleButton() {
+  const [state, send] = useMachine(toggleMachine)
+
+  return (
+    &lt;button onClick={() =&gt; send({ type: 'TOGGLE' })}&gt;
+      {state.matches('inactive') ? 'Activate' : 'Deactivate'}
+    &lt;/button&gt;
+  )
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { useMachine } </span><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '@xstate/react'</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { createMachine } </span><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'xstate'</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> toggleMachine</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> createMachine</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  id: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'toggle'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  initial: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'inactive'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  states: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    inactive: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      on: { TOGGLE: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'active'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    active: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      on: { TOGGLE: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'inactive'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">})</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ToggleButton</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">state</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">send</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> useMachine</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(toggleMachine)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    &#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">button onClick</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{() => </span><span style="color:#6F42C1;--shiki-dark:#B392F0">send</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ </span><span style="color:#E36209;--shiki-dark:#FFAB70">type</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'TOGGLE'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> })}</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      {</span><span style="color:#E36209;--shiki-dark:#FFAB70">state</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#E36209;--shiki-dark:#FFAB70">matches</span><span style="color:#24292E;--shiki-dark:#E1E4E8">('</span><span style="color:#E36209;--shiki-dark:#FFAB70">inactive</span><span style="color:#24292E;--shiki-dark:#E1E4E8">') ? </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Activate'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> : </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Deactivate'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    &#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">button</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  )</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><h2 id="表单提交状态机">表单提交状态机</h2><h3 id="带有加载和错误状态">带有加载和错误状态</h3><pre class="mermaid" data-diagram-type="stateDiagram-v2" data-source="stateDiagram-v2&#10;    [*] --&gt; idle&#10;    idle --&gt; loading: SUBMIT&#10;    loading --&gt; success: SUCCESS&#10;    loading --&gt; error: ERROR&#10;    error --&gt; loading: SUBMIT&#10;    success --&gt; idle: RESET&#10;    error --&gt; idle: RESET"></pre><div class="code-block-wrapper" data-lang="typescript" data-code="import { useMachine } from '@xstate/react'
+import { createMachine, assign } from 'xstate'
+
+interface FormContext {
+  email: string
+  password: string
+  error: string | null
+}
+
+type FormEvent =
+  | { type: 'UPDATE_EMAIL'; value: string }
+  | { type: 'UPDATE_PASSWORD'; value: string }
+  | { type: 'SUBMIT' }
+  | { type: 'SUCCESS' }
+  | { type: 'ERROR'; message: string }
+  | { type: 'RESET' }
+
+const formMachine = createMachine&lt;FormContext, FormEvent&gt;({
+  id: 'form',
+  initial: 'idle',
+  context: {
+    email: '',
+    password: '',
+    error: null
+  },
+  states: {
+    idle: {
+      on: {
+        UPDATE_EMAIL: {
+          actions: assign({
+            email: (_, event) =&gt; event.value
+          })
+        },
+        UPDATE_PASSWORD: {
+          actions: assign({
+            password: (_, event) =&gt; event.value
+          })
+        },
+        SUBMIT: 'loading'
+      }
+    },
+    loading: {
+      invoke: {
+        src: async (context) =&gt; {
+          const response = await fetch('/api/login', {
+            method: 'POST',
+            body: JSON.stringify({
+              email: context.email,
+              password: context.password
+            })
+          })
+          if (!response.ok) {
+            throw new Error('Login failed')
+          }
+          return response.json()
+        },
+        onDone: 'success',
+        onError: {
+          target: 'error',
+          actions: assign({
+            error: (_, event) =&gt; event.data.message
+          })
+        }
+      }
+    },
+    success: {
+      on: {
+        RESET: {
+          target: 'idle',
+          actions: assign({
+            email: '',
+            password: '',
+            error: null
+          })
+        }
+      }
+    },
+    error: {
+      on: {
+        SUBMIT: 'loading',
+        RESET: {
+          target: 'idle',
+          actions: assign({
+            email: '',
+            password: '',
+            error: null
+          })
+        }
+      }
+    }
+  }
+})
+
+function LoginForm() {
+  const [state, send] = useMachine(formMachine)
+
+  const handleSubmit = (e: React.FormEvent) =&gt; {
+    e.preventDefault()
+    send({ type: 'SUBMIT' })
+  }
+
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;div&gt;
+        &lt;label&gt;Email&lt;/label&gt;
+        &lt;input
+          type=&quot;email&quot;
+          value={state.context.email}
+          onChange={e =&gt; send({ type: 'UPDATE_EMAIL', value: e.target.value })}
+          disabled={state.matches('loading')}
+        /&gt;
+      &lt;/div&gt;
+      &lt;div&gt;
+        &lt;label&gt;Password&lt;/label&gt;
+        &lt;input
+          type=&quot;password&quot;
+          value={state.context.password}
+          onChange={e =&gt; send({ type: 'UPDATE_PASSWORD', value: e.target.value })}
+          disabled={state.matches('loading')}
+        /&gt;
+      &lt;/div&gt;
+      {state.matches('error') &amp;&amp; (
+        &lt;p&gt;{state.context.error}&lt;/p&gt;
+      )}
+      &lt;button
+        type=&quot;submit&quot;
+        disabled={state.matches('loading')}
+      &gt;
+        {state.matches('loading') ? 'Loading...' : 'Login'}
+      &lt;/button&gt;
+      {state.matches('success') &amp;&amp; (
+        &lt;div&gt;
+          &lt;p&gt;Login successful!&lt;/p&gt;
+          &lt;button onClick={() =&gt; send({ type: 'RESET' })}&gt;
+            Reset
+          &lt;/button&gt;
+        &lt;/div&gt;
+      )}
+    &lt;/form&gt;
+  )
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { useMachine } </span><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '@xstate/react'</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { createMachine, assign } </span><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'xstate'</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> FormContext</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  email</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  password</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  error</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> null</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">type</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> FormEvent</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#E36209;--shiki-dark:#FFAB70">type</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'UPDATE_EMAIL'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; </span><span style="color:#E36209;--shiki-dark:#FFAB70">value</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#E36209;--shiki-dark:#FFAB70">type</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'UPDATE_PASSWORD'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; </span><span style="color:#E36209;--shiki-dark:#FFAB70">value</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#E36209;--shiki-dark:#FFAB70">type</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'SUBMIT'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#E36209;--shiki-dark:#FFAB70">type</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'SUCCESS'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#E36209;--shiki-dark:#FFAB70">type</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'ERROR'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; </span><span style="color:#E36209;--shiki-dark:#FFAB70">message</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#E36209;--shiki-dark:#FFAB70">type</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'RESET'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> formMachine</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> createMachine</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">FormContext</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">FormEvent</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>({</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  id: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'form'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  initial: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'idle'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  context: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    email: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">''</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    password: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">''</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    error: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">null</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  states: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    idle: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      on: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        UPDATE_EMAIL: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          actions: </span><span style="color:#6F42C1;--shiki-dark:#B392F0">assign</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">            email</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: (</span><span style="color:#E36209;--shiki-dark:#FFAB70">_</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">event</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> event.value</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          })</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        UPDATE_PASSWORD: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          actions: </span><span style="color:#6F42C1;--shiki-dark:#B392F0">assign</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">            password</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: (</span><span style="color:#E36209;--shiki-dark:#FFAB70">_</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">event</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> event.value</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          })</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        SUBMIT: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'loading'</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    loading: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      invoke: {</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">        src</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#D73A49;--shiki-dark:#F97583">async</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">context</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">          const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> response</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> fetch</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'/api/login'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            method: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'POST'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            body: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">JSON</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">stringify</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">              email: context.email,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">              password: context.password</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            })</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          })</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">          if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">!</span><span style="color:#24292E;--shiki-dark:#E1E4E8">response.ok) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            throw</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Error</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Login failed'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">          return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> response.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">json</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        onDone: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'success'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        onError: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          target: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'error'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          actions: </span><span style="color:#6F42C1;--shiki-dark:#B392F0">assign</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">            error</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: (</span><span style="color:#E36209;--shiki-dark:#FFAB70">_</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">event</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> event.data.message</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          })</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    success: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      on: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        RESET: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          target: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'idle'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          actions: </span><span style="color:#6F42C1;--shiki-dark:#B392F0">assign</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            email: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">''</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            password: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">''</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            error: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">null</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          })</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    error: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      on: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        SUBMIT: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'loading'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        RESET: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          target: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'idle'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          actions: </span><span style="color:#6F42C1;--shiki-dark:#B392F0">assign</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            email: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">''</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            password: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">''</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            error: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">null</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          })</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">})</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> LoginForm</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">state</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">send</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> useMachine</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(formMachine)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> handleSubmit</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">e</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> React</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">FormEvent</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    e.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">preventDefault</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">    send</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'SUBMIT'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> })</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    &#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">form onSubmit</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{handleSubmit}</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">div</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">label</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>Email</span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">label</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        &#x3C;</span><span style="color:#E36209;--shiki-dark:#FFAB70">input</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          type</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"email"</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          value</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{state.context.email}</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          onChange</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{</span><span style="color:#E36209;--shiki-dark:#FFAB70">e</span><span style="color:#D73A49;--shiki-dark:#F97583"> =></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> send</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'UPDATE_EMAIL'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, value: e.target.value })}</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          disabled</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{state.matches(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'loading'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)}</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        /></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;/div></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;div></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        &#x3C;label>Password&#x3C;/label></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        &#x3C;input</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          type=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"password"</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          value={state.context.password}</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          onChange={e => send({ type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'UPDATE_PASSWORD'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, value: e.target.value })}</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          disabled</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{state.matches(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'loading'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)}</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        /></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;/div></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      {state.matches(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'error'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) &#x26;&#x26; (</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        &#x3C;p>{state.context.error}&#x3C;/p></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      )}</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;button</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        type=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"submit"</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        disabled={state.matches(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'loading'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)}</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      ></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        {state.matches(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'loading'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) ? </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Loading...'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> : </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Login'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      &#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">button</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      {state.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">matches</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'success'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x26;&#x26;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">div</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          &#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">p</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>Login successful</span><span style="color:#D73A49;--shiki-dark:#F97583">!&#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">p</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">          &#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">button onClick</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{() => </span><span style="color:#6F42C1;--shiki-dark:#B392F0">send</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ </span><span style="color:#E36209;--shiki-dark:#FFAB70">type</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'RESET'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> })}</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            Reset</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">          &#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">button</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        &#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">div</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      )}</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    &#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">form</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  )</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><h2 id="分层状态机">分层状态机</h2><h3 id="媒体播放器示例">媒体播放器示例</h3><pre class="mermaid" data-diagram-type="stateDiagram-v2" data-source="stateDiagram-v2&#10;    [*] --&gt; stopped&#10;    state stopped {&#10;        [*] --&gt; idle&#10;        idle --&gt; playing: PLAY&#10;    }&#10;    state playing {&#10;        [*] --&gt; normal&#10;        normal --&gt; paused: PAUSE&#10;        paused --&gt; normal: PLAY&#10;    }&#10;    stopped --&gt; playing: PLAY&#10;    playing --&gt; stopped: STOP&#10;    playing --&gt; playing: NEXT&#10;    playing --&gt; playing: PREV"></pre><div class="code-block-wrapper" data-lang="typescript" data-code="import { useMachine } from '@xstate/react'
+import { createMachine, assign } from 'xstate'
+
+interface PlayerContext {
+  currentTrack: number
+  volume: number
+  playlist: string[]
+}
+
+type PlayerEvent =
+  | { type: 'PLAY' }
+  | { type: 'PAUSE' }
+  | { type: 'STOP' }
+  | { type: 'NEXT' }
+  | { type: 'PREV' }
+  | { type: 'SET_VOLUME'; value: number }
+
+const playerMachine = createMachine&lt;PlayerContext, PlayerEvent&gt;({
+  id: 'player',
+  initial: 'stopped',
+  context: {
+    currentTrack: 0,
+    volume: 80,
+    playlist: ['Track 1', 'Track 2', 'Track 3']
+  },
+  states: {
+    stopped: {
+      on: {
+        PLAY: 'playing'
+      }
+    },
+    playing: {
+      initial: 'normal',
+      states: {
+        normal: {
+          on: {
+            PAUSE: 'paused'
+          }
+        },
+        paused: {
+          on: {
+            PLAY: 'normal'
+          }
+        }
+      },
+      on: {
+        STOP: 'stopped',
+        NEXT: {
+          actions: assign({
+            currentTrack: (context) =&gt;
+              (context.currentTrack + 1) % context.playlist.length
+          })
+        },
+        PREV: {
+          actions: assign({
+            currentTrack: (context) =&gt;
+              (context.currentTrack - 1 + context.playlist.length) % context.playlist.length
+          })
+        },
+        SET_VOLUME: {
+          actions: assign({
+            volume: (_, event) =&gt; event.value
+          })
+        }
+      }
+    }
+  }
+})
+
+function MediaPlayer() {
+  const [state, send] = useMachine(playerMachine)
+
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;{state.context.playlist[state.context.currentTrack]}&lt;/h2&gt;
+      &lt;p&gt;Status: {state.value}&lt;/p&gt;
+      {state.matches('playing.normal') &amp;&amp; &lt;p&gt;Now Playing&lt;/p&gt;}
+      {state.matches('playing.paused') &amp;&amp; &lt;p&gt;Paused&lt;/p&gt;}
+      &lt;div&gt;
+        &lt;button
+          onClick={() =&gt; send({ type: 'PREV' })}
+          disabled={!state.matches('playing')}
+        &gt;
+          Previous
+        &lt;/button&gt;
+        {state.matches('playing.normal') ? (
+          &lt;button onClick={() =&gt; send({ type: 'PAUSE' })}&gt;Pause&lt;/button&gt;
+        ) : (
+          &lt;button onClick={() =&gt; send({ type: 'PLAY' })}&gt;Play&lt;/button&gt;
+        )}
+        &lt;button
+          onClick={() =&gt; send({ type: 'NEXT' })}
+          disabled={!state.matches('playing')}
+        &gt;
+          Next
+        &lt;/button&gt;
+        &lt;button onClick={() =&gt; send({ type: 'STOP' })}&gt;Stop&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div&gt;
+        &lt;label&gt;Volume: {state.context.volume}&lt;/label&gt;
+        &lt;input
+          type=&quot;range&quot;
+          min=&quot;0&quot;
+          max=&quot;100&quot;
+          value={state.context.volume}
+          onChange={e =&gt; send({ type: 'SET_VOLUME', value: Number(e.target.value) })}
+        /&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  )
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { useMachine } </span><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '@xstate/react'</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { createMachine, assign } </span><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'xstate'</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> PlayerContext</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  currentTrack</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  volume</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  playlist</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[]</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">type</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> PlayerEvent</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#E36209;--shiki-dark:#FFAB70">type</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'PLAY'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#E36209;--shiki-dark:#FFAB70">type</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'PAUSE'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#E36209;--shiki-dark:#FFAB70">type</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'STOP'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#E36209;--shiki-dark:#FFAB70">type</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'NEXT'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#E36209;--shiki-dark:#FFAB70">type</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'PREV'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  |</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="color:#E36209;--shiki-dark:#FFAB70">type</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'SET_VOLUME'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; </span><span style="color:#E36209;--shiki-dark:#FFAB70">value</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> playerMachine</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> createMachine</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">PlayerContext</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">PlayerEvent</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>({</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  id: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'player'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  initial: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'stopped'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  context: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    currentTrack: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    volume: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">80</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    playlist: [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Track 1'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Track 2'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'Track 3'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  states: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    stopped: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      on: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        PLAY: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'playing'</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    playing: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      initial: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'normal'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      states: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        normal: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          on: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            PAUSE: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'paused'</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        paused: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          on: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            PLAY: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'normal'</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      on: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        STOP: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'stopped'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        NEXT: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          actions: </span><span style="color:#6F42C1;--shiki-dark:#B392F0">assign</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">            currentTrack</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: (</span><span style="color:#E36209;--shiki-dark:#FFAB70">context</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">              (context.currentTrack </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">%</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> context.playlist.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">length</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          })</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        PREV: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          actions: </span><span style="color:#6F42C1;--shiki-dark:#B392F0">assign</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">            currentTrack</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: (</span><span style="color:#E36209;--shiki-dark:#FFAB70">context</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">              (context.currentTrack </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#D73A49;--shiki-dark:#F97583"> +</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> context.playlist.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">length</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">%</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> context.playlist.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">length</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          })</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        SET_VOLUME: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          actions: </span><span style="color:#6F42C1;--shiki-dark:#B392F0">assign</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">            volume</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: (</span><span style="color:#E36209;--shiki-dark:#FFAB70">_</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">event</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> event.value</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          })</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">})</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> MediaPlayer</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">state</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">send</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> useMachine</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(playerMachine)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">div</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">h2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>{state.context.playlist[state.context.currentTrack]}&#x3C;/h2></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;p>Status: {state.value}</span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">p</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      {state.matches(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'playing.normal'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) &#x26;&#x26; &#x3C;p>Now Playing&#x3C;/p>}</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      {state.matches(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'playing.paused'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) &#x26;&#x26; &#x3C;p>Paused&#x3C;/p>}</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;div></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        &#x3C;button</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          onClick={() => send({ type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'PREV'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> })}</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          disabled</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{!state.matches(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'playing'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)}</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        ></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          Previous</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        &#x3C;/button></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        {state.matches(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'playing.normal'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) ? (</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          &#x3C;button onClick={() => send({ type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'PAUSE'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> })}</span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#24292E;--shiki-dark:#E1E4E8">Pause</span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">button</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        ) : (</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">          &#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">button onClick</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{() => </span><span style="color:#6F42C1;--shiki-dark:#B392F0">send</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ </span><span style="color:#E36209;--shiki-dark:#FFAB70">type</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'PLAY'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> })}</span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#24292E;--shiki-dark:#E1E4E8">Play</span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">button</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        )}</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        &#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">button</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          onClick</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{() => </span><span style="color:#6F42C1;--shiki-dark:#B392F0">send</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ </span><span style="color:#E36209;--shiki-dark:#FFAB70">type</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'NEXT'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> })}</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          disabled</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{!state.matches(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'playing'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)}</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        ></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          Next</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        &#x3C;/button></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        &#x3C;button onClick={() => send({ type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'STOP'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> })}</span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#24292E;--shiki-dark:#E1E4E8">Stop</span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">button</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      &#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">div</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">div</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">label</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span><span style="color:#6F42C1;--shiki-dark:#B392F0">Volume</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: {state.context.volume}</span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">label</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        &#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">input</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          type</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"range"</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          min</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"0"</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          max</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"100"</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          value</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{state.context.volume}</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          onChange</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">{</span><span style="color:#E36209;--shiki-dark:#FFAB70">e</span><span style="color:#D73A49;--shiki-dark:#F97583"> =></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> send</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({ type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'SET_VOLUME'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, value: </span><span style="color:#6F42C1;--shiki-dark:#B392F0">Number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(e.target.value) })}</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        /></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      &#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">div</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    &#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">div</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  )</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><h2 id="并行状态机">并行状态机</h2><h3 id="同时管理多个独立状态">同时管理多个独立状态</h3><div class="code-block-wrapper" data-lang="typescript" data-code="import { useMachine } from '@xstate/react'
+import { createMachine } from 'xstate'
+
+const trafficMachine = createMachine({
+  id: 'traffic',
+  type: 'parallel',
+  states: {
+    light: {
+      initial: 'red',
+      states: {
+        red: {
+          after: { 5000: 'yellow' }
+        },
+        yellow: {
+          after: { 1000: 'green' }
+        },
+        green: {
+          after: { 5000: 'red' }
+        }
+      }
+    },
+    pedestrian: {
+      initial: 'wait',
+      states: {
+        wait: {},
+        walk: {}
+      },
+      on: {
+        LIGHT_GREEN: { target: '.walk' },
+        LIGHT_RED: { target: '.wait' }
+      }
+    }
+  }
+})
+
+function TrafficLight() {
+  const [state] = useMachine(trafficMachine)
+
+  return (
+    &lt;div&gt;
+      &lt;div&gt;Light: {state.value.light}&lt;/div&gt;
+      &lt;div&gt;Pedestrian: {state.value.pedestrian}&lt;/div&gt;
+    &lt;/div&gt;
+  )
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { useMachine } </span><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '@xstate/react'</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { createMachine } </span><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'xstate'</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> trafficMachine</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> createMachine</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  id: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'traffic'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  type: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'parallel'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  states: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    light: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      initial: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'red'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      states: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        red: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          after: { </span><span style="color:#005CC5;--shiki-dark:#79B8FF">5000</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'yellow'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        yellow: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          after: { </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1000</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'green'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        green: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          after: { </span><span style="color:#005CC5;--shiki-dark:#79B8FF">5000</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'red'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    pedestrian: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      initial: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'wait'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      states: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        wait: {},</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        walk: {}</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      on: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        LIGHT_GREEN: { target: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'.walk'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        LIGHT_RED: { target: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'.wait'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">})</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> TrafficLight</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">state</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> useMachine</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(trafficMachine)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">div</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">div</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span><span style="color:#E36209;--shiki-dark:#FFAB70">Light</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span><span style="color:#6F42C1;--shiki-dark:#B392F0">state</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">value</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#E36209;--shiki-dark:#FFAB70">light</span><span style="color:#24292E;--shiki-dark:#E1E4E8">}&#x3C;/</span><span style="color:#6F42C1;--shiki-dark:#B392F0">div</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      &#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">div</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span><span style="color:#E36209;--shiki-dark:#FFAB70">Pedestrian</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span><span style="color:#6F42C1;--shiki-dark:#B392F0">state</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">value</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#E36209;--shiki-dark:#FFAB70">pedestrian</span><span style="color:#24292E;--shiki-dark:#E1E4E8">}&#x3C;/</span><span style="color:#6F42C1;--shiki-dark:#B392F0">div</span><span style="color:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    &#x3C;/</span><span style="color:#24292E;--shiki-dark:#E1E4E8">div</span><span style="color:#D73A49;--shiki-dark:#F97583">></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  )</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><h2 id="常见误区">常见误区</h2><h3 id="误区-1-过度使用状态机">❌ 误区 1：过度使用状态机</h3><p>对于简单的布尔开关，普通 useState 就足够了，不需要引入状态机。</p>
+<h3 id="误区-2-状态设计过于复杂">❌ 误区 2：状态设计过于复杂</h3><p>保持状态简单，避免创建过多的微状态。</p>
+<h3 id="误区-3-忽略守卫条件">❌ 误区 3：忽略守卫条件</h3><div class="code-block-wrapper" data-lang="typescript" data-code="// ✅ 正确：使用守卫条件
+const machine = createMachine(
+  {
+    initial: 'idle',
+    states: {
+      idle: {
+        on: {
+          SUBMIT: [{ target: 'loading', cond: 'isFormValid' }, { target: 'error' }],
+        },
+      },
+      loading: {},
+      error: {},
+    },
+  },
+  {
+    guards: {
+      isFormValid: (context) =&gt; context.email &amp;&amp; context.password,
+    },
+  },
+);"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// ✅ 正确：使用守卫条件</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> machine</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> createMachine</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    initial: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'idle'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    states: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      idle: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        on: {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">          SUBMIT: [{ target: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'loading'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, cond: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'isFormValid'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }, { target: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'error'</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      loading: {},</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      error: {},</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    guards: {</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">      isFormValid</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: (</span><span style="color:#E36209;--shiki-dark:#FFAB70">context</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> context.email </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x26;&#x26;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> context.password,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span></code></pre></div><h2 id="小结">小结</h2><p>状态机是管理复杂状态的强大工具，XState 让状态机在 React 中变得简单易用。</p>
+<p><strong>核心要点回顾：</strong></p>
+<ul>
+<li>状态机消除了不确定状态</li>
+<li>XState 提供了可视化和类型安全</li>
+<li>适合管理复杂的异步流程和表单</li>
+<li>分层和并行状态机可以处理复杂场景</li>
+<li>不要过度使用，简单场景用 useState</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../frontend-engineering/state-management-patterns/local-state/derived-state.html"><span class="label">Previous</span>派生状态</a><a class="next" href="../../../frontend-engineering/state-management-patterns/local-state/form-state-management.html"><span class="label">Next</span>表单状态管理</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-3"><a href="#为什么使用状态机" data-outline-link="为什么使用状态机">为什么使用状态机</a></li><li class="depth-3"><a href="#状态机基本要素" data-outline-link="状态机基本要素">状态机基本要素</a></li><li class="depth-2"><a href="#基础状态机" data-outline-link="基础状态机">基础状态机</a></li><li class="depth-3"><a href="#简单开关状态机" data-outline-link="简单开关状态机">简单开关状态机</a></li><li class="depth-3"><a href="#在-react-中使用" data-outline-link="在-react-中使用">在 React 中使用</a></li><li class="depth-2"><a href="#表单提交状态机" data-outline-link="表单提交状态机">表单提交状态机</a></li><li class="depth-3"><a href="#带有加载和错误状态" data-outline-link="带有加载和错误状态">带有加载和错误状态</a></li><li class="depth-2"><a href="#分层状态机" data-outline-link="分层状态机">分层状态机</a></li><li class="depth-3"><a href="#媒体播放器示例" data-outline-link="媒体播放器示例">媒体播放器示例</a></li><li class="depth-2"><a href="#并行状态机" data-outline-link="并行状态机">并行状态机</a></li><li class="depth-3"><a href="#同时管理多个独立状态" data-outline-link="同时管理多个独立状态">同时管理多个独立状态</a></li><li class="depth-2"><a href="#常见误区" data-outline-link="常见误区">常见误区</a></li><li class="depth-3"><a href="#误区-1-过度使用状态机" data-outline-link="误区-1-过度使用状态机">❌ 误区 1：过度使用状态机</a></li><li class="depth-3"><a href="#误区-2-状态设计过于复杂" data-outline-link="误区-2-状态设计过于复杂">❌ 误区 2：状态设计过于复杂</a></li><li class="depth-3"><a href="#误区-3-忽略守卫条件" data-outline-link="误区-3-忽略守卫条件">❌ 误区 3：忽略守卫条件</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

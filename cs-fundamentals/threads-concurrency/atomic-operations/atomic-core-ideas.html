@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>原子操作的核心思想 · 计算机科学基础</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:计算机科学基础" data-pagefind-meta="slug:cs-fundamentals">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">计算机科学基础</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item active" href="../../../cs-fundamentals/index.html" aria-current="page" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../cs-fundamentals/index.html">计算机科学基础</a><a class="back-to-hubs" href="../../../cs-fundamentals/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../cs-fundamentals/threads-concurrency/index.html">线程与并发 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="cs-fundamentals"><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/processes"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/processes/index.html">进程 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/processes/process-definition-and-concepts.html">进程的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/processes/process-core-ideas.html">进程的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/processes/process-implementation.html">进程的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/threads"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/threads/index.html">线程 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/threads/thread-definition-and-concepts.html">线程的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/threads/thread-core-ideas.html">线程的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/threads/thread-implementation.html">线程的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/coroutines"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/coroutines/index.html">协程 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/coroutines/coroutine-definition-and-concepts.html">协程的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/coroutines/coroutine-core-ideas.html">协程的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/coroutines/coroutine-implementation.html">协程的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/concurrency-and-parallelism"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/index.html">并发与并行 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/concurrency-parallelism-concepts.html">并发与并行的核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/concurrency-parallelism-ideas.html">并发与并行的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/concurrency-parallelism-implementation.html">并发与并行的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/atomic-operations" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/atomic-operations/index.html">原子操作 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/atomic-operations/atomic-definition-and-concepts.html">原子操作的定义与核心概念</a></li><li class="leaf"><a class="leaf-title active" href="../../../cs-fundamentals/threads-concurrency/atomic-operations/atomic-core-ideas.html">原子操作的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/atomic-operations/atomic-implementation.html">原子操作的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/locks"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/locks/index.html">锁 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/locks/lock-definition-and-concepts.html">锁的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/locks/lock-core-ideas.html">锁的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/locks/lock-implementation.html">锁的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/actor-model"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/actor-model/index.html">Actor 模型 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/actor-model/actor-model-concepts.html">Actor 模型的核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/actor-model/actor-model-ideas.html">Actor 模型的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/actor-model/actor-model-implementation.html">Actor 模型的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/supplementary"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/index.html">补充主题 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/race-conditions.html">竞态条件</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/deadlock-livelock-starvation.html">死锁、活锁与饥饿</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/semaphores-and-conditions.html">信号量与条件变量</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/thread-pools.html">线程池与任务调度</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/message-passing.html">消息传递</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part III · 系统 (Systems)</span><span>线程与并发 简介</span><span>原子操作 简介</span><span>原子操作的核心思想</span></nav>
+    <article class="content prose"><h1 id="原子操作的核心思想">原子操作的核心思想</h1><h2 id="问题背景">问题背景</h2><p>在并发编程中，保护共享数据的传统方式是使用<strong>锁（Lock）</strong>。锁虽然有效，但带来了显著的性能开销：线程在等待锁的过程中被挂起，涉及上下文切换、内核调度等昂贵的操作。对于简单的数据操作（如计数器加一、标志位翻转），使用锁就像用大炮打蚊子——<strong>过度重量级</strong>。</p>
+<p>原子操作的核心思想就是：<strong>在不使用锁的前提下，通过硬件级别的支持来保证操作的不可分割性</strong>。</p>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart LR&#10;    PROBLEM[&quot;Shared data&lt;br/&gt;concurrent access&quot;]&#10;&#10;    PROBLEM --&gt; LOCK[&quot;Approach A: Locking&quot;]&#10;    PROBLEM --&gt; ATOMIC[&quot;Approach B: Atomic operations&quot;]&#10;&#10;    LOCK --&gt; L1[&quot;✅ Highly versatile&quot;]&#10;    LOCK --&gt; L2[&quot;❌ High performance overhead&quot;]&#10;    LOCK --&gt; L3[&quot;❌ Possible deadlock&quot;]&#10;&#10;    ATOMIC --&gt; A1[&quot;✅ Excellent performance&quot;]&#10;    ATOMIC --&gt; A2[&quot;✅ No deadlock risk&quot;]&#10;    ATOMIC --&gt; A3[&quot;❌ Only suitable for simple operations&quot;]"></pre><blockquote>
+<p>原子操作是&quot;轻量级同步&quot;的代表：用最小的代价解决最常见的并发问题。</p>
+</blockquote>
+<hr>
+<h2 id="核心原理">核心原理</h2><h3 id="思想一-不可分割性">思想一：不可分割性</h3><p>原子操作最根本的思想是<strong>不可分割性（Indivisibility）</strong>——在操作执行过程中，没有任何其他线程能够介入或观察到中间状态。</p>
+<p>这意味着从任何外部观察者的角度来看，原子操作要么<strong>还没开始</strong>，要么<strong>已经完成</strong>，永远不会处于&quot;执行了一半&quot;的状态。</p>
+<div class="code-block-wrapper" data-lang="pseudocode" data-code="// 非原子操作：三个步骤，其他线程可在任意间隙介入
+temp = 读取(counter)        // ← 其他线程可在此处介入
+temp = temp + 1              // ← 或此处
+写回(counter, temp)          // ← 或此处
+
+// 原子操作：整体不可分割，外部只能看到操作前或操作后的状态
+原子执行 {
+  temp = 读取(counter)
+  temp = temp + 1
+  写回(counter, temp)
+}  // 整个过程对外部是&quot;瞬间&quot;完成的"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>// 非原子操作：三个步骤，其他线程可在任意间隙介入</span></span>
+<span class="line"><span>temp = 读取(counter)        // ← 其他线程可在此处介入</span></span>
+<span class="line"><span>temp = temp + 1              // ← 或此处</span></span>
+<span class="line"><span>写回(counter, temp)          // ← 或此处</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>// 原子操作：整体不可分割，外部只能看到操作前或操作后的状态</span></span>
+<span class="line"><span>原子执行 {</span></span>
+<span class="line"><span>  temp = 读取(counter)</span></span>
+<span class="line"><span>  temp = temp + 1</span></span>
+<span class="line"><span>  写回(counter, temp)</span></span>
+<span class="line"><span>}  // 整个过程对外部是"瞬间"完成的</span></span></code></pre></div><pre class="mermaid" data-diagram-type="sequenceDiagram" data-source="sequenceDiagram&#10;    participant OBS as External Observer&#10;    participant OP as Atomic Operation&#10;&#10;    Note over OP: State: Not started&#10;    OBS-&gt;&gt;OP: Observe → See &quot;Not started&quot;&#10;&#10;    rect rgb(220, 252, 231)&#10;        Note over OP: Executing (unobservable transitional state)&#10;        OP-&gt;&gt;OP: Read → Modify → Write back&#10;    end&#10;&#10;    Note over OP: State: Completed&#10;    OBS-&gt;&gt;OP: Observe → See &quot;Completed&quot;&#10;&#10;    Note over OBS,OP: External observer can never see&lt;br/&gt;a &quot;half-executed&quot; state"></pre><h3 id="思想二-无锁线程安全">思想二：无锁线程安全</h3><p>原子操作的第二个核心思想是<strong>不需要显式的同步原语（如锁）就能实现线程安全</strong>。</p>
+<p>使用锁时，线程需要经历&quot;获取锁 → 执行操作 → 释放锁&quot;的流程，如果锁被其他线程持有，当前线程就会<strong>阻塞等待</strong>。而原子操作跳过了这个中间环节，直接在硬件层面保证操作的安全性。</p>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TD&#10;    subgraph &quot;Lock-Based Approach&quot;&#10;        direction TB&#10;        LK1[&quot;Thread requests operation&quot;]&#10;        LK2{&quot;Is lock available?&quot;}&#10;        LK3[&quot;Acquire lock&quot;]&#10;        LK4[&quot;Execute operation&quot;]&#10;        LK5[&quot;Release lock&quot;]&#10;        LK6[&quot;Block and wait&lt;br/&gt;(context switch)&quot;]&#10;&#10;        LK1 --&gt; LK2&#10;        LK2 --&gt;|&quot;Yes&quot;| LK3 --&gt; LK4 --&gt; LK5&#10;        LK2 --&gt;|&quot;No&quot;| LK6&#10;        LK6 -.-&gt;|&quot;Wake up when lock available&quot;| LK3&#10;    end&#10;&#10;    subgraph &quot;Atomic Operation Approach&quot;&#10;        direction TB&#10;        AT1[&quot;Thread requests operation&quot;]&#10;        AT2[&quot;CPU executes atomic instruction&quot;]&#10;        AT3[&quot;Operation complete&quot;]&#10;&#10;        AT1 --&gt; AT2 --&gt; AT3&#10;    end"></pre><p>对比两种方式的线程安全实现：</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="// ---- 基于锁的线程安全 ----
+class LockedCounter {
+  private value = 0;
+  private lock = new Mutex();
+
+  increment(): void {
+    this.lock.acquire(); // 可能阻塞
+    this.value += 1;
+    this.lock.release();
+  }
+}
+
+// ---- 基于原子操作的线程安全 ----
+class AtomicCounter {
+  private value = new AtomicInteger(0);
+
+  increment(): void {
+    this.value.fetchAdd(1); // 永不阻塞，硬件保证安全
+  }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// ---- 基于锁的线程安全 ----</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> LockedCounter</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  private</span><span style="color:#E36209;--shiki-dark:#FFAB70"> value</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  private</span><span style="color:#E36209;--shiki-dark:#FFAB70"> lock</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Mutex</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  increment</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> void</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.lock.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">acquire</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(); </span><span style="color:#6A737D;--shiki-dark:#6A737D">// 可能阻塞</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.value </span><span style="color:#D73A49;--shiki-dark:#F97583">+=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.lock.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">release</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// ---- 基于原子操作的线程安全 ----</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> AtomicCounter</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  private</span><span style="color:#E36209;--shiki-dark:#FFAB70"> value</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> AtomicInteger</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  increment</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> void</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.value.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">fetchAdd</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">); </span><span style="color:#6A737D;--shiki-dark:#6A737D">// 永不阻塞，硬件保证安全</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><h3 id="思想三-硬件级高效性">思想三：硬件级高效性</h3><p>原子操作的第三个核心思想是<strong>充分利用硬件能力来实现高效的并发控制</strong>。</p>
+<p>现代 CPU 提供了专门的原子指令，这些指令在硬件层面保证了操作的不可分割性。相比于操作系统层面的锁机制，硬件原子指令的开销小得多：</p>
+<table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">开销量级</th>
+<th align="left">涉及的层次</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">普通读写</td>
+<td align="left">~1 ns</td>
+<td align="left">CPU 寄存器 / 缓存</td>
+</tr>
+<tr>
+<td align="left">原子操作</td>
+<td align="left">~10-50 ns</td>
+<td align="left">CPU 缓存一致性协议</td>
+</tr>
+<tr>
+<td align="left">锁（无竞争）</td>
+<td align="left">~20-100 ns</td>
+<td align="left">操作系统内核</td>
+</tr>
+<tr>
+<td align="left">锁（有竞争）</td>
+<td align="left">~1000+ ns</td>
+<td align="left">内核调度 + 上下文切换</td>
+</tr>
+</tbody></table>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart BT&#10;    HW[&quot;Hardware Layer&lt;br/&gt;CPU atomic instructions&quot;]&#10;    CACHE[&quot;Cache Layer&lt;br/&gt;Cache coherence protocol (MESI)&quot;]&#10;    OS[&quot;OS Layer&lt;br/&gt;Mutex, Semaphore&quot;]&#10;    APP[&quot;Application Layer&lt;br/&gt;Concurrent data structures&quot;]&#10;&#10;    HW --&gt; CACHE --&gt; OS --&gt; APP&#10;&#10;    HW -.- NOTE1[&quot;CAS, XCHG, ADD&lt;br/&gt;Minimal overhead&quot;]&#10;    OS -.- NOTE2[&quot;Mutex, Semaphore&lt;br/&gt;Higher overhead&quot;]"></pre><hr>
+<h2 id="分类与变体">分类与变体</h2><h3 id="cas-比较并交换">CAS：比较并交换</h3><p><strong>CAS（Compare-And-Swap）</strong> 是最重要的原子操作原语，几乎所有高级原子操作都基于它实现。CAS 的语义是：</p>
+<blockquote>
+<p>如果变量的当前值等于期望值，则将其更新为新值；否则不做任何修改。整个过程是原子的。</p>
+</blockquote>
+<div class="code-block-wrapper" data-lang="pseudocode" data-code="函数 CAS(地址, 期望值, 新值) -&gt; 布尔值:
+    原子执行 {
+        如果 *地址 == 期望值:
+            *地址 = 新值
+            返回 真    // 交换成功
+        否则:
+            返回 假    // 交换失败，当前值已被其他线程修改
+    }"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>函数 CAS(地址, 期望值, 新值) -> 布尔值:</span></span>
+<span class="line"><span>    原子执行 {</span></span>
+<span class="line"><span>        如果 *地址 == 期望值:</span></span>
+<span class="line"><span>            *地址 = 新值</span></span>
+<span class="line"><span>            返回 真    // 交换成功</span></span>
+<span class="line"><span>        否则:</span></span>
+<span class="line"><span>            返回 假    // 交换失败，当前值已被其他线程修改</span></span>
+<span class="line"><span>    }</span></span></code></pre></div><p>CAS 的典型使用模式是<strong>自旋重试</strong>——如果 CAS 失败（说明有其他线程抢先修改了值），就重新读取当前值并再次尝试：</p>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TD&#10;    START[&quot;Start&quot;]&#10;    READ[&quot;Read current value current&quot;]&#10;    COMPUTE[&quot;Compute new value next = f(current)&quot;]&#10;    CAS{&quot;CAS(current, next)&quot;}&#10;    SUCCESS[&quot;Operation succeeded ✅&quot;]&#10;    RETRY[&quot;Retry (spin)&quot;]&#10;&#10;    START --&gt; READ --&gt; COMPUTE --&gt; CAS&#10;    CAS --&gt;|&quot;Success&quot;| SUCCESS&#10;    CAS --&gt;|&quot;Failure: value already modified&quot;| RETRY&#10;    RETRY --&gt; READ"></pre><p>用 CAS 实现原子加一：</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="function atomicIncrement(atom: AtomicInteger): void {
+  let success = false;
+  while (!success) {
+    const current = atom.load();
+    const next = current + 1;
+    success = atom.compareAndSwap(current, next);
+  }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> atomicIncrement</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">atom</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> AtomicInteger</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> void</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  let</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> success </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> false</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  while</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">!</span><span style="color:#24292E;--shiki-dark:#E1E4E8">success) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> current</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> atom.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">load</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> next</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> current </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    success </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> atom.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">compareAndSwap</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(current, next);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><h3 id="cas-的-aba-问题">CAS 的 ABA 问题</h3><p>CAS 有一个经典的陷阱——<strong>ABA 问题</strong>：</p>
+<div class="code-block-wrapper" data-lang="pseudocode" data-code="初始状态: value = A
+
+线程 1: 读取 value → A
+线程 2: 将 value 从 A 改为 B
+线程 2: 将 value 从 B 改回 A
+线程 1: CAS(期望=A, 新值=C) → 成功！
+
+// 线程 1 的 CAS 成功了，但它并不知道 value 曾经被改变过
+// 在某些场景下（如链表操作），这可能导致逻辑错误"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>初始状态: value = A</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>线程 1: 读取 value → A</span></span>
+<span class="line"><span>线程 2: 将 value 从 A 改为 B</span></span>
+<span class="line"><span>线程 2: 将 value 从 B 改回 A</span></span>
+<span class="line"><span>线程 1: CAS(期望=A, 新值=C) → 成功！</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>// 线程 1 的 CAS 成功了，但它并不知道 value 曾经被改变过</span></span>
+<span class="line"><span>// 在某些场景下（如链表操作），这可能导致逻辑错误</span></span></code></pre></div><p>解决 ABA 问题的常见方法是给值<strong>附加一个版本号</strong>，每次修改时版本号递增：</p>
+<div class="code-block-wrapper" data-lang="pseudocode" data-code="原子变量 = { 值: A, 版本: 1 }
+
+线程 1: 读取 → { A, 1 }
+线程 2: 修改 → { B, 2 } → { A, 3 }
+线程 1: CAS(期望={A, 1}, 新值={C, 2}) → 失败！版本不匹配"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>原子变量 = { 值: A, 版本: 1 }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>线程 1: 读取 → { A, 1 }</span></span>
+<span class="line"><span>线程 2: 修改 → { B, 2 } → { A, 3 }</span></span>
+<span class="line"><span>线程 1: CAS(期望={A, 1}, 新值={C, 2}) → 失败！版本不匹配</span></span></code></pre></div><hr>
+<h2 id="工作流程">工作流程</h2><p>以一个完整的无锁计数器为例，展示原子操作在实际并发场景中的工作流程：</p>
+<pre class="mermaid" data-diagram-type="sequenceDiagram" data-source="sequenceDiagram&#10;    participant C as Counter (value=10)&#10;    participant A as Thread A&#10;    participant B as Thread B&#10;&#10;    Note over C: value = 10&#10;&#10;    A-&gt;&gt;C: load() → 10&#10;    B-&gt;&gt;C: load() → 10&#10;&#10;    A-&gt;&gt;A: Compute 10 + 1 = 11&#10;    B-&gt;&gt;B: Compute 10 + 1 = 11&#10;&#10;    A-&gt;&gt;C: CAS(10, 11) → Success ✅&#10;    Note over C: value = 11&#10;&#10;    B-&gt;&gt;C: CAS(10, 11) → Failure ❌&#10;    Note over B: Value changed to 11, retry&#10;&#10;    B-&gt;&gt;C: load() → 11&#10;    B-&gt;&gt;B: Compute 11 + 1 = 12&#10;    B-&gt;&gt;C: CAS(11, 12) → Success ✅&#10;    Note over C: value = 12 ✅"></pre><blockquote>
+<p>通过 CAS + 自旋重试，两个线程在无锁的情况下正确完成了计数器的递增操作。</p>
+</blockquote>
+<hr>
+<h2 id="优劣对比">优劣对比</h2><table>
+<thead>
+<tr>
+<th align="left">维度</th>
+<th align="left">原子操作</th>
+<th align="left">锁（Mutex）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>性能</strong></td>
+<td align="left">高（硬件指令，纳秒级）</td>
+<td align="left">低（涉及内核，微秒级）</td>
+</tr>
+<tr>
+<td align="left"><strong>阻塞行为</strong></td>
+<td align="left">不阻塞（自旋或立即完成）</td>
+<td align="left">可能阻塞（线程挂起）</td>
+</tr>
+<tr>
+<td align="left"><strong>死锁风险</strong></td>
+<td align="left">无</td>
+<td align="left">有（不当使用时）</td>
+</tr>
+<tr>
+<td align="left"><strong>适用范围</strong></td>
+<td align="left">单变量简单操作</td>
+<td align="left">任意复杂的临界区</td>
+</tr>
+<tr>
+<td align="left"><strong>公平性</strong></td>
+<td align="left">不保证（可能饥饿）</td>
+<td align="left">可配置公平策略</td>
+</tr>
+<tr>
+<td align="left"><strong>编程复杂度</strong></td>
+<td align="left">较高（需理解内存模型）</td>
+<td align="left">较低（语义直观）</td>
+</tr>
+<tr>
+<td align="left"><strong>竞争激烈时</strong></td>
+<td align="left">性能下降（大量自旋）</td>
+<td align="left">性能相对稳定</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>在低竞争场景下，原子操作的性能优势非常明显。但在高竞争场景下（大量线程频繁争抢同一变量），自旋重试的开销会急剧增加，此时锁反而可能更合适。</p>
+</blockquote>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TD&#10;    DECIDE[&quot;Choose synchronization strategy&quot;]&#10;    Q1{&quot;Does the operation involve&lt;br/&gt;only a single simple variable?&quot;}&#10;    Q2{&quot;Is thread contention&lt;br/&gt;high?&quot;}&#10;&#10;    DECIDE --&gt; Q1&#10;    Q1 --&gt;|&quot;No&quot;| LOCK[&quot;Use locks&quot;]&#10;    Q1 --&gt;|&quot;Yes&quot;| Q2&#10;    Q2 --&gt;|&quot;Low contention&quot;| ATOMIC[&quot;Use atomic operations ✅&quot;]&#10;    Q2 --&gt;|&quot;High contention&quot;| CONSIDER[&quot;Evaluate: Atomic ops vs Locks&lt;br/&gt;Benchmarking needed&quot;]"></pre><hr>
+<h2 id="小结">小结</h2><pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart LR&#10;    subgraph Three Core Ideas&#10;        I1[&quot;Indivisibility&lt;br/&gt;No intermediate state in operations&quot;]&#10;        I2[&quot;Lock-free thread safety&lt;br/&gt;No explicit synchronization needed&quot;]&#10;        I3[&quot;Hardware-level efficiency&lt;br/&gt;CPU instruction support&quot;]&#10;    end&#10;&#10;    subgraph Key Mechanisms&#10;        CAS[&quot;CAS (Compare-and-Swap)&quot;]&#10;        SPIN[&quot;Spin retry&quot;]&#10;        ABA[&quot;ABA problem and versioning&quot;]&#10;    end&#10;&#10;    I1 ~~~ I2 ~~~ I3&#10;    CAS ~~~ SPIN ~~~ ABA"></pre><ul>
+<li>原子操作的核心思想是<strong>不可分割性</strong>——操作对外界表现为瞬间完成，无中间状态</li>
+<li>原子操作实现了<strong>无锁的线程安全</strong>，避免了锁带来的阻塞、上下文切换和死锁风险</li>
+<li>原子操作依赖<strong>硬件级支持</strong>（CPU 原子指令），性能远优于操作系统级的锁机制</li>
+<li><strong>CAS（比较并交换）</strong> 是最核心的原子操作原语，配合自旋重试构成无锁编程的基础</li>
+<li>需要注意 CAS 的 <strong>ABA 问题</strong>，可通过版本号机制解决</li>
+<li>原子操作最适合<strong>低竞争、简单操作</strong>的场景；高竞争或复杂操作场景仍应考虑使用锁</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../cs-fundamentals/threads-concurrency/atomic-operations/atomic-definition-and-concepts.html"><span class="label">Previous</span>原子操作的定义与核心概念</a><a class="next" href="../../../cs-fundamentals/threads-concurrency/atomic-operations/atomic-implementation.html"><span class="label">Next</span>原子操作的实现机制</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#问题背景" data-outline-link="问题背景">问题背景</a></li><li class="depth-2"><a href="#核心原理" data-outline-link="核心原理">核心原理</a></li><li class="depth-3"><a href="#思想一-不可分割性" data-outline-link="思想一-不可分割性">思想一：不可分割性</a></li><li class="depth-3"><a href="#思想二-无锁线程安全" data-outline-link="思想二-无锁线程安全">思想二：无锁线程安全</a></li><li class="depth-3"><a href="#思想三-硬件级高效性" data-outline-link="思想三-硬件级高效性">思想三：硬件级高效性</a></li><li class="depth-2"><a href="#分类与变体" data-outline-link="分类与变体">分类与变体</a></li><li class="depth-3"><a href="#cas-比较并交换" data-outline-link="cas-比较并交换">CAS：比较并交换</a></li><li class="depth-3"><a href="#cas-的-aba-问题" data-outline-link="cas-的-aba-问题">CAS 的 ABA 问题</a></li><li class="depth-2"><a href="#工作流程" data-outline-link="工作流程">工作流程</a></li><li class="depth-2"><a href="#优劣对比" data-outline-link="优劣对比">优劣对比</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>异步 I/O 模式 · 计算机科学基础</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:计算机科学基础" data-pagefind-meta="slug:cs-fundamentals">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">计算机科学基础</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item active" href="../../../cs-fundamentals/index.html" aria-current="page" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../cs-fundamentals/index.html">计算机科学基础</a><a class="back-to-hubs" href="../../../cs-fundamentals/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../cs-fundamentals/system-performance/index.html">系统性能与优化 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="cs-fundamentals"><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:system-performance/performance-fundamentals"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/system-performance/performance-fundamentals/index.html">性能工程基础 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/system-performance/performance-fundamentals/performance-metrics.html">性能指标与度量</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/system-performance/performance-fundamentals/bottleneck-analysis.html">瓶颈分析</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/system-performance/performance-fundamentals/amdahl-and-ust.html">阿姆达尔定律与 USL</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:system-performance/cpu-optimization"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/system-performance/cpu-optimization/index.html">CPU 性能优化 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/system-performance/cpu-optimization/profiling-tools.html">性能剖析工具</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/system-performance/cpu-optimization/cache-optimization.html">CPU 缓存优化</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/system-performance/cpu-optimization/branch-prediction.html">分支预测</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/system-performance/cpu-optimization/simd-vectorization.html">SIMD 向量化</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:system-performance/memory-optimization"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/system-performance/memory-optimization/index.html">内存性能优化 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/system-performance/memory-optimization/memory-layout.html">内存布局</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/system-performance/memory-optimization/allocation-strategies.html">分配策略</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/system-performance/memory-optimization/memory-leak-detection.html">内存泄漏检测</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:system-performance/io-optimization" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/system-performance/io-optimization/index.html">I/O 与网络优化 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/system-performance/io-optimization/disk-io-optimization.html">磁盘 I/O 优化</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/system-performance/io-optimization/network-optimization.html">网络优化</a></li><li class="leaf"><a class="leaf-title active" href="../../../cs-fundamentals/system-performance/io-optimization/async-io-patterns.html">异步 I/O 模式</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:system-performance/system-tuning"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/system-performance/system-tuning/index.html">系统调优 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/system-performance/system-tuning/os-tuning.html">操作系统调优</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/system-performance/system-tuning/container-performance.html">容器性能</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/system-performance/system-tuning/observability-for-perf.html">可观测性与性能</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/system-performance/system-tuning/load-testing.html">负载测试</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part III · 系统 (Systems)</span><span>系统性能与优化 简介</span><span>I/O 与网络优化 简介</span><span>异步 I/O 模式</span></nav>
+    <article class="content prose"><h1 id="异步-i-o-模式">异步 I/O 模式</h1><h2 id="核心概念">核心概念</h2><p>传统的同步阻塞 I/O 模型中，每个 I/O 操作都会阻塞调用线程直到完成。这意味着要处理 1000 个并发连接就需要 1000 个线程，而每个线程的栈空间（通常 1-8MB）和上下文切换开销使这种模型在高并发下难以扩展。<strong>异步 I/O</strong> 通过非阻塞操作和事件通知机制，让少量线程就能高效处理大量并发 I/O，是构建高性能网络服务的基础。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    subgraph 同步阻塞&#10;        A1[线程1] --&gt;|阻塞| B1[连接1]&#10;        A2[线程2] --&gt;|阻塞| B2[连接2]&#10;        A3[线程N] --&gt;|阻塞| B3[连接N]&#10;    end&#10;    subgraph 异步多路复用&#10;        C[事件循环线程] --&gt; D[连接1]&#10;        C --&gt; E[连接2]&#10;        C --&gt; F[连接N]&#10;    end"></pre><table>
+<thead>
+<tr>
+<th>I/O 模型</th>
+<th>并发能力</th>
+<th>资源消耗</th>
+<th>编程复杂度</th>
+<th>典型实现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>同步阻塞</td>
+<td>低（线程数受限）</td>
+<td>高（每连接一线程）</td>
+<td>低</td>
+<td>传统 Java BIO</td>
+</tr>
+<tr>
+<td>非阻塞轮询</td>
+<td>中</td>
+<td>中（CPU 忙等）</td>
+<td>中</td>
+<td>O_NONBLOCK + 循环检查</td>
+</tr>
+<tr>
+<td>I/O 多路复用</td>
+<td>高</td>
+<td>低</td>
+<td>中</td>
+<td>select/poll/epoll/kqueue</td>
+</tr>
+<tr>
+<td>信号驱动</td>
+<td>高</td>
+<td>低</td>
+<td>高</td>
+<td>SIGIO</td>
+</tr>
+<tr>
+<td>异步 I/O (AIO)</td>
+<td>极高</td>
+<td>极低</td>
+<td>高</td>
+<td>io_uring, IOCP</td>
+</tr>
+</tbody></table>
+<h2 id="i-o-多路复用的演进">I/O 多路复用的演进</h2><p>I/O 多路复用（I/O Multiplexing）允许单个线程同时监控多个文件描述符的就绪状态。Linux 上经历了 select → poll → epoll 的演进：</p>
+<p><strong>select</strong> 是最早的多路复用接口（1983）。每次调用需要传递所有监控的 fd 集合，内核线性扫描检查状态，返回后应用还需再次遍历找到就绪的 fd。</p>
+<p><strong>poll</strong> 去除了 select 的 1024 fd 限制，但性能特征不变——O(n) 扫描。</p>
+<p><strong>epoll</strong> 是 Linux 的高性能多路复用接口（2002）。核心改进是：</p>
+<ol>
+<li><strong>注册一次</strong>：fd 只需注册一次，不需要每次调用都传递</li>
+<li><strong>事件驱动</strong>：内核通过回调维护就绪列表，epoll_wait 只返回就绪的 fd</li>
+<li><strong>O(1) 就绪通知</strong>：就绪 fd 数量为 k 时，复杂度是 O(k) 而非 O(n)</li>
+</ol>
+<div class="code-block-wrapper" data-lang="c" data-code="#include &lt;sys/epoll.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;fcntl.h&gt;
+
+#define MAX_EVENTS 1024
+
+void event_loop(int listen_fd) {
+    int epfd = epoll_create1(0);
+
+    struct epoll_event ev;
+    ev.events = EPOLLIN | EPOLLET;  // 边沿触发模式
+    ev.data.fd = listen_fd;
+    epoll_ctl(epfd, EPOLL_CTL_ADD, listen_fd, &amp;ev);
+
+    struct epoll_event events[MAX_EVENTS];
+
+    while (1) {
+        int nready = epoll_wait(epfd, events, MAX_EVENTS, -1);
+        for (int i = 0; i &lt; nready; i++) {
+            if (events[i].data.fd == listen_fd) {
+                int client_fd = accept4(listen_fd, NULL, NULL, SOCK_NONBLOCK);
+                ev.events = EPOLLIN | EPOLLET;
+                ev.data.fd = client_fd;
+                epoll_ctl(epfd, EPOLL_CTL_ADD, client_fd, &amp;ev);
+            } else {
+                handle_client(events[i].data.fd);
+            }
+        }
+    }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">#include</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> &#x3C;sys/epoll.h></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">#include</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> &#x3C;unistd.h></span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">#include</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> &#x3C;fcntl.h></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">#define</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> MAX_EVENTS</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1024</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">void</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> event_loop</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">int</span><span style="color:#E36209;--shiki-dark:#FFAB70"> listen_fd</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    int</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> epfd </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> epoll_create1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    struct</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> epoll_event ev;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    ev.events </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> EPOLLIN </span><span style="color:#D73A49;--shiki-dark:#F97583">|</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> EPOLLET;</span><span style="color:#6A737D;--shiki-dark:#6A737D">  // 边沿触发模式</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    ev.data.fd </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> listen_fd;</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">    epoll_ctl</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(epfd, EPOLL_CTL_ADD, listen_fd, </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x26;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">ev);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    struct</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> epoll_event </span><span style="color:#E36209;--shiki-dark:#FFAB70">events</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[MAX_EVENTS];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    while</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        int</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> nready </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> epoll_wait</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(epfd, events, MAX_EVENTS, </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">int</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; i </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> nready; i</span><span style="color:#D73A49;--shiki-dark:#F97583">++</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">events</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[i].data.fd </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> listen_fd) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">                int</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> client_fd </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> accept4</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(listen_fd, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">NULL</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">NULL</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, SOCK_NONBLOCK);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                ev.events </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> EPOLLIN </span><span style="color:#D73A49;--shiki-dark:#F97583">|</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> EPOLLET;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                ev.data.fd </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> client_fd;</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">                epoll_ctl</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(epfd, EPOLL_CTL_ADD, client_fd, </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x26;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">ev);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            } </span><span style="color:#D73A49;--shiki-dark:#F97583">else</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">                handle_client</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">events</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[i].data.fd);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><p>macOS/BSD 使用 <strong>kqueue</strong>，功能类似 epoll 但接口更统一。Windows 使用 <strong>IOCP</strong>（I/O Completion Ports），是真正的异步 I/O 模型——不是通知&quot;可以读了&quot;，而是通知&quot;读完了&quot;。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TB&#10;    subgraph I/O 多路复用演进&#10;        A[select 1983] --&gt;|去除 fd 上限| B[poll 1997]&#10;        B --&gt;|事件驱动,O1通知| C[epoll 2002]&#10;        C --&gt;|统一事件接口| D[kqueue BSD]&#10;    end&#10;    subgraph 真正的异步 I/O&#10;        E[IOCP Windows] --&gt; F[完成通知模型]&#10;        G[io_uring Linux 5.1] --&gt; F&#10;    end"></pre><h2 id="事件驱动架构">事件驱动架构</h2><p>基于 I/O 多路复用的<strong>事件驱动架构</strong>（Event-Driven Architecture）是高性能网络服务的标准模式。核心组件是<strong>事件循环</strong>（Event Loop）：单线程不断地等待事件、分发事件、处理回调。</p>
+<p><strong>Reactor 模式</strong>是最常见的事件驱动架构：</p>
+<div class="code-block-wrapper" data-lang="text" data-code="单 Reactor 单线程: 一个线程处理所有 I/O 事件和业务逻辑
+  → 适合: I/O 密集且业务处理极快（Redis）
+
+单 Reactor 多线程: 一个线程处理 I/O 事件，业务逻辑分发给线程池
+  → 适合: 业务处理有一定计算量
+
+主从 Reactor: 主线程处理 accept，子线程各自运行 Reactor 处理已建立的连接
+  → 适合: 大规模并发（Nginx, Netty）"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>单 Reactor 单线程: 一个线程处理所有 I/O 事件和业务逻辑</span></span>
+<span class="line"><span>  → 适合: I/O 密集且业务处理极快（Redis）</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>单 Reactor 多线程: 一个线程处理 I/O 事件，业务逻辑分发给线程池</span></span>
+<span class="line"><span>  → 适合: 业务处理有一定计算量</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>主从 Reactor: 主线程处理 accept，子线程各自运行 Reactor 处理已建立的连接</span></span>
+<span class="line"><span>  → 适合: 大规模并发（Nginx, Netty）</span></span></code></pre></div><div class="code-block-wrapper" data-lang="python" data-code="import asyncio
+
+async def handle_client(reader, writer):
+    data = await reader.read(4096)
+    response = process(data)
+    writer.write(response)
+    await writer.drain()
+    writer.close()
+
+async def main():
+    server = await asyncio.start_server(handle_client, '0.0.0.0', 8080)
+    async with server:
+        await server.serve_forever()
+
+asyncio.run(main())"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> asyncio</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">async</span><span style="color:#D73A49;--shiki-dark:#F97583"> def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> handle_client</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(reader, writer):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    data </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> reader.read(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">4096</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    response </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> process(data)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    writer.write(response)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    await</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> writer.drain()</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    writer.close()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">async</span><span style="color:#D73A49;--shiki-dark:#F97583"> def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="color:#24292E;--shiki-dark:#E1E4E8">():</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    server </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> asyncio.start_server(handle_client, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'0.0.0.0'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">8080</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    async</span><span style="color:#D73A49;--shiki-dark:#F97583"> with</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> server:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        await</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> server.serve_forever()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">asyncio.run(main())</span></span></code></pre></div><p>Node.js、Nginx、Redis 都采用事件驱动架构。它们能够用极少的线程处理数万甚至数十万的并发连接，关键在于所有 I/O 操作都是非阻塞的，线程永远不会因为等待 I/O 而闲置。</p>
+<p>但事件驱动模型有一个关键约束：<strong>回调中不能有阻塞操作</strong>。一次阻塞调用（如同步数据库查询、密集计算）会阻塞整个事件循环，导致所有连接的处理都停滞。</p>
+<h2 id="协程与异步运行时">协程与异步运行时</h2><p><strong>协程</strong>（Coroutine）解决了事件驱动模型中&quot;回调地狱&quot;和代码可读性差的问题。协程在语法上像同步代码，但在运行时是非阻塞的——遇到 I/O 时自动让出执行权给其他协程。</p>
+<div class="code-block-wrapper" data-lang="go" data-code="// Go goroutine: 语言级协程，由 Go 运行时调度
+func handleConnection(conn net.Conn) {
+    defer conn.Close()
+    buf := make([]byte, 4096)
+    for {
+        n, err := conn.Read(buf)  // 看起来阻塞，实际上 goroutine 挂起，线程去处理其他工作
+        if err != nil {
+            return
+        }
+        conn.Write(process(buf[:n]))
+    }
+}
+
+func main() {
+    ln, _ := net.Listen(&quot;tcp&quot;, &quot;:8080&quot;)
+    for {
+        conn, _ := ln.Accept()
+        go handleConnection(conn)  // 启动新 goroutine，极低开销（~2KB 栈）
+    }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// Go goroutine: 语言级协程，由 Go 运行时调度</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">func</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> handleConnection</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">conn</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> net</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Conn</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    defer</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> conn.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Close</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    buf </span><span style="color:#D73A49;--shiki-dark:#F97583">:=</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> make</span><span style="color:#24292E;--shiki-dark:#E1E4E8">([]</span><span style="color:#D73A49;--shiki-dark:#F97583">byte</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">4096</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        n, err </span><span style="color:#D73A49;--shiki-dark:#F97583">:=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> conn.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Read</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(buf)  </span><span style="color:#6A737D;--shiki-dark:#6A737D">// 看起来阻塞，实际上 goroutine 挂起，线程去处理其他工作</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> err </span><span style="color:#D73A49;--shiki-dark:#F97583">!=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> nil</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            return</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        conn.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Write</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">process</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(buf[:n]))</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">func</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    ln, _ </span><span style="color:#D73A49;--shiki-dark:#F97583">:=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> net.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Listen</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"tcp"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">":8080"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        conn, _ </span><span style="color:#D73A49;--shiki-dark:#F97583">:=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ln.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Accept</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        go</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> handleConnection</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(conn)  </span><span style="color:#6A737D;--shiki-dark:#6A737D">// 启动新 goroutine，极低开销（~2KB 栈）</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><div class="code-block-wrapper" data-lang="rust" data-code="// Rust async/await: 零成本抽象的异步运行时
+use tokio::net::TcpListener;
+use tokio::io::{AsyncReadExt, AsyncWriteExt};
+
+#[tokio::main]
+async fn main() {
+    let listener = TcpListener::bind(&quot;0.0.0.0:8080&quot;).await.unwrap();
+    loop {
+        let (mut socket, _) = listener.accept().await.unwrap();
+        tokio::spawn(async move {
+            let mut buf = [0u8; 4096];
+            loop {
+                let n = socket.read(&amp;mut buf).await.unwrap();
+                if n == 0 { return; }
+                socket.write_all(&amp;buf[..n]).await.unwrap();
+            }
+        });
+    }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>// Rust async/await: 零成本抽象的异步运行时</span></span>
+<span class="line"><span>use tokio::net::TcpListener;</span></span>
+<span class="line"><span>use tokio::io::{AsyncReadExt, AsyncWriteExt};</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>#[tokio::main]</span></span>
+<span class="line"><span>async fn main() {</span></span>
+<span class="line"><span>    let listener = TcpListener::bind("0.0.0.0:8080").await.unwrap();</span></span>
+<span class="line"><span>    loop {</span></span>
+<span class="line"><span>        let (mut socket, _) = listener.accept().await.unwrap();</span></span>
+<span class="line"><span>        tokio::spawn(async move {</span></span>
+<span class="line"><span>            let mut buf = [0u8; 4096];</span></span>
+<span class="line"><span>            loop {</span></span>
+<span class="line"><span>                let n = socket.read(&#x26;mut buf).await.unwrap();</span></span>
+<span class="line"><span>                if n == 0 { return; }</span></span>
+<span class="line"><span>                socket.write_all(&#x26;buf[..n]).await.unwrap();</span></span>
+<span class="line"><span>            }</span></span>
+<span class="line"><span>        });</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span>}</span></span></code></pre></div><table>
+<thead>
+<tr>
+<th>协程实现</th>
+<th>栈模型</th>
+<th>调度方式</th>
+<th>典型开销</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Go goroutine</td>
+<td>可增长栈（2KB 起）</td>
+<td>M:N 调度（runtime）</td>
+<td>~2 KB/goroutine</td>
+</tr>
+<tr>
+<td>Rust async/await</td>
+<td>无栈（状态机编译）</td>
+<td>运行时调度（tokio）</td>
+<td>~几百字节/task</td>
+</tr>
+<tr>
+<td>Python asyncio</td>
+<td>无栈</td>
+<td>单线程事件循环</td>
+<td>~1 KB/coroutine</td>
+</tr>
+<tr>
+<td>Java Virtual Threads</td>
+<td>虚拟栈</td>
+<td>M:N 调度（JVM）</td>
+<td>~1 KB/虚拟线程</td>
+</tr>
+<tr>
+<td>Kotlin coroutines</td>
+<td>无栈（CPS 变换）</td>
+<td>调度器可配置</td>
+<td>~几百字节</td>
+</tr>
+</tbody></table>
+<h2 id="io_uring-linux-现代异步-i-o">io_uring：Linux 现代异步 I/O</h2><p><strong>io_uring</strong> 是 Linux 5.1 引入的革命性异步 I/O 接口。它通过共享内存的环形缓冲区（Submission Queue 和 Completion Queue）实现用户态和内核之间的零系统调用通信，极大减少了上下文切换开销。</p>
+<div class="code-block-wrapper" data-lang="c" data-code="#include &lt;liburing.h&gt;
+
+void io_uring_echo_server(int listen_fd) {
+    struct io_uring ring;
+    io_uring_queue_init(256, &amp;ring, 0);
+
+    while (1) {
+        struct io_uring_sqe *sqe = io_uring_get_sqe(&amp;ring);
+        io_uring_prep_accept(sqe, listen_fd, NULL, NULL, 0);
+        io_uring_sqe_set_data(sqe, (void*)ACCEPT_EVENT);
+        io_uring_submit(&amp;ring);
+
+        struct io_uring_cqe *cqe;
+        io_uring_wait_cqe(&amp;ring, &amp;cqe);
+
+        int client_fd = cqe-&gt;res;
+        io_uring_cqe_seen(&amp;ring, cqe);
+
+        sqe = io_uring_get_sqe(&amp;ring);
+        io_uring_prep_read(sqe, client_fd, buf, BUF_SIZE, 0);
+        io_uring_submit(&amp;ring);
+    }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">#include</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> &#x3C;liburing.h></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">void</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> io_uring_echo_server</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">int</span><span style="color:#E36209;--shiki-dark:#FFAB70"> listen_fd</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    struct</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> io_uring ring;</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">    io_uring_queue_init</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">256</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x26;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">ring, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    while</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        struct</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> io_uring_sqe </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">sqe </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> io_uring_get_sqe</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">&#x26;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">ring);</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">        io_uring_prep_accept</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(sqe, listen_fd, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">NULL</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">NULL</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">        io_uring_sqe_set_data</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(sqe, (</span><span style="color:#D73A49;--shiki-dark:#F97583">void*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)ACCEPT_EVENT);</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">        io_uring_submit</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">&#x26;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">ring);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        struct</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> io_uring_cqe </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8">cqe;</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">        io_uring_wait_cqe</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">&#x26;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">ring, </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x26;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">cqe);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        int</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> client_fd </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> cqe->res;</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">        io_uring_cqe_seen</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">&#x26;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">ring, cqe);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        sqe </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> io_uring_get_sqe</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">&#x26;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">ring);</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">        io_uring_prep_read</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(sqe, client_fd, buf, BUF_SIZE, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">        io_uring_submit</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">&#x26;</span><span style="color:#24292E;--shiki-dark:#E1E4E8">ring);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><p>io_uring 相比 epoll 的优势：</p>
+<ul>
+<li><strong>真正的异步 I/O</strong>：epoll 只通知&quot;可读&quot;，应用仍需调用 read()；io_uring 直接将读取结果放入完成队列</li>
+<li><strong>批量提交</strong>：一次 io_uring_submit() 可以提交多个 I/O 请求</li>
+<li><strong>零系统调用</strong>：使用 SQPOLL 模式，内核线程主动轮询提交队列，应用完全不需要系统调用</li>
+<li><strong>统一接口</strong>：支持文件 I/O、网络 I/O、定时器等所有操作</li>
+</ul>
+<h2 id="小结">小结</h2><pre class="mermaid" data-diagram-type="mindmap" data-source="mindmap&#10;  root((异步 I/O))&#10;    多路复用&#10;      select/poll&#10;      epoll/kqueue&#10;      事件驱动模型&#10;    架构模式&#10;      Reactor&#10;      单线程事件循环&#10;      主从多线程&#10;    协程&#10;      Go goroutine&#10;      Rust async/await&#10;      Java Virtual Threads&#10;      同步语法异步执行&#10;    io_uring&#10;      零系统调用&#10;      批量提交&#10;      真正异步&#10;      SQ/CQ 环形缓冲"></pre><ul>
+<li><strong>I/O 多路复用</strong>（epoll/kqueue）让少量线程处理大量并发连接，是高性能网络服务的基础</li>
+<li><strong>epoll</strong> 的 O(1) 就绪通知相比 select/poll 的 O(n) 扫描有本质性能优势</li>
+<li><strong>事件驱动架构</strong>的关键约束是回调中不能阻塞，任何阻塞都会影响所有连接</li>
+<li><strong>协程</strong>用同步的代码风格实现异步执行，Go goroutine 和 Rust async 是两种主流实现</li>
+<li><strong>io_uring</strong> 是 Linux 上最先进的异步 I/O 接口，通过共享内存环形缓冲实现零系统调用</li>
+<li>异步 I/O 选型的核心考量：<strong>并发规模、编程复杂度和生态成熟度</strong></li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../cs-fundamentals/system-performance/io-optimization/network-optimization.html"><span class="label">Previous</span>网络优化</a><a class="next" href="../../../cs-fundamentals/system-performance/system-tuning/index.html"><span class="label">Next</span>系统调优 简介</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#i-o-多路复用的演进" data-outline-link="i-o-多路复用的演进">I/O 多路复用的演进</a></li><li class="depth-2"><a href="#事件驱动架构" data-outline-link="事件驱动架构">事件驱动架构</a></li><li class="depth-2"><a href="#协程与异步运行时" data-outline-link="协程与异步运行时">协程与异步运行时</a></li><li class="depth-2"><a href="#io_uring-linux-现代异步-i-o" data-outline-link="io_uring-linux-现代异步-i-o">io_uring：Linux 现代异步 I/O</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

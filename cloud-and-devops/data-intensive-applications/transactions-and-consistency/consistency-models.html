@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>分布式一致性模型 · 云与 DevOps 工程</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:云与 DevOps 工程" data-pagefind-meta="slug:cloud-and-devops">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">云与 DevOps 工程</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item active" href="../../../cloud-and-devops/index.html" aria-current="page" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../cloud-and-devops/index.html">云与 DevOps 工程</a><a class="back-to-hubs" href="../../../cloud-and-devops/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../cloud-and-devops/data-intensive-applications/index.html">数据密集型应用设计 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="cloud-and-devops"><li class="chapter"><details class="folder-collapse" data-sb-key="cloud-and-devops:folder:data-intensive-applications/data-storage-retrieval"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cloud-and-devops/data-intensive-applications/data-storage-retrieval/index.html">数据存储与检索 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/data-storage-retrieval/storage-engine-comparison.html">存储引擎对比：LSM-Tree 与 B-Tree</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/data-storage-retrieval/index-structures.html">索引结构与查询优化</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/data-storage-retrieval/columnar-storage.html">列式存储与 OLAP 优化</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cloud-and-devops:folder:data-intensive-applications/replication-and-partitioning"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cloud-and-devops/data-intensive-applications/replication-and-partitioning/index.html">复制与分区 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/replication-and-partitioning/replication-models.html">主从复制与多主复制</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/replication-and-partitioning/partitioning-strategies.html">分区策略与再平衡</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/replication-and-partitioning/consistency-and-consensus.html">复制一致性与共识算法</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cloud-and-devops:folder:data-intensive-applications/transactions-and-consistency" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cloud-and-devops/data-intensive-applications/transactions-and-consistency/index.html">事务与一致性 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/transactions-and-consistency/acid-vs-base.html">ACID 与 BASE：事务语义对比</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/transactions-and-consistency/distributed-transactions.html">分布式事务实现机制</a></li><li class="leaf"><a class="leaf-title active" href="../../../cloud-and-devops/data-intensive-applications/transactions-and-consistency/consistency-models.html">分布式一致性模型</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cloud-and-devops:folder:data-intensive-applications/stream-and-batch-processing"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cloud-and-devops/data-intensive-applications/stream-and-batch-processing/index.html">流处理与批处理 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/stream-and-batch-processing/mapreduce-evolution.html">MapReduce 演进：从批处理到统一计算</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/stream-and-batch-processing/stream-processing-architecture.html">流处理架构与实时计算</a></li><li class="leaf"><a class="leaf-title" href="../../../cloud-and-devops/data-intensive-applications/stream-and-batch-processing/event-sourcing-cqrs.html">事件溯源与 CQRS 模式</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part VII · 数据与伸缩</span><span>数据密集型应用设计 简介</span><span>事务与一致性 简介</span><span>分布式一致性模型</span></nav>
+    <article class="content prose"><h1 id="分布式一致性模型">分布式一致性模型</h1><h2 id="概述">概述</h2><p>分布式一致性模型定义了系统在面对并发操作、网络延迟和节点故障时，向外部观察者提供什么样的行为保证。从最强的线性一致性到最弱的最终一致性，每个级别都代表了正确性与性能之间的不同权衡点。深入理解这些模型的形式化定义和工程含义，是设计正确分布式系统的理论基础。</p>
+<p>本文系统梳理主流一致性模型的层次关系，结合 CAP、PACELC 定理分析其在实际系统中的体现，为工程师提供一致性选择的理论指导。</p>
+<h2 id="核心概念">核心概念</h2><h3 id="一致性模型层次图">一致性模型层次图</h3><pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[&quot;Linearizability - 线性一致性&quot;] --&gt; B[&quot;Sequential Consistency - 顺序一致性&quot;]&#10;    B --&gt; C[&quot;Causal Consistency - 因果一致性&quot;]&#10;    C --&gt; D[&quot;PRAM / FIFO Consistency&quot;]&#10;    D --&gt; E[&quot;Read-your-writes&quot;]&#10;    E --&gt; F[&quot;Monotonic Reads&quot;]&#10;    F --&gt; G[&quot;Eventual Consistency - 最终一致性&quot;]"></pre><h3 id="线性一致性-linearizability">线性一致性（Linearizability）</h3><p>线性一致性要求所有操作等效于在某个全局时间轴上的原子操作：</p>
+<div class="code-block-wrapper" data-lang="text" data-code="形式化定义:
+  对于任何执行历史 H，存在一个合法的顺序 S，使得:
+  1. S 包含 H 中所有已完成的操作 (及部分未完成操作)
+  2. 对于 H 中 op1 在 op2 之前完成的情况，在 S 中 op1 排在 op2 之前
+  3. S 中每个读操作返回最近一次写操作的值"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>形式化定义:</span></span>
+<span class="line"><span>  对于任何执行历史 H，存在一个合法的顺序 S，使得:</span></span>
+<span class="line"><span>  1. S 包含 H 中所有已完成的操作 (及部分未完成操作)</span></span>
+<span class="line"><span>  2. 对于 H 中 op1 在 op2 之前完成的情况，在 S 中 op1 排在 op2 之前</span></span>
+<span class="line"><span>  3. S 中每个读操作返回最近一次写操作的值</span></span></code></pre></div><p><strong>线性一致性检验示例：</strong></p>
+<div class="code-block-wrapper" data-lang="text" data-code="时间 →
+Client A: |--write(x=1)--|
+Client B:       |--read(x)→?--|
+Client C:            |--write(x=2)--|
+Client D:                  |--read(x)→?--|
+
+合法线性化:
+  write(x=1), read(x)→1, write(x=2), read(x)→2  ✓
+  write(x=1), write(x=2), read(x)→2, read(x)→2  ✓
+
+非法 (违反线性一致性):
+  Client B 读到 1, Client D 读到 1  (如果 write(x=2) 已返回成功)"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>时间 →</span></span>
+<span class="line"><span>Client A: |--write(x=1)--|</span></span>
+<span class="line"><span>Client B:       |--read(x)→?--|</span></span>
+<span class="line"><span>Client C:            |--write(x=2)--|</span></span>
+<span class="line"><span>Client D:                  |--read(x)→?--|</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>合法线性化:</span></span>
+<span class="line"><span>  write(x=1), read(x)→1, write(x=2), read(x)→2  ✓</span></span>
+<span class="line"><span>  write(x=1), write(x=2), read(x)→2, read(x)→2  ✓</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>非法 (违反线性一致性):</span></span>
+<span class="line"><span>  Client B 读到 1, Client D 读到 1  (如果 write(x=2) 已返回成功)</span></span></code></pre></div><p><strong>实现线性一致性的代价：</strong></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>机制</th>
+<th>延迟</th>
+<th>可用性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>单 Leader 读写</td>
+<td>所有操作经过 Leader</td>
+<td>网络 RTT × 1</td>
+<td>Leader 故障时不可用</td>
+</tr>
+<tr>
+<td>Quorum + 线性化</td>
+<td>W+R &gt; N + 版本号</td>
+<td>网络 RTT × 1</td>
+<td>多数节点存活即可</td>
+</tr>
+<tr>
+<td>共识协议 (Raft)</td>
+<td>每次读写经过 Raft log</td>
+<td>网络 RTT × 1-2</td>
+<td>多数节点存活即可</td>
+</tr>
+</tbody></table>
+<h3 id="因果一致性-causal-consistency">因果一致性（Causal Consistency）</h3><p>因果一致性只保序&quot;有因果关系&quot;的操作，允许&quot;无因果关系&quot;的并发操作被不同节点以不同顺序观察：</p>
+<div class="code-block-wrapper" data-lang="python" data-code="# 因果关系的三种来源:
+# 1. 进程顺序: 同一客户端的操作有因果关系
+# 2. 读写依赖: 读取某值后基于该值的写入有因果关系
+# 3. 传递性: A→B, B→C 则 A→C
+
+class CausalStore:
+    &quot;&quot;&quot;基于 Lamport 时钟的因果一致性实现&quot;&quot;&quot;
+    def __init__(self, node_id):
+        self.node_id = node_id
+        self.logical_clock = 0
+        self.data = {}
+        self.pending = []  # 等待因果依赖满足的操作
+
+    def write(self, key, value, causal_deps):
+        &quot;&quot;&quot;写入时附带因果依赖&quot;&quot;&quot;
+        self.logical_clock += 1
+        entry = {
+            'key': key,
+            'value': value,
+            'timestamp': (self.logical_clock, self.node_id),
+            'deps': causal_deps  # 因果前驱的时间戳列表
+        }
+        self.data[key] = entry
+        self._broadcast(entry)
+
+    def deliver(self, entry):
+        &quot;&quot;&quot;收到远程写入时检查因果依赖是否满足&quot;&quot;&quot;
+        if self._deps_satisfied(entry['deps']):
+            self._apply(entry)
+            self._check_pending()
+        else:
+            self.pending.append(entry)  # 依赖未满足，暂存
+
+    def _deps_satisfied(self, deps):
+        &quot;&quot;&quot;检查所有因果前驱是否已应用&quot;&quot;&quot;
+        for dep_ts in deps:
+            if not self._has_applied(dep_ts):
+                return False
+        return True"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 因果关系的三种来源:</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 1. 进程顺序: 同一客户端的操作有因果关系</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 2. 读写依赖: 读取某值后基于该值的写入有因果关系</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 3. 传递性: A→B, B→C 则 A→C</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> CausalStore</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">    """基于 Lamport 时钟的因果一致性实现"""</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, node_id):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.node_id </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> node_id</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.logical_clock </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.data </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {}</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.pending </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> []  </span><span style="color:#6A737D;--shiki-dark:#6A737D"># 等待因果依赖满足的操作</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> write</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, key, value, causal_deps):</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        """写入时附带因果依赖"""</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.logical_clock </span><span style="color:#D73A49;--shiki-dark:#F97583">+=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        entry </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            'key'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: key,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            'value'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: value,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            'timestamp'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.logical_clock, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.node_id),</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            'deps'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: causal_deps  </span><span style="color:#6A737D;--shiki-dark:#6A737D"># 因果前驱的时间戳列表</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.data[key] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> entry</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._broadcast(entry)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> deliver</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, entry):</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        """收到远程写入时检查因果依赖是否满足"""</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._deps_satisfied(entry[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'deps'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._apply(entry)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._check_pending()</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        else</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.pending.append(entry)  </span><span style="color:#6A737D;--shiki-dark:#6A737D"># 依赖未满足，暂存</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> _deps_satisfied</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, deps):</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        """检查所有因果前驱是否已应用"""</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> dep_ts </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> deps:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            if</span><span style="color:#D73A49;--shiki-dark:#F97583"> not</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._has_applied(dep_ts):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">                return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> False</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> True</span></span></code></pre></div><h3 id="最终一致性及其变体">最终一致性及其变体</h3><p>最终一致性的核心保证：如果没有新的写入，所有副本最终会收敛到相同状态。</p>
+<p><strong>收敛时间的影响因素：</strong></p>
+<table>
+<thead>
+<tr>
+<th>因素</th>
+<th>影响</th>
+<th>优化手段</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>网络延迟</td>
+<td>直接决定传播时间</td>
+<td>多数据中心就近部署</td>
+</tr>
+<tr>
+<td>复制拓扑</td>
+<td>星型快于链式</td>
+<td>使用 Gossip 协议</td>
+</tr>
+<tr>
+<td>冲突处理</td>
+<td>冲突需要额外解决时间</td>
+<td>CRDT 自动合并</td>
+</tr>
+<tr>
+<td>系统负载</td>
+<td>高负载延缓复制</td>
+<td>背压控制</td>
+</tr>
+<tr>
+<td>反熵频率</td>
+<td>后台修复的间隔</td>
+<td>Merkle Tree 增量对比</td>
+</tr>
+</tbody></table>
+<p><strong>会话保证（Session Guarantees）：</strong></p>
+<div class="code-block-wrapper" data-lang="python" data-code="class SessionGuarantees:
+    &quot;&quot;&quot;在最终一致性之上提供会话级保证&quot;&quot;&quot;
+
+    def __init__(self, client_id):
+        self.client_id = client_id
+        self.read_set = {}   # 已读取的版本号
+        self.write_set = {}  # 已写入的版本号
+
+    def read_your_writes(self, key, replicas):
+        &quot;&quot;&quot;保证读到自己的写入&quot;&quot;&quot;
+        my_write_version = self.write_set.get(key, 0)
+        for replica in replicas:
+            value, version = replica.get(key)
+            if version &gt;= my_write_version:
+                self.read_set[key] = version
+                return value
+        # 所有副本都落后: 路由到主节点
+        return self._read_from_primary(key)
+
+    def monotonic_reads(self, key, replicas):
+        &quot;&quot;&quot;保证不会读到比之前更旧的值&quot;&quot;&quot;
+        last_read_version = self.read_set.get(key, 0)
+        for replica in replicas:
+            value, version = replica.get(key)
+            if version &gt;= last_read_version:
+                self.read_set[key] = version
+                return value
+        return self._read_from_primary(key)"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> SessionGuarantees</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">    """在最终一致性之上提供会话级保证"""</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, client_id):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.client_id </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> client_id</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.read_set </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {}   </span><span style="color:#6A737D;--shiki-dark:#6A737D"># 已读取的版本号</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.write_set </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {}  </span><span style="color:#6A737D;--shiki-dark:#6A737D"># 已写入的版本号</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> read_your_writes</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, key, replicas):</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        """保证读到自己的写入"""</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        my_write_version </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.write_set.get(key, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> replica </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> replicas:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            value, version </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> replica.get(key)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> version </span><span style="color:#D73A49;--shiki-dark:#F97583">>=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> my_write_version:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">                self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.read_set[key] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> version</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">                return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> value</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">        # 所有副本都落后: 路由到主节点</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._read_from_primary(key)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> monotonic_reads</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, key, replicas):</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        """保证不会读到比之前更旧的值"""</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        last_read_version </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.read_set.get(key, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> replica </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> replicas:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            value, version </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> replica.get(key)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> version </span><span style="color:#D73A49;--shiki-dark:#F97583">>=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> last_read_version:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">                self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.read_set[key] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> version</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">                return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> value</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._read_from_primary(key)</span></span></code></pre></div><h3 id="cap-定理与-pacelc">CAP 定理与 PACELC</h3><p><strong>CAP 定理：</strong></p>
+<p>在网络分区（P）发生时，系统必须在一致性（C）和可用性（A）之间选择。</p>
+<div class="code-block-wrapper" data-lang="text" data-code="重要澄清:
+- CAP 中的 C 特指线性一致性 (最强级别)
+- CAP 中的 A 指所有非故障节点都能响应请求
+- CAP 不是&quot;三选二&quot;而是&quot;分区时二选一&quot;
+- 正常运行时 (无分区)，可以同时提供 C 和 A"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>重要澄清:</span></span>
+<span class="line"><span>- CAP 中的 C 特指线性一致性 (最强级别)</span></span>
+<span class="line"><span>- CAP 中的 A 指所有非故障节点都能响应请求</span></span>
+<span class="line"><span>- CAP 不是"三选二"而是"分区时二选一"</span></span>
+<span class="line"><span>- 正常运行时 (无分区)，可以同时提供 C 和 A</span></span></code></pre></div><p><strong>PACELC 模型（Daniel Abadi, 2012）：</strong></p>
+<div class="code-block-wrapper" data-lang="text" data-code="IF Partition:
+  Choose Availability or Consistency (same as CAP)
+ELSE (normal operation):
+  Choose Latency or Consistency
+
+完整表述: PA/EL, PA/EC, PC/EL, PC/EC
+
+系统分类:
+  DynamoDB, Cassandra: PA/EL (分区时选 A, 正常时选低延迟)
+  MongoDB (默认):     PA/EC (分区时选 A, 正常时选一致性)
+  Spanner, etcd:      PC/EC (分区时选 C, 正常时也选一致性)
+  PNUTS (Yahoo):      PC/EL (分区时选 C, 正常时选低延迟)"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>IF Partition:</span></span>
+<span class="line"><span>  Choose Availability or Consistency (same as CAP)</span></span>
+<span class="line"><span>ELSE (normal operation):</span></span>
+<span class="line"><span>  Choose Latency or Consistency</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>完整表述: PA/EL, PA/EC, PC/EL, PC/EC</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>系统分类:</span></span>
+<span class="line"><span>  DynamoDB, Cassandra: PA/EL (分区时选 A, 正常时选低延迟)</span></span>
+<span class="line"><span>  MongoDB (默认):     PA/EC (分区时选 A, 正常时选一致性)</span></span>
+<span class="line"><span>  Spanner, etcd:      PC/EC (分区时选 C, 正常时也选一致性)</span></span>
+<span class="line"><span>  PNUTS (Yahoo):      PC/EL (分区时选 C, 正常时选低延迟)</span></span></code></pre></div><h2 id="实战指南">实战指南</h2><h3 id="一致性级别测试工具">一致性级别测试工具</h3><div class="code-block-wrapper" data-lang="python" data-code="# 使用 Jepsen 风格的一致性检验
+class LinearizabilityChecker:
+    &quot;&quot;&quot;检验系统是否满足线性一致性&quot;&quot;&quot;
+
+    def __init__(self):
+        self.history = []  # [(op_type, key, value, start_time, end_time)]
+
+    def record_operation(self, op_type, key, value, start, end):
+        self.history.append({
+            'type': op_type,  # 'write' or 'read'
+            'key': key,
+            'value': value,
+            'start': start,
+            'end': end
+        })
+
+    def check(self):
+        &quot;&quot;&quot;检查历史是否可线性化 (NP-complete, 小规模可穷举)&quot;&quot;&quot;
+        ops = sorted(self.history, key=lambda x: x['start'])
+        return self._try_linearize(ops, [], {})
+
+    def _try_linearize(self, remaining, linearized, state):
+        if not remaining:
+            return True
+        # 尝试将每个可选操作放在当前位置
+        candidates = [op for op in remaining
+                      if not self._must_come_after(op, linearized)]
+        for op in candidates:
+            if self._is_valid(op, state):
+                new_state = self._apply(op, state.copy())
+                new_remaining = [o for o in remaining if o != op]
+                if self._try_linearize(new_remaining, linearized + [op], new_state):
+                    return True
+        return False"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 使用 Jepsen 风格的一致性检验</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> LinearizabilityChecker</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">    """检验系统是否满足线性一致性"""</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.history </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> []  </span><span style="color:#6A737D;--shiki-dark:#6A737D"># [(op_type, key, value, start_time, end_time)]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> record_operation</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, op_type, key, value, start, end):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.history.append({</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            'type'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: op_type,  </span><span style="color:#6A737D;--shiki-dark:#6A737D"># 'write' or 'read'</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            'key'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: key,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            'value'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: value,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            'start'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: start,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            'end'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: end</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        })</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> check</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        """检查历史是否可线性化 (NP-complete, 小规模可穷举)"""</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        ops </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> sorted</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.history, </span><span style="color:#E36209;--shiki-dark:#FFAB70">key</span><span style="color:#D73A49;--shiki-dark:#F97583">=lambda</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> x: x[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'start'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">])</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._try_linearize(ops, [], {})</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> _try_linearize</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, remaining, linearized, state):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#D73A49;--shiki-dark:#F97583"> not</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> remaining:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> True</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">        # 尝试将每个可选操作放在当前位置</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        candidates </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [op </span><span style="color:#D73A49;--shiki-dark:#F97583">for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> op </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> remaining</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">                      if</span><span style="color:#D73A49;--shiki-dark:#F97583"> not</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._must_come_after(op, linearized)]</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> op </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> candidates:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            if</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._is_valid(op, state):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                new_state </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._apply(op, state.copy())</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                new_remaining </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [o </span><span style="color:#D73A49;--shiki-dark:#F97583">for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> o </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> remaining </span><span style="color:#D73A49;--shiki-dark:#F97583">if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> o </span><span style="color:#D73A49;--shiki-dark:#F97583">!=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> op]</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">                if</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._try_linearize(new_remaining, linearized </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [op], new_state):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">                    return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> True</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> False</span></span></code></pre></div><h3 id="系统设计中的一致性选择">系统设计中的一致性选择</h3><div class="code-block-wrapper" data-lang="yaml" data-code="# 电商系统的一致性策略设计
+services:
+  order-service:
+    consistency: serializable # 订单状态变更需要强一致
+    implementation: single-leader with sync replication
+
+  inventory-service:
+    consistency: linearizable # 库存扣减不允许超卖
+    implementation: raft consensus (TiKV)
+
+  product-catalog:
+    consistency: eventual # 商品信息秒级延迟可接受
+    implementation: async replication + CDN cache
+
+  user-profile:
+    consistency: read-your-writes # 用户能看到自己的修改
+    implementation: session-sticky routing to primary
+
+  search-index:
+    consistency: eventual # 搜索索引分钟级延迟可接受
+    implementation: CDC → Elasticsearch async sync
+
+  analytics:
+    consistency: eventual # 数据分析允许小时级延迟
+    implementation: batch ETL to data warehouse"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 电商系统的一致性策略设计</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">services</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  order-service</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    consistency</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">serializable</span><span style="color:#6A737D;--shiki-dark:#6A737D"> # 订单状态变更需要强一致</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    implementation</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">single-leader with sync replication</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  inventory-service</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    consistency</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">linearizable</span><span style="color:#6A737D;--shiki-dark:#6A737D"> # 库存扣减不允许超卖</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    implementation</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">raft consensus (TiKV)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  product-catalog</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    consistency</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">eventual</span><span style="color:#6A737D;--shiki-dark:#6A737D"> # 商品信息秒级延迟可接受</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    implementation</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">async replication + CDN cache</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  user-profile</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    consistency</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">read-your-writes</span><span style="color:#6A737D;--shiki-dark:#6A737D"> # 用户能看到自己的修改</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    implementation</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">session-sticky routing to primary</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  search-index</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    consistency</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">eventual</span><span style="color:#6A737D;--shiki-dark:#6A737D"> # 搜索索引分钟级延迟可接受</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    implementation</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">CDC → Elasticsearch async sync</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  analytics</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    consistency</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">eventual</span><span style="color:#6A737D;--shiki-dark:#6A737D"> # 数据分析允许小时级延迟</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    implementation</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">batch ETL to data warehouse</span></span></code></pre></div><h3 id="可调一致性-tunable-consistency">可调一致性（Tunable Consistency）</h3><div class="code-block-wrapper" data-lang="python" data-code="# Cassandra 风格的可调一致性
+class TunableConsistencyClient:
+    &quot;&quot;&quot;按操作选择一致性级别&quot;&quot;&quot;
+
+    def write_critical(self, key, value):
+        &quot;&quot;&quot;关键写入: 强一致性&quot;&quot;&quot;
+        return self.session.execute(
+            &quot;INSERT INTO data (key, value) VALUES (?, ?)&quot;,
+            [key, value],
+            consistency_level=ConsistencyLevel.QUORUM  # W = N/2 + 1
+        )
+
+    def write_fire_and_forget(self, key, value):
+        &quot;&quot;&quot;日志类写入: 高吞吐&quot;&quot;&quot;
+        return self.session.execute(
+            &quot;INSERT INTO logs (key, value) VALUES (?, ?)&quot;,
+            [key, value],
+            consistency_level=ConsistencyLevel.ONE  # W = 1
+        )
+
+    def read_strong(self, key):
+        &quot;&quot;&quot;强一致性读取&quot;&quot;&quot;
+        return self.session.execute(
+            &quot;SELECT value FROM data WHERE key = ?&quot;,
+            [key],
+            consistency_level=ConsistencyLevel.QUORUM
+        )
+
+    def read_fast(self, key):
+        &quot;&quot;&quot;就近读取（可能过期）&quot;&quot;&quot;
+        return self.session.execute(
+            &quot;SELECT value FROM data WHERE key = ?&quot;,
+            [key],
+            consistency_level=ConsistencyLevel.LOCAL_ONE
+        )"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># Cassandra 风格的可调一致性</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> TunableConsistencyClient</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">    """按操作选择一致性级别"""</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> write_critical</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, key, value):</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        """关键写入: 强一致性"""</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.session.execute(</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            "INSERT INTO data (key, value) VALUES (?, ?)"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            [key, value],</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">            consistency_level</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">ConsistencyLevel.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">QUORUM</span><span style="color:#6A737D;--shiki-dark:#6A737D">  # W = N/2 + 1</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> write_fire_and_forget</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, key, value):</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        """日志类写入: 高吞吐"""</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.session.execute(</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            "INSERT INTO logs (key, value) VALUES (?, ?)"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            [key, value],</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">            consistency_level</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">ConsistencyLevel.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">ONE</span><span style="color:#6A737D;--shiki-dark:#6A737D">  # W = 1</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> read_strong</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, key):</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        """强一致性读取"""</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.session.execute(</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            "SELECT value FROM data WHERE key = ?"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            [key],</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">            consistency_level</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">ConsistencyLevel.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">QUORUM</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> read_fast</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, key):</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">        """就近读取（可能过期）"""</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.session.execute(</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            "SELECT value FROM data WHERE key = ?"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            [key],</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">            consistency_level</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">ConsistencyLevel.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">LOCAL_ONE</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        )</span></span></code></pre></div><h2 id="最佳实践">最佳实践</h2><h3 id="一致性需求分析模板">一致性需求分析模板</h3><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>分析维度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据被并发修改的频率？</td>
+<td>高 → 需要更强隔离</td>
+</tr>
+<tr>
+<td>过期数据的业务影响？</td>
+<td>大 (资金) → 线性一致性</td>
+</tr>
+<tr>
+<td>用户对延迟的容忍度？</td>
+<td>低 → 接受弱一致换低延迟</td>
+</tr>
+<tr>
+<td>是否存在跨区域部署？</td>
+<td>是 → 强一致性延迟成本高</td>
+</tr>
+<tr>
+<td>违反一致性的代价？</td>
+<td>可计算 (损失金额) → 精确权衡</td>
+</tr>
+</tbody></table>
+<h3 id="渐进式一致性升级策略">渐进式一致性升级策略</h3><ol>
+<li><strong>默认最终一致性</strong>：系统初期用最终一致性，覆盖大多数场景</li>
+<li><strong>识别关键路径</strong>：分析哪些业务操作不能容忍不一致</li>
+<li><strong>局部加强</strong>：仅对关键路径使用强一致性（如 Raft 共识）</li>
+<li><strong>监控一致性违反</strong>：在非强一致路径上监控不一致的频率和影响</li>
+</ol>
+<h3 id="避免的反模式">避免的反模式</h3><ul>
+<li><strong>全局强一致</strong>：对所有数据都用线性一致性→性能灾难</li>
+<li><strong>忽略 session 保证</strong>：最终一致性下不提供 read-your-writes→用户体验差</li>
+<li><strong>CAP 误用</strong>：以为 CAP 意味着&quot;只能三选二&quot;→忽略了正常运行时的权衡</li>
+<li><strong>一致性混淆</strong>：将 ACID 的 C 与 CAP 的 C 混为一谈</li>
+</ul>
+<h2 id="工具与生态">工具与生态</h2><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>用途</th>
+<th>特色</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Jepsen</td>
+<td>分布式系统正确性测试</td>
+<td>发现了大量知名系统的一致性 bug</td>
+</tr>
+<tr>
+<td>Elle</td>
+<td>事务隔离级别验证</td>
+<td>Jepsen 团队的事务检验工具</td>
+</tr>
+<tr>
+<td>Porcupine</td>
+<td>线性一致性检验 (Go)</td>
+<td>高效的线性化检验算法</td>
+</tr>
+<tr>
+<td>Knossos</td>
+<td>线性一致性检验 (Clojure)</td>
+<td>Jepsen 使用的核心检验器</td>
+</tr>
+<tr>
+<td>Hermitage</td>
+<td>隔离级别行为文档</td>
+<td>各数据库隔离级别的精确行为</td>
+</tr>
+<tr>
+<td>FoundationDB Simulation</td>
+<td>确定性模拟测试</td>
+<td>发现极端场景下的一致性问题</td>
+</tr>
+</tbody></table>
+<h2 id="总结">总结</h2><p>分布式一致性模型提供了一个从强到弱的保证频谱，每个级别对应不同的性能代价和编程复杂度。工程师的核心能力不在于&quot;实现最强一致性&quot;，而在于&quot;识别每个数据和操作的最低一致性需求&quot;——用最弱的保证满足业务正确性，从而获得最优的性能和可用性。</p>
+<p>2026 年的趋势是&quot;混合一致性&quot;成为主流：同一系统内不同数据采用不同一致性级别，关键路径使用共识协议保证线性一致性，非关键路径使用最终一致性优化性能。Jepsen 测试已经成为分布式数据库发布前的标配验证，一致性不再是靠信任而是靠工程验证来保证。</p>
+</article>
+    <nav class="pager"><a class="prev" href="../../../cloud-and-devops/data-intensive-applications/transactions-and-consistency/distributed-transactions.html"><span class="label">Previous</span>分布式事务实现机制</a><a class="next" href="../../../cloud-and-devops/data-intensive-applications/stream-and-batch-processing/index.html"><span class="label">Next</span>流处理与批处理 简介</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#概述" data-outline-link="概述">概述</a></li><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-3"><a href="#一致性模型层次图" data-outline-link="一致性模型层次图">一致性模型层次图</a></li><li class="depth-3"><a href="#线性一致性-linearizability" data-outline-link="线性一致性-linearizability">线性一致性（Linearizability）</a></li><li class="depth-3"><a href="#因果一致性-causal-consistency" data-outline-link="因果一致性-causal-consistency">因果一致性（Causal Consistency）</a></li><li class="depth-3"><a href="#最终一致性及其变体" data-outline-link="最终一致性及其变体">最终一致性及其变体</a></li><li class="depth-3"><a href="#cap-定理与-pacelc" data-outline-link="cap-定理与-pacelc">CAP 定理与 PACELC</a></li><li class="depth-2"><a href="#实战指南" data-outline-link="实战指南">实战指南</a></li><li class="depth-3"><a href="#一致性级别测试工具" data-outline-link="一致性级别测试工具">一致性级别测试工具</a></li><li class="depth-3"><a href="#系统设计中的一致性选择" data-outline-link="系统设计中的一致性选择">系统设计中的一致性选择</a></li><li class="depth-3"><a href="#可调一致性-tunable-consistency" data-outline-link="可调一致性-tunable-consistency">可调一致性（Tunable Consistency）</a></li><li class="depth-2"><a href="#最佳实践" data-outline-link="最佳实践">最佳实践</a></li><li class="depth-3"><a href="#一致性需求分析模板" data-outline-link="一致性需求分析模板">一致性需求分析模板</a></li><li class="depth-3"><a href="#渐进式一致性升级策略" data-outline-link="渐进式一致性升级策略">渐进式一致性升级策略</a></li><li class="depth-3"><a href="#避免的反模式" data-outline-link="避免的反模式">避免的反模式</a></li><li class="depth-2"><a href="#工具与生态" data-outline-link="工具与生态">工具与生态</a></li><li class="depth-2"><a href="#总结" data-outline-link="总结">总结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

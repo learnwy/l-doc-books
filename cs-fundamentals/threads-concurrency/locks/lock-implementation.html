@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>锁的实现机制 · 计算机科学基础</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:计算机科学基础" data-pagefind-meta="slug:cs-fundamentals">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">计算机科学基础</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item active" href="../../../cs-fundamentals/index.html" aria-current="page" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../cs-fundamentals/index.html">计算机科学基础</a><a class="back-to-hubs" href="../../../cs-fundamentals/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../cs-fundamentals/threads-concurrency/index.html">线程与并发 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="cs-fundamentals"><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/processes"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/processes/index.html">进程 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/processes/process-definition-and-concepts.html">进程的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/processes/process-core-ideas.html">进程的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/processes/process-implementation.html">进程的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/threads"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/threads/index.html">线程 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/threads/thread-definition-and-concepts.html">线程的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/threads/thread-core-ideas.html">线程的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/threads/thread-implementation.html">线程的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/coroutines"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/coroutines/index.html">协程 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/coroutines/coroutine-definition-and-concepts.html">协程的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/coroutines/coroutine-core-ideas.html">协程的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/coroutines/coroutine-implementation.html">协程的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/concurrency-and-parallelism"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/index.html">并发与并行 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/concurrency-parallelism-concepts.html">并发与并行的核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/concurrency-parallelism-ideas.html">并发与并行的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/concurrency-parallelism-implementation.html">并发与并行的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/atomic-operations"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/atomic-operations/index.html">原子操作 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/atomic-operations/atomic-definition-and-concepts.html">原子操作的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/atomic-operations/atomic-core-ideas.html">原子操作的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/atomic-operations/atomic-implementation.html">原子操作的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/locks" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/locks/index.html">锁 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/locks/lock-definition-and-concepts.html">锁的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/locks/lock-core-ideas.html">锁的核心思想</a></li><li class="leaf"><a class="leaf-title active" href="../../../cs-fundamentals/threads-concurrency/locks/lock-implementation.html">锁的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/actor-model"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/actor-model/index.html">Actor 模型 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/actor-model/actor-model-concepts.html">Actor 模型的核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/actor-model/actor-model-ideas.html">Actor 模型的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/actor-model/actor-model-implementation.html">Actor 模型的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/supplementary"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/index.html">补充主题 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/race-conditions.html">竞态条件</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/deadlock-livelock-starvation.html">死锁、活锁与饥饿</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/semaphores-and-conditions.html">信号量与条件变量</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/thread-pools.html">线程池与任务调度</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/message-passing.html">消息传递</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part III · 系统 (Systems)</span><span>线程与并发 简介</span><span>锁 简介</span><span>锁的实现机制</span></nav>
+    <article class="content prose"><h1 id="锁的实现机制">锁的实现机制</h1><h2 id="问题背景">问题背景</h2><p>我们已经理解了锁的核心思想——互斥、等待策略、死锁预防。但锁在底层究竟是<strong>如何实现</strong>的？一个看似简单的&quot;获取锁&quot;操作，需要解决多个技术难题：如何保证锁的获取本身是原子的？线程等待时如何高效地管理？多种锁类型各自的实现有什么区别？</p>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart LR&#10;    subgraph Lock Implementation Layers&#10;        APP[&quot;Application Layer&lt;br/&gt;lock() / unlock()&quot;]&#10;        LIB[&quot;Standard Library&lt;br/&gt;Mutex / RWLock Classes&quot;]&#10;        OS[&quot;Operating System&lt;br/&gt;futex / Semaphore&quot;]&#10;        HW[&quot;Hardware&lt;br/&gt;CAS / XCHG Instructions&quot;]&#10;    end&#10;&#10;    APP --&gt; LIB --&gt; OS --&gt; HW"></pre><blockquote>
+<p>锁从上到下贯穿了应用层、标准库、操作系统和硬件四个层次。理解每一层的实现有助于做出正确的性能决策。</p>
+</blockquote>
+<hr>
+<h2 id="核心原理">核心原理</h2><h3 id="互斥锁-mutex-的实现">互斥锁（Mutex）的实现</h3><p>互斥锁是最基础的锁类型。其核心实现依赖于<strong>原子操作 + 操作系统的线程调度</strong>：</p>
+<div class="code-block-wrapper" data-lang="pseudocode" data-code="互斥锁 {
+    状态: 0         // 0 = 未锁定, 1 = 已锁定
+    等待队列: []     // 被阻塞的线程列表
+}
+
+函数 lock():
+    如果 CAS(状态, 0, 1) 成功:   // 原子地尝试从 0 变为 1
+        返回                       // 获取成功
+    否则:
+        将当前线程加入等待队列
+        挂起当前线程               // 操作系统接管，让出 CPU
+
+函数 unlock():
+    状态 = 0                       // 释放锁
+    如果 等待队列不为空:
+        唤醒队列中的第一个线程     // 操作系统唤醒被阻塞的线程"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>互斥锁 {</span></span>
+<span class="line"><span>    状态: 0         // 0 = 未锁定, 1 = 已锁定</span></span>
+<span class="line"><span>    等待队列: []     // 被阻塞的线程列表</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>函数 lock():</span></span>
+<span class="line"><span>    如果 CAS(状态, 0, 1) 成功:   // 原子地尝试从 0 变为 1</span></span>
+<span class="line"><span>        返回                       // 获取成功</span></span>
+<span class="line"><span>    否则:</span></span>
+<span class="line"><span>        将当前线程加入等待队列</span></span>
+<span class="line"><span>        挂起当前线程               // 操作系统接管，让出 CPU</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>函数 unlock():</span></span>
+<span class="line"><span>    状态 = 0                       // 释放锁</span></span>
+<span class="line"><span>    如果 等待队列不为空:</span></span>
+<span class="line"><span>        唤醒队列中的第一个线程     // 操作系统唤醒被阻塞的线程</span></span></code></pre></div><pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TD&#10;    LOCK_START[&quot;lock() Call&quot;]&#10;    CAS{&quot;CAS(0 → 1)&lt;br/&gt;Atomic Operation&quot;}&#10;    SUCCESS[&quot;Acquisition Successful&lt;br/&gt;Enter Critical Section&quot;]&#10;    ENQUEUE[&quot;Enqueue to Wait Queue&quot;]&#10;    SUSPEND[&quot;Suspend Thread&lt;br/&gt;(OS Scheduling)&quot;]&#10;    WAKEUP[&quot;Woken Up&quot;]&#10;&#10;    LOCK_START --&gt; CAS&#10;    CAS --&gt;|&quot;Success&quot;| SUCCESS&#10;    CAS --&gt;|&quot;Failure&quot;| ENQUEUE --&gt; SUSPEND&#10;    SUSPEND -.-&gt;|&quot;Another Thread unlock&quot;| WAKEUP --&gt; CAS&#10;&#10;    UNLOCK_START[&quot;unlock() Call&quot;]&#10;    RESET[&quot;State = 0&quot;]&#10;    CHECK{&quot;Is Wait Queue&lt;br/&gt;Empty?&quot;}&#10;    WAKE[&quot;Wake Up First Waiting Thread&quot;]&#10;    DONE[&quot;Done&quot;]&#10;&#10;    UNLOCK_START --&gt; RESET --&gt; CHECK&#10;    CHECK --&gt;|&quot;No&quot;| WAKE --&gt; DONE&#10;    CHECK --&gt;|&quot;Yes&quot;| DONE"></pre><h3 id="自旋锁-spinlock-的实现">自旋锁（Spinlock）的实现</h3><p>自旋锁的实现比互斥锁简单得多——不涉及操作系统调度，纯粹在用户空间通过原子操作实现：</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="class Spinlock {
+  private locked = new AtomicInteger(0);
+
+  lock(): void {
+    while (!this.locked.compareAndSwap(0, 1)) {
+      // 获取失败，持续自旋
+      // 不让出 CPU，不调用操作系统
+    }
+  }
+
+  unlock(): void {
+    this.locked.store(0);
+  }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Spinlock</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  private</span><span style="color:#E36209;--shiki-dark:#FFAB70"> locked</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> AtomicInteger</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  lock</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> void</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    while</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">!</span><span style="color:#005CC5;--shiki-dark:#79B8FF">this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.locked.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">compareAndSwap</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)) {</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">      // 获取失败，持续自旋</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">      // 不让出 CPU，不调用操作系统</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  unlock</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> void</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.locked.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">store</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><p>优化版本——<strong>TTAS（Test-and-Test-and-Set）</strong>，减少缓存行争用：</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="class OptimizedSpinlock {
+  private locked = new AtomicInteger(0);
+
+  lock(): void {
+    while (true) {
+      while (this.locked.load() !== 0) {
+        // 外层循环：只读检查（不产生缓存行写入）
+        // 减少总线流量
+      }
+      if (this.locked.compareAndSwap(0, 1)) {
+        return; // 获取成功
+      }
+    }
+  }
+
+  unlock(): void {
+    this.locked.store(0);
+  }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> OptimizedSpinlock</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  private</span><span style="color:#E36209;--shiki-dark:#FFAB70"> locked</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> AtomicInteger</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  lock</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> void</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    while</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">true</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      while</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.locked.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">load</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() </span><span style="color:#D73A49;--shiki-dark:#F97583">!==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">        // 外层循环：只读检查（不产生缓存行写入）</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">        // 减少总线流量</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.locked.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">compareAndSwap</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; </span><span style="color:#6A737D;--shiki-dark:#6A737D">// 获取成功</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  unlock</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> void</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.locked.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">store</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><blockquote>
+<p>TTAS 优化的关键在于：先通过普通读取检查锁状态（不会产生缓存行独占请求），只有在锁看起来空闲时才执行 CAS（会产生缓存行独占请求）。这大大减少了多核之间的缓存一致性流量。</p>
+</blockquote>
+<hr>
+<h2 id="分类与变体">分类与变体</h2><h3 id="读写锁-read-write-lock-的实现">读写锁（Read-Write Lock）的实现</h3><p>读写锁需要维护更复杂的状态——区分读者和写者：</p>
+<div class="code-block-wrapper" data-lang="pseudocode" data-code="读写锁 {
+    读者计数: 0     // 当前持有读锁的线程数量
+    写者标志: 假     // 是否有线程持有写锁
+    等待写者队列: []
+    等待读者队列: []
+}
+
+函数 read_lock():
+    等待直到 写者标志 == 假
+    读者计数 += 1    // 原子操作
+
+函数 read_unlock():
+    读者计数 -= 1    // 原子操作
+    如果 读者计数 == 0 且 等待写者队列不为空:
+        唤醒第一个等待的写者
+
+函数 write_lock():
+    等待直到 写者标志 == 假 且 读者计数 == 0
+    写者标志 = 真
+
+函数 write_unlock():
+    写者标志 = 假
+    如果 等待写者队列不为空:
+        唤醒第一个等待的写者
+    否则如果 等待读者队列不为空:
+        唤醒所有等待的读者"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>读写锁 {</span></span>
+<span class="line"><span>    读者计数: 0     // 当前持有读锁的线程数量</span></span>
+<span class="line"><span>    写者标志: 假     // 是否有线程持有写锁</span></span>
+<span class="line"><span>    等待写者队列: []</span></span>
+<span class="line"><span>    等待读者队列: []</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>函数 read_lock():</span></span>
+<span class="line"><span>    等待直到 写者标志 == 假</span></span>
+<span class="line"><span>    读者计数 += 1    // 原子操作</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>函数 read_unlock():</span></span>
+<span class="line"><span>    读者计数 -= 1    // 原子操作</span></span>
+<span class="line"><span>    如果 读者计数 == 0 且 等待写者队列不为空:</span></span>
+<span class="line"><span>        唤醒第一个等待的写者</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>函数 write_lock():</span></span>
+<span class="line"><span>    等待直到 写者标志 == 假 且 读者计数 == 0</span></span>
+<span class="line"><span>    写者标志 = 真</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>函数 write_unlock():</span></span>
+<span class="line"><span>    写者标志 = 假</span></span>
+<span class="line"><span>    如果 等待写者队列不为空:</span></span>
+<span class="line"><span>        唤醒第一个等待的写者</span></span>
+<span class="line"><span>    否则如果 等待读者队列不为空:</span></span>
+<span class="line"><span>        唤醒所有等待的读者</span></span></code></pre></div><pre class="mermaid" data-diagram-type="sequenceDiagram" data-source="sequenceDiagram&#10;    participant RW as Read-Write Lock&#10;    participant R1 as Reader 1&#10;    participant R2 as Reader 2&#10;    participant W as Writer&#10;&#10;    Note over RW: State: Free&lt;br/&gt;Readers=0, Writer=None&#10;&#10;    R1-&gt;&gt;RW: read_lock()&#10;    RW-&gt;&gt;R1: ✅ Read Lock Acquired&#10;    Note over RW: Readers=1&#10;&#10;    R2-&gt;&gt;RW: read_lock()&#10;    RW-&gt;&gt;R2: ✅ Read Lock Acquired (Multiple Readers Coexist)&#10;    Note over RW: Readers=2&#10;&#10;    W-&gt;&gt;RW: write_lock()&#10;    Note over W: ❌ Waiting (Active Readers Exist)&#10;&#10;    R1-&gt;&gt;RW: read_unlock()&#10;    Note over RW: Readers=1&#10;&#10;    R2-&gt;&gt;RW: read_unlock()&#10;    Note over RW: Readers=0&#10;&#10;    RW-&gt;&gt;W: ✅ Wake Up Writer, Write Lock Acquired&#10;    Note over RW: Writer=Active&#10;&#10;    rect rgb(254, 226, 226)&#10;        W-&gt;&gt;W: Exclusive Write Operation&#10;    end&#10;&#10;    W-&gt;&gt;RW: write_unlock()&#10;    Note over RW: State: Free"></pre><h3 id="递归锁-recursive-lock-的实现">递归锁（Recursive Lock）的实现</h3><p>递归锁在互斥锁的基础上增加了<strong>线程标识</strong>和<strong>计数器</strong>：</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="class RecursiveMutex {
+  private owner: number | null = null;
+  private count = 0;
+  private innerLock = new Mutex();
+
+  lock(threadId: number): void {
+    if (this.owner === threadId) {
+      this.count += 1;
+      return;
+    }
+    this.innerLock.lock();
+    this.owner = threadId;
+    this.count = 1;
+  }
+
+  unlock(threadId: number): void {
+    if (this.owner !== threadId) {
+      throw new Error('非锁持有者不能释放锁');
+    }
+    this.count -= 1;
+    if (this.count === 0) {
+      this.owner = null;
+      this.innerLock.unlock();
+    }
+  }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> RecursiveMutex</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  private</span><span style="color:#E36209;--shiki-dark:#FFAB70"> owner</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> null</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> null</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  private</span><span style="color:#E36209;--shiki-dark:#FFAB70"> count</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  private</span><span style="color:#E36209;--shiki-dark:#FFAB70"> innerLock</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Mutex</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  lock</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">threadId</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> void</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.owner </span><span style="color:#D73A49;--shiki-dark:#F97583">===</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> threadId) {</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">      this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.count </span><span style="color:#D73A49;--shiki-dark:#F97583">+=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      return</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.innerLock.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">lock</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.owner </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> threadId;</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.count </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  unlock</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">threadId</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> void</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.owner </span><span style="color:#D73A49;--shiki-dark:#F97583">!==</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> threadId) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      throw</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Error</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'非锁持有者不能释放锁'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.count </span><span style="color:#D73A49;--shiki-dark:#F97583">-=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.count </span><span style="color:#D73A49;--shiki-dark:#F97583">===</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">      this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.owner </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> null</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">      this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.innerLock.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">unlock</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><h3 id="条件变量-condition-variable">条件变量（Condition Variable）</h3><p>条件变量通常与互斥锁配合使用，实现&quot;等待某个条件成立&quot;的语义：</p>
+<div class="code-block-wrapper" data-lang="pseudocode" data-code="条件变量 {
+    等待队列: []
+}
+
+函数 wait(互斥锁, 条件变量):
+    将当前线程加入条件变量的等待队列
+    释放互斥锁                    // 重要：等待前必须释放锁
+    挂起当前线程
+    // ——被唤醒后——
+    重新获取互斥锁                // 唤醒后必须重新获取锁
+
+函数 signal(条件变量):
+    唤醒等待队列中的一个线程
+
+函数 broadcast(条件变量):
+    唤醒等待队列中的所有线程"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>条件变量 {</span></span>
+<span class="line"><span>    等待队列: []</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>函数 wait(互斥锁, 条件变量):</span></span>
+<span class="line"><span>    将当前线程加入条件变量的等待队列</span></span>
+<span class="line"><span>    释放互斥锁                    // 重要：等待前必须释放锁</span></span>
+<span class="line"><span>    挂起当前线程</span></span>
+<span class="line"><span>    // ——被唤醒后——</span></span>
+<span class="line"><span>    重新获取互斥锁                // 唤醒后必须重新获取锁</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>函数 signal(条件变量):</span></span>
+<span class="line"><span>    唤醒等待队列中的一个线程</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>函数 broadcast(条件变量):</span></span>
+<span class="line"><span>    唤醒等待队列中的所有线程</span></span></code></pre></div><p>生产者-消费者模式的实现：</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="class BoundedBuffer&lt;T&gt; {
+  private buffer: T[] = [];
+  private capacity: number;
+  private lock = new Mutex();
+  private notEmpty = new ConditionVariable();
+  private notFull = new ConditionVariable();
+
+  constructor(capacity: number) {
+    this.capacity = capacity;
+  }
+
+  produce(item: T): void {
+    this.lock.lock();
+    try {
+      while (this.buffer.length &gt;= this.capacity) {
+        this.notFull.wait(this.lock);
+      }
+      this.buffer.push(item);
+      this.notEmpty.signal();
+    } finally {
+      this.lock.unlock();
+    }
+  }
+
+  consume(): T {
+    this.lock.lock();
+    try {
+      while (this.buffer.length === 0) {
+        this.notEmpty.wait(this.lock);
+      }
+      const item = this.buffer.shift()!;
+      this.notFull.signal();
+      return item;
+    } finally {
+      this.lock.unlock();
+    }
+  }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> BoundedBuffer</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  private</span><span style="color:#E36209;--shiki-dark:#FFAB70"> buffer</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [];</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  private</span><span style="color:#E36209;--shiki-dark:#FFAB70"> capacity</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  private</span><span style="color:#E36209;--shiki-dark:#FFAB70"> lock</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Mutex</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  private</span><span style="color:#E36209;--shiki-dark:#FFAB70"> notEmpty</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ConditionVariable</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  private</span><span style="color:#E36209;--shiki-dark:#FFAB70"> notFull</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ConditionVariable</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  constructor</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">capacity</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.capacity </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> capacity;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  produce</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">item</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> T</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> void</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.lock.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">lock</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    try</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      while</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.buffer.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">length</span><span style="color:#D73A49;--shiki-dark:#F97583"> >=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.capacity) {</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.notFull.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">wait</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.lock);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">      this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.buffer.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">push</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(item);</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">      this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.notEmpty.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">signal</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    } </span><span style="color:#D73A49;--shiki-dark:#F97583">finally</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">      this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.lock.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">unlock</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  consume</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> T</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.lock.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">lock</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    try</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      while</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.buffer.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">length</span><span style="color:#D73A49;--shiki-dark:#F97583"> ===</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.notEmpty.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">wait</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.lock);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> item</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.buffer.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">shift</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span><span style="color:#D73A49;--shiki-dark:#F97583">!</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">      this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.notFull.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">signal</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> item;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    } </span><span style="color:#D73A49;--shiki-dark:#F97583">finally</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">      this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.lock.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">unlock</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><hr>
+<h2 id="工作流程">工作流程</h2><h3 id="锁的优化技术">锁的优化技术</h3><p>在实际系统中，锁的实现通常会采用多种优化技术来提升性能：</p>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TD&#10;    OPT[&quot;Lock Optimization Techniques&quot;]&#10;&#10;    LF[&quot;Lock-Free Programming&lt;br/&gt;Lock-Free&quot;]&#10;    LC[&quot;Lock Coarsening&lt;br/&gt;Lock Coarsening&quot;]&#10;    LE[&quot;Lock Elimination&lt;br/&gt;Lock Elimination&quot;]&#10;    FS[&quot;Fair Scheduling&lt;br/&gt;Fair Scheduling&quot;]&#10;&#10;    OPT --&gt; LF&#10;    OPT --&gt; LC&#10;    OPT --&gt; LE&#10;    OPT --&gt; FS&#10;&#10;    LF --&gt; LF_DESC[&quot;Replace Locks with Atomic Operations&lt;br/&gt;Suitable for Simple Operations&quot;]&#10;    LC --&gt; LC_DESC[&quot;Merge Adjacent Small Critical Sections&lt;br/&gt;Reduce Acquire/Release Count&quot;]&#10;    LE --&gt; LE_DESC[&quot;Compiler Detects No Contention&lt;br/&gt;Automatically Removes Lock Operations&quot;]&#10;    FS --&gt; FS_DESC[&quot;FIFO Queue Ensures Order&lt;br/&gt;Prevents Thread Starvation&quot;]"></pre><h4 id="锁粗化">锁粗化</h4><div class="code-block-wrapper" data-lang="pseudocode" data-code="// 优化前：频繁的加锁/解锁
+函数 处理列表(列表):
+    对于 列表中的每个元素:
+        获取锁(锁)
+        处理(元素)
+        释放锁(锁)
+    // 如果列表有 1000 个元素，就要加锁/解锁 1000 次
+
+// 优化后：锁粗化，一次加锁处理所有元素
+函数 处理列表(列表):
+    获取锁(锁)
+    对于 列表中的每个元素:
+        处理(元素)
+    释放锁(锁)
+    // 只需加锁/解锁 1 次，但临界区变长了"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>// 优化前：频繁的加锁/解锁</span></span>
+<span class="line"><span>函数 处理列表(列表):</span></span>
+<span class="line"><span>    对于 列表中的每个元素:</span></span>
+<span class="line"><span>        获取锁(锁)</span></span>
+<span class="line"><span>        处理(元素)</span></span>
+<span class="line"><span>        释放锁(锁)</span></span>
+<span class="line"><span>    // 如果列表有 1000 个元素，就要加锁/解锁 1000 次</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>// 优化后：锁粗化，一次加锁处理所有元素</span></span>
+<span class="line"><span>函数 处理列表(列表):</span></span>
+<span class="line"><span>    获取锁(锁)</span></span>
+<span class="line"><span>    对于 列表中的每个元素:</span></span>
+<span class="line"><span>        处理(元素)</span></span>
+<span class="line"><span>    释放锁(锁)</span></span>
+<span class="line"><span>    // 只需加锁/解锁 1 次，但临界区变长了</span></span></code></pre></div><h4 id="锁消除">锁消除</h4><div class="code-block-wrapper" data-lang="pseudocode" data-code="// 编译器优化：如果检测到锁保护的数据不会被其他线程访问，自动消除锁操作
+函数 本地计算():
+    局部变量 buffer = 新建列表()    // 局部变量，不会逃逸到其他线程
+    获取锁(buffer.锁)                // 编译器检测到：这把锁是多余的
+    buffer.添加(1)
+    buffer.添加(2)
+    释放锁(buffer.锁)                // 编译器自动移除这些锁操作
+    返回 buffer"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>// 编译器优化：如果检测到锁保护的数据不会被其他线程访问，自动消除锁操作</span></span>
+<span class="line"><span>函数 本地计算():</span></span>
+<span class="line"><span>    局部变量 buffer = 新建列表()    // 局部变量，不会逃逸到其他线程</span></span>
+<span class="line"><span>    获取锁(buffer.锁)                // 编译器检测到：这把锁是多余的</span></span>
+<span class="line"><span>    buffer.添加(1)</span></span>
+<span class="line"><span>    buffer.添加(2)</span></span>
+<span class="line"><span>    释放锁(buffer.锁)                // 编译器自动移除这些锁操作</span></span>
+<span class="line"><span>    返回 buffer</span></span></code></pre></div><hr>
+<h2 id="优劣对比">优劣对比</h2><h3 id="所有锁类型综合对比">所有锁类型综合对比</h3><table>
+<thead>
+<tr>
+<th align="left">锁类型</th>
+<th align="left">实现复杂度</th>
+<th align="left">等待方式</th>
+<th align="left">支持递归</th>
+<th align="left">读写区分</th>
+<th align="left">公平性</th>
+<th align="left">典型开销</th>
+<th align="left">最佳场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>互斥锁</strong></td>
+<td align="left">低</td>
+<td align="left">阻塞</td>
+<td align="left">❌</td>
+<td align="left">❌</td>
+<td align="left">可选</td>
+<td align="left">~100ns（无竞争）</td>
+<td align="left">通用临界区保护</td>
+</tr>
+<tr>
+<td align="left"><strong>自旋锁</strong></td>
+<td align="left">极低</td>
+<td align="left">自旋</td>
+<td align="left">❌</td>
+<td align="left">❌</td>
+<td align="left">❌</td>
+<td align="left">~10ns（无竞争）</td>
+<td align="left">短临界区、内核代码</td>
+</tr>
+<tr>
+<td align="left"><strong>读写锁</strong></td>
+<td align="left">中</td>
+<td align="left">阻塞</td>
+<td align="left">❌</td>
+<td align="left">✅</td>
+<td align="left">可选</td>
+<td align="left">~150ns（无竞争）</td>
+<td align="left">读多写少的缓存</td>
+</tr>
+<tr>
+<td align="left"><strong>递归锁</strong></td>
+<td align="left">中</td>
+<td align="left">阻塞</td>
+<td align="left">✅</td>
+<td align="left">❌</td>
+<td align="left">可选</td>
+<td align="left">~120ns（无竞争）</td>
+<td align="left">递归调用</td>
+</tr>
+<tr>
+<td align="left"><strong>条件锁</strong></td>
+<td align="left">高</td>
+<td align="left">条件阻塞</td>
+<td align="left">❌</td>
+<td align="left">❌</td>
+<td align="left">取决于实现</td>
+<td align="left">~200ns（无竞争）</td>
+<td align="left">生产者-消费者</td>
+</tr>
+</tbody></table>
+<h3 id="锁选择决策矩阵">锁选择决策矩阵</h3><pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TD&#10;    START[&quot;Choose the Right Lock&quot;]&#10;&#10;    Q1{&quot;Need to Distinguish&lt;br/&gt;Read/Write Operations?&quot;}&#10;    Q1 --&gt;|&quot;Yes&quot;| RW[&quot;Read-Write Lock&lt;br/&gt;ReadWriteLock&quot;]&#10;    Q1 --&gt;|&quot;No&quot;| Q2&#10;&#10;    Q2{&quot;Same Thread&lt;br/&gt;Needs Reentrancy?&quot;}&#10;    Q2 --&gt;|&quot;Yes&quot;| REC[&quot;Recursive Lock&lt;br/&gt;RecursiveMutex&quot;]&#10;    Q2 --&gt;|&quot;No&quot;| Q3&#10;&#10;    Q3{&quot;Need to Wait for&lt;br/&gt;a Specific Condition?&quot;}&#10;    Q3 --&gt;|&quot;Yes&quot;| COND[&quot;Mutex + Condition Variable&quot;]&#10;    Q3 --&gt;|&quot;No&quot;| Q4&#10;&#10;    Q4{&quot;Critical Section Duration?&quot;}&#10;    Q4 --&gt;|&quot;Very Short (&lt; 1μs)&quot;| SPIN[&quot;Spinlock&quot;]&#10;    Q4 --&gt;|&quot;Longer (≥ 1μs)&quot;| MUTEX[&quot;Mutex&quot;]"></pre><h3 id="锁优化技术对比">锁优化技术对比</h3><table>
+<thead>
+<tr>
+<th align="left">优化技术</th>
+<th align="left">原理</th>
+<th align="left">效果</th>
+<th align="left">适用场景</th>
+<th align="left">风险</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>无锁编程</strong></td>
+<td align="left">用原子操作替代锁</td>
+<td align="left">消除锁开销</td>
+<td align="left">简单数据操作</td>
+<td align="left">编程复杂度高</td>
+</tr>
+<tr>
+<td align="left"><strong>锁粗化</strong></td>
+<td align="left">合并相邻临界区</td>
+<td align="left">减少加锁次数</td>
+<td align="left">循环内的小临界区</td>
+<td align="left">增大临界区范围</td>
+</tr>
+<tr>
+<td align="left"><strong>锁消除</strong></td>
+<td align="left">编译器移除不必要的锁</td>
+<td align="left">零开销</td>
+<td align="left">局部对象的锁</td>
+<td align="left">依赖编译器分析</td>
+</tr>
+<tr>
+<td align="left"><strong>公平调度</strong></td>
+<td align="left">FIFO 队列管理等待线程</td>
+<td align="left">避免饥饿</td>
+<td align="left">公平性要求高的场景</td>
+<td align="left">降低吞吐量</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="小结">小结</h2><pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TD&#10;    IMPL[&quot;Lock Implementation Mechanisms&quot;]&#10;&#10;    TYPES[&quot;Implementation of Various Locks&quot;]&#10;    T1[&quot;Mutex&lt;br/&gt;CAS + OS Blocking&quot;]&#10;    T2[&quot;Spinlock&lt;br/&gt;CAS + Busy-Wait Loop&quot;]&#10;    T3[&quot;Read-Write Lock&lt;br/&gt;Reader Count + Writer Flag&quot;]&#10;    T4[&quot;Recursive Lock&lt;br/&gt;Thread ID + Reentry Count&quot;]&#10;    T5[&quot;Condition Variable&lt;br/&gt;Wait Queue + Signal Notification&quot;]&#10;&#10;    OPTIM[&quot;Optimization Techniques&quot;]&#10;    O1[&quot;Lock-Free Programming&quot;]&#10;    O2[&quot;Lock Coarsening&quot;]&#10;    O3[&quot;Lock Elimination&quot;]&#10;    O4[&quot;Fair Scheduling&quot;]&#10;&#10;    IMPL --&gt; TYPES&#10;    TYPES --&gt; T1&#10;    TYPES --&gt; T2&#10;    TYPES --&gt; T3&#10;    TYPES --&gt; T4&#10;    TYPES --&gt; T5&#10;&#10;    IMPL --&gt; OPTIM&#10;    OPTIM --&gt; O1&#10;    OPTIM --&gt; O2&#10;    OPTIM --&gt; O3&#10;    OPTIM --&gt; O4"></pre><ul>
+<li><strong>互斥锁</strong>基于 CAS 原子操作实现获取，通过操作系统的线程挂起/唤醒机制处理等待</li>
+<li><strong>自旋锁</strong>纯粹在用户空间实现，通过 CAS 循环重试获取锁，适合极短的临界区；TTAS 优化可减少缓存行争用</li>
+<li><strong>读写锁</strong>通过维护读者计数和写者标志，允许多个读者共存或独占一个写者</li>
+<li><strong>递归锁</strong>在互斥锁基础上增加线程标识和重入计数，允许同一线程多次获取</li>
+<li><strong>条件变量</strong>与互斥锁配合，实现&quot;等待条件成立&quot;的语义，是生产者-消费者模式的基础</li>
+<li>锁的优化技术包括<strong>无锁编程、锁粗化、锁消除、公平调度</strong>，需根据具体场景选择</li>
+<li>选择锁类型时应综合考虑<strong>临界区长度、读写比例、重入需求、公平性要求</strong>等因素</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../cs-fundamentals/threads-concurrency/locks/lock-core-ideas.html"><span class="label">Previous</span>锁的核心思想</a><a class="next" href="../../../cs-fundamentals/threads-concurrency/actor-model/index.html"><span class="label">Next</span>Actor 模型 简介</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#问题背景" data-outline-link="问题背景">问题背景</a></li><li class="depth-2"><a href="#核心原理" data-outline-link="核心原理">核心原理</a></li><li class="depth-3"><a href="#互斥锁-mutex-的实现" data-outline-link="互斥锁-mutex-的实现">互斥锁（Mutex）的实现</a></li><li class="depth-3"><a href="#自旋锁-spinlock-的实现" data-outline-link="自旋锁-spinlock-的实现">自旋锁（Spinlock）的实现</a></li><li class="depth-2"><a href="#分类与变体" data-outline-link="分类与变体">分类与变体</a></li><li class="depth-3"><a href="#读写锁-read-write-lock-的实现" data-outline-link="读写锁-read-write-lock-的实现">读写锁（Read-Write Lock）的实现</a></li><li class="depth-3"><a href="#递归锁-recursive-lock-的实现" data-outline-link="递归锁-recursive-lock-的实现">递归锁（Recursive Lock）的实现</a></li><li class="depth-3"><a href="#条件变量-condition-variable" data-outline-link="条件变量-condition-variable">条件变量（Condition Variable）</a></li><li class="depth-2"><a href="#工作流程" data-outline-link="工作流程">工作流程</a></li><li class="depth-3"><a href="#锁的优化技术" data-outline-link="锁的优化技术">锁的优化技术</a></li><li class="depth-2"><a href="#优劣对比" data-outline-link="优劣对比">优劣对比</a></li><li class="depth-3"><a href="#所有锁类型综合对比" data-outline-link="所有锁类型综合对比">所有锁类型综合对比</a></li><li class="depth-3"><a href="#锁选择决策矩阵" data-outline-link="锁选择决策矩阵">锁选择决策矩阵</a></li><li class="depth-3"><a href="#锁优化技术对比" data-outline-link="锁优化技术对比">锁优化技术对比</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

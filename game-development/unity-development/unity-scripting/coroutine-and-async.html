@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>协程与异步编程 · 游戏开发实战</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:游戏开发实战" data-pagefind-meta="slug:game-development">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">游戏开发实战</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item active" href="../../../game-development/index.html" aria-current="page" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../game-development/index.html">游戏开发实战</a><a class="back-to-hubs" href="../../../game-development/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../game-development/unity-development/index.html">Unity 开发实践 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="game-development"><li class="chapter"><details class="folder-collapse" data-sb-key="game-development:folder:unity-development/unity-basics"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../game-development/unity-development/unity-basics/index.html">Unity 基础 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-basics/unity-editor-overview.html">Unity 编辑器概览</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-basics/gameobject-component.html">GameObject 与组件系统</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-basics/coordinate-and-transform.html">坐标系统与 Transform</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-basics/prefab-system.html">预制体系统</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="game-development:folder:unity-development/unity-scripting" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../game-development/unity-development/unity-scripting/index.html">Unity 脚本编程 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-scripting/monobehaviour-lifecycle.html">MonoBehaviour 生命周期</a></li><li class="leaf"><a class="leaf-title active" href="../../../game-development/unity-development/unity-scripting/coroutine-and-async.html">协程与异步编程</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-scripting/event-system.html">事件系统</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-scripting/scriptable-objects.html">ScriptableObject 数据架构</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="game-development:folder:unity-development/unity-ui"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../game-development/unity-development/unity-ui/index.html">Unity UI 系统 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-ui/ugui-fundamentals.html">UGUI 基础</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-ui/ui-toolkit.html">UI Toolkit (Unity 现代 UI 框架)</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-ui/ui-animation.html">UI 动画</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-ui/ui-optimization.html">UI 性能优化</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="game-development:folder:unity-development/unity-performance"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../game-development/unity-development/unity-performance/index.html">Unity 性能优化 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-performance/profiling-tools.html">性能分析工具</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-performance/rendering-optimization.html">渲染优化</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-performance/memory-optimization.html">内存优化</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-performance/physics-optimization.html">物理优化</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="game-development:folder:unity-development/unity-publishing"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../game-development/unity-development/unity-publishing/index.html">Unity 发布与部署 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-publishing/build-pipeline.html">构建管线</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-publishing/multi-platform.html">多平台发布</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-publishing/addressables.html">Addressables 资源管理</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-publishing/cicd-automation.html">CI/CD 自动化</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part IV · 引擎实战</span><span>Unity 开发实践 简介</span><span>Unity 脚本编程 简介</span><span>协程与异步编程</span></nav>
+    <article class="content prose"><h1 id="协程与异步编程">协程与异步编程</h1><h2 id="核心概念">核心概念</h2><p>Unity 的协程（Coroutine）是一种基于迭代器的协作式多任务机制，允许将需要跨越多帧执行的操作写成顺序代码。协程并非多线程，它运行在主线程上，通过 <code>yield return</code> 语句在每帧之间暂停和恢复执行。除了协程之外，Unity 还支持 C# 原生的 async/await 异步编程模式以及 UniTask 等第三方方案，各有适用场景。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    subgraph 协程执行模型&#10;        A[StartCoroutine] --&gt; B[执行到 yield]&#10;        B --&gt; C{yield 类型}&#10;        C --&gt;|null| D[下一帧 Update 后继续]&#10;        C --&gt;|WaitForSeconds| E[等待指定秒数]&#10;        C --&gt;|WaitForFixedUpdate| F[下一次 FixedUpdate 后]&#10;        C --&gt;|WaitForEndOfFrame| G[当前帧渲染后]&#10;        C --&gt;|WaitUntil| H[条件满足时]&#10;        C --&gt;|其他协程| I[嵌套协程完成时]&#10;        D --&gt; B&#10;        E --&gt; B&#10;        F --&gt; B&#10;        G --&gt; B&#10;        H --&gt; B&#10;        I --&gt; B&#10;    end"></pre><table>
+<thead>
+<tr>
+<th>异步方案</th>
+<th>运行线程</th>
+<th>GC 分配</th>
+<th>取消机制</th>
+<th>异常处理</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Coroutine</td>
+<td>主线程</td>
+<td>每次 yield 产生</td>
+<td>StopCoroutine</td>
+<td>无法 try-catch</td>
+<td>延时、动画序列</td>
+</tr>
+<tr>
+<td>async/await</td>
+<td>主线程/线程池</td>
+<td>状态机分配</td>
+<td>CancellationToken</td>
+<td>try-catch 支持</td>
+<td>I/O、网络请求</td>
+</tr>
+<tr>
+<td>UniTask</td>
+<td>主线程</td>
+<td>零分配（结构体）</td>
+<td>CancellationToken</td>
+<td>try-catch 支持</td>
+<td>高性能异步全场景</td>
+</tr>
+<tr>
+<td>Invoke/InvokeRepeating</td>
+<td>主线程</td>
+<td>反射开销</td>
+<td>CancelInvoke</td>
+<td>无</td>
+<td>简单延时回调</td>
+</tr>
+</tbody></table>
+<h2 id="协程调度机制">协程调度机制</h2><p>协程的核心在于 <code>IEnumerator</code> 迭代器和 <code>yield return</code> 关键字。Unity 引擎维护了一个协程调度器，每帧在特定时间点检查所有活跃协程的等待条件，条件满足时恢复执行到下一个 yield 语句。</p>
+<p>不同的 yield 指令决定了协程在帧循环中的恢复时机。理解这些时机对于编写正确的协程逻辑至关重要：</p>
+<table>
+<thead>
+<tr>
+<th>yield 类型</th>
+<th>恢复时机</th>
+<th>常见用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>yield return null</td>
+<td>下一帧 Update 之后</td>
+<td>分帧处理</td>
+</tr>
+<tr>
+<td>yield return new WaitForSeconds(t)</td>
+<td>t 秒后（受 Time.timeScale 影响）</td>
+<td>延时操作</td>
+</tr>
+<tr>
+<td>yield return new WaitForSecondsRealtime(t)</td>
+<td>t 秒后（不受 timeScale 影响）</td>
+<td>暂停菜单计时</td>
+</tr>
+<tr>
+<td>yield return new WaitForFixedUpdate()</td>
+<td>下一次 FixedUpdate 之后</td>
+<td>物理相关等待</td>
+</tr>
+<tr>
+<td>yield return new WaitForEndOfFrame()</td>
+<td>当前帧渲染完成后</td>
+<td>截屏、后处理</td>
+</tr>
+<tr>
+<td>yield return new WaitUntil(pred)</td>
+<td>谓词返回 true 时</td>
+<td>条件等待</td>
+</tr>
+<tr>
+<td>yield return new WaitWhile(pred)</td>
+<td>谓词返回 false 时</td>
+<td>条件等待</td>
+</tr>
+<tr>
+<td>yield return StartCoroutine(other)</td>
+<td>嵌套协程完成时</td>
+<td>协程编排</td>
+</tr>
+</tbody></table>
+<div class="code-block-wrapper" data-lang="csharp" data-code="using UnityEngine;
+using System.Collections;
+
+public class WaveSpawner : MonoBehaviour
+{
+    [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private Transform[] spawnPoints;
+    [SerializeField] private int enemiesPerWave = 5;
+    [SerializeField] private float spawnInterval = 0.5f;
+    [SerializeField] private float waveCooldown = 10f;
+
+    private void Start()
+    {
+        StartCoroutine(SpawnWaves());
+    }
+
+    private IEnumerator SpawnWaves()
+    {
+        int waveNumber = 0;
+
+        while (true)
+        {
+            waveNumber++;
+            yield return StartCoroutine(SpawnWave(waveNumber));
+            yield return new WaitForSeconds(waveCooldown);
+        }
+    }
+
+    private IEnumerator SpawnWave(int wave)
+    {
+        int count = enemiesPerWave + wave * 2;
+
+        for (int i = 0; i &lt; count; i++)
+        {
+            Transform point = spawnPoints[Random.Range(0, spawnPoints.Length)];
+            Instantiate(enemyPrefab, point.position, point.rotation);
+            yield return new WaitForSeconds(spawnInterval);
+        }
+    }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>using UnityEngine;</span></span>
+<span class="line"><span>using System.Collections;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>public class WaveSpawner : MonoBehaviour</span></span>
+<span class="line"><span>{</span></span>
+<span class="line"><span>    [SerializeField] private GameObject enemyPrefab;</span></span>
+<span class="line"><span>    [SerializeField] private Transform[] spawnPoints;</span></span>
+<span class="line"><span>    [SerializeField] private int enemiesPerWave = 5;</span></span>
+<span class="line"><span>    [SerializeField] private float spawnInterval = 0.5f;</span></span>
+<span class="line"><span>    [SerializeField] private float waveCooldown = 10f;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    private void Start()</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        StartCoroutine(SpawnWaves());</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    private IEnumerator SpawnWaves()</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        int waveNumber = 0;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>        while (true)</span></span>
+<span class="line"><span>        {</span></span>
+<span class="line"><span>            waveNumber++;</span></span>
+<span class="line"><span>            yield return StartCoroutine(SpawnWave(waveNumber));</span></span>
+<span class="line"><span>            yield return new WaitForSeconds(waveCooldown);</span></span>
+<span class="line"><span>        }</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    private IEnumerator SpawnWave(int wave)</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        int count = enemiesPerWave + wave * 2;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>        for (int i = 0; i &#x3C; count; i++)</span></span>
+<span class="line"><span>        {</span></span>
+<span class="line"><span>            Transform point = spawnPoints[Random.Range(0, spawnPoints.Length)];</span></span>
+<span class="line"><span>            Instantiate(enemyPrefab, point.position, point.rotation);</span></span>
+<span class="line"><span>            yield return new WaitForSeconds(spawnInterval);</span></span>
+<span class="line"><span>        }</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span>}</span></span></code></pre></div><h2 id="协程的生命周期管理">协程的生命周期管理</h2><p>协程的启动与停止需要精确管理，否则容易出现内存泄漏或逻辑残留。协程与启动它的 MonoBehaviour 绑定，当 GameObject 被禁用或销毁时，所有绑定的协程自动停止。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[StartCoroutine] --&gt; B{协程运行中}&#10;    B --&gt;|正常结束| C[迭代器耗尽]&#10;    B --&gt;|手动停止| D[StopCoroutine]&#10;    B --&gt;|停止全部| E[StopAllCoroutines]&#10;    B --&gt;|对象禁用| F[GameObject.SetActive false]&#10;    B --&gt;|组件禁用| G[enabled = false 不停止]&#10;    B --&gt;|对象销毁| H[Destroy]&#10;    F --&gt; I[协程暂停]&#10;    I --&gt;|重新激活| J[协程不恢复]"></pre><p>正确管理协程引用是避免问题的关键。通过缓存 Coroutine 引用可以精确控制特定协程的停止：</p>
+<div class="code-block-wrapper" data-lang="csharp" data-code="using UnityEngine;
+using System.Collections;
+
+public class AbilitySystem : MonoBehaviour
+{
+    [SerializeField] private float cooldownDuration = 3f;
+    [SerializeField] private float channelDuration = 2f;
+
+    private Coroutine cooldownRoutine;
+    private Coroutine channelRoutine;
+    private bool isCoolingDown;
+    private bool isChanneling;
+
+    public void UseAbility()
+    {
+        if (isCoolingDown || isChanneling) return;
+
+        channelRoutine = StartCoroutine(ChannelAbility());
+    }
+
+    public void CancelChannel()
+    {
+        if (channelRoutine != null)
+        {
+            StopCoroutine(channelRoutine);
+            channelRoutine = null;
+            isChanneling = false;
+        }
+    }
+
+    private IEnumerator ChannelAbility()
+    {
+        isChanneling = true;
+        yield return new WaitForSeconds(channelDuration);
+        isChanneling = false;
+
+        ExecuteAbility();
+
+        cooldownRoutine = StartCoroutine(Cooldown());
+    }
+
+    private IEnumerator Cooldown()
+    {
+        isCoolingDown = true;
+        yield return new WaitForSeconds(cooldownDuration);
+        isCoolingDown = false;
+        cooldownRoutine = null;
+    }
+
+    private void ExecuteAbility()
+    {
+        Debug.Log(&quot;技能释放！&quot;);
+    }
+
+    private void OnDisable()
+    {
+        isCoolingDown = false;
+        isChanneling = false;
+        cooldownRoutine = null;
+        channelRoutine = null;
+    }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>using UnityEngine;</span></span>
+<span class="line"><span>using System.Collections;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>public class AbilitySystem : MonoBehaviour</span></span>
+<span class="line"><span>{</span></span>
+<span class="line"><span>    [SerializeField] private float cooldownDuration = 3f;</span></span>
+<span class="line"><span>    [SerializeField] private float channelDuration = 2f;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    private Coroutine cooldownRoutine;</span></span>
+<span class="line"><span>    private Coroutine channelRoutine;</span></span>
+<span class="line"><span>    private bool isCoolingDown;</span></span>
+<span class="line"><span>    private bool isChanneling;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    public void UseAbility()</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        if (isCoolingDown || isChanneling) return;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>        channelRoutine = StartCoroutine(ChannelAbility());</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    public void CancelChannel()</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        if (channelRoutine != null)</span></span>
+<span class="line"><span>        {</span></span>
+<span class="line"><span>            StopCoroutine(channelRoutine);</span></span>
+<span class="line"><span>            channelRoutine = null;</span></span>
+<span class="line"><span>            isChanneling = false;</span></span>
+<span class="line"><span>        }</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    private IEnumerator ChannelAbility()</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        isChanneling = true;</span></span>
+<span class="line"><span>        yield return new WaitForSeconds(channelDuration);</span></span>
+<span class="line"><span>        isChanneling = false;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>        ExecuteAbility();</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>        cooldownRoutine = StartCoroutine(Cooldown());</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    private IEnumerator Cooldown()</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        isCoolingDown = true;</span></span>
+<span class="line"><span>        yield return new WaitForSeconds(cooldownDuration);</span></span>
+<span class="line"><span>        isCoolingDown = false;</span></span>
+<span class="line"><span>        cooldownRoutine = null;</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    private void ExecuteAbility()</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        Debug.Log("技能释放！");</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    private void OnDisable()</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        isCoolingDown = false;</span></span>
+<span class="line"><span>        isChanneling = false;</span></span>
+<span class="line"><span>        cooldownRoutine = null;</span></span>
+<span class="line"><span>        channelRoutine = null;</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span>}</span></span></code></pre></div><p>需要注意的关键陷阱：<code>SetActive(false)</code> 会停止所有协程且重新激活后不会恢复；禁用组件（<code>enabled = false</code>）不会停止协程但 <code>OnDisable</code> 会被调用；<code>StopCoroutine</code> 传入字符串和传入引用是不同的 API。</p>
+<h2 id="async-await-与-awaitable">async/await 与 Awaitable</h2><p>Unity 2023+ 引入了原生的 <code>Awaitable</code> 类型，使得 async/await 可以直接在 Unity 生命周期中使用，无需第三方库。<code>Awaitable</code> 提供了与协程 yield 指令对应的异步等待方法，同时支持 <code>CancellationToken</code> 实现优雅的取消机制。</p>
+<div class="code-block-wrapper" data-lang="csharp" data-code="using UnityEngine;
+using System.Threading;
+
+public class AsyncDialogueSystem : MonoBehaviour
+{
+    [SerializeField] private DialogueUI dialogueUI;
+    [SerializeField] private float typingSpeed = 0.05f;
+
+    private CancellationTokenSource cts;
+
+    public async void StartDialogue(string[] lines)
+    {
+        cts?.Cancel();
+        cts = new CancellationTokenSource();
+
+        try
+        {
+            foreach (string line in lines)
+            {
+                await TypeText(line, cts.Token);
+                await WaitForInput(cts.Token);
+            }
+            dialogueUI.Hide();
+        }
+        catch (OperationCanceledException)
+        {
+            dialogueUI.Hide();
+        }
+    }
+
+    private async Awaitable TypeText(string text, CancellationToken token)
+    {
+        dialogueUI.ClearText();
+
+        foreach (char c in text)
+        {
+            token.ThrowIfCancellationRequested();
+            dialogueUI.AppendChar(c);
+            await Awaitable.WaitForSecondsAsync(typingSpeed, token);
+        }
+    }
+
+    private async Awaitable WaitForInput(CancellationToken token)
+    {
+        while (!Input.GetButtonDown(&quot;Submit&quot;))
+        {
+            token.ThrowIfCancellationRequested();
+            await Awaitable.NextFrameAsync(token);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        cts?.Cancel();
+        cts?.Dispose();
+    }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>using UnityEngine;</span></span>
+<span class="line"><span>using System.Threading;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>public class AsyncDialogueSystem : MonoBehaviour</span></span>
+<span class="line"><span>{</span></span>
+<span class="line"><span>    [SerializeField] private DialogueUI dialogueUI;</span></span>
+<span class="line"><span>    [SerializeField] private float typingSpeed = 0.05f;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    private CancellationTokenSource cts;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    public async void StartDialogue(string[] lines)</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        cts?.Cancel();</span></span>
+<span class="line"><span>        cts = new CancellationTokenSource();</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>        try</span></span>
+<span class="line"><span>        {</span></span>
+<span class="line"><span>            foreach (string line in lines)</span></span>
+<span class="line"><span>            {</span></span>
+<span class="line"><span>                await TypeText(line, cts.Token);</span></span>
+<span class="line"><span>                await WaitForInput(cts.Token);</span></span>
+<span class="line"><span>            }</span></span>
+<span class="line"><span>            dialogueUI.Hide();</span></span>
+<span class="line"><span>        }</span></span>
+<span class="line"><span>        catch (OperationCanceledException)</span></span>
+<span class="line"><span>        {</span></span>
+<span class="line"><span>            dialogueUI.Hide();</span></span>
+<span class="line"><span>        }</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    private async Awaitable TypeText(string text, CancellationToken token)</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        dialogueUI.ClearText();</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>        foreach (char c in text)</span></span>
+<span class="line"><span>        {</span></span>
+<span class="line"><span>            token.ThrowIfCancellationRequested();</span></span>
+<span class="line"><span>            dialogueUI.AppendChar(c);</span></span>
+<span class="line"><span>            await Awaitable.WaitForSecondsAsync(typingSpeed, token);</span></span>
+<span class="line"><span>        }</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    private async Awaitable WaitForInput(CancellationToken token)</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        while (!Input.GetButtonDown("Submit"))</span></span>
+<span class="line"><span>        {</span></span>
+<span class="line"><span>            token.ThrowIfCancellationRequested();</span></span>
+<span class="line"><span>            await Awaitable.NextFrameAsync(token);</span></span>
+<span class="line"><span>        }</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    private void OnDestroy()</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        cts?.Cancel();</span></span>
+<span class="line"><span>        cts?.Dispose();</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span>}</span></span></code></pre></div><p>async/await 相比协程的核心优势在于异常处理能力和返回值支持。协程无法使用 try-catch 捕获异常，也无法直接返回计算结果，而 async 方法可以：</p>
+<table>
+<thead>
+<tr>
+<th>能力</th>
+<th>Coroutine</th>
+<th>async/await (Awaitable)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>异常传播</td>
+<td>静默失败</td>
+<td>try-catch 捕获</td>
+</tr>
+<tr>
+<td>返回值</td>
+<td>不支持</td>
+<td>支持泛型返回</td>
+</tr>
+<tr>
+<td>取消机制</td>
+<td>StopCoroutine</td>
+<td>CancellationToken</td>
+</tr>
+<tr>
+<td>嵌套组合</td>
+<td>yield return 嵌套</td>
+<td>await 链式调用</td>
+</tr>
+<tr>
+<td>条件等待</td>
+<td>WaitUntil/WaitWhile</td>
+<td>循环 + NextFrameAsync</td>
+</tr>
+<tr>
+<td>线程切换</td>
+<td>不支持</td>
+<td>Awaitable.BackgroundThreadAsync</td>
+</tr>
+</tbody></table>
+<h2 id="协程性能优化策略">协程性能优化策略</h2><p>协程每次 <code>yield return new WaitForSeconds()</code> 都会产生堆内存分配，在高频调用场景下会加重 GC 压力。通过缓存 yield 对象可以显著降低分配：</p>
+<div class="code-block-wrapper" data-lang="csharp" data-code="using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+
+public static class YieldCache
+{
+    private static readonly Dictionary&lt;float, WaitForSeconds&gt; waitCache = new();
+    private static readonly WaitForEndOfFrame endOfFrame = new();
+    private static readonly WaitForFixedUpdate fixedUpdate = new();
+
+    public static WaitForSeconds Seconds(float time)
+    {
+        if (!waitCache.TryGetValue(time, out var wait))
+        {
+            wait = new WaitForSeconds(time);
+            waitCache[time] = wait;
+        }
+        return wait;
+    }
+
+    public static WaitForEndOfFrame EndOfFrame =&gt; endOfFrame;
+    public static WaitForFixedUpdate FixedUpdate =&gt; fixedUpdate;
+}
+
+public class OptimizedSpawner : MonoBehaviour
+{
+    private IEnumerator SpawnLoop()
+    {
+        while (true)
+        {
+            SpawnEnemy();
+            yield return YieldCache.Seconds(2f);
+        }
+    }
+
+    private void SpawnEnemy()
+    {
+        Debug.Log(&quot;敌人生成&quot;);
+    }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>using UnityEngine;</span></span>
+<span class="line"><span>using System.Collections;</span></span>
+<span class="line"><span>using System.Collections.Generic;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>public static class YieldCache</span></span>
+<span class="line"><span>{</span></span>
+<span class="line"><span>    private static readonly Dictionary&#x3C;float, WaitForSeconds> waitCache = new();</span></span>
+<span class="line"><span>    private static readonly WaitForEndOfFrame endOfFrame = new();</span></span>
+<span class="line"><span>    private static readonly WaitForFixedUpdate fixedUpdate = new();</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    public static WaitForSeconds Seconds(float time)</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        if (!waitCache.TryGetValue(time, out var wait))</span></span>
+<span class="line"><span>        {</span></span>
+<span class="line"><span>            wait = new WaitForSeconds(time);</span></span>
+<span class="line"><span>            waitCache[time] = wait;</span></span>
+<span class="line"><span>        }</span></span>
+<span class="line"><span>        return wait;</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    public static WaitForEndOfFrame EndOfFrame => endOfFrame;</span></span>
+<span class="line"><span>    public static WaitForFixedUpdate FixedUpdate => fixedUpdate;</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>public class OptimizedSpawner : MonoBehaviour</span></span>
+<span class="line"><span>{</span></span>
+<span class="line"><span>    private IEnumerator SpawnLoop()</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        while (true)</span></span>
+<span class="line"><span>        {</span></span>
+<span class="line"><span>            SpawnEnemy();</span></span>
+<span class="line"><span>            yield return YieldCache.Seconds(2f);</span></span>
+<span class="line"><span>        }</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    private void SpawnEnemy()</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        Debug.Log("敌人生成");</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span>}</span></span></code></pre></div><p>分帧处理是协程的另一个重要应用场景，可以将大量计算分散到多帧中执行，避免单帧卡顿：</p>
+<div class="code-block-wrapper" data-lang="csharp" data-code="using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+
+public class ChunkLoader : MonoBehaviour
+{
+    [SerializeField] private int itemsPerFrame = 50;
+
+    public IEnumerator LoadItems&lt;T&gt;(List&lt;T&gt; items, System.Action&lt;T&gt; processAction)
+    {
+        for (int i = 0; i &lt; items.Count; i++)
+        {
+            processAction(items[i]);
+
+            if ((i + 1) % itemsPerFrame == 0)
+            {
+                yield return null;
+            }
+        }
+    }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>using UnityEngine;</span></span>
+<span class="line"><span>using System.Collections;</span></span>
+<span class="line"><span>using System.Collections.Generic;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>public class ChunkLoader : MonoBehaviour</span></span>
+<span class="line"><span>{</span></span>
+<span class="line"><span>    [SerializeField] private int itemsPerFrame = 50;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    public IEnumerator LoadItems&#x3C;T>(List&#x3C;T> items, System.Action&#x3C;T> processAction)</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        for (int i = 0; i &#x3C; items.Count; i++)</span></span>
+<span class="line"><span>        {</span></span>
+<span class="line"><span>            processAction(items[i]);</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>            if ((i + 1) % itemsPerFrame == 0)</span></span>
+<span class="line"><span>            {</span></span>
+<span class="line"><span>                yield return null;</span></span>
+<span class="line"><span>            }</span></span>
+<span class="line"><span>        }</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span>}</span></span></code></pre></div><h2 id="小结">小结</h2><pre class="mermaid" data-diagram-type="mindmap" data-source="mindmap&#10;  root((协程与异步编程))&#10;    协程基础&#10;      IEnumerator 迭代器&#10;      yield return 暂停恢复&#10;      主线程协作式调度&#10;    yield 指令&#10;      WaitForSeconds 延时&#10;      WaitUntil 条件等待&#10;      WaitForFixedUpdate 物理&#10;      嵌套协程编排&#10;    生命周期管理&#10;      Coroutine 引用缓存&#10;      StopCoroutine 精确停止&#10;      SetActive 自动停止&#10;    async/await&#10;      Awaitable 原生支持&#10;      CancellationToken 取消&#10;      try-catch 异常处理&#10;      返回值支持&#10;    性能优化&#10;      yield 对象缓存&#10;      分帧处理大数据&#10;      减少 GC 分配"></pre><ul>
+<li>协程是基于迭代器的协作式多任务机制，运行在主线程上，通过 yield return 暂停和恢复</li>
+<li>不同 yield 指令决定协程在帧循环中的恢复时机，理解时机是编写正确协程的关键</li>
+<li>协程与 MonoBehaviour 生命周期绑定，GameObject 禁用会停止协程且不可恢复</li>
+<li>async/await 配合 Awaitable 提供了异常处理、返回值和取消机制的完整异步方案</li>
+<li>缓存 WaitForSeconds 等 yield 对象可以避免重复的堆内存分配</li>
+<li>分帧处理模式适合将大量数据加载或计算分散到多帧执行</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../game-development/unity-development/unity-scripting/monobehaviour-lifecycle.html"><span class="label">Previous</span>MonoBehaviour 生命周期</a><a class="next" href="../../../game-development/unity-development/unity-scripting/event-system.html"><span class="label">Next</span>事件系统</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#协程调度机制" data-outline-link="协程调度机制">协程调度机制</a></li><li class="depth-2"><a href="#协程的生命周期管理" data-outline-link="协程的生命周期管理">协程的生命周期管理</a></li><li class="depth-2"><a href="#async-await-与-awaitable" data-outline-link="async-await-与-awaitable">async/await 与 Awaitable</a></li><li class="depth-2"><a href="#协程性能优化策略" data-outline-link="协程性能优化策略">协程性能优化策略</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

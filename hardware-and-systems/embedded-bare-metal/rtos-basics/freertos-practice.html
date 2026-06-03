@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>FreeRTOS 实践 · 硬件、机器人与安全工程</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:硬件、机器人与安全工程" data-pagefind-meta="slug:hardware-and-systems">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">硬件、机器人与安全工程</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item active" href="../../../hardware-and-systems/index.html" aria-current="page" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../hardware-and-systems/index.html">硬件、机器人与安全工程</a><a class="back-to-hubs" href="../../../hardware-and-systems/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../hardware-and-systems/embedded-bare-metal/index.html">嵌入式裸机开发</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="hardware-and-systems"><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:embedded-bare-metal/microcontroller-fundamentals"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/embedded-bare-metal/microcontroller-fundamentals/index.html">微控制器基础</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/microcontroller-fundamentals/mcu-architecture-cortex-m.html">MCU 架构与 ARM Cortex-M 内核</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/microcontroller-fundamentals/memory-map-boot-process.html">存储器映射与启动流程</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/microcontroller-fundamentals/clock-system-power-management.html">时钟系统与电源管理</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:embedded-bare-metal/peripheral-programming"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/embedded-bare-metal/peripheral-programming/index.html">外设编程</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/peripheral-programming/gpio-interrupt-system.html">GPIO 与中断系统</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/peripheral-programming/timer-pwm-adc.html">定时器、PWM 与 ADC</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/peripheral-programming/communication-interface-drivers.html">通信接口驱动开发</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:embedded-bare-metal/rtos-basics" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/embedded-bare-metal/rtos-basics/index.html">RTOS 基础</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/rtos-basics/rtos-scheduling-principles.html">RTOS 调度原理</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/rtos-basics/task-management-synchronization.html">任务管理与同步机制</a></li><li class="leaf"><a class="leaf-title active" href="../../../hardware-and-systems/embedded-bare-metal/rtos-basics/freertos-practice.html">FreeRTOS 实践</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:embedded-bare-metal/debugging-optimization"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/embedded-bare-metal/debugging-optimization/index.html">调试与优化</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/debugging-optimization/jtag-swd-debugging.html">JTAG/SWD 调试原理</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/debugging-optimization/performance-power-optimization.html">性能分析与功耗优化</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/embedded-bare-metal/debugging-optimization/firmware-security-ota.html">固件安全与 OTA 更新</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part I · 硬件电子</span><span>嵌入式裸机开发</span><span>RTOS 基础</span><span>FreeRTOS 实践</span></nav>
+    <article class="content prose"><h1 id="freertos-实践">FreeRTOS 实践</h1><h2 id="freertos-系统概述">FreeRTOS 系统概述</h2><p>FreeRTOS 是全球部署量最大的嵌入式实时操作系统内核，以 MIT 许可证开源，支持超过 40 种处理器架构。其设计哲学是&quot;小、简单、健壮&quot;——核心代码仅约 9000 行 C 代码，RAM 占用可低至数百字节。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    APP[应用任务层] --&gt; API[FreeRTOS API]&#10;    API --&gt; KERNEL[内核层]&#10;    KERNEL --&gt; SCHED[调度器]&#10;    KERNEL --&gt; QUEUE[队列管理]&#10;    KERNEL --&gt; TIMER[软件定时器]&#10;    KERNEL --&gt; MEM[内存管理]&#10;    SCHED --&gt; PORT[移植层 port.c]&#10;    PORT --&gt; HW[硬件抽象]&#10;    HW --&gt; CM4[Cortex-M4 硬件]"></pre><table>
+<thead>
+<tr>
+<th>组件</th>
+<th>核心文件</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>任务管理</td>
+<td>tasks.c</td>
+<td>创建/删除/调度任务</td>
+</tr>
+<tr>
+<td>队列</td>
+<td>queue.c</td>
+<td>消息队列、信号量、互斥量底层实现</td>
+</tr>
+<tr>
+<td>定时器</td>
+<td>timers.c</td>
+<td>软件定时器服务</td>
+</tr>
+<tr>
+<td>事件组</td>
+<td>event_groups.c</td>
+<td>位图事件管理</td>
+</tr>
+<tr>
+<td>移植层</td>
+<td>port.c / portmacro.h</td>
+<td>芯片特定的上下文切换和 Tick</td>
+</tr>
+<tr>
+<td>配置</td>
+<td>FreeRTOSConfig.h</td>
+<td>全局功能裁剪和参数配置</td>
+</tr>
+</tbody></table>
+<h2 id="内核配置">内核配置</h2><h3 id="freertosconfig-h-关键参数">FreeRTOSConfig.h 关键参数</h3><table>
+<thead>
+<tr>
+<th>配置宏</th>
+<th>典型值</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>configCPU_CLOCK_HZ</td>
+<td>168000000</td>
+<td>CPU 主频（用于计算 SysTick 重装值）</td>
+</tr>
+<tr>
+<td>configTICK_RATE_HZ</td>
+<td>1000</td>
+<td>Tick 频率（1 ms）</td>
+</tr>
+<tr>
+<td>configMAX_PRIORITIES</td>
+<td>5-32</td>
+<td>最大优先级数（RAM 开销线性增长）</td>
+</tr>
+<tr>
+<td>configMINIMAL_STACK_SIZE</td>
+<td>128</td>
+<td>空闲任务栈大小（字，非字节）</td>
+</tr>
+<tr>
+<td>configTOTAL_HEAP_SIZE</td>
+<td>根据应用</td>
+<td>FreeRTOS 堆大小</td>
+</tr>
+<tr>
+<td>configUSE_PREEMPTION</td>
+<td>1</td>
+<td>启用抢占式调度</td>
+</tr>
+<tr>
+<td>configUSE_TIME_SLICING</td>
+<td>1</td>
+<td>同优先级时间片轮转</td>
+</tr>
+<tr>
+<td>configUSE_MUTEXES</td>
+<td>1</td>
+<td>启用互斥量支持</td>
+</tr>
+<tr>
+<td>configUSE_COUNTING_SEMAPHORES</td>
+<td>1</td>
+<td>启用计数信号量</td>
+</tr>
+<tr>
+<td>configMAX_SYSCALL_INTERRUPT_PRIORITY</td>
+<td>5&lt;&lt;4</td>
+<td>RTOS API 可调用的最高中断优先级</td>
+</tr>
+</tbody></table>
+<h3 id="中断优先级约束">中断优先级约束</h3><p>FreeRTOS 对中断优先级有严格的分层要求：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>优先级</mtext><mo>&lt;</mo><mtext>configMAX_SYSCALL_INTERRUPT_PRIORITY：不受 RTOS 影响，不可调 API</mtext></mrow><annotation encoding="application/x-tex">\text{优先级} &lt; \text{configMAX\_SYSCALL\_INTERRUPT\_PRIORITY}：\text{不受 RTOS 影响，不可调 API}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7224em;vertical-align:-0.0391em;"></span><span class="mord text"><span class="mord cjk_fallback">优先级</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0044em;vertical-align:-0.31em;"></span><span class="mord text"><span class="mord">configMAX_SYSCALL_INTERRUPT_PRIORITY</span></span><span class="mord cjk_fallback">：</span><span class="mord text"><span class="mord cjk_fallback">不受</span><span class="mord"> RTOS </span><span class="mord cjk_fallback">影响，不可调</span><span class="mord"> API</span></span></span></span></span></span></div><div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>优先级</mtext><mo>≥</mo><mtext>configMAX_SYSCALL_INTERRUPT_PRIORITY：可调用 FromISR 版 API</mtext></mrow><annotation encoding="application/x-tex">\text{优先级} \geq \text{configMAX\_SYSCALL\_INTERRUPT\_PRIORITY}：\text{可调用 FromISR 版 API}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8193em;vertical-align:-0.136em;"></span><span class="mord text"><span class="mord cjk_fallback">优先级</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0044em;vertical-align:-0.31em;"></span><span class="mord text"><span class="mord">configMAX_SYSCALL_INTERRUPT_PRIORITY</span></span><span class="mord cjk_fallback">：</span><span class="mord text"><span class="mord cjk_fallback">可调用</span><span class="mord"> FromISR </span><span class="mord cjk_fallback">版</span><span class="mord"> API</span></span></span></span></span></span></div><pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    subgraph 不受 RTOS 管理&#10;        P0[&quot;优先级 0-4&lt;br/&gt;(数值小=高优先级)&quot;]&#10;        P0 --&gt; CRIT[&quot;不受临界区屏蔽&lt;br/&gt;零延迟中断&quot;]&#10;    end&#10;    subgraph RTOS 管理范围&#10;        P5[&quot;优先级 5-15&quot;]&#10;        P5 --&gt; RTOS_API[&quot;可调用 xSemaphoreGiveFromISR 等&quot;]&#10;    end&#10;    subgraph 最低优先级&#10;        PENDSV[&quot;PendSV: 优先级 15&quot;]&#10;        SYSTICK2[&quot;SysTick: 优先级 15&quot;]&#10;    end"></pre><h2 id="内存管理方案">内存管理方案</h2><p>FreeRTOS 提供 5 种可替换的堆内存管理实现：</p>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>文件</th>
+<th>特点</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>heap_1</td>
+<td>heap_1.c</td>
+<td>只分配不释放</td>
+<td>任务创建后不删除</td>
+</tr>
+<tr>
+<td>heap_2</td>
+<td>heap_2.c</td>
+<td>支持释放（不合并）</td>
+<td>固定大小块分配</td>
+</tr>
+<tr>
+<td>heap_3</td>
+<td>heap_3.c</td>
+<td>封装标准 malloc/free</td>
+<td>已有 malloc 实现</td>
+</tr>
+<tr>
+<td>heap_4</td>
+<td>heap_4.c</td>
+<td>支持释放+合并</td>
+<td>通用推荐方案</td>
+</tr>
+<tr>
+<td>heap_5</td>
+<td>heap_5.c</td>
+<td>多段非连续内存</td>
+<td>多 SRAM 区域</td>
+</tr>
+</tbody></table>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>可用堆</mtext><mo>=</mo><mtext>configTOTAL_HEAP_SIZE</mtext><mo>−</mo><mtext>管理开销</mtext></mrow><annotation encoding="application/x-tex">\text{可用堆} = \text{configTOTAL\_HEAP\_SIZE} - \text{管理开销}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">可用堆</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0044em;vertical-align:-0.31em;"></span><span class="mord text"><span class="mord">configTOTAL_HEAP_SIZE</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">管理开销</span></span></span></span></span></span></div><p>heap_4 的最佳适配算法在分配时搜索满足要求的最小空闲块，释放时与相邻空闲块合并减少碎片。</p>
+<h2 id="软件定时器">软件定时器</h2><h3 id="定时器服务任务">定时器服务任务</h3><p>FreeRTOS 软件定时器运行在专用的守护任务（Timer Service Task）中，而非中断上下文：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>定时器精度</mtext><mo>≤</mo><msub><mi>T</mi><mtext>Tick</mtext></msub><mspace width="1em"/><mtext>（受 Tick 分辨率限制）</mtext></mrow><annotation encoding="application/x-tex">\text{定时器精度} \leq T_{\text{Tick}} \quad \text{（受 Tick 分辨率限制）}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8193em;vertical-align:-0.136em;"></span><span class="mord text"><span class="mord cjk_fallback">定时器精度</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">Tick</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:1em;"></span><span class="mord text"><span class="mord cjk_fallback">（受</span><span class="mord"> Tick </span><span class="mord cjk_fallback">分辨率限制）</span></span></span></span></span></span></div><table>
+<thead>
+<tr>
+<th>定时器类型</th>
+<th>行为</th>
+<th>典型用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>单次定时器</td>
+<td>触发一次后停止</td>
+<td>超时检测、延时操作</td>
+</tr>
+<tr>
+<td>周期定时器</td>
+<td>重复触发</td>
+<td>周期性数据上报、LED 闪烁</td>
+</tr>
+</tbody></table>
+<h3 id="定时器命令队列">定时器命令队列</h3><p>所有定时器操作（启动、停止、重置、修改周期）通过命令队列发送给定时器任务：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>应用任务</mtext><mover><mo stretchy="true" minsize="3.0em">→</mo><mpadded width="+0.6em" lspace="0.3em"><mtext>xTimerStart()</mtext></mpadded></mover><mtext>命令队列</mtext><mover><mo stretchy="true" minsize="3.0em">→</mo><mpadded width="+0.6em" lspace="0.3em"><mtext>Timer Task</mtext></mpadded></mover><mtext>执行回调</mtext></mrow><annotation encoding="application/x-tex">\text{应用任务} \xrightarrow{\text{xTimerStart()}} \text{命令队列} \xrightarrow{\text{Timer Task}} \text{执行回调}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.158em;vertical-align:-0.011em;"></span><span class="mord text"><span class="mord cjk_fallback">应用任务</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel x-arrow"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.147em;"><span style="top:-3.322em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight x-arrow-pad"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">xTimerStart()</span></span></span></span></span><span class="svg-align" style="top:-2.689em;"><span class="pstrut" style="height:2.7em;"></span><span class="hide-tail" style="height:0.522em;min-width:1.469em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="0.522em" viewBox="0 0 400000 522" preserveAspectRatio="xMaxYMin slice"><path d="M0 241v40h399891c-47.3 35.3-84 78-110 128
+-16.7 32-27.7 63.7-33 95 0 1.3-.2 2.7-.5 4-.3 1.3-.5 2.3-.5 3 0 7.3 6.7 11 20
+ 11 8 0 13.2-.8 15.5-2.5 2.3-1.7 4.2-5.5 5.5-11.5 2-13.3 5.7-27 11-41 14.7-44.7
+ 39-84.5 73-119.5s73.7-60.2 119-75.5c6-2 9-5.7 9-11s-3-9-9-11c-45.3-15.3-85
+-40.5-119-75.5s-58.3-74.8-73-119.5c-4.7-14-8.3-27.3-11-40-1.3-6.7-3.2-10.8-5.5
+-12.5-2.3-1.7-7.5-2.5-15.5-2.5-14 0-21 3.7-21 11 0 2 2 10.3 6 25 20.7 83.3 67
+ 151.7 139 205zm0 0v40h399900v-40z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.011em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.1191em;vertical-align:-0.011em;"></span><span class="mord text"><span class="mord cjk_fallback">命令队列</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel x-arrow"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1081em;"><span style="top:-3.322em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight x-arrow-pad"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">Timer Task</span></span></span></span></span><span class="svg-align" style="top:-2.689em;"><span class="pstrut" style="height:2.7em;"></span><span class="hide-tail" style="height:0.522em;min-width:1.469em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="0.522em" viewBox="0 0 400000 522" preserveAspectRatio="xMaxYMin slice"><path d="M0 241v40h399891c-47.3 35.3-84 78-110 128
+-16.7 32-27.7 63.7-33 95 0 1.3-.2 2.7-.5 4-.3 1.3-.5 2.3-.5 3 0 7.3 6.7 11 20
+ 11 8 0 13.2-.8 15.5-2.5 2.3-1.7 4.2-5.5 5.5-11.5 2-13.3 5.7-27 11-41 14.7-44.7
+ 39-84.5 73-119.5s73.7-60.2 119-75.5c6-2 9-5.7 9-11s-3-9-9-11c-45.3-15.3-85
+-40.5-119-75.5s-58.3-74.8-73-119.5c-4.7-14-8.3-27.3-11-40-1.3-6.7-3.2-10.8-5.5
+-12.5-2.3-1.7-7.5-2.5-15.5-2.5-14 0-21 3.7-21 11 0 2 2 10.3 6 25 20.7 83.3 67
+ 151.7 139 205zm0 0v40h399900v-40z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.011em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">执行回调</span></span></span></span></span></span></div><p>命令队列长度由 configTIMER_QUEUE_LENGTH 配置，队列满时操作可能失败（返回 pdFAIL）。</p>
+<h3 id="回调函数注意事项">回调函数注意事项</h3><p>定时器回调函数在 Timer Task 上下文中执行，需遵守：</p>
+<ul>
+<li>不可调用阻塞 API（vTaskDelay、xSemaphoreTake 带超时）</li>
+<li>执行时间应尽量短，避免阻塞其他定时器到期</li>
+<li>不可调用 vTaskDelete(NULL) 删除自身</li>
+</ul>
+<h2 id="实践项目-多任务传感器系统">实践项目：多任务传感器系统</h2><h3 id="系统架构">系统架构</h3><p>构建一个典型的嵌入式多任务系统，包含传感器采集、数据处理、通信发送和状态指示四个任务：</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    SENSOR[传感器任务&lt;br/&gt;优先级 3] --&gt;|队列| PROC[处理任务&lt;br/&gt;优先级 2]&#10;    PROC --&gt;|队列| COMM[通信任务&lt;br/&gt;优先级 2]&#10;    PROC --&gt;|事件组| LED_TASK[LED 任务&lt;br/&gt;优先级 1]&#10;    ISR[ADC 中断] --&gt;|信号量| SENSOR&#10;    TIMER_SW[软件定时器&lt;br/&gt;1s 周期] --&gt;|通知| COMM"></pre><h3 id="任务优先级分配策略">任务优先级分配策略</h3><table>
+<thead>
+<tr>
+<th>任务</th>
+<th>优先级</th>
+<th>栈大小</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>传感器采集</td>
+<td>3（最高）</td>
+<td>256 字</td>
+<td>实时性要求高，不可丢采样</td>
+</tr>
+<tr>
+<td>数据处理</td>
+<td>2</td>
+<td>512 字</td>
+<td>计算量大需较大栈</td>
+</tr>
+<tr>
+<td>通信发送</td>
+<td>2</td>
+<td>384 字</td>
+<td>协议栈调用深度较大</td>
+</tr>
+<tr>
+<td>LED 状态</td>
+<td>1（最低）</td>
+<td>128 字</td>
+<td>可接受延迟</td>
+</tr>
+</tbody></table>
+<h3 id="任务间通信设计">任务间通信设计</h3><p>数据流经过多级队列传递：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>ADC ISR</mtext><mover><mo stretchy="true" minsize="3.0em">→</mo><mpadded width="+0.6em" lspace="0.3em"><mtext>Binary Sem</mtext></mpadded></mover><mtext>Sensor Task</mtext><mover><mo stretchy="true" minsize="3.0em">→</mo><mpadded width="+0.6em" lspace="0.3em"><mtext>Queue(10×sizeof)</mtext></mpadded></mover><mtext>Process Task</mtext></mrow><annotation encoding="application/x-tex">\text{ADC ISR} \xrightarrow{\text{Binary Sem}} \text{Sensor Task} \xrightarrow{\text{Queue(10×sizeof)}} \text{Process Task}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1113em;vertical-align:-0.011em;"></span><span class="mord text"><span class="mord">ADC ISR</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel x-arrow"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1003em;"><span style="top:-3.322em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight x-arrow-pad"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">Binary Sem</span></span></span></span></span><span class="svg-align" style="top:-2.689em;"><span class="pstrut" style="height:2.7em;"></span><span class="hide-tail" style="height:0.522em;min-width:1.469em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="0.522em" viewBox="0 0 400000 522" preserveAspectRatio="xMaxYMin slice"><path d="M0 241v40h399891c-47.3 35.3-84 78-110 128
+-16.7 32-27.7 63.7-33 95 0 1.3-.2 2.7-.5 4-.3 1.3-.5 2.3-.5 3 0 7.3 6.7 11 20
+ 11 8 0 13.2-.8 15.5-2.5 2.3-1.7 4.2-5.5 5.5-11.5 2-13.3 5.7-27 11-41 14.7-44.7
+ 39-84.5 73-119.5s73.7-60.2 119-75.5c6-2 9-5.7 9-11s-3-9-9-11c-45.3-15.3-85
+-40.5-119-75.5s-58.3-74.8-73-119.5c-4.7-14-8.3-27.3-11-40-1.3-6.7-3.2-10.8-5.5
+-12.5-2.3-1.7-7.5-2.5-15.5-2.5-14 0-21 3.7-21 11 0 2 2 10.3 6 25 20.7 83.3 67
+ 151.7 139 205zm0 0v40h399900v-40z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.011em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.158em;vertical-align:-0.011em;"></span><span class="mord text"><span class="mord">Sensor Task</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel x-arrow"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.147em;"><span style="top:-3.322em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight x-arrow-pad"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">Queue(10×sizeof)</span></span></span></span></span><span class="svg-align" style="top:-2.689em;"><span class="pstrut" style="height:2.7em;"></span><span class="hide-tail" style="height:0.522em;min-width:1.469em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="0.522em" viewBox="0 0 400000 522" preserveAspectRatio="xMaxYMin slice"><path d="M0 241v40h399891c-47.3 35.3-84 78-110 128
+-16.7 32-27.7 63.7-33 95 0 1.3-.2 2.7-.5 4-.3 1.3-.5 2.3-.5 3 0 7.3 6.7 11 20
+ 11 8 0 13.2-.8 15.5-2.5 2.3-1.7 4.2-5.5 5.5-11.5 2-13.3 5.7-27 11-41 14.7-44.7
+ 39-84.5 73-119.5s73.7-60.2 119-75.5c6-2 9-5.7 9-11s-3-9-9-11c-45.3-15.3-85
+-40.5-119-75.5s-58.3-74.8-73-119.5c-4.7-14-8.3-27.3-11-40-1.3-6.7-3.2-10.8-5.5
+-12.5-2.3-1.7-7.5-2.5-15.5-2.5-14 0-21 3.7-21 11 0 2 2 10.3 6 25 20.7 83.3 67
+ 151.7 139 205zm0 0v40h399900v-40z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.011em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord text"><span class="mord">Process Task</span></span></span></span></span></span></div><div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Process Task</mtext><mover><mo stretchy="true" minsize="3.0em">→</mo><mpadded width="+0.6em" lspace="0.3em"><mtext>Queue(5×sizeof)</mtext></mpadded></mover><mtext>Comm Task</mtext></mrow><annotation encoding="application/x-tex">\text{Process Task} \xrightarrow{\text{Queue(5×sizeof)}} \text{Comm Task}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.158em;vertical-align:-0.011em;"></span><span class="mord text"><span class="mord">Process Task</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel x-arrow"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.147em;"><span style="top:-3.322em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight x-arrow-pad"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">Queue(5×sizeof)</span></span></span></span></span><span class="svg-align" style="top:-2.689em;"><span class="pstrut" style="height:2.7em;"></span><span class="hide-tail" style="height:0.522em;min-width:1.469em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="0.522em" viewBox="0 0 400000 522" preserveAspectRatio="xMaxYMin slice"><path d="M0 241v40h399891c-47.3 35.3-84 78-110 128
+-16.7 32-27.7 63.7-33 95 0 1.3-.2 2.7-.5 4-.3 1.3-.5 2.3-.5 3 0 7.3 6.7 11 20
+ 11 8 0 13.2-.8 15.5-2.5 2.3-1.7 4.2-5.5 5.5-11.5 2-13.3 5.7-27 11-41 14.7-44.7
+ 39-84.5 73-119.5s73.7-60.2 119-75.5c6-2 9-5.7 9-11s-3-9-9-11c-45.3-15.3-85
+-40.5-119-75.5s-58.3-74.8-73-119.5c-4.7-14-8.3-27.3-11-40-1.3-6.7-3.2-10.8-5.5
+-12.5-2.3-1.7-7.5-2.5-15.5-2.5-14 0-21 3.7-21 11 0 2 2 10.3 6 25 20.7 83.3 67
+ 151.7 139 205zm0 0v40h399900v-40z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.011em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord text"><span class="mord">Comm Task</span></span></span></span></span></span></div><p>队列深度根据生产消费速率差和突发量确定：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>队列深度</mtext><mo>≥</mo><mfrac><mtext>生产突发量</mtext><mtext>消费速率</mtext></mfrac><mo>+</mo><mtext>安全余量</mtext></mrow><annotation encoding="application/x-tex">\text{队列深度} \geq \frac{\text{生产突发量}}{\text{消费速率}} + \text{安全余量}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8193em;vertical-align:-0.136em;"></span><span class="mord text"><span class="mord cjk_fallback">队列深度</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0463em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord text"><span class="mord cjk_fallback">消费速率</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord text"><span class="mord cjk_fallback">生产突发量</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">安全余量</span></span></span></span></span></span></div><h2 id="调试与性能分析">调试与性能分析</h2><h3 id="运行时统计">运行时统计</h3><p>启用 configGENERATE_RUN_TIME_STATS 后，FreeRTOS 可统计每个任务的 CPU 占用率：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>CPU 占用率</mtext><mo>=</mo><mfrac><mtext>任务运行计数器</mtext><mtext>总运行计数器</mtext></mfrac><mo>×</mo><mn>100</mn><mi mathvariant="normal">%</mi></mrow><annotation encoding="application/x-tex">\text{CPU 占用率} = \frac{\text{任务运行计数器}}{\text{总运行计数器}} \times 100\%</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord">CPU </span><span class="mord cjk_fallback">占用率</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0463em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord text"><span class="mord cjk_fallback">总运行计数器</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord text"><span class="mord cjk_fallback">任务运行计数器</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8056em;vertical-align:-0.0556em;"></span><span class="mord">100%</span></span></span></span></span></div><p>统计需要一个比 Tick 更高频的计数器（通常 10-100× Tick 频率）作为时间基准。</p>
+<h3 id="常用调试-api">常用调试 API</h3><table>
+<thead>
+<tr>
+<th>API</th>
+<th>功能</th>
+<th>使用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>vTaskList</td>
+<td>列出所有任务状态</td>
+<td>查看任务创建是否正确</td>
+</tr>
+<tr>
+<td>vTaskGetRunTimeStats</td>
+<td>CPU 占用率统计</td>
+<td>性能瓶颈定位</td>
+</tr>
+<tr>
+<td>uxTaskGetStackHighWaterMark</td>
+<td>栈使用峰值</td>
+<td>优化栈大小分配</td>
+</tr>
+<tr>
+<td>xQueueGetMessagesWaiting</td>
+<td>队列当前消息数</td>
+<td>判断生产消费平衡</td>
+</tr>
+</tbody></table>
+<h3 id="常见问题排查">常见问题排查</h3><table>
+<thead>
+<tr>
+<th>现象</th>
+<th>可能原因</th>
+<th>排查方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>任务不执行</td>
+<td>优先级配置错误</td>
+<td>vTaskList 检查状态</td>
+</tr>
+<tr>
+<td>HardFault</td>
+<td>栈溢出</td>
+<td>启用栈溢出检测</td>
+</tr>
+<tr>
+<td>系统死锁</td>
+<td>互斥量获取顺序不一致</td>
+<td>审查所有锁获取路径</td>
+</tr>
+<tr>
+<td>Tick 不准</td>
+<td>SysTick 配置错误</td>
+<td>示波器测量 Tick 引脚</td>
+</tr>
+<tr>
+<td>中断中调 API 无效</td>
+<td>未使用 FromISR 版本</td>
+<td>启用 configASSERT</td>
+</tr>
+</tbody></table>
+<h2 id="freertos-生态扩展">FreeRTOS 生态扩展</h2><h3 id="freertos-组件">FreeRTOS+组件</h3><table>
+<thead>
+<tr>
+<th>组件</th>
+<th>功能</th>
+<th>协议</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>FreeRTOS+TCP</td>
+<td>TCP/IP 协议栈</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>FreeRTOS+CLI</td>
+<td>命令行接口</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>coreMQTT</td>
+<td>MQTT 客户端</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>coreHTTP</td>
+<td>HTTP 客户端</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>corePKCS11</td>
+<td>加密接口</td>
+<td>MIT</td>
+</tr>
+</tbody></table>
+<h3 id="aws-iot-集成">AWS IoT 集成</h3><p>FreeRTOS 被 Amazon 收购后深度集成 AWS IoT 服务：</p>
+<div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>设备</mtext><mover><mo stretchy="true" minsize="3.0em">→</mo><mpadded width="+0.6em" lspace="0.3em"><mtext>TLS + MQTT</mtext></mpadded></mover><mtext>AWS IoT Core</mtext><mover><mo stretchy="true" minsize="3.0em">→</mo><mpadded width="+0.6em" lspace="0.3em"><mtext>规则引擎</mtext></mpadded></mover><mtext>云端服务</mtext></mrow><annotation encoding="application/x-tex">\text{设备} \xrightarrow{\text{TLS + MQTT}} \text{AWS IoT Core} \xrightarrow{\text{规则引擎}} \text{云端服务}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1113em;vertical-align:-0.011em;"></span><span class="mord text"><span class="mord cjk_fallback">设备</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel x-arrow"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1003em;"><span style="top:-3.322em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight x-arrow-pad"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">TLS + MQTT</span></span></span></span></span><span class="svg-align" style="top:-2.689em;"><span class="pstrut" style="height:2.7em;"></span><span class="hide-tail" style="height:0.522em;min-width:1.469em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="0.522em" viewBox="0 0 400000 522" preserveAspectRatio="xMaxYMin slice"><path d="M0 241v40h399891c-47.3 35.3-84 78-110 128
+-16.7 32-27.7 63.7-33 95 0 1.3-.2 2.7-.5 4-.3 1.3-.5 2.3-.5 3 0 7.3 6.7 11 20
+ 11 8 0 13.2-.8 15.5-2.5 2.3-1.7 4.2-5.5 5.5-11.5 2-13.3 5.7-27 11-41 14.7-44.7
+ 39-84.5 73-119.5s73.7-60.2 119-75.5c6-2 9-5.7 9-11s-3-9-9-11c-45.3-15.3-85
+-40.5-119-75.5s-58.3-74.8-73-119.5c-4.7-14-8.3-27.3-11-40-1.3-6.7-3.2-10.8-5.5
+-12.5-2.3-1.7-7.5-2.5-15.5-2.5-14 0-21 3.7-21 11 0 2 2 10.3 6 25 20.7 83.3 67
+ 151.7 139 205zm0 0v40h399900v-40z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.011em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.1113em;vertical-align:-0.011em;"></span><span class="mord text"><span class="mord">AWS IoT Core</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel x-arrow"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1003em;"><span style="top:-3.322em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight x-arrow-pad"><span class="mord mtight"><span class="mord text mtight"><span class="mord cjk_fallback mtight">规则引擎</span></span></span></span></span><span class="svg-align" style="top:-2.689em;"><span class="pstrut" style="height:2.7em;"></span><span class="hide-tail" style="height:0.522em;min-width:1.469em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="0.522em" viewBox="0 0 400000 522" preserveAspectRatio="xMaxYMin slice"><path d="M0 241v40h399891c-47.3 35.3-84 78-110 128
+-16.7 32-27.7 63.7-33 95 0 1.3-.2 2.7-.5 4-.3 1.3-.5 2.3-.5 3 0 7.3 6.7 11 20
+ 11 8 0 13.2-.8 15.5-2.5 2.3-1.7 4.2-5.5 5.5-11.5 2-13.3 5.7-27 11-41 14.7-44.7
+ 39-84.5 73-119.5s73.7-60.2 119-75.5c6-2 9-5.7 9-11s-3-9-9-11c-45.3-15.3-85
+-40.5-119-75.5s-58.3-74.8-73-119.5c-4.7-14-8.3-27.3-11-40-1.3-6.7-3.2-10.8-5.5
+-12.5-2.3-1.7-7.5-2.5-15.5-2.5-14 0-21 3.7-21 11 0 2 2 10.3 6 25 20.7 83.3 67
+ 151.7 139 205zm0 0v40h399900v-40z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.011em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">云端服务</span></span></span></span></span></span></div><p>支持 OTA 固件更新、设备影子（Device Shadow）、作业（Jobs）等云原生物联网功能。</p>
+</article>
+    <nav class="pager"><a class="prev" href="../../../hardware-and-systems/embedded-bare-metal/rtos-basics/task-management-synchronization.html"><span class="label">Previous</span>任务管理与同步机制</a><a class="next" href="../../../hardware-and-systems/embedded-bare-metal/debugging-optimization/index.html"><span class="label">Next</span>调试与优化</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#freertos-系统概述" data-outline-link="freertos-系统概述">FreeRTOS 系统概述</a></li><li class="depth-2"><a href="#内核配置" data-outline-link="内核配置">内核配置</a></li><li class="depth-3"><a href="#freertosconfig-h-关键参数" data-outline-link="freertosconfig-h-关键参数">FreeRTOSConfig.h 关键参数</a></li><li class="depth-3"><a href="#中断优先级约束" data-outline-link="中断优先级约束">中断优先级约束</a></li><li class="depth-2"><a href="#内存管理方案" data-outline-link="内存管理方案">内存管理方案</a></li><li class="depth-2"><a href="#软件定时器" data-outline-link="软件定时器">软件定时器</a></li><li class="depth-3"><a href="#定时器服务任务" data-outline-link="定时器服务任务">定时器服务任务</a></li><li class="depth-3"><a href="#定时器命令队列" data-outline-link="定时器命令队列">定时器命令队列</a></li><li class="depth-3"><a href="#回调函数注意事项" data-outline-link="回调函数注意事项">回调函数注意事项</a></li><li class="depth-2"><a href="#实践项目-多任务传感器系统" data-outline-link="实践项目-多任务传感器系统">实践项目：多任务传感器系统</a></li><li class="depth-3"><a href="#系统架构" data-outline-link="系统架构">系统架构</a></li><li class="depth-3"><a href="#任务优先级分配策略" data-outline-link="任务优先级分配策略">任务优先级分配策略</a></li><li class="depth-3"><a href="#任务间通信设计" data-outline-link="任务间通信设计">任务间通信设计</a></li><li class="depth-2"><a href="#调试与性能分析" data-outline-link="调试与性能分析">调试与性能分析</a></li><li class="depth-3"><a href="#运行时统计" data-outline-link="运行时统计">运行时统计</a></li><li class="depth-3"><a href="#常用调试-api" data-outline-link="常用调试-api">常用调试 API</a></li><li class="depth-3"><a href="#常见问题排查" data-outline-link="常见问题排查">常见问题排查</a></li><li class="depth-2"><a href="#freertos-生态扩展" data-outline-link="freertos-生态扩展">FreeRTOS 生态扩展</a></li><li class="depth-3"><a href="#freertos-组件" data-outline-link="freertos-组件">FreeRTOS+组件</a></li><li class="depth-3"><a href="#aws-iot-集成" data-outline-link="aws-iot-集成">AWS IoT 集成</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

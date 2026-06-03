@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>分片与一致性哈希 · 计算机科学基础</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:计算机科学基础" data-pagefind-meta="slug:cs-fundamentals">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">计算机科学基础</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item active" href="../../../cs-fundamentals/index.html" aria-current="page" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../cs-fundamentals/index.html">计算机科学基础</a><a class="back-to-hubs" href="../../../cs-fundamentals/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../cs-fundamentals/distributed-systems/index.html">分布式系统 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="cs-fundamentals"><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:distributed-systems/fundamentals"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/distributed-systems/fundamentals/index.html">分布式基础理论 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/distributed-systems/fundamentals/cap-and-base.html">CAP 定理与 BASE</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/distributed-systems/fundamentals/consistency-models.html">一致性模型</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/distributed-systems/fundamentals/clocks-and-ordering.html">分布式时钟与排序</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/distributed-systems/fundamentals/fault-models.html">故障模型与容错</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:distributed-systems/consensus-protocols"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/distributed-systems/consensus-protocols/index.html">一致性协议 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/distributed-systems/consensus-protocols/paxos.html">Paxos 协议</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/distributed-systems/consensus-protocols/raft.html">Raft 协议</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/distributed-systems/consensus-protocols/zab-and-zookeeper.html">Zab 与 ZooKeeper</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/distributed-systems/consensus-protocols/byzantine-fault-tolerance.html">拜占庭容错</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:distributed-systems/distributed-storage" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/distributed-systems/distributed-storage/index.html">分布式存储 简介</a></summary><ul><li class="leaf"><a class="leaf-title active" href="../../../cs-fundamentals/distributed-systems/distributed-storage/sharding-and-consistent-hash.html">分片与一致性哈希</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/distributed-systems/distributed-storage/replication.html">复制策略与主从</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/distributed-systems/distributed-storage/distributed-fs.html">分布式文件系统</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/distributed-systems/distributed-storage/object-storage-lsm.html">对象存储与 LSM-Tree</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:distributed-systems/microservices"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/distributed-systems/microservices/index.html">微服务架构 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/distributed-systems/microservices/service-decomposition.html">服务拆分与边界</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/distributed-systems/microservices/service-discovery.html">服务注册与发现</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/distributed-systems/microservices/api-gateway.html">API 网关与 BFF</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/distributed-systems/microservices/distributed-tracing.html">分布式链路追踪</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:distributed-systems/messaging-and-streaming"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/distributed-systems/messaging-and-streaming/index.html">消息系统与流处理 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/distributed-systems/messaging-and-streaming/message-queue.html">消息队列模型与选型</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/distributed-systems/messaging-and-streaming/kafka-deep-dive.html">Kafka 深入</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/distributed-systems/messaging-and-streaming/event-driven.html">事件驱动架构</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/distributed-systems/messaging-and-streaming/stream-processing.html">流处理框架</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part IV · 网络与分布式 (Networks &amp; Distributed)</span><span>分布式系统 简介</span><span>分布式存储 简介</span><span>分片与一致性哈希</span></nav>
+    <article class="content prose"><h1 id="分片与一致性哈希">分片与一致性哈希</h1><h2 id="概述">概述</h2><p>当数据量超出单节点的存储或处理能力时，必须将数据分片（Sharding/Partitioning）到多个节点。分片策略决定了数据如何分布、查询如何路由以及系统如何扩缩容。一致性哈希是解决节点动态变化时数据迁移量最小化的经典方案。</p>
+<hr>
+<h2 id="分片策略">分片策略</h2><h3 id="策略对比">策略对比</h3><table>
+<thead>
+<tr>
+<th>策略</th>
+<th>原理</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>哈希分片</td>
+<td>hash(key) % N</td>
+<td>分布均匀</td>
+<td>扩缩容需全量迁移</td>
+</tr>
+<tr>
+<td>范围分片</td>
+<td>key 落入 [min, max) 区间</td>
+<td>支持范围查询</td>
+<td>热点问题</td>
+</tr>
+<tr>
+<td>一致性哈希</td>
+<td>哈希环 + 虚拟节点</td>
+<td>扩缩容迁移量小</td>
+<td>实现较复杂</td>
+</tr>
+<tr>
+<td>目录服务</td>
+<td>查表确定分片位置</td>
+<td>灵活</td>
+<td>目录服务是单点</td>
+</tr>
+</tbody></table>
+<h3 id="哈希分片">哈希分片</h3><div class="code-block-wrapper" data-lang="python" data-code="def hash_partition(key: str, num_nodes: int) -&gt; int:
+    return hash(key) % num_nodes"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> hash_partition</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(key: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, num_nodes: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">int</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) -> </span><span style="color:#005CC5;--shiki-dark:#79B8FF">int</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> hash</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(key) </span><span style="color:#D73A49;--shiki-dark:#F97583">%</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> num_nodes</span></span></code></pre></div><p>问题：当 <code>num_nodes</code> 变化时（如从 3 扩到 4），几乎所有 key 的映射都会改变。</p>
+<hr>
+<h2 id="一致性哈希">一致性哈希</h2><h3 id="基本原理">基本原理</h3><p>将哈希空间组织成一个环（0 ~ 2³²-1），节点和数据 key 都映射到环上。每个 key 沿顺时针方向找到的第一个节点即为负责节点。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;  subgraph 哈希环&#10;    A[&quot;Node A (hash=100)&quot;]&#10;    B[&quot;Node B (hash=300)&quot;]&#10;    C[&quot;Node C (hash=600)&quot;]&#10;  end&#10;  K1[&quot;Key1 (hash=150) → Node B&quot;]&#10;  K2[&quot;Key2 (hash=400) → Node C&quot;]&#10;  K3[&quot;Key3 (hash=700) → Node A&quot;]"></pre><h3 id="节点增删时的数据迁移">节点增删时的数据迁移</h3><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>影响范围</th>
+<th>迁移量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>增加节点</td>
+<td>仅影响新节点与其后继之间的 key</td>
+<td>~1/N 数据</td>
+</tr>
+<tr>
+<td>删除节点</td>
+<td>仅影响该节点的 key → 后继节点</td>
+<td>~1/N 数据</td>
+</tr>
+</tbody></table>
+<h3 id="虚拟节点">虚拟节点</h3><p>真实节点映射到多个虚拟节点，解决节点数量少时的不均匀问题：</p>
+<div class="code-block-wrapper" data-lang="python" data-code="class ConsistentHash:
+    def __init__(self, nodes, replicas=150):
+        self.ring = {}
+        self.sorted_keys = []
+        self.replicas = replicas
+        for node in nodes:
+            self.add_node(node)
+
+    def add_node(self, node):
+        for i in range(self.replicas):
+            key = self._hash(f&quot;{node}:{i}&quot;)
+            self.ring[key] = node
+            self.sorted_keys.append(key)
+        self.sorted_keys.sort()
+
+    def get_node(self, data_key):
+        h = self._hash(data_key)
+        for key in self.sorted_keys:
+            if h &lt;= key:
+                return self.ring[key]
+        return self.ring[self.sorted_keys[0]]
+
+    def _hash(self, key):
+        import hashlib
+        return int(hashlib.md5(key.encode()).hexdigest(), 16)"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ConsistentHash</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, nodes, replicas</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">150</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.ring </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {}</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.sorted_keys </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> []</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.replicas </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> replicas</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> node </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> nodes:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.add_node(node)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> add_node</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, node):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> range</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.replicas):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            key </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._hash(</span><span style="color:#D73A49;--shiki-dark:#F97583">f</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"</span><span style="color:#005CC5;--shiki-dark:#79B8FF">{</span><span style="color:#24292E;--shiki-dark:#E1E4E8">node</span><span style="color:#005CC5;--shiki-dark:#79B8FF">}</span><span style="color:#032F62;--shiki-dark:#9ECBFF">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">{</span><span style="color:#24292E;--shiki-dark:#E1E4E8">i</span><span style="color:#005CC5;--shiki-dark:#79B8FF">}</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.ring[key] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> node</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.sorted_keys.append(key)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.sorted_keys.sort()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> get_node</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, data_key):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        h </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._hash(data_key)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> key </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.sorted_keys:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> h </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> key:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">                return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.ring[key]</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.ring[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.sorted_keys[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> _hash</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, key):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> hashlib</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> int</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(hashlib.md5(key.encode()).hexdigest(), </span><span style="color:#005CC5;--shiki-dark:#79B8FF">16</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span></code></pre></div><table>
+<thead>
+<tr>
+<th>虚拟节点数</th>
+<th>负载标准差</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>~60%</td>
+<td>严重不均匀</td>
+</tr>
+<tr>
+<td>50</td>
+<td>~10%</td>
+<td>基本可接受</td>
+</tr>
+<tr>
+<td>150</td>
+<td>~5%</td>
+<td>生产环境推荐</td>
+</tr>
+<tr>
+<td>500</td>
+<td>~2%</td>
+<td>均匀但内存开销大</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="范围分片">范围分片</h2><p>按 key 的范围将数据划分到不同分片：</p>
+<div class="code-block-wrapper" data-lang="text" data-code="Shard 1: [A, G)
+Shard 2: [G, N)
+Shard 3: [N, T)
+Shard 4: [T, Z]"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>Shard 1: [A, G)</span></span>
+<span class="line"><span>Shard 2: [G, N)</span></span>
+<span class="line"><span>Shard 3: [N, T)</span></span>
+<span class="line"><span>Shard 4: [T, Z]</span></span></code></pre></div><h3 id="热点问题与解决">热点问题与解决</h3><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>原因</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>写热点</td>
+<td>按时间排序的 key 集中写入</td>
+<td>key 前缀加盐</td>
+</tr>
+<tr>
+<td>读热点</td>
+<td>热门数据集中在少数分片</td>
+<td>分裂热点分片</td>
+</tr>
+<tr>
+<td>不均衡</td>
+<td>数据分布不均匀</td>
+<td>动态分裂/合并</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="路由策略">路由策略</h2><p>客户端如何知道数据在哪个分片？</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;  C[Client] --&gt; R{路由方式}&#10;  R --&gt;|方案1| P[客户端直连-内置路由表]&#10;  R --&gt;|方案2| Q[代理层路由]&#10;  R --&gt;|方案3| S[任意节点转发]"></pre><table>
+<thead>
+<tr>
+<th>路由方式</th>
+<th>说明</th>
+<th>代表系统</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>客户端路由</td>
+<td>客户端维护分片映射表</td>
+<td>Cassandra</td>
+</tr>
+<tr>
+<td>代理层路由</td>
+<td>中间件负责路由</td>
+<td>Codis、ShardingSphere</td>
+</tr>
+<tr>
+<td>协调服务</td>
+<td>通过 ZK/etcd 获取分片信息</td>
+<td>HBase、Kafka</td>
+</tr>
+<tr>
+<td>节点转发</td>
+<td>请求到任意节点，节点内部转发</td>
+<td>Redis Cluster</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="再平衡-rebalancing">再平衡（Rebalancing）</h2><h3 id="触发条件">触发条件</h3><ul>
+<li>新节点加入集群</li>
+<li>节点故障被移除</li>
+<li>数据分布不均匀</li>
+</ul>
+<h3 id="再平衡策略">再平衡策略</h3><table>
+<thead>
+<tr>
+<th>策略</th>
+<th>说明</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>固定分区数</td>
+<td>预设分区数远大于节点数</td>
+<td>迁移简单</td>
+<td>需预估分区数</td>
+</tr>
+<tr>
+<td>动态分裂合并</td>
+<td>分区过大时分裂</td>
+<td>自适应</td>
+<td>实现复杂</td>
+</tr>
+<tr>
+<td>按节点比例分区</td>
+<td>每个节点固定数量分区</td>
+<td>均匀</td>
+<td>需要再平衡</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="实际系统的分片策略">实际系统的分片策略</h2><table>
+<thead>
+<tr>
+<th>系统</th>
+<th>分片方式</th>
+<th>路由方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Redis Cluster</td>
+<td>16384 个槽位</td>
+<td>节点转发</td>
+</tr>
+<tr>
+<td>Cassandra</td>
+<td>一致性哈希</td>
+<td>客户端路由</td>
+</tr>
+<tr>
+<td>MongoDB</td>
+<td>范围/哈希可选</td>
+<td>mongos 路由</td>
+</tr>
+<tr>
+<td>HBase</td>
+<td>范围分片</td>
+<td>ZooKeeper</td>
+</tr>
+<tr>
+<td>TiDB</td>
+<td>范围分片</td>
+<td>PD 调度</td>
+</tr>
+<tr>
+<td>Kafka</td>
+<td>分区(哈希/自定义)</td>
+<td>ZK/Controller</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="最佳实践">最佳实践</h2><ul>
+<li>优先使用一致性哈希 + 虚拟节点方案，避免扩缩容时的全量数据迁移</li>
+<li>虚拟节点数量建议 100-200 个/物理节点</li>
+<li>范围分片适合需要范围查询的场景，但需要配合自动分裂避免热点</li>
+<li>预设足够多的分区数（如 Redis Cluster 的 16384 个槽），避免后续调整</li>
+<li>再平衡操作应限速执行，避免对线上流量造成冲击</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../cs-fundamentals/distributed-systems/distributed-storage/index.html"><span class="label">Previous</span>分布式存储 简介</a><a class="next" href="../../../cs-fundamentals/distributed-systems/distributed-storage/replication.html"><span class="label">Next</span>复制策略与主从</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#概述" data-outline-link="概述">概述</a></li><li class="depth-2"><a href="#分片策略" data-outline-link="分片策略">分片策略</a></li><li class="depth-3"><a href="#策略对比" data-outline-link="策略对比">策略对比</a></li><li class="depth-3"><a href="#哈希分片" data-outline-link="哈希分片">哈希分片</a></li><li class="depth-2"><a href="#一致性哈希" data-outline-link="一致性哈希">一致性哈希</a></li><li class="depth-3"><a href="#基本原理" data-outline-link="基本原理">基本原理</a></li><li class="depth-3"><a href="#节点增删时的数据迁移" data-outline-link="节点增删时的数据迁移">节点增删时的数据迁移</a></li><li class="depth-3"><a href="#虚拟节点" data-outline-link="虚拟节点">虚拟节点</a></li><li class="depth-2"><a href="#范围分片" data-outline-link="范围分片">范围分片</a></li><li class="depth-3"><a href="#热点问题与解决" data-outline-link="热点问题与解决">热点问题与解决</a></li><li class="depth-2"><a href="#路由策略" data-outline-link="路由策略">路由策略</a></li><li class="depth-2"><a href="#再平衡-rebalancing" data-outline-link="再平衡-rebalancing">再平衡（Rebalancing）</a></li><li class="depth-3"><a href="#触发条件" data-outline-link="触发条件">触发条件</a></li><li class="depth-3"><a href="#再平衡策略" data-outline-link="再平衡策略">再平衡策略</a></li><li class="depth-2"><a href="#实际系统的分片策略" data-outline-link="实际系统的分片策略">实际系统的分片策略</a></li><li class="depth-2"><a href="#最佳实践" data-outline-link="最佳实践">最佳实践</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

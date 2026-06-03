@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Q-learning 与 SARSA · AI 系统深度剖析</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:AI 系统深度剖析" data-pagefind-meta="slug:ai-systems-deep-dive">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">AI 系统深度剖析</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item active" href="../../../ai-systems-deep-dive/index.html" aria-current="page" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../ai-systems-deep-dive/index.html">AI 系统深度剖析</a><a class="back-to-hubs" href="../../../ai-systems-deep-dive/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../ai-systems-deep-dive/reinforcement-learning/index.html">强化学习 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="ai-systems-deep-dive"><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:reinforcement-learning/rl-foundations"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/reinforcement-learning/rl-foundations/index.html">强化学习基础 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/rl-foundations/rl-problem-formulation.html">强化学习问题建模</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/rl-foundations/markov-decision-process.html">马尔可夫决策过程</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/rl-foundations/reward-design.html">奖励设计</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/rl-foundations/exploration-exploitation.html">探索与利用</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:reinforcement-learning/value-based-methods" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/reinforcement-learning/value-based-methods/index.html">基于值的方法 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/value-based-methods/dynamic-programming.html">动态规划</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/value-based-methods/monte-carlo-methods.html">蒙特卡洛方法</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/value-based-methods/temporal-difference.html">时序差分学习</a></li><li class="leaf"><a class="leaf-title active" href="../../../ai-systems-deep-dive/reinforcement-learning/value-based-methods/q-learning-sarsa.html">Q-learning 与 SARSA</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:reinforcement-learning/policy-based-methods"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/reinforcement-learning/policy-based-methods/index.html">基于策略的方法 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/policy-based-methods/policy-gradient.html">策略梯度</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/policy-based-methods/actor-critic.html">Actor-Critic 架构</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/policy-based-methods/ppo-and-trpo.html">PPO 与 TRPO</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/policy-based-methods/soft-actor-critic.html">Soft Actor-Critic 柔性演员-评论家算法</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:reinforcement-learning/deep-reinforcement-learning"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/reinforcement-learning/deep-reinforcement-learning/index.html">深度强化学习 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/deep-reinforcement-learning/dqn-and-variants.html">DQN 及其变体</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/deep-reinforcement-learning/continuous-control.html">连续控制</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/deep-reinforcement-learning/model-based-rl.html">基于模型的强化学习</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/deep-reinforcement-learning/offline-rl.html">离线强化学习</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:reinforcement-learning/multi-agent-rl"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/reinforcement-learning/multi-agent-rl/index.html">多智能体强化学习 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/multi-agent-rl/marl-foundations.html">MARL 基础</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/multi-agent-rl/cooperative-rl.html">合作强化学习</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/multi-agent-rl/competitive-rl.html">竞争强化学习</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/multi-agent-rl/emergent-behavior.html">涌现行为</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:reinforcement-learning/rl-applications"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/reinforcement-learning/rl-applications/index.html">强化学习应用 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/rl-applications/game-ai.html">游戏 AI</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/rl-applications/robotics-control.html">机器人控制</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/rl-applications/rlhf-connection.html">RLHF 与大模型对齐</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/reinforcement-learning/rl-applications/autonomous-decision.html">自主决策系统</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part I · 机器学习与深度学习 (ML &amp; Deep Learning)</span><span>强化学习 简介</span><span>基于值的方法 简介</span><span>Q-learning 与 SARSA</span></nav>
+    <article class="content prose"><h1 id="q-learning-与-sarsa">Q-learning 与 SARSA</h1><h2 id="核心概念">核心概念</h2><p>Q-learning 和 SARSA 是两种最经典的时序差分控制算法，它们将 TD 学习扩展到动作价值函数 Q(s,a) 的估计和策略优化。两者的核心区别在于更新目标的选择方式：Q-learning 是离策略（Off-Policy）算法，使用贪心动作的值作为更新目标；SARSA 是在策略（On-Policy）算法，使用实际执行的下一个动作的值作为更新目标。这一看似微小的差异导致了截然不同的学习行为和理论性质。</p>
+<p>Q-learning 的更新规则：Q(s<em>t,a_t) ← Q(s_t,a_t) + α·[r</em>{t+1} + γ·max<em>a Q(s</em>{t+1},a) - Q(s_t,a_t)]</p>
+<p>SARSA 的更新规则：Q(s<em>t,a_t) ← Q(s_t,a_t) + α·[r</em>{t+1} + γ·Q(s*{t+1},a*{t+1}) - Q(s_t,a_t)]</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[TD 控制算法] --&gt; B[Q-learning]&#10;    A --&gt; C[SARSA]&#10;    B --&gt; D[离策略]&#10;    B --&gt; E[max Q 作为目标]&#10;    C --&gt; F[在策略]&#10;    C --&gt; G[实际动作 Q 作为目标]&#10;    D --&gt; H[学习最优策略]&#10;    F --&gt; I[学习当前策略的值]"></pre><p>两种算法的核心对比：</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Q-learning</th>
+<th>SARSA</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>策略类型</td>
+<td>离策略</td>
+<td>在策略</td>
+</tr>
+<tr>
+<td>TD 目标</td>
+<td>max_a Q(s&#39;,a)</td>
+<td>Q(s&#39;,a&#39;)</td>
+</tr>
+<tr>
+<td>收敛目标</td>
+<td>Q* (最优)</td>
+<td>Q^π (当前策略)</td>
+</tr>
+<tr>
+<td>行为策略</td>
+<td>任意（需覆盖）</td>
+<td>当前策略</td>
+</tr>
+<tr>
+<td>安全性</td>
+<td>可能学到冒险策略</td>
+<td>倾向安全策略</td>
+</tr>
+<tr>
+<td>收敛条件</td>
+<td>所有 (s,a) 被无限访问</td>
+<td>策略 GLIE</td>
+</tr>
+</tbody></table>
+<h2 id="q-learning-算法详解">Q-learning 算法详解</h2><p>Q-learning 由 Watkins 于 1989 年提出，是强化学习历史上最重要的算法之一。它的核心洞见是：更新目标使用 max<em>a Q(s</em>{t+1},a) 而非实际执行动作的 Q 值，使得学习过程独立于行为策略——无论智能体实际执行什么动作（包括随机探索动作），Q-learning 都在学习最优策略。</p>
+<p>Q-learning 的完整算法流程是：初始化 Q 表，在每个时间步观察状态 s<em>t，按行为策略（通常是 ε-贪心）选择动作 a_t，执行后获得 r</em>{t+1} 和 s*{t+1}，然后用 r*{t+1} + γ·max<em>a Q(s</em>{t+1},a) 作为目标更新 Q(s_t,a_t)。</p>
+<p>Q-learning 的收敛性定理指出：在表格情况下，如果所有状态-动作对被无限频繁地访问，且学习率满足 Robbins-Monro 条件（Σα = ∞, Σα² &lt; ∞），Q-learning 保证以概率 1 收敛到最优动作价值函数 Q*。</p>
+<p>Q-learning 的一个重要问题是<strong>最大化偏差（Maximization Bias）</strong>。由于更新目标中使用 max 操作，当 Q 估计存在噪声时，max 运算会系统性地高估价值——因为它总是选择噪声恰好为正的那个动作的估计值。这种偏差在早期学习阶段（Q 估计不准确时）特别严重。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    A[Q-learning] --&gt; B[最大化偏差问题]&#10;    B --&gt; C[Double Q-learning]&#10;    C --&gt; D[两组 Q 表]&#10;    D --&gt; E[交替更新]&#10;    E --&gt; F[解耦选择与评估]&#10;    subgraph 解决方案&#10;        C&#10;        D&#10;        E&#10;        F&#10;    end"></pre><p><strong>Double Q-learning</strong> 通过维护两组 Q 值来解决最大化偏差。每次更新时随机选择一组来确定最优动作（选择），用另一组来评估该动作的值（评估）。这种解耦消除了系统性的高估偏差，在实践中显著提升了学习质量。</p>
+<h2 id="sarsa-算法详解">SARSA 算法详解</h2><p>SARSA 的名称来源于其更新所需的五元组 (S<em>t, A_t, R</em>{t+1}, S*{t+1}, A*{t+1})。与 Q-learning 不同，SARSA 使用实际在 s*{t+1} 执行的动作 a*{t+1} 的 Q 值作为更新目标，因此它学习的是当前策略（包括探索动作）的动作价值函数。</p>
+<p>这一差异在有风险的环境中尤为显著。考虑一个悬崖行走（Cliff Walking）问题：沿悬崖边走是最短路径但有掉落风险（ε 概率随机动作可能导致坠崖）。Q-learning 会学到沿悬崖边走的最优路径（因为它在学最优策略的值），但在 ε-贪心执行时偶尔坠崖，实际累积奖励反而较低。SARSA 则会学到远离悬崖的安全路径（因为它在学包含 ε 探索的当前策略的值），虽然路径更长但实际累积奖励更高。</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>Q-learning 行为</th>
+<th>SARSA 行为</th>
+<th>实际效果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>安全环境</td>
+<td>最优路径</td>
+<td>次优但安全</td>
+<td>Q-learning 更优</td>
+</tr>
+<tr>
+<td>高风险环境</td>
+<td>最优但高风险</td>
+<td>安全路径</td>
+<td>SARSA 更优</td>
+</tr>
+<tr>
+<td>ε→0 时</td>
+<td>最优策略</td>
+<td>也趋向最优</td>
+<td>两者等价</td>
+</tr>
+</tbody></table>
+<p>SARSA 的收敛条件是策略必须满足 GLIE（Greedy in the Limit with Infinite Exploration）：所有状态-动作对被无限探索，且策略在极限下收敛到贪心策略。常用的 ε-递减策略满足这一条件。</p>
+<p><strong>Expected SARSA</strong> 是 SARSA 的改进版本，用期望值代替采样值：更新目标变为 Σ<em>a π(a|s</em>{t+1})·Q(s*{t+1},a)。这消除了采样 a*{t+1} 带来的额外方差，同时保持在策略学习的特性。当目标策略是贪心策略时，Expected SARSA 退化为 Q-learning，因此 Expected SARSA 可以看作 Q-learning 和 SARSA 的统一。</p>
+<h2 id="表格方法的局限与扩展">表格方法的局限与扩展</h2><p>表格形式的 Q-learning 和 SARSA 要求为每个状态-动作对维护独立的 Q 值条目。当状态空间和动作空间较大时，这种方式面临严重的存储和效率问题。</p>
+<p><strong>状态空间爆炸</strong>：围棋有约 10^{170} 个合法状态，Atari 游戏的像素输入对应天文数字级别的状态空间。表格方法无法处理如此庞大的状态空间，更无法在合理时间内对每个状态-动作对进行充分的采样。</p>
+<p><strong>缺乏泛化能力</strong>：表格方法将每个状态完全独立对待，在一个状态上的学习经验无法迁移到相似状态。即使两个状态只有微小差异，它们的 Q 值估计也是完全独立的。</p>
+<p><strong>连续空间问题</strong>：许多实际问题的状态空间和/或动作空间是连续的（如机器人关节角度），表格方法完全无法处理。</p>
+<p>这些局限催生了两个重要方向：<strong>线性函数近似</strong>用特征向量的线性组合来近似 Q 函数，Q(s,a) ≈ w^T·φ(s,a)，具有理论收敛保证但表达能力有限；**深度 Q 网络（DQN）**用深度神经网络近似 Q 函数，表达能力强大但失去了收敛保证。DQN 的成功开启了深度强化学习时代，将在后续章节详细讨论。</p>
+<p>从表格方法到函数近似的跨越不仅是实现技术的变化，更带来了根本性的理论挑战。表格方法中的很多收敛保证在函数近似下不再成立，需要新的理论工具和实践技巧来确保学习的稳定性和有效性。</p>
+<h2 id="小结">小结</h2><pre class="mermaid" data-diagram-type="mindmap" data-source="mindmap&#10;  root((Q-learning 与 SARSA))&#10;    Q-learning&#10;      离策略&#10;      最大化偏差&#10;      Double Q-learning&#10;    SARSA&#10;      在策略&#10;      安全策略&#10;      Expected SARSA&#10;    统一视角&#10;      GPI 实例&#10;      TD 控制&#10;      策略-值交互&#10;    扩展方向&#10;      函数近似&#10;      DQN&#10;      连续空间"></pre><ul>
+<li>Q-learning 是离策略 TD 控制算法，使用 max Q 作为更新目标，直接逼近最优策略</li>
+<li>SARSA 是在策略 TD 控制算法，使用实际下一步动作的 Q 值更新，倾向学习安全策略</li>
+<li>Q-learning 存在最大化偏差问题，Double Q-learning 通过解耦选择和评估来缓解</li>
+<li>Expected SARSA 统一了 Q-learning 和 SARSA，用期望代替采样降低方差</li>
+<li>表格方法受限于状态空间大小和缺乏泛化能力，推动了函数近似方法的发展</li>
+<li>从表格到函数近似是深度强化学习的关键跨越，带来新的理论和实践挑战</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../ai-systems-deep-dive/reinforcement-learning/value-based-methods/temporal-difference.html"><span class="label">Previous</span>时序差分学习</a><a class="next" href="../../../ai-systems-deep-dive/reinforcement-learning/policy-based-methods/index.html"><span class="label">Next</span>基于策略的方法 简介</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#q-learning-算法详解" data-outline-link="q-learning-算法详解">Q-learning 算法详解</a></li><li class="depth-2"><a href="#sarsa-算法详解" data-outline-link="sarsa-算法详解">SARSA 算法详解</a></li><li class="depth-2"><a href="#表格方法的局限与扩展" data-outline-link="表格方法的局限与扩展">表格方法的局限与扩展</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

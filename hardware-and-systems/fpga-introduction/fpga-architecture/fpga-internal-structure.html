@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>FPGA 内部结构详解 · 硬件、机器人与安全工程</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:硬件、机器人与安全工程" data-pagefind-meta="slug:hardware-and-systems">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">硬件、机器人与安全工程</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item active" href="../../../hardware-and-systems/index.html" aria-current="page" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../hardware-and-systems/index.html">硬件、机器人与安全工程</a><a class="back-to-hubs" href="../../../hardware-and-systems/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../hardware-and-systems/fpga-introduction/index.html">FPGA 入门</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="hardware-and-systems"><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:fpga-introduction/fpga-architecture" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/fpga-introduction/fpga-architecture/index.html">FPGA 架构</a></summary><ul><li class="leaf"><a class="leaf-title active" href="../../../hardware-and-systems/fpga-introduction/fpga-architecture/fpga-internal-structure.html">FPGA 内部结构详解</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/fpga-introduction/fpga-architecture/lut-carry-chain.html">查找表与进位链</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/fpga-introduction/fpga-architecture/on-chip-resources.html">片上资源详解</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:fpga-introduction/hdl-programming"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/fpga-introduction/hdl-programming/index.html">HDL 编程</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/fpga-introduction/hdl-programming/verilog-basics.html">Verilog 基础语法</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/fpga-introduction/hdl-programming/combinational-sequential-description.html">组合与时序逻辑描述</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/fpga-introduction/hdl-programming/modular-parameterized-design.html">模块化与参数化设计</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:fpga-introduction/fpga-development-flow"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/fpga-introduction/fpga-development-flow/index.html">FPGA 开发流程</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/fpga-introduction/fpga-development-flow/synthesis-implementation.html">综合与实现流程</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/fpga-introduction/fpga-development-flow/constraint-files.html">约束文件编写</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/fpga-introduction/fpga-development-flow/simulation-timing-analysis.html">仿真与时序分析</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="hardware-and-systems:folder:fpga-introduction/fpga-applications"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../hardware-and-systems/fpga-introduction/fpga-applications/index.html">FPGA 应用</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/fpga-introduction/fpga-applications/dsp-acceleration.html">数字信号处理加速</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/fpga-introduction/fpga-applications/communication-protocol-implementation.html">通信协议实现</a></li><li class="leaf"><a class="leaf-title" href="../../../hardware-and-systems/fpga-introduction/fpga-applications/ai-inference-accelerator.html">AI 推理加速器</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part I · 硬件电子</span><span>FPGA 入门</span><span>FPGA 架构</span><span>FPGA 内部结构详解</span></nav>
+    <article class="content prose"><h1 id="fpga-内部结构详解">FPGA 内部结构详解</h1><p>FPGA 的核心架构由三大基本组件构成：可配置逻辑块（CLB）、输入输出块（IOB）和可编程互联网络（Programmable Interconnect）。这三者共同构成了一个可以实现任意数字电路的二维阵列结构。理解这些组件的内部工作原理与协作方式，是进行高效 FPGA 设计的基石。</p>
+<h2 id="整体架构概览">整体架构概览</h2><p>FPGA 的物理结构可以类比为一座城市：CLB 是城市中的建筑物（执行计算），IOB 是城市的出入口（连接外部世界），互联网络则是连接所有建筑物的道路系统。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TB&#10;    subgraph FPGA芯片&#10;        direction TB&#10;        subgraph IOB层[&quot;IOB 输入输出块&quot;]&#10;            IOB1[&quot;IOB&quot;] --- IOB2[&quot;IOB&quot;] --- IOB3[&quot;IOB&quot;] --- IOB4[&quot;IOB&quot;]&#10;        end&#10;        subgraph 逻辑阵列[&quot;CLB 逻辑阵列 + 互联网络&quot;]&#10;            CLB1[&quot;CLB&quot;] ---|互联| CLB2[&quot;CLB&quot;]&#10;            CLB2 ---|互联| CLB3[&quot;CLB&quot;]&#10;            CLB4[&quot;CLB&quot;] ---|互联| CLB5[&quot;CLB&quot;]&#10;            CLB5 ---|互联| CLB6[&quot;CLB&quot;]&#10;            CLB1 ---|互联| CLB4&#10;            CLB2 ---|互联| CLB5&#10;            CLB3 ---|互联| CLB6&#10;        end&#10;        IOB层 --- 逻辑阵列&#10;    end"></pre><p>现代 FPGA（如 AMD/Xilinx 的 Virtex UltraScale+、Intel 的 Agilex 系列）的基本架构模型保持了这种二维阵列结构，但在规模和复杂度上已经远超早期器件，单片集成数百万个逻辑单元。</p>
+<h2 id="可配置逻辑块-clb">可配置逻辑块（CLB）</h2><p>CLB 是 FPGA 中执行逻辑运算的核心单元。每个 CLB 包含多个 Slice（切片），每个 Slice 又由查找表（LUT）、触发器（Flip-Flop）和多路选择器（MUX）组成。</p>
+<h3 id="clb-内部层次结构">CLB 内部层次结构</h3><table>
+<thead>
+<tr>
+<th>层级</th>
+<th>组件</th>
+<th>功能</th>
+<th>典型数量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CLB</td>
+<td>整体单元</td>
+<td>包含多个 Slice 的逻辑容器</td>
+<td>数万~数十万/芯片</td>
+</tr>
+<tr>
+<td>Slice</td>
+<td>逻辑切片</td>
+<td>CLB 的基本计算子单元</td>
+<td>2 个/CLB（Xilinx 7 系列）</td>
+</tr>
+<tr>
+<td>LUT</td>
+<td>查找表</td>
+<td>实现任意组合逻辑函数</td>
+<td>4 个/Slice</td>
+</tr>
+<tr>
+<td>FF</td>
+<td>触发器</td>
+<td>存储 1-bit 状态（时序逻辑）</td>
+<td>8 个/Slice</td>
+</tr>
+<tr>
+<td>MUX</td>
+<td>多路选择器</td>
+<td>扩展 LUT 功能或实现选择逻辑</td>
+<td>3 个/Slice</td>
+</tr>
+<tr>
+<td>Carry Chain</td>
+<td>进位链</td>
+<td>加速算术运算的专用进位传播路径</td>
+<td>1 条/Slice</td>
+</tr>
+</tbody></table>
+<p>在 Xilinx 7 系列架构中，Slice 分为两种类型：</p>
+<ul>
+<li><strong>SLICEL</strong>（Logic）：仅包含 LUT 和 FF，用于纯逻辑功能</li>
+<li><strong>SLICEM</strong>（Memory）：LUT 可配置为分布式 RAM 或移位寄存器，增加灵活性</li>
+</ul>
+<h3 id="lut-的工作原理">LUT 的工作原理</h3><p>LUT 本质上是一个预存真值表的小型存储器。一个 <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span></span></span></span></span> 输入的 LUT 可以实现任意 <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span></span></span></span></span> 变量布尔函数，内部存储 <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mi>k</mi></msup></mrow><annotation encoding="application/x-tex">2^k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8491em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8491em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span></span></span></span></span></span></span></span></span> 个比特的真值表数据。</p>
+<p>以 4 输入 LUT（LUT4）为例，实现 <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mo>=</mo><mi>A</mi><mo>⋅</mo><mi>B</mi><mo>+</mo><mi>C</mi><mo>⋅</mo><mi>D</mi></mrow><annotation encoding="application/x-tex">F = A \cdot B + C \cdot D</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">F</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">D</span></span></span></span></span>：</p>
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>F</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+</tbody></table>
+<p>现代 FPGA 普遍采用 6 输入 LUT（LUT6），可实现任意 6 变量布尔函数。相比 LUT4，LUT6 将原本需要多个 LUT4 级联才能实现的复杂函数压缩到单个 LUT 中，减少了互联延迟。</p>
+<h2 id="输入输出块-iob">输入输出块（IOB）</h2><p>IOB 是 FPGA 与外部世界通信的桥梁，位于芯片的四周边缘。每个 IOB 对应一个物理引脚（Pin），负责电气信号的输入缓冲、输出驱动和电平转换。</p>
+<h3 id="iob-功能特性">IOB 功能特性</h3><p>IOB 的设计远比简单的缓冲器复杂，需要支持多种电气标准和信号完整性要求：</p>
+<ul>
+<li><strong>多电压标准支持</strong>：LVCMOS（1.2V/1.8V/2.5V/3.3V）、LVDS、HSTL、SSTL 等</li>
+<li><strong>输入延迟校准</strong>：IDELAY 原语提供精确到皮秒级别的输入延迟调节</li>
+<li><strong>输出驱动强度配置</strong>：2mA 到 24mA 可编程驱动能力</li>
+<li><strong>内部上/下拉电阻</strong>：可配置的弱上拉或弱下拉，简化 PCB 设计</li>
+<li><strong>差分信号支持</strong>：相邻 IOB 配对实现 LVDS 等差分标准</li>
+<li><strong>DDR 寄存器</strong>：输入/输出路径内置 DDR 寄存器，支持双倍数据率接口</li>
+</ul>
+<h3 id="iob-bank-组织">IOB Bank 组织</h3><p>IOB 按 Bank（组）划分，同一 Bank 内共享参考电压 <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>V</mi><mrow><mi>R</mi><mi>E</mi><mi>F</mi></mrow></msub></mrow><annotation encoding="application/x-tex">V_{REF}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.2222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.2222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0077em;">R</span><span class="mord mathnormal mtight" style="margin-right:0.0576em;">E</span><span class="mord mathnormal mtight" style="margin-right:0.1389em;">F</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 和电源电压 <span class="math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>V</mi><mrow><mi>C</mi><mi>C</mi><mi>O</mi></mrow></msub></mrow><annotation encoding="application/x-tex">V_{CCO}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.2222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.2222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0715em;">C</span><span class="mord mathnormal mtight" style="margin-right:0.0715em;">C</span><span class="mord mathnormal mtight" style="margin-right:0.0278em;">O</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>。这意味着同一 Bank 内的所有 IO 必须使用兼容的电气标准。设计时需注意：</p>
+<ul>
+<li>不同电压标准的信号必须分配到不同 Bank</li>
+<li>高速差分信号优先分配到靠近时钟输入的 Bank</li>
+<li>Bank 内的信号数量不能超过该 Bank 的物理引脚限制</li>
+</ul>
+<h2 id="可编程互联网络">可编程互联网络</h2><p>互联网络是 FPGA 中面积占比最大（通常超过 60%）且对性能影响最关键的部分。它决定了信号从源 CLB 到目标 CLB 的传播路径和延迟。</p>
+<h3 id="互联层次结构">互联层次结构</h3><p>现代 FPGA 的互联网络采用分层设计，以平衡连接灵活性和信号延迟：</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    subgraph 互联层次&#10;        L[&quot;本地互联&lt;br/&gt;Local&quot;] --&gt; S[&quot;短线互联&lt;br/&gt;Single&quot;]&#10;        S --&gt; D[&quot;双线互联&lt;br/&gt;Double&quot;]&#10;        D --&gt; Q[&quot;四线互联&lt;br/&gt;Quad&quot;]&#10;        Q --&gt; G[&quot;长线互联&lt;br/&gt;Long&quot;]&#10;    end&#10;    subgraph 覆盖范围&#10;        L1[&quot;同一CLB内&quot;] -.-&gt; L&#10;        S1[&quot;相邻1个CLB&quot;] -.-&gt; S&#10;        D1[&quot;跨越2个CLB&quot;] -.-&gt; D&#10;        Q1[&quot;跨越4个CLB&quot;] -.-&gt; Q&#10;        G1[&quot;跨越芯片1/4~1/2&quot;] -.-&gt; G&#10;    end"></pre><table>
+<thead>
+<tr>
+<th>互联类型</th>
+<th>跨越距离</th>
+<th>典型延迟</th>
+<th>使用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>本地互联</td>
+<td>同一 CLB 内</td>
+<td>&lt; 0.1 ns</td>
+<td>Slice 间直连</td>
+</tr>
+<tr>
+<td>短线（Single）</td>
+<td>1 个 CLB</td>
+<td>0.2–0.5 ns</td>
+<td>近邻通信</td>
+</tr>
+<tr>
+<td>双线（Double）</td>
+<td>2 个 CLB</td>
+<td>0.3–0.8 ns</td>
+<td>中等距离</td>
+</tr>
+<tr>
+<td>四线（Quad）</td>
+<td>4 个 CLB</td>
+<td>0.5–1.2 ns</td>
+<td>较长距离</td>
+</tr>
+<tr>
+<td>长线（Long）</td>
+<td>芯片 1/4</td>
+<td>1.0–2.5 ns</td>
+<td>全局信号分发</td>
+</tr>
+</tbody></table>
+<h3 id="开关矩阵-switch-matrix">开关矩阵（Switch Matrix）</h3><p>开关矩阵是互联网络中的核心交汇点。每个 CLB 周围都有一个开关矩阵，其中包含大量可编程互联点（PIP, Programmable Interconnect Point）。这些 PIP 通过 SRAM 配置位控制，决定哪些线段被连通。</p>
+<p>开关矩阵的连通度直接影响布线成功率。典型的 FPGA 开关矩阵提供约 60% 的连通度——即任意输入线段有约 60% 的概率可以连接到任意输出线段。这是面积效率和布线灵活性之间的工程折中。</p>
+<h2 id="全局时钟网络">全局时钟网络</h2><p>时钟信号需要以极低的偏差（skew）分发到芯片上所有触发器。FPGA 为此提供专用的全局时钟网络：</p>
+<ul>
+<li><strong>全局时钟线（BUFG）</strong>：覆盖整个芯片的低偏差时钟树，典型 skew &lt; 100 ps</li>
+<li><strong>区域时钟线（BUFR）</strong>：仅覆盖特定时钟区域，适用于局部高速时钟</li>
+<li><strong>时钟管理模块（CMT）</strong>：包含 PLL 和 MMCM，用于时钟倍频、分频和相位调整</li>
+<li><strong>专用时钟输入引脚（CC）</strong>：直连到时钟网络的专用 IOB，减少输入抖动</li>
+</ul>
+<p>合理使用时钟资源是实现高频设计的关键。时钟域交叉（CDC）处理不当是 FPGA 设计中最常见的错误来源之一。</p>
+<h2 id="现代-fpga-架构演进">现代 FPGA 架构演进</h2><p>从 2020 年代至今，FPGA 架构经历了显著演进：</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>传统 FPGA</th>
+<th>现代 FPGA（2024-2026）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LUT 输入数</td>
+<td>4 输入</td>
+<td>6 输入（可分裂为双 5 输入）</td>
+</tr>
+<tr>
+<td>片上存储</td>
+<td>KB 级 BRAM</td>
+<td>MB 级 BRAM + UltraRAM（最高 50+ MB）</td>
+</tr>
+<tr>
+<td>处理器核心</td>
+<td>无/软核</td>
+<td>硬核 ARM Cortex-A + Cortex-R</td>
+</tr>
+<tr>
+<td>AI 引擎</td>
+<td>无</td>
+<td>专用 AIE（如 Versal 的 AI Engine）</td>
+</tr>
+<tr>
+<td>制程节点</td>
+<td>28nm/20nm</td>
+<td>7nm/5nm</td>
+</tr>
+<tr>
+<td>互联架构</td>
+<td>平面互联</td>
+<td>NoC（片上网络）+ Chiplet</td>
+</tr>
+<tr>
+<td>内存接口</td>
+<td>DDR3/DDR4</td>
+<td>DDR5 + LPDDR5X + HBM</td>
+</tr>
+</tbody></table>
+<p>AMD（原 Xilinx）的 Versal 系列和 Intel 的 Agilex 系列代表了当前最先进的 FPGA 架构，集成了自适应计算、AI 引擎和硬化网络接口于一体的异构平台。2026 年初发布的 AMD Kintex UltraScale+ Gen 2 进一步将中端 FPGA 的内存带宽提升了 5 倍，PCIe 通道密度提升了 2 倍。</p>
+</article>
+    <nav class="pager"><a class="prev" href="../../../hardware-and-systems/fpga-introduction/fpga-architecture/index.html"><span class="label">Previous</span>FPGA 架构</a><a class="next" href="../../../hardware-and-systems/fpga-introduction/fpga-architecture/lut-carry-chain.html"><span class="label">Next</span>查找表与进位链</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#整体架构概览" data-outline-link="整体架构概览">整体架构概览</a></li><li class="depth-2"><a href="#可配置逻辑块-clb" data-outline-link="可配置逻辑块-clb">可配置逻辑块（CLB）</a></li><li class="depth-3"><a href="#clb-内部层次结构" data-outline-link="clb-内部层次结构">CLB 内部层次结构</a></li><li class="depth-3"><a href="#lut-的工作原理" data-outline-link="lut-的工作原理">LUT 的工作原理</a></li><li class="depth-2"><a href="#输入输出块-iob" data-outline-link="输入输出块-iob">输入输出块（IOB）</a></li><li class="depth-3"><a href="#iob-功能特性" data-outline-link="iob-功能特性">IOB 功能特性</a></li><li class="depth-3"><a href="#iob-bank-组织" data-outline-link="iob-bank-组织">IOB Bank 组织</a></li><li class="depth-2"><a href="#可编程互联网络" data-outline-link="可编程互联网络">可编程互联网络</a></li><li class="depth-3"><a href="#互联层次结构" data-outline-link="互联层次结构">互联层次结构</a></li><li class="depth-3"><a href="#开关矩阵-switch-matrix" data-outline-link="开关矩阵-switch-matrix">开关矩阵（Switch Matrix）</a></li><li class="depth-2"><a href="#全局时钟网络" data-outline-link="全局时钟网络">全局时钟网络</a></li><li class="depth-2"><a href="#现代-fpga-架构演进" data-outline-link="现代-fpga-架构演进">现代 FPGA 架构演进</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

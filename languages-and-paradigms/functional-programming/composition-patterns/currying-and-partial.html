@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>柯里化与偏应用 · 编程语言与范式</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:编程语言与范式" data-pagefind-meta="slug:languages-and-paradigms">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">编程语言与范式</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item active" href="../../../languages-and-paradigms/index.html" aria-current="page" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../languages-and-paradigms/index.html">编程语言与范式</a><a class="back-to-hubs" href="../../../languages-and-paradigms/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../languages-and-paradigms/functional-programming/index.html">函数式编程 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="languages-and-paradigms"><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:functional-programming/core-concepts"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/functional-programming/core-concepts/index.html">核心概念 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/functional-programming/core-concepts/pure-functions-and-immutability.html">纯函数与不可变性</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/functional-programming/core-concepts/first-class-functions.html">一等函数</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/functional-programming/core-concepts/recursion-and-tail-call.html">递归与尾调用</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/functional-programming/core-concepts/referential-transparency.html">引用透明性</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:functional-programming/composition-patterns" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/functional-programming/composition-patterns/index.html">组合模式 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/functional-programming/composition-patterns/function-composition.html">函数组合</a></li><li class="leaf"><a class="leaf-title active" href="../../../languages-and-paradigms/functional-programming/composition-patterns/currying-and-partial.html">柯里化与偏应用</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/functional-programming/composition-patterns/point-free-style.html">Point-free 风格</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/functional-programming/composition-patterns/pipeline-and-chaining.html">管道与链式调用</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:functional-programming/algebraic-types"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/functional-programming/algebraic-types/index.html">代数类型 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/functional-programming/algebraic-types/sum-and-product-types.html">和类型与积类型</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/functional-programming/algebraic-types/option-and-result.html">Option 与 Result</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/functional-programming/algebraic-types/pattern-matching.html">模式匹配</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/functional-programming/algebraic-types/discriminated-unions.html">可辨识联合</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:functional-programming/functors-and-monads"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/functional-programming/functors-and-monads/index.html">函子与单子 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/functional-programming/functors-and-monads/functor-and-map.html">函子与 map</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/functional-programming/functors-and-monads/monad-fundamentals.html">Monad 基础</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/functional-programming/functors-and-monads/common-monads.html">常见 Monad</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/functional-programming/functors-and-monads/monad-transformers.html">Monad Transformer 单子变换器</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:functional-programming/fp-in-practice"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/functional-programming/fp-in-practice/index.html">FP 实战 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/functional-programming/fp-in-practice/fp-in-typescript.html">TypeScript 中的 FP</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/functional-programming/fp-in-practice/fp-in-rust.html">Rust 中的 FP</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/functional-programming/fp-in-practice/state-management.html">状态管理</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/functional-programming/fp-in-practice/testing-and-property.html">测试与属性</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part III · 范式与文本</span><span>函数式编程 简介</span><span>组合模式 简介</span><span>柯里化与偏应用</span></nav>
+    <article class="content prose"><h1 id="柯里化与偏应用">柯里化与偏应用</h1><h2 id="柯里化的定义">柯里化的定义</h2><p><strong>柯里化</strong>（Currying）是将一个接受多个参数的函数转换为一系列接受单个参数的函数的技术。它以数学家 Haskell Curry 的名字命名。</p>
+<div class="code-block-wrapper" data-lang="haskell" data-code="add :: Int -&gt; Int -&gt; Int
+add x y = x + y
+
+add3 :: Int -&gt; Int
+add3 = add 3"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>add :: Int -> Int -> Int</span></span>
+<span class="line"><span>add x y = x + y</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>add3 :: Int -> Int</span></span>
+<span class="line"><span>add3 = add 3</span></span></code></pre></div><div class="code-block-wrapper" data-lang="typescript" data-code="const add =
+  (a: number) =&gt;
+  (b: number): number =&gt;
+    a + b;
+
+const add3 = add(3);
+const result = add3(5);"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> add</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  (</span><span style="color:#E36209;--shiki-dark:#FFAB70">a</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  (</span><span style="color:#E36209;--shiki-dark:#FFAB70">b</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#D73A49;--shiki-dark:#F97583"> =></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    a </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> b;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> add3</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> add</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> result</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> add3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">5</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span></code></pre></div><table>
+<thead>
+<tr>
+<th>形式</th>
+<th>函数签名</th>
+<th>调用方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>未柯里化</td>
+<td><code>(a, b, c) =&gt; d</code></td>
+<td><code>f(1, 2, 3)</code></td>
+</tr>
+<tr>
+<td>柯里化</td>
+<td><code>a =&gt; b =&gt; c =&gt; d</code></td>
+<td><code>f(1)(2)(3)</code></td>
+</tr>
+<tr>
+<td>偏应用</td>
+<td>固定部分参数后的函数</td>
+<td><code>f(1)(2)</code> → 新函数</td>
+</tr>
+</tbody></table>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    F[&quot;f(a, b, c)&quot;] --&gt;|柯里化| F1[&quot;f(a)&quot;]&#10;    F1 --&gt;|&quot;传入 a&quot;| F2[&quot;g(b)&quot;]&#10;    F2 --&gt;|&quot;传入 b&quot;| F3[&quot;h(c)&quot;]&#10;    F3 --&gt;|&quot;传入 c&quot;| R[&quot;结果&quot;]"></pre><blockquote>
+<p><strong>提示：</strong> 在 Haskell 中，所有函数默认都是柯里化的。<code>add 3 5</code> 实际上是 <code>(add 3) 5</code>——先用 <code>3</code> 调用 <code>add</code> 得到一个新函数，再用 <code>5</code> 调用这个新函数。</p>
+</blockquote>
+<hr>
+<h2 id="通用柯里化实现">通用柯里化实现</h2><p>在 JavaScript/TypeScript 中，可以编写一个通用的 curry 函数：</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="type Curry&lt;Args extends unknown[], R&gt; = Args extends [infer First, ...infer Rest] ? (arg: First) =&gt; Curry&lt;Rest, R&gt; : R;
+
+const curry = &lt;Args extends unknown[], R&gt;(fn: (...args: Args) =&gt; R): Curry&lt;Args, R&gt; =&gt; {
+  const arity = fn.length;
+  const curried = (...args: unknown[]): unknown =&gt;
+    args.length &gt;= arity ? fn(...(args as Args)) : (...more: unknown[]) =&gt; curried(...args, ...more);
+  return curried as Curry&lt;Args, R&gt;;
+};
+
+const multiply = (a: number, b: number, c: number): number =&gt; a * b * c;
+const curriedMultiply = curry(multiply);
+const double = curriedMultiply(2)(1);"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">type</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Curry</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Args</span><span style="color:#D73A49;--shiki-dark:#F97583"> extends</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> unknown</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[], </span><span style="color:#6F42C1;--shiki-dark:#B392F0">R</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Args</span><span style="color:#D73A49;--shiki-dark:#F97583"> extends</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#D73A49;--shiki-dark:#F97583">infer</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> First</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">...infer</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Rest</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">?</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">arg</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> First</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Curry</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Rest</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">R</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> </span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> R</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> curry</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> &#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Args</span><span style="color:#D73A49;--shiki-dark:#F97583"> extends</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> unknown</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[], </span><span style="color:#6F42C1;--shiki-dark:#B392F0">R</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">fn</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">...</span><span style="color:#E36209;--shiki-dark:#FFAB70">args</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Args</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> R</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Curry</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Args</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">R</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> arity</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> fn.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">length</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> curried</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">...</span><span style="color:#E36209;--shiki-dark:#FFAB70">args</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> unknown</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[])</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> unknown</span><span style="color:#D73A49;--shiki-dark:#F97583"> =></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    args.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">length</span><span style="color:#D73A49;--shiki-dark:#F97583"> >=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> arity </span><span style="color:#D73A49;--shiki-dark:#F97583">?</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> fn</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">...</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(args </span><span style="color:#D73A49;--shiki-dark:#F97583">as</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Args</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)) </span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">...</span><span style="color:#E36209;--shiki-dark:#FFAB70">more</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> unknown</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[]) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> curried</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">...</span><span style="color:#24292E;--shiki-dark:#E1E4E8">args, </span><span style="color:#D73A49;--shiki-dark:#F97583">...</span><span style="color:#24292E;--shiki-dark:#E1E4E8">more);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> curried </span><span style="color:#D73A49;--shiki-dark:#F97583">as</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Curry</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Args</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#6F42C1;--shiki-dark:#B392F0">R</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> multiply</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">a</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">b</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">c</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#D73A49;--shiki-dark:#F97583"> =></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> a </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> b </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> c;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> curriedMultiply</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> curry</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(multiply);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> double</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> curriedMultiply</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span></code></pre></div><p>不同语言的柯里化支持：</p>
+<table>
+<thead>
+<tr>
+<th>语言</th>
+<th>自动柯里化</th>
+<th>手动柯里化</th>
+<th>语法便利性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Haskell</td>
+<td>✅ 默认</td>
+<td>N/A</td>
+<td>⭐⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td>F#</td>
+<td>✅ 默认</td>
+<td>N/A</td>
+<td>⭐⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td>Scala</td>
+<td>❌</td>
+<td>多参数列表</td>
+<td>⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td>TypeScript</td>
+<td>❌</td>
+<td>手动/库</td>
+<td>⭐⭐⭐</td>
+</tr>
+<tr>
+<td>Rust</td>
+<td>❌</td>
+<td>闭包</td>
+<td>⭐⭐</td>
+</tr>
+<tr>
+<td>Python</td>
+<td>❌</td>
+<td>functools</td>
+<td>⭐⭐</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="偏应用">偏应用</h2><p><strong>偏应用</strong>（Partial Application）是固定一个函数的部分参数，生成一个接受剩余参数的新函数。偏应用与柯里化相关但不同——柯里化一次固定一个参数，偏应用可以一次固定多个。</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="const partial =
+  &lt;A extends unknown[], B extends unknown[], R&gt;(fn: (...args: [...A, ...B]) =&gt; R, ...fixed: A): ((...rest: B) =&gt; R) =&gt;
+  (...rest: B) =&gt;
+    fn(...fixed, ...rest);
+
+const log = (level: string, module: string, message: string): string =&gt; `[${level}] [${module}] ${message}`;
+
+const errorLog = partial(log, 'ERROR');
+const authError = partial(log, 'ERROR', 'AUTH');"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> partial</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">A</span><span style="color:#D73A49;--shiki-dark:#F97583"> extends</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> unknown</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[], </span><span style="color:#6F42C1;--shiki-dark:#B392F0">B</span><span style="color:#D73A49;--shiki-dark:#F97583"> extends</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> unknown</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[], </span><span style="color:#6F42C1;--shiki-dark:#B392F0">R</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">fn</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">...</span><span style="color:#E36209;--shiki-dark:#FFAB70">args</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [</span><span style="color:#D73A49;--shiki-dark:#F97583">...</span><span style="color:#6F42C1;--shiki-dark:#B392F0">A</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">...</span><span style="color:#6F42C1;--shiki-dark:#B392F0">B</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> R</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">...</span><span style="color:#E36209;--shiki-dark:#FFAB70">fixed</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> A</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> ((</span><span style="color:#D73A49;--shiki-dark:#F97583">...</span><span style="color:#E36209;--shiki-dark:#FFAB70">rest</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> B</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#6F42C1;--shiki-dark:#B392F0"> R</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  (</span><span style="color:#D73A49;--shiki-dark:#F97583">...</span><span style="color:#E36209;--shiki-dark:#FFAB70">rest</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> B</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">    fn</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#D73A49;--shiki-dark:#F97583">...</span><span style="color:#24292E;--shiki-dark:#E1E4E8">fixed, </span><span style="color:#D73A49;--shiki-dark:#F97583">...</span><span style="color:#24292E;--shiki-dark:#E1E4E8">rest);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> log</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#E36209;--shiki-dark:#FFAB70">level</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">module</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">message</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#D73A49;--shiki-dark:#F97583"> =></span><span style="color:#032F62;--shiki-dark:#9ECBFF"> `[${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">level</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}] [${</span><span style="color:#005CC5;--shiki-dark:#79B8FF">module</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}] ${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">message</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> errorLog</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> partial</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(log, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'ERROR'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> authError</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> partial</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(log, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'ERROR'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'AUTH'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span></code></pre></div><div class="code-block-wrapper" data-lang="haskell" data-code="import Data.List (intercalate)
+
+joinWith :: String -&gt; [String] -&gt; String
+joinWith = intercalate
+
+commaSeparated :: [String] -&gt; String
+commaSeparated = joinWith &quot;, &quot;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>import Data.List (intercalate)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>joinWith :: String -> [String] -> String</span></span>
+<span class="line"><span>joinWith = intercalate</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>commaSeparated :: [String] -> String</span></span>
+<span class="line"><span>commaSeparated = joinWith ", "</span></span></code></pre></div><pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    FULL[&quot;log(level, module, msg)&quot;] --&gt;|&quot;固定 level='ERROR'&quot;| PARTIAL1[&quot;errorLog(module, msg)&quot;]&#10;    PARTIAL1 --&gt;|&quot;固定 module='AUTH'&quot;| PARTIAL2[&quot;authError(msg)&quot;]&#10;    PARTIAL2 --&gt;|&quot;传入 msg&quot;| RESULT[&quot;最终字符串&quot;]"></pre><p>柯里化与偏应用的对比：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>柯里化</th>
+<th>偏应用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>参数固定数量</td>
+<td>每次恰好一个</td>
+<td>一次可以多个</td>
+</tr>
+<tr>
+<td>返回函数元数</td>
+<td>总是一元函数</td>
+<td>取决于剩余参数数量</td>
+</tr>
+<tr>
+<td>参数顺序</td>
+<td>必须从左到右</td>
+<td>可以固定任意位置</td>
+</tr>
+<tr>
+<td>实现方式</td>
+<td>函数变换</td>
+<td>闭包捕获</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>提示：</strong> 在设计柯里化友好的 API 时，应将最不常变化的参数放在前面（如配置、选项），将最常变化的参数（如数据）放在最后。这样偏应用或柯里化时可以先固定配置，得到一个处理数据的专用函数。</p>
+</blockquote>
+<hr>
+<h2 id="实际应用场景">实际应用场景</h2><p>柯里化和偏应用在日常开发中有广泛应用：</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="const createValidator =
+  (rules: Record&lt;string, (v: unknown) =&gt; boolean&gt;) =&gt;
+  (fieldName: string) =&gt;
+  (value: unknown): boolean =&gt;
+    rules[fieldName]?.(value) ?? false;
+
+const validate = createValidator({
+  email: (v) =&gt; typeof v === 'string' &amp;&amp; v.includes('@'),
+  age: (v) =&gt; typeof v === 'number' &amp;&amp; v &gt;= 0 &amp;&amp; v &lt;= 150,
+});
+
+const validateEmail = validate('email');
+const validateAge = validate('age');
+
+const createApiClient =
+  (baseUrl: string) =&gt;
+  (endpoint: string) =&gt;
+  (params?: Record&lt;string, string&gt;): string =&gt; {
+    const query = params ? '?' + new URLSearchParams(params).toString() : '';
+    return `${baseUrl}${endpoint}${query}`;
+  };
+
+const api = createApiClient('https://api.example.com');
+const usersApi = api('/users');"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> createValidator</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  (</span><span style="color:#E36209;--shiki-dark:#FFAB70">rules</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Record</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#005CC5;--shiki-dark:#79B8FF">string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, (</span><span style="color:#E36209;--shiki-dark:#FFAB70">v</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> unknown</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#005CC5;--shiki-dark:#79B8FF"> boolean</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  (</span><span style="color:#E36209;--shiki-dark:#FFAB70">fieldName</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  (</span><span style="color:#E36209;--shiki-dark:#FFAB70">value</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> unknown</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> boolean</span><span style="color:#D73A49;--shiki-dark:#F97583"> =></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    rules[fieldName]?.(value) </span><span style="color:#D73A49;--shiki-dark:#F97583">??</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> false</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> validate</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> createValidator</span><span style="color:#24292E;--shiki-dark:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  email</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: (</span><span style="color:#E36209;--shiki-dark:#FFAB70">v</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#D73A49;--shiki-dark:#F97583"> typeof</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> v </span><span style="color:#D73A49;--shiki-dark:#F97583">===</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'string'</span><span style="color:#D73A49;--shiki-dark:#F97583"> &#x26;&#x26;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> v.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">includes</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'@'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  age</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: (</span><span style="color:#E36209;--shiki-dark:#FFAB70">v</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#D73A49;--shiki-dark:#F97583"> typeof</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> v </span><span style="color:#D73A49;--shiki-dark:#F97583">===</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'number'</span><span style="color:#D73A49;--shiki-dark:#F97583"> &#x26;&#x26;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> v </span><span style="color:#D73A49;--shiki-dark:#F97583">>=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#D73A49;--shiki-dark:#F97583"> &#x26;&#x26;</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> v </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 150</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> validateEmail</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> validate</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'email'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> validateAge</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> validate</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'age'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> createApiClient</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  (</span><span style="color:#E36209;--shiki-dark:#FFAB70">baseUrl</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  (</span><span style="color:#E36209;--shiki-dark:#FFAB70">endpoint</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  (</span><span style="color:#E36209;--shiki-dark:#FFAB70">params</span><span style="color:#D73A49;--shiki-dark:#F97583">?:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Record</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#005CC5;--shiki-dark:#79B8FF">string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#D73A49;--shiki-dark:#F97583"> =></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> query</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> params </span><span style="color:#D73A49;--shiki-dark:#F97583">?</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '?'</span><span style="color:#D73A49;--shiki-dark:#F97583"> +</span><span style="color:#D73A49;--shiki-dark:#F97583"> new</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> URLSearchParams</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(params).</span><span style="color:#6F42C1;--shiki-dark:#B392F0">toString</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() </span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> ''</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> `${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">baseUrl</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">endpoint</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">query</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  };</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> api</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> createApiClient</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'https://api.example.com'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> usersApi</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> api</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'/users'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span></code></pre></div><table>
+<thead>
+<tr>
+<th>应用场景</th>
+<th>描述</th>
+<th>固定参数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>日志工厂</td>
+<td>固定日志级别和模块</td>
+<td>level, module</td>
+</tr>
+<tr>
+<td>API 客户端</td>
+<td>固定基础 URL</td>
+<td>baseUrl</td>
+</tr>
+<tr>
+<td>验证器</td>
+<td>固定验证规则</td>
+<td>rules</td>
+</tr>
+<tr>
+<td>事件处理</td>
+<td>固定事件类型</td>
+<td>eventType</td>
+</tr>
+<tr>
+<td>格式化</td>
+<td>固定格式选项</td>
+<td>locale, options</td>
+</tr>
+<tr>
+<td>数据库查询</td>
+<td>固定连接和表名</td>
+<td>connection, table</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="小结">小结</h2><pre class="mermaid" data-diagram-type="mindmap" data-source="mindmap&#10;  root((柯里化与偏应用))&#10;    柯里化&#10;      多参数转单参数链&#10;      Haskell 默认&#10;      curry 工具函数&#10;    偏应用&#10;      固定部分参数&#10;      生成新函数&#10;      参数位置灵活&#10;    区别&#10;      柯里化逐个参数&#10;      偏应用一次多个&#10;    实践&#10;      参数顺序设计&#10;      配置在前数据在后&#10;      日志/API/验证器工厂"></pre><ul>
+<li><strong>柯里化</strong>将多参数函数转换为一系列单参数函数，Haskell 和 F# 默认支持。</li>
+<li><strong>偏应用</strong>固定函数的部分参数生成新函数，比柯里化更灵活。</li>
+<li>参数顺序设计是关键：<strong>不常变化的参数在前，数据在后</strong>。</li>
+<li>柯里化和偏应用广泛用于日志工厂、API 客户端、验证器等场景。</li>
+<li>TypeScript 中可通过泛型实现类型安全的 curry 和 partial 工具函数。</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../languages-and-paradigms/functional-programming/composition-patterns/function-composition.html"><span class="label">Previous</span>函数组合</a><a class="next" href="../../../languages-and-paradigms/functional-programming/composition-patterns/point-free-style.html"><span class="label">Next</span>Point-free 风格</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#柯里化的定义" data-outline-link="柯里化的定义">柯里化的定义</a></li><li class="depth-2"><a href="#通用柯里化实现" data-outline-link="通用柯里化实现">通用柯里化实现</a></li><li class="depth-2"><a href="#偏应用" data-outline-link="偏应用">偏应用</a></li><li class="depth-2"><a href="#实际应用场景" data-outline-link="实际应用场景">实际应用场景</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

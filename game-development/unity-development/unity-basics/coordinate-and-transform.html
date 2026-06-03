@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>坐标系统与 Transform · 游戏开发实战</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:游戏开发实战" data-pagefind-meta="slug:game-development">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">游戏开发实战</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item active" href="../../../game-development/index.html" aria-current="page" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../game-development/index.html">游戏开发实战</a><a class="back-to-hubs" href="../../../game-development/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../game-development/unity-development/index.html">Unity 开发实践 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="game-development"><li class="chapter"><details class="folder-collapse" data-sb-key="game-development:folder:unity-development/unity-basics" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../game-development/unity-development/unity-basics/index.html">Unity 基础 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-basics/unity-editor-overview.html">Unity 编辑器概览</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-basics/gameobject-component.html">GameObject 与组件系统</a></li><li class="leaf"><a class="leaf-title active" href="../../../game-development/unity-development/unity-basics/coordinate-and-transform.html">坐标系统与 Transform</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-basics/prefab-system.html">预制体系统</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="game-development:folder:unity-development/unity-scripting"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../game-development/unity-development/unity-scripting/index.html">Unity 脚本编程 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-scripting/monobehaviour-lifecycle.html">MonoBehaviour 生命周期</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-scripting/coroutine-and-async.html">协程与异步编程</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-scripting/event-system.html">事件系统</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-scripting/scriptable-objects.html">ScriptableObject 数据架构</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="game-development:folder:unity-development/unity-ui"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../game-development/unity-development/unity-ui/index.html">Unity UI 系统 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-ui/ugui-fundamentals.html">UGUI 基础</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-ui/ui-toolkit.html">UI Toolkit (Unity 现代 UI 框架)</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-ui/ui-animation.html">UI 动画</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-ui/ui-optimization.html">UI 性能优化</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="game-development:folder:unity-development/unity-performance"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../game-development/unity-development/unity-performance/index.html">Unity 性能优化 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-performance/profiling-tools.html">性能分析工具</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-performance/rendering-optimization.html">渲染优化</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-performance/memory-optimization.html">内存优化</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-performance/physics-optimization.html">物理优化</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="game-development:folder:unity-development/unity-publishing"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../game-development/unity-development/unity-publishing/index.html">Unity 发布与部署 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-publishing/build-pipeline.html">构建管线</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-publishing/multi-platform.html">多平台发布</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-publishing/addressables.html">Addressables 资源管理</a></li><li class="leaf"><a class="leaf-title" href="../../../game-development/unity-development/unity-publishing/cicd-automation.html">CI/CD 自动化</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part IV · 引擎实战</span><span>Unity 开发实践 简介</span><span>Unity 基础 简介</span><span>坐标系统与 Transform</span></nav>
+    <article class="content prose"><h1 id="坐标系统与-transform">坐标系统与 Transform</h1><h2 id="核心概念">核心概念</h2><p>坐标系统是 Unity 空间定位的基础，Transform 组件是每个 GameObject 必备的核心组件，负责管理对象在三维空间中的位置（Position）、旋转（Rotation）和缩放（Scale）。Unity 使用左手坐标系，Y 轴朝上，Z 轴朝前。理解世界空间、本地空间和屏幕空间之间的转换关系，是实现精确空间操作的关键。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TB&#10;    subgraph 坐标空间体系&#10;        W[世界空间 World Space] --&gt; L[本地空间 Local Space]&#10;        W --&gt; V[视口空间 Viewport Space]&#10;        W --&gt; S[屏幕空间 Screen Space]&#10;        L --&gt; M[模型空间 Model Space]&#10;    end&#10;    W --&gt;|Transform 组件| POS[position/rotation/scale]&#10;    L --&gt;|Transform 组件| LPOS[localPosition/localRotation/localScale]&#10;    V --&gt;|Camera| VP[0-1 归一化坐标]&#10;    S --&gt;|Camera| SP[像素坐标]"></pre><table>
+<thead>
+<tr>
+<th>空间类型</th>
+<th>原点</th>
+<th>用途</th>
+<th>访问方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>世界空间</td>
+<td>场景原点 (0,0,0)</td>
+<td>全局定位、物理计算</td>
+<td>transform.position</td>
+</tr>
+<tr>
+<td>本地空间</td>
+<td>父对象原点</td>
+<td>相对定位、层级组织</td>
+<td>transform.localPosition</td>
+</tr>
+<tr>
+<td>屏幕空间</td>
+<td>屏幕左下角</td>
+<td>UI 交互、鼠标输入</td>
+<td>Camera.WorldToScreenPoint</td>
+</tr>
+<tr>
+<td>视口空间</td>
+<td>屏幕左下角 (0-1)</td>
+<td>归一化屏幕定位</td>
+<td>Camera.WorldToViewportPoint</td>
+</tr>
+<tr>
+<td>模型空间</td>
+<td>模型自身原点</td>
+<td>网格顶点定义</td>
+<td>Mesh.vertices</td>
+</tr>
+</tbody></table>
+<h2 id="位置与移动">位置与移动</h2><p>Transform 的 position 属性表示世界空间坐标，localPosition 表示相对于父对象的本地坐标。当对象没有父对象时，两者相同。移动对象有多种方式，选择取决于是否需要物理交互。</p>
+<div class="code-block-wrapper" data-lang="csharp" data-code="using UnityEngine;
+
+public class MovementController : MonoBehaviour
+{
+    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private bool usePhysics = true;
+
+    private Rigidbody rb;
+
+    private void Awake()
+    {
+        rb = GetComponent&lt;Rigidbody&gt;();
+    }
+
+    private void Update()
+    {
+        if (!usePhysics)
+        {
+            float h = Input.GetAxis(&quot;Horizontal&quot;);
+            float v = Input.GetAxis(&quot;Vertical&quot;);
+            Vector3 direction = new Vector3(h, 0, v).normalized;
+            transform.Translate(direction * moveSpeed * Time.deltaTime, Space.World);
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (usePhysics &amp;&amp; rb != null)
+        {
+            float h = Input.GetAxis(&quot;Horizontal&quot;);
+            float v = Input.GetAxis(&quot;Vertical&quot;);
+            Vector3 velocity = new Vector3(h, rb.linearVelocity.y, v) * moveSpeed;
+            rb.linearVelocity = velocity;
+        }
+    }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>using UnityEngine;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>public class MovementController : MonoBehaviour</span></span>
+<span class="line"><span>{</span></span>
+<span class="line"><span>    [SerializeField] private float moveSpeed = 5f;</span></span>
+<span class="line"><span>    [SerializeField] private bool usePhysics = true;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    private Rigidbody rb;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    private void Awake()</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        rb = GetComponent&#x3C;Rigidbody>();</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    private void Update()</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        if (!usePhysics)</span></span>
+<span class="line"><span>        {</span></span>
+<span class="line"><span>            float h = Input.GetAxis("Horizontal");</span></span>
+<span class="line"><span>            float v = Input.GetAxis("Vertical");</span></span>
+<span class="line"><span>            Vector3 direction = new Vector3(h, 0, v).normalized;</span></span>
+<span class="line"><span>            transform.Translate(direction * moveSpeed * Time.deltaTime, Space.World);</span></span>
+<span class="line"><span>        }</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    private void FixedUpdate()</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        if (usePhysics &#x26;&#x26; rb != null)</span></span>
+<span class="line"><span>        {</span></span>
+<span class="line"><span>            float h = Input.GetAxis("Horizontal");</span></span>
+<span class="line"><span>            float v = Input.GetAxis("Vertical");</span></span>
+<span class="line"><span>            Vector3 velocity = new Vector3(h, rb.linearVelocity.y, v) * moveSpeed;</span></span>
+<span class="line"><span>            rb.linearVelocity = velocity;</span></span>
+<span class="line"><span>        }</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span>}</span></span></code></pre></div><table>
+<thead>
+<tr>
+<th>移动方式</th>
+<th>适用场景</th>
+<th>是否触发物理</th>
+<th>性能开销</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>transform.position 直接赋值</td>
+<td>UI、非物理对象</td>
+<td>否</td>
+<td>最低</td>
+</tr>
+<tr>
+<td>transform.Translate</td>
+<td>简单位移</td>
+<td>否</td>
+<td>低</td>
+</tr>
+<tr>
+<td>Rigidbody.MovePosition</td>
+<td>运动学物理对象</td>
+<td>是</td>
+<td>中</td>
+</tr>
+<tr>
+<td>Rigidbody.velocity</td>
+<td>动态物理对象</td>
+<td>是</td>
+<td>中</td>
+</tr>
+<tr>
+<td>Rigidbody.AddForce</td>
+<td>力驱动运动</td>
+<td>是</td>
+<td>中</td>
+</tr>
+<tr>
+<td>CharacterController.Move</td>
+<td>角色控制</td>
+<td>自带碰撞</td>
+<td>中</td>
+</tr>
+</tbody></table>
+<p>使用 Transform 直接移动的对象不会触发物理系统，穿透碰撞体时不会产生碰撞事件。需要物理交互的对象必须通过 Rigidbody API 移动。</p>
+<h2 id="旋转与四元数">旋转与四元数</h2><p>Unity 内部使用四元数（Quaternion）表示旋转，避免了欧拉角的万向节锁（Gimbal Lock）问题。Inspector 面板显示的欧拉角只是四元数的可读表示。开发中应优先使用四元数 API 进行旋转操作。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    subgraph 旋转表示方式&#10;        E[欧拉角 Euler] --&gt;|ToQuaternion| Q[四元数 Quaternion]&#10;        Q --&gt;|eulerAngles| E&#10;        Q --&gt;|矩阵转换| M[旋转矩阵 4x4]&#10;        M --&gt;|QuaternionFrom| Q&#10;    end&#10;    Q --&gt; SLERP[球面插值 Slerp]&#10;    Q --&gt; LERP[线性插值 Lerp]&#10;    Q --&gt; LR2[LookRotation]"></pre><div class="code-block-wrapper" data-lang="csharp" data-code="using UnityEngine;
+
+public class RotationController : MonoBehaviour
+{
+    [SerializeField] private float rotateSpeed = 90f;
+    [SerializeField] private Transform target;
+
+    private void Update()
+    {
+        transform.Rotate(Vector3.up, rotateSpeed * Time.deltaTime, Space.World);
+    }
+
+    public void SmoothLookAt(float smoothTime)
+    {
+        if (target == null) return;
+
+        Vector3 direction = (target.position - transform.position).normalized;
+        if (direction == Vector3.zero) return;
+
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Slerp(
+            transform.rotation,
+            targetRotation,
+            smoothTime * Time.deltaTime
+        );
+    }
+
+    public void RotateAround(Vector3 pivot, float angle)
+    {
+        transform.RotateAround(pivot, Vector3.up, angle * Time.deltaTime);
+    }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>using UnityEngine;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>public class RotationController : MonoBehaviour</span></span>
+<span class="line"><span>{</span></span>
+<span class="line"><span>    [SerializeField] private float rotateSpeed = 90f;</span></span>
+<span class="line"><span>    [SerializeField] private Transform target;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    private void Update()</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        transform.Rotate(Vector3.up, rotateSpeed * Time.deltaTime, Space.World);</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    public void SmoothLookAt(float smoothTime)</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        if (target == null) return;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>        Vector3 direction = (target.position - transform.position).normalized;</span></span>
+<span class="line"><span>        if (direction == Vector3.zero) return;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>        Quaternion targetRotation = Quaternion.LookRotation(direction);</span></span>
+<span class="line"><span>        transform.rotation = Quaternion.Slerp(</span></span>
+<span class="line"><span>            transform.rotation,</span></span>
+<span class="line"><span>            targetRotation,</span></span>
+<span class="line"><span>            smoothTime * Time.deltaTime</span></span>
+<span class="line"><span>        );</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    public void RotateAround(Vector3 pivot, float angle)</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        transform.RotateAround(pivot, Vector3.up, angle * Time.deltaTime);</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span>}</span></span></code></pre></div><table>
+<thead>
+<tr>
+<th>API</th>
+<th>说明</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Quaternion.Euler(x,y,z)</td>
+<td>欧拉角转四元数</td>
+<td>已知目标角度</td>
+</tr>
+<tr>
+<td>Quaternion.LookRotation(dir)</td>
+<td>朝向指定方向</td>
+<td>面向目标</td>
+</tr>
+<tr>
+<td>Quaternion.Slerp</td>
+<td>球面线性插值</td>
+<td>平滑旋转过渡</td>
+</tr>
+<tr>
+<td>Quaternion.Lerp</td>
+<td>线性插值</td>
+<td>快速近似插值</td>
+</tr>
+<tr>
+<td>Quaternion.Angle</td>
+<td>计算两旋转夹角</td>
+<td>判断朝向差异</td>
+</tr>
+<tr>
+<td>transform.Rotate</td>
+<td>增量旋转</td>
+<td>持续旋转</td>
+</tr>
+<tr>
+<td>transform.RotateAround</td>
+<td>围绕点旋转</td>
+<td>轨道运动</td>
+</tr>
+</tbody></table>
+<p>避免直接修改 <code>transform.eulerAngles</code> 的单个分量（如 <code>eulerAngles.y = 90</code>），因为欧拉角的 getter 每次可能返回不同的等效表示，应使用 <code>Quaternion.Euler</code> 构建完整旋转。</p>
+<h2 id="空间变换与坐标转换">空间变换与坐标转换</h2><p>不同坐标空间之间的转换在游戏开发中无处不在：将鼠标屏幕坐标转为世界坐标以实现点击定位、将世界坐标转为本地坐标进行局部判断、将世界坐标转为屏幕坐标显示 UI 标记等。</p>
+<div class="code-block-wrapper" data-lang="csharp" data-code="using UnityEngine;
+
+public class CoordinateConverter : MonoBehaviour
+{
+    [SerializeField] private Camera mainCamera;
+    [SerializeField] private LayerMask groundLayer;
+
+    public Vector3 ScreenToWorldOnPlane(Vector3 screenPos, float planeY = 0f)
+    {
+        Ray ray = mainCamera.ScreenPointToRay(screenPos);
+        Plane ground = new Plane(Vector3.up, new Vector3(0, planeY, 0));
+
+        if (ground.Raycast(ray, out float distance))
+            return ray.GetPoint(distance);
+
+        return Vector3.zero;
+    }
+
+    public Vector3 WorldToLocal(Vector3 worldPos)
+    {
+        return transform.InverseTransformPoint(worldPos);
+    }
+
+    public Vector3 LocalToWorld(Vector3 localPos)
+    {
+        return transform.TransformPoint(localPos);
+    }
+
+    public Vector3 WorldDirectionToLocal(Vector3 worldDir)
+    {
+        return transform.InverseTransformDirection(worldDir);
+    }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>using UnityEngine;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>public class CoordinateConverter : MonoBehaviour</span></span>
+<span class="line"><span>{</span></span>
+<span class="line"><span>    [SerializeField] private Camera mainCamera;</span></span>
+<span class="line"><span>    [SerializeField] private LayerMask groundLayer;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    public Vector3 ScreenToWorldOnPlane(Vector3 screenPos, float planeY = 0f)</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        Ray ray = mainCamera.ScreenPointToRay(screenPos);</span></span>
+<span class="line"><span>        Plane ground = new Plane(Vector3.up, new Vector3(0, planeY, 0));</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>        if (ground.Raycast(ray, out float distance))</span></span>
+<span class="line"><span>            return ray.GetPoint(distance);</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>        return Vector3.zero;</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    public Vector3 WorldToLocal(Vector3 worldPos)</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        return transform.InverseTransformPoint(worldPos);</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    public Vector3 LocalToWorld(Vector3 localPos)</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        return transform.TransformPoint(localPos);</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    public Vector3 WorldDirectionToLocal(Vector3 worldDir)</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        return transform.InverseTransformDirection(worldDir);</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span>}</span></span></code></pre></div><table>
+<thead>
+<tr>
+<th>转换方法</th>
+<th>功能</th>
+<th>输入空间 → 输出空间</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>TransformPoint</td>
+<td>本地点转世界点</td>
+<td>Local → World</td>
+</tr>
+<tr>
+<td>InverseTransformPoint</td>
+<td>世界点转本地点</td>
+<td>World → Local</td>
+</tr>
+<tr>
+<td>TransformDirection</td>
+<td>本地方向转世界方向</td>
+<td>Local → World</td>
+</tr>
+<tr>
+<td>InverseTransformDirection</td>
+<td>世界方向转本地方向</td>
+<td>World → Local</td>
+</tr>
+<tr>
+<td>TransformVector</td>
+<td>本地向量转世界（含缩放）</td>
+<td>Local → World</td>
+</tr>
+<tr>
+<td>Camera.WorldToScreenPoint</td>
+<td>世界转屏幕</td>
+<td>World → Screen</td>
+</tr>
+<tr>
+<td>Camera.ScreenToWorldPoint</td>
+<td>屏幕转世界</td>
+<td>Screen → World</td>
+</tr>
+<tr>
+<td>Camera.ScreenPointToRay</td>
+<td>屏幕点生成射线</td>
+<td>Screen → Ray</td>
+</tr>
+</tbody></table>
+<p><code>TransformDirection</code> 不受缩放影响，适合方向转换；<code>TransformVector</code> 包含缩放，适合向量转换；<code>TransformPoint</code> 包含位置偏移、旋转和缩放，适合点的转换。</p>
+<h2 id="缩放与层级陷阱">缩放与层级陷阱</h2><p>缩放在 Unity 层级系统中具有级联效应：父对象的缩放会影响所有子对象的最终缩放。非均匀缩放（X/Y/Z 不等）可能导致物理碰撞异常、法线扭曲和性能下降。</p>
+<div class="code-block-wrapper" data-lang="csharp" data-code="using UnityEngine;
+
+public class ScaleManager : MonoBehaviour
+{
+    public Vector3 GetLossyScale(Transform target)
+    {
+        return target.lossyScale;
+    }
+
+    public void ResetLocalScale(Transform target)
+    {
+        target.localScale = Vector3.one;
+    }
+
+    public void ScaleUniform(Transform target, float factor)
+    {
+        target.localScale = Vector3.one * factor;
+    }
+
+    public bool HasNonUniformScale(Transform target)
+    {
+        Vector3 s = target.lossyScale;
+        return !Mathf.Approximately(s.x, s.y) || !Mathf.Approximately(s.y, s.z);
+    }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>using UnityEngine;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>public class ScaleManager : MonoBehaviour</span></span>
+<span class="line"><span>{</span></span>
+<span class="line"><span>    public Vector3 GetLossyScale(Transform target)</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        return target.lossyScale;</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    public void ResetLocalScale(Transform target)</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        target.localScale = Vector3.one;</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    public void ScaleUniform(Transform target, float factor)</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        target.localScale = Vector3.one * factor;</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    public bool HasNonUniformScale(Transform target)</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        Vector3 s = target.lossyScale;</span></span>
+<span class="line"><span>        return !Mathf.Approximately(s.x, s.y) || !Mathf.Approximately(s.y, s.z);</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span>}</span></span></code></pre></div><p>非均匀缩放的常见问题包括：BoxCollider 形变不匹配、SphereCollider 变椭球但物理仍按球计算、法线贴图方向错误、骨骼动画变形。最佳实践是在建模阶段确定正确尺寸，运行时仅使用均匀缩放。</p>
+<p><code>lossyScale</code> 返回的是世界空间的近似缩放值（当存在旋转+非均匀缩放时不精确），<code>localScale</code> 是相对于父对象的精确缩放值。</p>
+<h2 id="小结">小结</h2><pre class="mermaid" data-diagram-type="mindmap" data-source="mindmap&#10;  root((坐标系统与 Transform))&#10;    坐标空间&#10;      世界空间&#10;      本地空间&#10;      屏幕空间&#10;      视口空间&#10;    位置移动&#10;      Transform 直接移动&#10;      Rigidbody 物理移动&#10;      CharacterController&#10;    旋转系统&#10;      四元数优先&#10;      Slerp 平滑插值&#10;      避免欧拉角分量修改&#10;    空间转换&#10;      TransformPoint 系列&#10;      Camera 投影转换&#10;      射线转换&#10;    缩放注意&#10;      均匀缩放优先&#10;      lossyScale 近似值&#10;      非均匀缩放陷阱"></pre><ul>
+<li>Unity 使用左手坐标系，Transform 是每个 GameObject 的必备组件</li>
+<li>世界空间用于全局定位，本地空间用于层级相对定位，屏幕空间用于 UI 交互</li>
+<li>移动对象需区分物理移动（Rigidbody）和非物理移动（Transform），两者不可混用</li>
+<li>旋转应优先使用四元数 API，避免欧拉角的万向节锁问题</li>
+<li>空间转换使用 TransformPoint/InverseTransformPoint 系列方法，注意方向、向量和点的区别</li>
+<li>运行时应避免非均匀缩放，lossyScale 在复杂层级下可能不精确</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../game-development/unity-development/unity-basics/gameobject-component.html"><span class="label">Previous</span>GameObject 与组件系统</a><a class="next" href="../../../game-development/unity-development/unity-basics/prefab-system.html"><span class="label">Next</span>预制体系统</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#位置与移动" data-outline-link="位置与移动">位置与移动</a></li><li class="depth-2"><a href="#旋转与四元数" data-outline-link="旋转与四元数">旋转与四元数</a></li><li class="depth-2"><a href="#空间变换与坐标转换" data-outline-link="空间变换与坐标转换">空间变换与坐标转换</a></li><li class="depth-2"><a href="#缩放与层级陷阱" data-outline-link="缩放与层级陷阱">缩放与层级陷阱</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>共享状态与 Mutex · 编程语言与范式</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:编程语言与范式" data-pagefind-meta="slug:languages-and-paradigms">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">编程语言与范式</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item active" href="../../../languages-and-paradigms/index.html" aria-current="page" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../languages-and-paradigms/index.html">编程语言与范式</a><a class="back-to-hubs" href="../../../languages-and-paradigms/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../languages-and-paradigms/rust-language/index.html">Rust 语言 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="languages-and-paradigms"><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:rust-language/ownership-and-borrowing"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/rust-language/ownership-and-borrowing/index.html">所有权与借用 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/ownership-and-borrowing/ownership-rules.html">所有权规则与移动语义</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/ownership-and-borrowing/references-and-borrowing.html">引用与借用规则</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/ownership-and-borrowing/lifetimes.html">生命周期标注</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/ownership-and-borrowing/smart-pointers.html">智能指针</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:rust-language/type-system"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/rust-language/type-system/index.html">类型系统 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/type-system/traits-and-generics.html">Trait 与泛型</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/type-system/enums-and-pattern-matching.html">枚举与模式匹配</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/type-system/error-handling.html">错误处理 Result 与 Option</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/type-system/typestate-pattern.html">类型状态模式</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:rust-language/concurrency" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/rust-language/concurrency/index.html">并发编程 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/concurrency/threads-and-channels.html">线程与消息传递</a></li><li class="leaf"><a class="leaf-title active" href="../../../languages-and-paradigms/rust-language/concurrency/shared-state.html">共享状态与 Mutex</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/concurrency/async-await.html">async/await 与异步运行时</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/concurrency/lock-free.html">无锁编程与原子操作</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:rust-language/systems-programming"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/rust-language/systems-programming/index.html">系统编程 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/systems-programming/unsafe-and-ffi.html">unsafe Rust 与 FFI</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/systems-programming/memory-layout.html">内存布局与零成本抽象</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/systems-programming/embedded-and-nostd.html">嵌入式与 no_std</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/systems-programming/performance-benchmarking.html">性能优化与基准测试</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="languages-and-paradigms:folder:rust-language/ecosystem"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../languages-and-paradigms/rust-language/ecosystem/index.html">Rust 生态实战 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/ecosystem/cargo.html">Cargo 与包管理</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/ecosystem/wasm.html">WebAssembly 与 Rust</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/ecosystem/web-backend.html">Web 后端 Actix/Axum</a></li><li class="leaf"><a class="leaf-title" href="../../../languages-and-paradigms/rust-language/ecosystem/cli-tools.html">CLI 工具开发</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part II · 系统级语言</span><span>Rust 语言 简介</span><span>并发编程 简介</span><span>共享状态与 Mutex</span></nav>
+    <article class="content prose"><h1 id="共享状态与-mutex">共享状态与 Mutex</h1><h2 id="共享状态并发">共享状态并发</h2><p>当多个线程需要读写同一数据时，需要同步原语来保证数据一致性。Rust 通过类型系统确保共享数据必须被正确保护。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[&quot;线程 1&quot;] --&gt;|lock| M[&quot;Mutex&amp;lt;T&amp;gt;&quot;]&#10;    B[&quot;线程 2&quot;] --&gt;|lock| M&#10;    C[&quot;线程 3&quot;] --&gt;|lock| M&#10;    M --&gt;|保护| D[&quot;共享数据 T&quot;]"></pre><hr>
+<h2 id="mutex-t-互斥锁">Mutex&lt;T&gt;：互斥锁</h2><p><code>Mutex&lt;T&gt;</code> 保证同一时刻只有一个线程能访问内部数据。调用 <code>lock()</code> 获取锁，返回的 <code>MutexGuard</code> 在离开作用域时自动释放锁。</p>
+<div class="code-block-wrapper" data-lang="rust" data-code="use std::sync::{Arc, Mutex};
+use std::thread;
+
+fn main() {
+    let counter = Arc::new(Mutex::new(0));
+    let mut handles = vec![];
+
+    for _ in 0..10 {
+        let counter = Arc::clone(&amp;counter);
+        let handle = thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
+            *num += 1;
+        });
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!(&quot;最终计数: {}&quot;, *counter.lock().unwrap());
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>use std::sync::{Arc, Mutex};</span></span>
+<span class="line"><span>use std::thread;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>fn main() {</span></span>
+<span class="line"><span>    let counter = Arc::new(Mutex::new(0));</span></span>
+<span class="line"><span>    let mut handles = vec![];</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    for _ in 0..10 {</span></span>
+<span class="line"><span>        let counter = Arc::clone(&#x26;counter);</span></span>
+<span class="line"><span>        let handle = thread::spawn(move || {</span></span>
+<span class="line"><span>            let mut num = counter.lock().unwrap();</span></span>
+<span class="line"><span>            *num += 1;</span></span>
+<span class="line"><span>        });</span></span>
+<span class="line"><span>        handles.push(handle);</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    for handle in handles {</span></span>
+<span class="line"><span>        handle.join().unwrap();</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    println!("最终计数: {}", *counter.lock().unwrap());</span></span>
+<span class="line"><span>}</span></span></code></pre></div><h3 id="mutex-api">Mutex API</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>行为</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>lock()</code></td>
+<td>阻塞等待锁，返回 <code>LockResult&lt;MutexGuard&gt;</code></td>
+<td>大多数场景</td>
+</tr>
+<tr>
+<td><code>try_lock()</code></td>
+<td>非阻塞尝试获取锁，返回 <code>TryLockResult</code></td>
+<td>避免死锁、轮询场景</td>
+</tr>
+<tr>
+<td><code>into_inner()</code></td>
+<td>消耗 Mutex，提取内部数据</td>
+<td>不再需要共享时</td>
+</tr>
+<tr>
+<td><code>get_mut()</code></td>
+<td>独占访问时直接获取可变引用</td>
+<td>已有 <code>&amp;mut Mutex</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="锁中毒-poisoning">锁中毒（Poisoning）</h2><p>如果持有锁的线程 panic，锁会被标记为&quot;中毒&quot;。后续的 <code>lock()</code> 调用返回 <code>Err</code>，但仍可通过 <code>into_inner()</code> 获取数据。</p>
+<div class="code-block-wrapper" data-lang="rust" data-code="use std::sync::{Arc, Mutex};
+
+fn main() {
+    let data = Arc::new(Mutex::new(vec![1, 2, 3]));
+
+    let data_clone = Arc::clone(&amp;data);
+    let handle = std::thread::spawn(move || {
+        let mut guard = data_clone.lock().unwrap();
+        guard.push(4);
+        panic!(&quot;线程崩溃!&quot;);
+    });
+
+    let _ = handle.join();
+
+    match data.lock() {
+        Ok(guard) =&gt; println!(&quot;数据: {:?}&quot;, *guard),
+        Err(poisoned) =&gt; {
+            let guard = poisoned.into_inner();
+            println!(&quot;锁中毒，但数据可恢复: {:?}&quot;, *guard);
+        }
+    }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>use std::sync::{Arc, Mutex};</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>fn main() {</span></span>
+<span class="line"><span>    let data = Arc::new(Mutex::new(vec![1, 2, 3]));</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    let data_clone = Arc::clone(&#x26;data);</span></span>
+<span class="line"><span>    let handle = std::thread::spawn(move || {</span></span>
+<span class="line"><span>        let mut guard = data_clone.lock().unwrap();</span></span>
+<span class="line"><span>        guard.push(4);</span></span>
+<span class="line"><span>        panic!("线程崩溃!");</span></span>
+<span class="line"><span>    });</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    let _ = handle.join();</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    match data.lock() {</span></span>
+<span class="line"><span>        Ok(guard) => println!("数据: {:?}", *guard),</span></span>
+<span class="line"><span>        Err(poisoned) => {</span></span>
+<span class="line"><span>            let guard = poisoned.into_inner();</span></span>
+<span class="line"><span>            println!("锁中毒，但数据可恢复: {:?}", *guard);</span></span>
+<span class="line"><span>        }</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span>}</span></span></code></pre></div><hr>
+<h2 id="rwlock-t-读写锁">RwLock&lt;T&gt;：读写锁</h2><p><code>RwLock</code> 允许多个读者同时访问，但写者独占。适合读多写少的场景。</p>
+<div class="code-block-wrapper" data-lang="rust" data-code="use std::sync::{Arc, RwLock};
+use std::thread;
+
+fn main() {
+    let config = Arc::new(RwLock::new(String::from(&quot;初始配置&quot;)));
+    let mut handles = vec![];
+
+    for i in 0..5 {
+        let config = Arc::clone(&amp;config);
+        handles.push(thread::spawn(move || {
+            let r = config.read().unwrap();
+            println!(&quot;读者 {}: {}&quot;, i, *r);
+        }));
+    }
+
+    {
+        let config = Arc::clone(&amp;config);
+        handles.push(thread::spawn(move || {
+            let mut w = config.write().unwrap();
+            *w = String::from(&quot;更新后的配置&quot;);
+            println!(&quot;写者: 配置已更新&quot;);
+        }));
+    }
+
+    for h in handles {
+        h.join().unwrap();
+    }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>use std::sync::{Arc, RwLock};</span></span>
+<span class="line"><span>use std::thread;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>fn main() {</span></span>
+<span class="line"><span>    let config = Arc::new(RwLock::new(String::from("初始配置")));</span></span>
+<span class="line"><span>    let mut handles = vec![];</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    for i in 0..5 {</span></span>
+<span class="line"><span>        let config = Arc::clone(&#x26;config);</span></span>
+<span class="line"><span>        handles.push(thread::spawn(move || {</span></span>
+<span class="line"><span>            let r = config.read().unwrap();</span></span>
+<span class="line"><span>            println!("读者 {}: {}", i, *r);</span></span>
+<span class="line"><span>        }));</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        let config = Arc::clone(&#x26;config);</span></span>
+<span class="line"><span>        handles.push(thread::spawn(move || {</span></span>
+<span class="line"><span>            let mut w = config.write().unwrap();</span></span>
+<span class="line"><span>            *w = String::from("更新后的配置");</span></span>
+<span class="line"><span>            println!("写者: 配置已更新");</span></span>
+<span class="line"><span>        }));</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    for h in handles {</span></span>
+<span class="line"><span>        h.join().unwrap();</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span>}</span></span></code></pre></div><hr>
+<h2 id="mutex-vs-rwlock-对比">Mutex vs RwLock 对比</h2><table>
+<thead>
+<tr>
+<th>特性</th>
+<th><code>Mutex&lt;T&gt;</code></th>
+<th><code>RwLock&lt;T&gt;</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>读并发</td>
+<td>不允许（互斥）</td>
+<td>允许多个读者</td>
+</tr>
+<tr>
+<td>写并发</td>
+<td>互斥</td>
+<td>互斥</td>
+</tr>
+<tr>
+<td>性能（读多写少）</td>
+<td>较低</td>
+<td>较高</td>
+</tr>
+<tr>
+<td>性能（写频繁）</td>
+<td>较高</td>
+<td>较低（写饥饿风险）</td>
+</tr>
+<tr>
+<td>复杂度</td>
+<td>简单</td>
+<td>稍复杂</td>
+</tr>
+<tr>
+<td>死锁风险</td>
+<td>递归锁会死锁</td>
+<td>读锁升级写锁会死锁</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="arc-mutex-模式">Arc + Mutex 模式</h2><p>跨线程共享可变数据的标准模式是 <code>Arc&lt;Mutex&lt;T&gt;&gt;</code>：<code>Arc</code> 提供线程安全的共享所有权，<code>Mutex</code> 提供互斥访问。</p>
+<div class="code-block-wrapper" data-lang="rust" data-code="use std::collections::HashMap;
+use std::sync::{Arc, Mutex};
+use std::thread;
+
+fn main() {
+    let map = Arc::new(Mutex::new(HashMap::new()));
+    let mut handles = vec![];
+
+    for i in 0..5 {
+        let map = Arc::clone(&amp;map);
+        handles.push(thread::spawn(move || {
+            let mut m = map.lock().unwrap();
+            m.insert(format!(&quot;key_{}&quot;, i), i * 10);
+        }));
+    }
+
+    for h in handles {
+        h.join().unwrap();
+    }
+
+    println!(&quot;结果: {:?}&quot;, map.lock().unwrap());
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>use std::collections::HashMap;</span></span>
+<span class="line"><span>use std::sync::{Arc, Mutex};</span></span>
+<span class="line"><span>use std::thread;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>fn main() {</span></span>
+<span class="line"><span>    let map = Arc::new(Mutex::new(HashMap::new()));</span></span>
+<span class="line"><span>    let mut handles = vec![];</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    for i in 0..5 {</span></span>
+<span class="line"><span>        let map = Arc::clone(&#x26;map);</span></span>
+<span class="line"><span>        handles.push(thread::spawn(move || {</span></span>
+<span class="line"><span>            let mut m = map.lock().unwrap();</span></span>
+<span class="line"><span>            m.insert(format!("key_{}", i), i * 10);</span></span>
+<span class="line"><span>        }));</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    for h in handles {</span></span>
+<span class="line"><span>        h.join().unwrap();</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    println!("结果: {:?}", map.lock().unwrap());</span></span>
+<span class="line"><span>}</span></span></code></pre></div><hr>
+<h2 id="避免死锁">避免死锁</h2><p>死锁常见于多个锁的嵌套获取。以下策略可以减少死锁风险：</p>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>固定加锁顺序</td>
+<td>所有线程以相同顺序获取多个锁</td>
+</tr>
+<tr>
+<td>缩小锁粒度</td>
+<td>尽量减小临界区范围</td>
+</tr>
+<tr>
+<td>使用 <code>try_lock()</code></td>
+<td>非阻塞尝试，失败时释放已持有的锁</td>
+</tr>
+<tr>
+<td>避免锁嵌套</td>
+<td>尽量在持有锁时不再获取其他锁</td>
+</tr>
+<tr>
+<td>使用通道替代共享状态</td>
+<td>消息传递天然避免死锁</td>
+</tr>
+</tbody></table>
+<div class="code-block-wrapper" data-lang="rust" data-code="use std::sync::Mutex;
+
+fn safe_transfer(
+    from: &amp;Mutex&lt;i64&gt;,
+    to: &amp;Mutex&lt;i64&gt;,
+    amount: i64,
+) {
+    let (first, second) = if std::ptr::from_ref(from) &lt; std::ptr::from_ref(to) {
+        (from, to)
+    } else {
+        (to, from)
+    };
+
+    let mut a = first.lock().unwrap();
+    let mut b = second.lock().unwrap();
+
+    if std::ptr::from_ref(from) &lt; std::ptr::from_ref(to) {
+        *a -= amount;
+        *b += amount;
+    } else {
+        *b -= amount;
+        *a += amount;
+    }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>use std::sync::Mutex;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>fn safe_transfer(</span></span>
+<span class="line"><span>    from: &#x26;Mutex&#x3C;i64>,</span></span>
+<span class="line"><span>    to: &#x26;Mutex&#x3C;i64>,</span></span>
+<span class="line"><span>    amount: i64,</span></span>
+<span class="line"><span>) {</span></span>
+<span class="line"><span>    let (first, second) = if std::ptr::from_ref(from) &#x3C; std::ptr::from_ref(to) {</span></span>
+<span class="line"><span>        (from, to)</span></span>
+<span class="line"><span>    } else {</span></span>
+<span class="line"><span>        (to, from)</span></span>
+<span class="line"><span>    };</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    let mut a = first.lock().unwrap();</span></span>
+<span class="line"><span>    let mut b = second.lock().unwrap();</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    if std::ptr::from_ref(from) &#x3C; std::ptr::from_ref(to) {</span></span>
+<span class="line"><span>        *a -= amount;</span></span>
+<span class="line"><span>        *b += amount;</span></span>
+<span class="line"><span>    } else {</span></span>
+<span class="line"><span>        *b -= amount;</span></span>
+<span class="line"><span>        *a += amount;</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span>}</span></span></code></pre></div><hr>
+<h2 id="parking_lot-高性能替代">parking_lot：高性能替代</h2><p><code>parking_lot</code> crate 提供了比标准库更高效的同步原语，且不会中毒。</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th><code>std::sync::Mutex</code></th>
+<th><code>parking_lot::Mutex</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>锁中毒</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>API</td>
+<td><code>lock()</code> 返回 <code>Result</code></td>
+<td><code>lock()</code> 直接返回 Guard</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>标准</td>
+<td>更高（更小的锁）</td>
+</tr>
+<tr>
+<td>可重入</td>
+<td>不支持</td>
+<td><code>ReentrantMutex</code> 可选</td>
+</tr>
+<tr>
+<td>公平性</td>
+<td>不保证</td>
+<td>可选公平锁</td>
+</tr>
+</tbody></table>
+</article>
+    <nav class="pager"><a class="prev" href="../../../languages-and-paradigms/rust-language/concurrency/threads-and-channels.html"><span class="label">Previous</span>线程与消息传递</a><a class="next" href="../../../languages-and-paradigms/rust-language/concurrency/async-await.html"><span class="label">Next</span>async/await 与异步运行时</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#共享状态并发" data-outline-link="共享状态并发">共享状态并发</a></li><li class="depth-2"><a href="#mutex-t-互斥锁" data-outline-link="mutex-t-互斥锁">Mutex\&lt;T\&gt;：互斥锁</a></li><li class="depth-3"><a href="#mutex-api" data-outline-link="mutex-api">Mutex API</a></li><li class="depth-2"><a href="#锁中毒-poisoning" data-outline-link="锁中毒-poisoning">锁中毒（Poisoning）</a></li><li class="depth-2"><a href="#rwlock-t-读写锁" data-outline-link="rwlock-t-读写锁">RwLock\&lt;T\&gt;：读写锁</a></li><li class="depth-2"><a href="#mutex-vs-rwlock-对比" data-outline-link="mutex-vs-rwlock-对比">Mutex vs RwLock 对比</a></li><li class="depth-2"><a href="#arc-mutex-模式" data-outline-link="arc-mutex-模式">Arc + Mutex 模式</a></li><li class="depth-2"><a href="#避免死锁" data-outline-link="避免死锁">避免死锁</a></li><li class="depth-2"><a href="#parking_lot-高性能替代" data-outline-link="parking_lot-高性能替代">parking_lot：高性能替代</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>任务分解与自主规划策略 · AI 系统深度剖析</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:AI 系统深度剖析" data-pagefind-meta="slug:ai-systems-deep-dive">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">AI 系统深度剖析</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item active" href="../../../ai-systems-deep-dive/index.html" aria-current="page" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../ai-systems-deep-dive/index.html">AI 系统深度剖析</a><a class="back-to-hubs" href="../../../ai-systems-deep-dive/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/index.html">AI 自主编程与智能编码自动化 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="ai-systems-deep-dive"><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:ai-autonomous-coding/autonomous-coding-foundations"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/autonomous-coding-foundations/index.html">自主编程基础 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/autonomous-coding-foundations/assisted-to-autonomous.html">从辅助编程到自主开发的演进</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/autonomous-coding-foundations/ai-agent-coding-architecture.html">AI 编码 Agent 的核心架构</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/autonomous-coding-foundations/code-generation-reliability.html">代码生成的可靠性与正确性保证</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/autonomous-coding-foundations/autonomous-coding-landscape.html">自主编码工具与平台全景</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:ai-autonomous-coding/intelligent-coding-workflows" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/intelligent-coding-workflows/index.html">智能编码工作流 简介</a></summary><ul><li class="leaf"><a class="leaf-title active" href="../../../ai-systems-deep-dive/ai-autonomous-coding/intelligent-coding-workflows/task-decomposition-planning.html">任务分解与自主规划策略</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/intelligent-coding-workflows/context-aware-generation.html">上下文感知的代码生成</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/intelligent-coding-workflows/test-driven-ai-coding.html">测试驱动的 AI 编码循环</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/intelligent-coding-workflows/multi-agent-coding-pipelines.html">多 Agent 编码流水线</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:ai-autonomous-coding/harness-and-orchestration"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/harness-and-orchestration/index.html">Harness 与编排引擎 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/harness-and-orchestration/coding-agent-harness.html">编码 Agent Harness 设计</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/harness-and-orchestration/execution-sandboxing.html">执行沙箱与安全隔离</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/harness-and-orchestration/feedback-loop-self-repair.html">反馈循环与自修复机制</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/harness-and-orchestration/observability-debugging.html">可观测性与 Agent 调试</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:ai-autonomous-coding/scaling-and-production"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/scaling-and-production/index.html">规模化与生产实践 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/scaling-and-production/enterprise-ai-coding.html">企业级 AI 编码平台架构</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/scaling-and-production/quality-assurance-at-scale.html">规模化质量保障体系</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/scaling-and-production/cost-optimization-strategy.html">成本优化与资源调度策略</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/scaling-and-production/future-autonomous-development.html">自主开发的未来趋势</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part VI · 微调与自主 (Fine-tuning &amp; Autonomy)</span><span>AI 自主编程与智能编码自动化 简介</span><span>智能编码工作流 简介</span><span>任务分解与自主规划策略</span></nav>
+    <article class="content prose"><h1 id="任务分解与自主规划策略">任务分解与自主规划策略</h1><h2 id="核心概念">核心概念</h2><p>任务分解是自主编码 Agent 将模糊的高层需求转化为可执行编码步骤的关键能力。一个&quot;给用户模块添加 OAuth 登录&quot;的需求，在人类开发者脑中会自然分解为数据库 schema 修改、API 端点实现、前端页面开发、测试编写等子任务。AI Agent 需要具备同样的分解能力，并在执行过程中根据反馈动态调整计划。规划质量直接决定了自主编码的成功率——错误的规划比错误的代码更难修复。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TB&#10;    A[高层需求] --&gt; B[需求分析]&#10;    B --&gt; C[架构规划]&#10;    C --&gt; D[任务分解树]&#10;    D --&gt; E1[子任务 1: Schema 修改]&#10;    D --&gt; E2[子任务 2: API 实现]&#10;    D --&gt; E3[子任务 3: 前端页面]&#10;    D --&gt; E4[子任务 4: 测试编写]&#10;    E1 --&gt; F1[文件级变更计划]&#10;    E2 --&gt; F2[文件级变更计划]&#10;    E3 --&gt; F3[文件级变更计划]&#10;    E4 --&gt; F4[文件级变更计划]&#10;    F1 --&gt; G{执行 + 验证}&#10;    F2 --&gt; G&#10;    F3 --&gt; G&#10;    F4 --&gt; G&#10;    G --&gt;|失败| H[重规划]&#10;    H --&gt; D&#10;    G --&gt;|成功| I[交付]"></pre><table>
+<thead>
+<tr>
+<th>规划策略</th>
+<th>规划粒度</th>
+<th>适用场景</th>
+<th>优势</th>
+<th>劣势</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>一次性全局规划</td>
+<td>文件级</td>
+<td>简单明确任务</td>
+<td>速度快、一致性好</td>
+<td>无法应对不确定性</td>
+</tr>
+<tr>
+<td>层次化分解</td>
+<td>子任务→文件级</td>
+<td>中等复杂度任务</td>
+<td>结构清晰、可追踪</td>
+<td>规划开销大</td>
+</tr>
+<tr>
+<td>增量式规划</td>
+<td>单步</td>
+<td>探索性任务</td>
+<td>灵活适应</td>
+<td>可能迷失方向</td>
+</tr>
+<tr>
+<td>混合规划</td>
+<td>粗粒度全局 + 细粒度增量</td>
+<td>复杂项目</td>
+<td>兼顾全局与灵活</td>
+<td>实现复杂度高</td>
+</tr>
+</tbody></table>
+<h2 id="从需求到实现计划的转化">从需求到实现计划的转化</h2><p>将用户需求转化为可执行计划，需要 Agent 完成三个层次的推理：<strong>需求理解</strong>（用户到底想要什么）、<strong>架构分析</strong>（需要修改哪些模块）和<strong>步骤排序</strong>（以什么顺序执行）。</p>
+<p><strong>需求理解</strong>的核心挑战是处理模糊性。用户说&quot;优化首页性能&quot;时，Agent 需要判断：是优化加载速度、渲染性能还是 API 响应时间？是否需要先做性能分析？优秀的 Agent 会在规划阶段主动澄清模糊点——要么通过分析代码库现状推断，要么向用户提问确认。</p>
+<p><strong>架构分析</strong>要求 Agent 理解项目的模块结构和依赖关系。添加一个新功能可能涉及路由配置、API 端点、数据库模型、前端组件和测试文件等多个层面。Agent 需要通过扫描项目结构、阅读配置文件和分析导入关系来构建这个理解。</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="interface TaskPlan {
+  goal: string;
+  context: ProjectContext;
+  subtasks: SubTask[];
+  dependencies: DependencyGraph;
+  estimatedSteps: number;
+}
+
+interface SubTask {
+  id: string;
+  description: string;
+  type: 'create' | 'modify' | 'delete' | 'verify';
+  targetFiles: string[];
+  dependsOn: string[];
+  priority: number;
+  estimatedComplexity: 'low' | 'medium' | 'high';
+}
+
+interface ProjectContext {
+  framework: string;
+  language: string;
+  testFramework: string;
+  buildTool: string;
+  relevantModules: ModuleInfo[];
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> TaskPlan</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  goal</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  context</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ProjectContext</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  subtasks</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> SubTask</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  dependencies</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> DependencyGraph</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  estimatedSteps</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> SubTask</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  id</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  description</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  type</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'create'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'modify'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'delete'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'verify'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  targetFiles</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  dependsOn</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  priority</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  estimatedComplexity</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'low'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'medium'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'high'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ProjectContext</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  framework</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  language</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  testFramework</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  buildTool</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  relevantModules</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ModuleInfo</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><p><strong>步骤排序</strong>遵循依赖优先原则：被依赖的组件先实现。典型的排序逻辑是：数据层（schema/model）→ 服务层（业务逻辑）→ API 层（路由/控制器）→ 展示层（UI 组件）→ 测试层。这种从底层到上层的顺序确保每一步实现时，其依赖项已经就位。</p>
+<table>
+<thead>
+<tr>
+<th>层次</th>
+<th>实现优先级</th>
+<th>原因</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据层</td>
+<td>最高</td>
+<td>其他层依赖数据模型</td>
+<td>Prisma schema, 数据库迁移</td>
+</tr>
+<tr>
+<td>服务层</td>
+<td>高</td>
+<td>封装核心业务逻辑</td>
+<td>Service 类, 工具函数</td>
+</tr>
+<tr>
+<td>API 层</td>
+<td>中</td>
+<td>连接前后端</td>
+<td>Hono 路由, Express 控制器</td>
+</tr>
+<tr>
+<td>展示层</td>
+<td>中低</td>
+<td>依赖 API 和数据</td>
+<td>React 组件, 页面</td>
+</tr>
+<tr>
+<td>测试层</td>
+<td>最低</td>
+<td>测试依赖被测代码</td>
+<td>单元测试, 集成测试</td>
+</tr>
+</tbody></table>
+<h2 id="层次化任务分解">层次化任务分解</h2><p>层次化分解是处理复杂任务的核心策略。它将一个大任务递归分解为子任务树，每一层的粒度逐步细化，直到达到&quot;可在单次 Agent 行动中完成&quot;的原子粒度。</p>
+<p><strong>第一层：功能分解</strong>。将整体需求分解为独立的功能模块。例如&quot;实现用户认证系统&quot;可以分解为：注册流程、登录流程、Token 管理、密码重置。</p>
+<p><strong>第二层：技术分解</strong>。每个功能模块分解为具体的技术任务。&quot;注册流程&quot;可以分解为：用户 Schema 定义、注册 API 端点、输入验证逻辑、密码哈希处理、注册页面组件。</p>
+<p><strong>第三层：文件级分解</strong>。每个技术任务映射到具体的文件变更。&quot;注册 API 端点&quot;对应：<code>server/routes/auth.ts</code> 添加 POST /register 路由、<code>server/services/user-service.ts</code> 添加 createUser 方法。</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="interface HierarchicalPlan {
+  level1: FeatureTask[];
+}
+
+interface FeatureTask {
+  name: string;
+  subtasks: TechnicalTask[];
+}
+
+interface TechnicalTask {
+  name: string;
+  fileChanges: FileChange[];
+}
+
+interface FileChange {
+  path: string;
+  operation: 'create' | 'modify' | 'delete';
+  description: string;
+  estimatedLines: number;
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> HierarchicalPlan</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  level1</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> FeatureTask</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> FeatureTask</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  name</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  subtasks</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> TechnicalTask</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> TechnicalTask</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  name</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  fileChanges</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> FileChange</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> FileChange</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  path</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  operation</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'create'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'modify'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'delete'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  description</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  estimatedLines</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><p>层次化分解的一个关键设计决策是<strong>分解深度</strong>。过浅的分解（如只分到功能层）会让 Agent 在执行阶段面临过大的任务粒度，增加出错概率。过深的分解（如分到行级操作）会产生大量细碎任务，消耗规划阶段的 token 预算且降低执行效率。</p>
+<table>
+<thead>
+<tr>
+<th>分解深度</th>
+<th>子任务粒度</th>
+<th>规划成本</th>
+<th>执行可靠性</th>
+<th>适用任务规模</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1 层</td>
+<td>功能级</td>
+<td>低</td>
+<td>低（粒度过大）</td>
+<td>≤5 文件变更</td>
+</tr>
+<tr>
+<td>2 层</td>
+<td>技术任务级</td>
+<td>中</td>
+<td>中</td>
+<td>5-20 文件变更</td>
+</tr>
+<tr>
+<td>3 层</td>
+<td>文件级</td>
+<td>高</td>
+<td>高</td>
+<td>20+ 文件变更</td>
+</tr>
+<tr>
+<td>4 层</td>
+<td>代码块级</td>
+<td>很高</td>
+<td>最高但效率低</td>
+<td>关键路径代码</td>
+</tr>
+</tbody></table>
+<p>实践中，<strong>2-3 层分解</strong>是最佳平衡点。规划阶段分解到技术任务级别，在执行阶段由 Agent 动态决定每个任务的文件级操作。</p>
+<h2 id="spec-驱动开发与-ai-规划">Spec 驱动开发与 AI 规划</h2><p>Spec 驱动开发（Specification-Driven Development）是将传统软件工程的&quot;先设计后实现&quot;理念应用于 AI 编码的实践模式。其核心思想是：在 Agent 开始写代码之前，先生成一份详细的技术 Spec 文档，人类审查 Spec 后再让 Agent 按 Spec 实现。</p>
+<p>这种模式的优势在于<strong>将审查前移</strong>。审查一份 Spec 文档比审查数十个文件的代码变更要高效得多。如果 Spec 的方向正确，后续的代码生成大概率也是正确的；如果 Spec 有问题，在代码实现前修正的成本远低于实现后返工。</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="interface TechnicalSpec {
+  overview: string;
+  architecture: {
+    components: ComponentSpec[];
+    interactions: InteractionSpec[];
+    dataFlow: DataFlowSpec[];
+  };
+  fileChanges: {
+    path: string;
+    operation: 'create' | 'modify';
+    description: string;
+    keyDecisions: string[];
+  }[];
+  testStrategy: {
+    unitTests: string[];
+    integrationTests: string[];
+    edgeCases: string[];
+  };
+  risks: {
+    description: string;
+    mitigation: string;
+    severity: 'low' | 'medium' | 'high';
+  }[];
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> TechnicalSpec</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  overview</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  architecture</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    components</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ComponentSpec</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    interactions</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> InteractionSpec</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    dataFlow</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> DataFlowSpec</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  };</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  fileChanges</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    path</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    operation</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'create'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'modify'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    description</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    keyDecisions</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }[];</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  testStrategy</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    unitTests</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    integrationTests</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    edgeCases</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  };</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  risks</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    description</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    mitigation</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    severity</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'low'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'medium'</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 'high'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }[];</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><p>Spec 的生成过程本身也是一种规划。Agent 在编写 Spec 时需要深入理解代码库，分析可行的实现方案，评估潜在风险。这个过程消耗的 token 虽然不少，但相比于&quot;先写代码再反复修复&quot;的模式，总体效率通常更高。</p>
+<p>Claude Code 和 Cursor Agent 都支持&quot;先 plan 后 implement&quot;的工作模式。用户可以先让 Agent 生成计划，审查确认后再执行。这种模式在处理大型功能需求时尤其有效。</p>
+<h2 id="失败恢复与动态重规划">失败恢复与动态重规划</h2><p>再完美的规划也会遇到执行中的意外。编译错误、测试失败、API 不兼容、依赖缺失等情况在自主编码中频繁发生。Agent 需要具备动态重规划能力——在执行受阻时，回退到规划阶段，分析失败原因，调整后续计划。</p>
+<p><strong>局部重规划</strong>是最常见的恢复策略。当某个子任务的某个文件变更失败时，Agent 仅调整该子任务的实现方式，不影响其他子任务。例如使用某个 API 出现兼容性问题时，切换到替代 API。</p>
+<p><strong>全局重规划</strong>在架构级假设被推翻时触发。例如 Agent 原计划使用 REST API，但发现项目实际使用 GraphQL，此时需要重新规划整个 API 层的实现。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    A[执行子任务] --&gt; B{成功?}&#10;    B --&gt;|是| C[继续下一个]&#10;    B --&gt;|否| D[分析失败类型]&#10;    D --&gt; E{局部问题?}&#10;    E --&gt;|是| F[局部重规划]&#10;    F --&gt; A&#10;    E --&gt;|否| G{架构问题?}&#10;    G --&gt;|是| H[全局重规划]&#10;    H --&gt; I[重新生成计划]&#10;    I --&gt; A&#10;    G --&gt;|否| J[升级处理]&#10;    J --&gt; K[切换模型/人类介入]"></pre><p>重规划的触发条件和策略：</p>
+<table>
+<thead>
+<tr>
+<th>失败类型</th>
+<th>触发条件</th>
+<th>恢复策略</th>
+<th>最大重试次数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>编译/类型错误</td>
+<td>tsc 报错</td>
+<td>局部修复代码</td>
+<td>3</td>
+</tr>
+<tr>
+<td>测试失败</td>
+<td>测试断言不通过</td>
+<td>分析失败用例，修正逻辑</td>
+<td>3</td>
+</tr>
+<tr>
+<td>API 不兼容</td>
+<td>运行时错误</td>
+<td>切换替代 API 或更新版本</td>
+<td>2</td>
+</tr>
+<tr>
+<td>架构不匹配</td>
+<td>多个子任务连续失败</td>
+<td>全局重规划</td>
+<td>1</td>
+</tr>
+<tr>
+<td>依赖缺失</td>
+<td>import/require 失败</td>
+<td>安装依赖或替换方案</td>
+<td>2</td>
+</tr>
+<tr>
+<td>权限不足</td>
+<td>沙箱限制</td>
+<td>升级到人类处理</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<h2 id="规划质量评估">规划质量评估</h2><p>规划本身也需要质量评估。一个好的计划应该是可执行的、完整的、有序的。以下指标可以用于评估规划质量：</p>
+<p><strong>完整性</strong>：计划是否覆盖了所有需要修改的文件？是否考虑了测试更新和文档更新？常见的遗漏包括：忘记更新路由配置、忘记添加新依赖到 package.json、忘记处理边界条件。</p>
+<p><strong>可执行性</strong>：每个子任务的描述是否足够具体，让执行 Agent 能够无歧义地理解和实现？过于抽象的描述（如&quot;优化性能&quot;）会导致执行偏差。</p>
+<p><strong>依赖正确性</strong>：子任务之间的依赖关系是否正确？是否会出现循环依赖？是否有可以并行执行的独立子任务？</p>
+<p><strong>风险识别</strong>：计划是否识别了高风险点并准备了回退方案？例如在修改公共 API 时，是否考虑了向后兼容性？</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="interface PlanQualityMetrics {
+  completeness: number;
+  executability: number;
+  dependencyCorrectness: number;
+  riskCoverage: number;
+  estimatedSuccessRate: number;
+}
+
+function evaluatePlan(plan: TaskPlan): PlanQualityMetrics {
+  const completeness = assessCompleteness(plan);
+  const executability = assessExecutability(plan);
+  const dependencyCorrectness = validateDependencies(plan.dependencies);
+  const riskCoverage = assessRiskCoverage(plan);
+
+  const estimatedSuccessRate =
+    completeness * 0.3 + executability * 0.3 + dependencyCorrectness * 0.2 + riskCoverage * 0.2;
+
+  return { completeness, executability, dependencyCorrectness, riskCoverage, estimatedSuccessRate };
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> PlanQualityMetrics</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  completeness</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  executability</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  dependencyCorrectness</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  riskCoverage</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  estimatedSuccessRate</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> evaluatePlan</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">plan</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> TaskPlan</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> PlanQualityMetrics</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> completeness</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> assessCompleteness</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(plan);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> executability</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> assessExecutability</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(plan);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> dependencyCorrectness</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> validateDependencies</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(plan.dependencies);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> riskCoverage</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> assessRiskCoverage</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(plan);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> estimatedSuccessRate</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    completeness </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.3</span><span style="color:#D73A49;--shiki-dark:#F97583"> +</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> executability </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.3</span><span style="color:#D73A49;--shiki-dark:#F97583"> +</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> dependencyCorrectness </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.2</span><span style="color:#D73A49;--shiki-dark:#F97583"> +</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> riskCoverage </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { completeness, executability, dependencyCorrectness, riskCoverage, estimatedSuccessRate };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><h2 id="小结">小结</h2><ul>
+<li><strong>任务分解是自主编码的规划核心</strong>，将模糊的高层需求转化为可执行的子任务树。</li>
+<li><strong>需求理解→架构分析→步骤排序</strong>构成了从需求到实现计划的三层推理链。</li>
+<li><strong>层次化分解</strong>（2-3 层）是处理复杂任务的最佳策略，平衡了规划精度与执行效率。</li>
+<li><strong>Spec 驱动开发</strong>将审查前移到规划阶段，显著降低返工成本。</li>
+<li><strong>动态重规划</strong>让 Agent 能够在执行受阻时灵活调整，局部重规划处理技术问题，全局重规划应对架构级变化。</li>
+<li>规划质量评估应关注完整性、可执行性、依赖正确性和风险覆盖四个维度。</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../ai-systems-deep-dive/ai-autonomous-coding/intelligent-coding-workflows/index.html"><span class="label">Previous</span>智能编码工作流 简介</a><a class="next" href="../../../ai-systems-deep-dive/ai-autonomous-coding/intelligent-coding-workflows/context-aware-generation.html"><span class="label">Next</span>上下文感知的代码生成</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#从需求到实现计划的转化" data-outline-link="从需求到实现计划的转化">从需求到实现计划的转化</a></li><li class="depth-2"><a href="#层次化任务分解" data-outline-link="层次化任务分解">层次化任务分解</a></li><li class="depth-2"><a href="#spec-驱动开发与-ai-规划" data-outline-link="spec-驱动开发与-ai-规划">Spec 驱动开发与 AI 规划</a></li><li class="depth-2"><a href="#失败恢复与动态重规划" data-outline-link="失败恢复与动态重规划">失败恢复与动态重规划</a></li><li class="depth-2"><a href="#规划质量评估" data-outline-link="规划质量评估">规划质量评估</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

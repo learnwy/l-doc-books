@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Git Hooks 与 Lefthook · 前端工程化全景</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:前端工程化全景" data-pagefind-meta="slug:frontend-engineering">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">前端工程化全景</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item active" href="../../../frontend-engineering/index.html" aria-current="page" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../frontend-engineering/index.html">前端工程化全景</a><a class="back-to-hubs" href="../../../frontend-engineering/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../frontend-engineering/frontend-engineering/index.html">前端工程化 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="frontend-engineering"><li class="chapter"><details class="folder-collapse" data-sb-key="frontend-engineering:folder:frontend-engineering/project-architecture"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../frontend-engineering/frontend-engineering/project-architecture/index.html">项目架构 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-engineering/project-architecture/monorepo-structure.html">Monorepo 架构</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-engineering/project-architecture/framework-selection.html">框架选型</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-engineering/project-architecture/directory-conventions.html">目录约定</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="frontend-engineering:folder:frontend-engineering/code-quality"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../frontend-engineering/frontend-engineering/code-quality/index.html">代码质量 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-engineering/code-quality/eslint-and-biome.html">ESLint 与 Biome</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-engineering/code-quality/prettier-and-formatting.html">Prettier 与代码格式化</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-engineering/code-quality/type-safety-strategies.html">类型安全策略</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-engineering/code-quality/code-review-practices.html">Code Review 实践</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="frontend-engineering:folder:frontend-engineering/testing-strategy"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../frontend-engineering/frontend-engineering/testing-strategy/index.html">测试策略 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-engineering/testing-strategy/unit-testing.html">单元测试</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-engineering/testing-strategy/integration-and-e2e-testing.html">集成测试与端到端测试</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-engineering/testing-strategy/visual-regression-testing.html">视觉回归测试</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="frontend-engineering:folder:frontend-engineering/component-engineering"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../frontend-engineering/frontend-engineering/component-engineering/index.html">组件工程化 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-engineering/component-engineering/design-system-foundations.html">Design System 基础</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-engineering/component-engineering/component-library-development.html">组件库开发</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-engineering/component-engineering/storybook-and-documentation.html">Storybook 与文档化</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="frontend-engineering:folder:frontend-engineering/state-management"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../frontend-engineering/frontend-engineering/state-management/index.html">状态管理 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-engineering/state-management/local-vs-global-state.html">本地状态与全局状态</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-engineering/state-management/react-state-solutions.html">React 状态方案</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-engineering/state-management/server-state-and-caching.html">服务端状态与缓存</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="frontend-engineering:folder:frontend-engineering/ci-cd-and-automation" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../frontend-engineering/frontend-engineering/ci-cd-and-automation/index.html">CI/CD 与自动化 简介</a></summary><ul><li class="leaf"><a class="leaf-title active" href="../../../frontend-engineering/frontend-engineering/ci-cd-and-automation/git-hooks-and-lefthook.html">Git Hooks 与 Lefthook</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-engineering/ci-cd-and-automation/github-actions-pipeline.html">GitHub Actions 流水线</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-engineering/ci-cd-and-automation/automated-releases.html">自动化发布</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="frontend-engineering:folder:frontend-engineering/micro-frontends"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../frontend-engineering/frontend-engineering/micro-frontends/index.html">微前端 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-engineering/micro-frontends/micro-frontend-concepts.html">微前端概念</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-engineering/micro-frontends/module-federation.html">Module Federation 模块联邦</a></li><li class="leaf"><a class="leaf-title" href="../../../frontend-engineering/frontend-engineering/micro-frontends/integration-strategies.html">集成策略</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part I · 工程化与工具链 (Tooling &amp; Engineering)</span><span>前端工程化 简介</span><span>CI/CD 与自动化 简介</span><span>Git Hooks 与 Lefthook</span></nav>
+    <article class="content prose"><h1 id="git-hooks-与-lefthook">Git Hooks 与 Lefthook</h1><h2 id="git-hooks-的作用">Git Hooks 的作用</h2><p>Git Hooks 是 Git 在特定事件（如提交、推送）发生时自动执行的脚本。在前端工程化中，Git Hooks 是本地代码质量的&quot;最后一道防线&quot;——确保每一次提交的代码都通过了基本的质量检查。</p>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart LR&#10;    EDIT[编辑代码] --&gt; STAGE[git add]&#10;    STAGE --&gt; COMMIT[git commit]&#10;    COMMIT --&gt; PREHOOK[pre-commit Hook&lt;br/&gt;Lint + Format + Type Check]&#10;    PREHOOK --&gt;|通过| MSG[commit-msg Hook&lt;br/&gt;校验提交消息格式]&#10;    MSG --&gt;|通过| DONE[提交成功]&#10;    PREHOOK --&gt;|失败| REJECT1[提交被拒绝]&#10;    MSG --&gt;|失败| REJECT2[提交被拒绝]"></pre><table>
+<thead>
+<tr>
+<th>Hook</th>
+<th>触发时机</th>
+<th>典型用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>pre-commit</code></td>
+<td><code>git commit</code> 前</td>
+<td>Lint、格式化、类型检查</td>
+</tr>
+<tr>
+<td><code>commit-msg</code></td>
+<td>提交消息写入后</td>
+<td>校验 Conventional Commits 格式</td>
+</tr>
+<tr>
+<td><code>pre-push</code></td>
+<td><code>git push</code> 前</td>
+<td>运行测试</td>
+</tr>
+<tr>
+<td><code>post-merge</code></td>
+<td><code>git merge</code> 后</td>
+<td>自动 <code>pnpm install</code></td>
+</tr>
+<tr>
+<td><code>post-checkout</code></td>
+<td><code>git checkout</code> 后</td>
+<td>自动 <code>pnpm install</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="lefthook-配置">Lefthook 配置</h2><p>Lefthook 是一个用 Go 编写的 Git Hook 管理工具，相比 Husky + lint-staged 的组合，它具有以下优势：</p>
+<ul>
+<li>单一工具替代 Husky + lint-staged 两个工具</li>
+<li>Go 原生执行，启动速度更快</li>
+<li>并行执行多个命令</li>
+<li>原生支持 Monorepo</li>
+</ul>
+<h3 id="安装">安装</h3><div class="code-block-wrapper" data-lang="bash" data-code="pnpm add -D lefthook
+npx lefthook install"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">pnpm</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> add</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> -D</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> lefthook</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">npx</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> lefthook</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> install</span></span></code></pre></div><h3 id="基础配置">基础配置</h3><div class="code-block-wrapper" data-lang="yaml" data-code="# lefthook.yml
+pre-commit:
+  parallel: true
+  commands:
+    lint:
+      glob: '*.{ts,tsx,js,jsx}'
+      run: npx biome check --apply {staged_files}
+      stage_fixed: true
+    typecheck:
+      glob: '*.{ts,tsx}'
+      run: npx tsc --noEmit
+    test:
+      glob: '*.{ts,tsx}'
+      run: npx vitest related {staged_files} --run
+
+commit-msg:
+  commands:
+    commitlint:
+      run: npx commitlint --edit {1}
+
+pre-push:
+  commands:
+    test:
+      run: pnpm run test --run
+    build:
+      run: pnpm run build"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># lefthook.yml</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">pre-commit</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  parallel</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">true</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  commands</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    lint</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      glob</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'*.{ts,tsx,js,jsx}'</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      run</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">npx biome check --apply {staged_files}</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      stage_fixed</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">true</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    typecheck</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      glob</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'*.{ts,tsx}'</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      run</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">npx tsc --noEmit</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    test</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      glob</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'*.{ts,tsx}'</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      run</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">npx vitest related {staged_files} --run</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">commit-msg</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  commands</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    commitlint</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      run</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">npx commitlint --edit {1}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">pre-push</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  commands</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    test</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      run</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">pnpm run test --run</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    build</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      run</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">pnpm run build</span></span></code></pre></div><h3 id="monorepo-配置">Monorepo 配置</h3><div class="code-block-wrapper" data-lang="yaml" data-code="# lefthook.yml (Monorepo)
+pre-commit:
+  parallel: true
+  commands:
+    lint:
+      glob: '*.{ts,tsx,js,jsx}'
+      run: npx biome check --apply {staged_files}
+      stage_fixed: true
+    typecheck-web:
+      root: 'apps/web/'
+      glob: 'apps/web/**/*.{ts,tsx}'
+      run: npx tsc --noEmit --project tsconfig.json
+    typecheck-admin:
+      root: 'apps/admin/'
+      glob: 'apps/admin/**/*.{ts,tsx}'
+      run: npx tsc --noEmit --project tsconfig.json
+    typecheck-ui:
+      root: 'packages/ui/'
+      glob: 'packages/ui/**/*.{ts,tsx}'
+      run: npx tsc --noEmit --project tsconfig.json
+
+post-merge:
+  commands:
+    install:
+      run: pnpm install --frozen-lockfile
+      glob: '**/pnpm-lock.yaml'
+
+post-checkout:
+  commands:
+    install:
+      run: pnpm install --frozen-lockfile
+      glob: '**/pnpm-lock.yaml'"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># lefthook.yml (Monorepo)</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">pre-commit</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  parallel</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">true</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  commands</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    lint</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      glob</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'*.{ts,tsx,js,jsx}'</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      run</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">npx biome check --apply {staged_files}</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      stage_fixed</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">true</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    typecheck-web</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      root</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'apps/web/'</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      glob</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'apps/web/**/*.{ts,tsx}'</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      run</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">npx tsc --noEmit --project tsconfig.json</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    typecheck-admin</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      root</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'apps/admin/'</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      glob</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'apps/admin/**/*.{ts,tsx}'</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      run</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">npx tsc --noEmit --project tsconfig.json</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    typecheck-ui</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      root</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'packages/ui/'</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      glob</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'packages/ui/**/*.{ts,tsx}'</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      run</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">npx tsc --noEmit --project tsconfig.json</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">post-merge</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  commands</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    install</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      run</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">pnpm install --frozen-lockfile</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      glob</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'**/pnpm-lock.yaml'</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">post-checkout</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">  commands</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">    install</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      run</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">pnpm install --frozen-lockfile</span></span>
+<span class="line"><span style="color:#22863A;--shiki-dark:#85E89D">      glob</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'**/pnpm-lock.yaml'</span></span></code></pre></div><hr>
+<h2 id="conventional-commits">Conventional Commits</h2><p>Conventional Commits 是一种结构化的提交消息格式，为自动化版本管理和 CHANGELOG 生成提供基础。</p>
+<h3 id="格式规范">格式规范</h3><div class="code-block-wrapper" data-lang="text" data-code="&lt;type&gt;(&lt;scope&gt;): &lt;description&gt;
+
+[optional body]
+
+[optional footer(s)]"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>&#x3C;type>(&#x3C;scope>): &#x3C;description></span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>[optional body]</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>[optional footer(s)]</span></span></code></pre></div><h3 id="常用-type">常用 Type</h3><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>说明</th>
+<th>版本影响</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>feat</code></td>
+<td>新功能</td>
+<td>Minor (0.x.0)</td>
+</tr>
+<tr>
+<td><code>fix</code></td>
+<td>Bug 修复</td>
+<td>Patch (0.0.x)</td>
+</tr>
+<tr>
+<td><code>docs</code></td>
+<td>文档更新</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>style</code></td>
+<td>代码风格（不影响功能）</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>refactor</code></td>
+<td>重构（不增加功能或修复 Bug）</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>perf</code></td>
+<td>性能优化</td>
+<td>Patch</td>
+</tr>
+<tr>
+<td><code>test</code></td>
+<td>测试相关</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>chore</code></td>
+<td>构建/工具/依赖等</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>ci</code></td>
+<td>CI 配置变更</td>
+<td>无</td>
+</tr>
+</tbody></table>
+<h3 id="commitlint-配置">commitlint 配置</h3><div class="code-block-wrapper" data-lang="typescript" data-code="// commitlint.config.ts
+import type { UserConfig } from '@commitlint/types';
+
+const config: UserConfig = {
+  extends: ['@commitlint/config-conventional'],
+  rules: {
+    'type-enum': [2, 'always', ['feat', 'fix', 'docs', 'style', 'refactor', 'perf', 'test', 'chore', 'ci', 'revert']],
+    'scope-enum': [2, 'always', ['web', 'admin', 'ui', 'shared', 'api-client', 'docs', 'ci']],
+    'subject-max-length': [2, 'always', 72],
+    'body-max-line-length': [2, 'always', 100],
+  },
+};
+
+export default config;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// commitlint.config.ts</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#D73A49;--shiki-dark:#F97583"> type</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { UserConfig } </span><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> '@commitlint/types'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> config</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> UserConfig</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  extends: [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'@commitlint/config-conventional'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  rules: {</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">    'type-enum'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'always'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'feat'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'fix'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'docs'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'style'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'refactor'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'perf'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'test'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'chore'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'ci'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'revert'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]],</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">    'scope-enum'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'always'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, [</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'web'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'admin'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'ui'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'shared'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'api-client'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'docs'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'ci'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]],</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">    'subject-max-length'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'always'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">72</span><span style="color:#24292E;--shiki-dark:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">    'body-max-line-length'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: [</span><span style="color:#005CC5;--shiki-dark:#79B8FF">2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'always'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">100</span><span style="color:#24292E;--shiki-dark:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  },</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">export</span><span style="color:#D73A49;--shiki-dark:#F97583"> default</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> config;</span></span></code></pre></div><p>示例提交消息：</p>
+<div class="code-block-wrapper" data-lang="bash" data-code="feat(ui): 新增 DatePicker 组件
+
+实现了基础的日期选择器组件，支持以下功能：
+- 单日期选择
+- 日期范围选择
+- 禁用特定日期
+
+Closes #123"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">feat(ui</span><span style="color:#24292E;--shiki-dark:#E1E4E8">): 新增 DatePicker 组件</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">实现了基础的日期选择器组件，支持以下功能：</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">-</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 单日期选择</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">-</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 日期范围选择</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">-</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> 禁用特定日期</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">Closes</span><span style="color:#6A737D;--shiki-dark:#6A737D"> #123</span></span></code></pre></div><hr>
+<h2 id="lefthook-vs-husky-lint-staged">Lefthook vs Husky + lint-staged</h2><pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    subgraph Husky + lint-staged&#10;        H[Husky&lt;br/&gt;Hook 管理] --&gt; LS[lint-staged&lt;br/&gt;暂存文件过滤]&#10;        LS --&gt; CMD1[ESLint]&#10;        LS --&gt; CMD2[Prettier]&#10;    end&#10;    subgraph Lefthook&#10;        LH[Lefthook&lt;br/&gt;Hook 管理 + 文件过滤&lt;br/&gt;一体化]&#10;        LH --&gt; CMD3[Biome]&#10;        LH --&gt; CMD4[TypeCheck]&#10;        LH --&gt; CMD5[Test]&#10;    end"></pre><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Husky + lint-staged</th>
+<th>Lefthook</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>工具数量</td>
+<td>2 个</td>
+<td>1 个</td>
+</tr>
+<tr>
+<td>语言</td>
+<td>Node.js</td>
+<td>Go（更快）</td>
+</tr>
+<tr>
+<td>暂存文件过滤</td>
+<td>lint-staged 提供</td>
+<td>内置 <code>{staged_files}</code></td>
+</tr>
+<tr>
+<td>并行执行</td>
+<td>需要配置</td>
+<td>内置 <code>parallel: true</code></td>
+</tr>
+<tr>
+<td>Monorepo 支持</td>
+<td>需要额外配置</td>
+<td>内置 <code>root</code> 选项</td>
+</tr>
+<tr>
+<td>配置格式</td>
+<td><code>.husky/</code> + JSON</td>
+<td>单一 YAML 文件</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="实践建议">实践建议</h2><pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TD&#10;    subgraph 本地守护&#10;        PRE_COMMIT[pre-commit&lt;br/&gt;Lint + Format&lt;br/&gt;只检查暂存文件]&#10;        COMMIT_MSG[commit-msg&lt;br/&gt;校验提交消息]&#10;        PRE_PUSH[pre-push&lt;br/&gt;Test + Build&lt;br/&gt;完整检查]&#10;    end&#10;    subgraph CI 流水线&#10;        CI_LINT[Lint 全量检查]&#10;        CI_TYPE[Type Check]&#10;        CI_TEST[Test 全量]&#10;        CI_BUILD[Build]&#10;    end&#10;    PRE_COMMIT --&gt; COMMIT_MSG&#10;    COMMIT_MSG --&gt; PRE_PUSH&#10;    PRE_PUSH --&gt; CI_LINT"></pre><ul>
+<li><strong>pre-commit 应该快</strong>：只检查暂存文件，1-5 秒内完成</li>
+<li><strong>pre-push 可以更全面</strong>：运行测试和构建，10-30 秒可接受</li>
+<li><strong>不要阻塞开发流程</strong>：Hook 太慢会导致开发者用 <code>--no-verify</code> 跳过</li>
+</ul>
+<hr>
+<h2 id="小结">小结</h2><ul>
+<li>Git Hooks 是本地代码质量的&quot;最后一道防线&quot;。</li>
+<li>Lefthook 是单一的 Go 原生工具，替代 Husky + lint-staged 组合。</li>
+<li>Conventional Commits 为自动化版本管理和 CHANGELOG 生成提供基础。</li>
+<li>pre-commit Hook 应保持快速（1-5 秒），只检查暂存文件。</li>
+<li>本地 Hook 和 CI 流水线是互补关系——前者提供快速反馈，后者提供全面保障。</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../frontend-engineering/frontend-engineering/ci-cd-and-automation/index.html"><span class="label">Previous</span>CI/CD 与自动化 简介</a><a class="next" href="../../../frontend-engineering/frontend-engineering/ci-cd-and-automation/github-actions-pipeline.html"><span class="label">Next</span>GitHub Actions 流水线</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#git-hooks-的作用" data-outline-link="git-hooks-的作用">Git Hooks 的作用</a></li><li class="depth-2"><a href="#lefthook-配置" data-outline-link="lefthook-配置">Lefthook 配置</a></li><li class="depth-3"><a href="#安装" data-outline-link="安装">安装</a></li><li class="depth-3"><a href="#基础配置" data-outline-link="基础配置">基础配置</a></li><li class="depth-3"><a href="#monorepo-配置" data-outline-link="monorepo-配置">Monorepo 配置</a></li><li class="depth-2"><a href="#conventional-commits" data-outline-link="conventional-commits">Conventional Commits</a></li><li class="depth-3"><a href="#格式规范" data-outline-link="格式规范">格式规范</a></li><li class="depth-3"><a href="#常用-type" data-outline-link="常用-type">常用 Type</a></li><li class="depth-3"><a href="#commitlint-配置" data-outline-link="commitlint-配置">commitlint 配置</a></li><li class="depth-2"><a href="#lefthook-vs-husky-lint-staged" data-outline-link="lefthook-vs-husky-lint-staged">Lefthook vs Husky + lint-staged</a></li><li class="depth-2"><a href="#实践建议" data-outline-link="实践建议">实践建议</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

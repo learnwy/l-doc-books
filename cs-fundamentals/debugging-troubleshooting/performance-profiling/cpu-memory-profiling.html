@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>CPU 与内存 Profiling · 计算机科学基础</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:计算机科学基础" data-pagefind-meta="slug:cs-fundamentals">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">计算机科学基础</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item active" href="../../../cs-fundamentals/index.html" aria-current="page" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../cs-fundamentals/index.html">计算机科学基础</a><a class="back-to-hubs" href="../../../cs-fundamentals/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../cs-fundamentals/debugging-troubleshooting/index.html">调试与问题排查 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="cs-fundamentals"><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:debugging-troubleshooting/debugging-methodology"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/debugging-troubleshooting/debugging-methodology/index.html">调试方法论 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/debugging-troubleshooting/debugging-methodology/scientific-debugging-process.html">科学调试流程</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/debugging-troubleshooting/debugging-methodology/hypothesis-driven-debugging.html">假设驱动调试</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/debugging-troubleshooting/debugging-methodology/bisect-and-minimal-reproduction.html">二分法与最小复现</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:debugging-troubleshooting/logging-and-observability"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/debugging-troubleshooting/logging-and-observability/index.html">日志与可观测性 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/debugging-troubleshooting/logging-and-observability/structured-logging-design.html">结构化日志设计</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/debugging-troubleshooting/logging-and-observability/distributed-tracing.html">分布式追踪</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/debugging-troubleshooting/logging-and-observability/metrics-and-alerting.html">指标与告警</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:debugging-troubleshooting/performance-profiling" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/debugging-troubleshooting/performance-profiling/index.html">性能分析 简介</a></summary><ul><li class="leaf"><a class="leaf-title active" href="../../../cs-fundamentals/debugging-troubleshooting/performance-profiling/cpu-memory-profiling.html">CPU 与内存 Profiling</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/debugging-troubleshooting/performance-profiling/flame-graph-analysis.html">火焰图解读与实战</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/debugging-troubleshooting/performance-profiling/bottleneck-identification.html">瓶颈定位方法论</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:debugging-troubleshooting/production-debugging"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/debugging-troubleshooting/production-debugging/index.html">生产环境排查 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/debugging-troubleshooting/production-debugging/incident-severity-response.html">线上问题分级与响应</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/debugging-troubleshooting/production-debugging/troubleshooting-sop.html">故障排查 SOP</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/debugging-troubleshooting/production-debugging/postmortem-analysis.html">事后分析 Postmortem</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part II · 程序与算法 (Programs &amp; Algorithms)</span><span>调试与问题排查 简介</span><span>性能分析 简介</span><span>CPU 与内存 Profiling</span></nav>
+    <article class="content prose"><h1 id="cpu-与内存-profiling">CPU 与内存 Profiling</h1><h2 id="概述">概述</h2><p>CPU 和内存 Profiling 是量化分析程序运行时资源消耗的核心技术。CPU Profiling 回答&quot;程序把时间花在了哪些函数上&quot;，内存 Profiling 回答&quot;程序的内存被什么对象占用&quot;。掌握这两种分析技术是性能优化的基础——没有数据支撑的优化都是盲目猜测。</p>
+<h2 id="核心概念">核心概念</h2><h3 id="profiling-的两种模式">Profiling 的两种模式</h3><pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TD&#10;    P[&quot;Profiling 方式&quot;] --&gt; S[&quot;采样型 Sampling&quot;]&#10;    P --&gt; I[&quot;插桩型 Instrumentation&quot;]&#10;&#10;    S --&gt; S1[&quot;定期中断, 记录当前调用栈&quot;]&#10;    S --&gt; S2[&quot;低开销 1-5%, 统计近似&quot;]&#10;    S --&gt; S3[&quot;适合生产环境&quot;]&#10;&#10;    I --&gt; I1[&quot;在函数入口/出口插入计时代码&quot;]&#10;    I --&gt; I2[&quot;高开销 10-100%, 精确计时&quot;]&#10;    I --&gt; I3[&quot;适合开发环境&quot;]"></pre><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>采样型</th>
+<th>插桩型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>原理</td>
+<td>定时器中断采集调用栈</td>
+<td>代码注入计时</td>
+</tr>
+<tr>
+<td>开销</td>
+<td>1-5%</td>
+<td>10-100%</td>
+</tr>
+<tr>
+<td>精度</td>
+<td>统计近似</td>
+<td>精确</td>
+</tr>
+<tr>
+<td>生产可用</td>
+<td>是</td>
+<td>通常不是</td>
+</tr>
+<tr>
+<td>代表工具</td>
+<td>perf, pprof, async-profiler</td>
+<td>gprof, callgrind</td>
+</tr>
+</tbody></table>
+<h3 id="cpu-profiling-工作原理">CPU Profiling 工作原理</h3><p>采样型 CPU profiler 的工作流程：</p>
+<div class="code-block-wrapper" data-lang="text" data-code="1. 以固定频率（如 99Hz）发送信号中断程序
+2. 在中断处理中记录当前线程的完整调用栈
+3. 运行一段时间后收集所有样本
+4. 统计每个函数出现在栈顶的次数 → CPU 时间占比
+5. 统计每个函数出现在栈中的次数 → 含子调用的总时间"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>1. 以固定频率（如 99Hz）发送信号中断程序</span></span>
+<span class="line"><span>2. 在中断处理中记录当前线程的完整调用栈</span></span>
+<span class="line"><span>3. 运行一段时间后收集所有样本</span></span>
+<span class="line"><span>4. 统计每个函数出现在栈顶的次数 → CPU 时间占比</span></span>
+<span class="line"><span>5. 统计每个函数出现在栈中的次数 → 含子调用的总时间</span></span></code></pre></div><div class="code-block-wrapper" data-lang="bash" data-code="# Linux perf: 系统级 CPU profiling
+perf record -F 99 -p $(pidof myapp) -g -- sleep 30
+# -F 99: 采样频率 99Hz（避免与系统时钟对齐）
+# -p: 目标进程
+# -g: 记录调用栈
+
+perf report --stdio  # 文本报告
+perf script &gt; out.perf  # 导出用于火焰图"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># Linux perf: 系统级 CPU profiling</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">perf</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> record</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> -F</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 99</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> -p</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> $(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">pidof</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> myapp</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#005CC5;--shiki-dark:#79B8FF">-g</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> --</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> sleep</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 30</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># -F 99: 采样频率 99Hz（避免与系统时钟对齐）</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># -p: 目标进程</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># -g: 记录调用栈</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">perf</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> report</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> --stdio</span><span style="color:#6A737D;--shiki-dark:#6A737D">  # 文本报告</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">perf</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> script</span><span style="color:#D73A49;--shiki-dark:#F97583"> ></span><span style="color:#032F62;--shiki-dark:#9ECBFF"> out.perf</span><span style="color:#6A737D;--shiki-dark:#6A737D">  # 导出用于火焰图</span></span></code></pre></div><div class="code-block-wrapper" data-lang="go" data-code="// Go: 内置 pprof CPU profiling
+import (
+    &quot;os&quot;
+    &quot;runtime/pprof&quot;
+)
+
+func main() {
+    // 开始 CPU profile
+    f, _ := os.Create(&quot;cpu.prof&quot;)
+    pprof.StartCPUProfile(f)
+    defer pprof.StopCPUProfile()
+
+    // ... 程序逻辑 ...
+}
+
+// 或通过 HTTP 端点动态采集
+import _ &quot;net/http/pprof&quot;
+// GET /debug/pprof/profile?seconds=30"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// Go: 内置 pprof CPU profiling</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">    "</span><span style="color:#6F42C1;--shiki-dark:#B392F0">os</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">    "</span><span style="color:#6F42C1;--shiki-dark:#B392F0">runtime/pprof</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">func</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">    // 开始 CPU profile</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    f, _ </span><span style="color:#D73A49;--shiki-dark:#F97583">:=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> os.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Create</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"cpu.prof"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    pprof.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">StartCPUProfile</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(f)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    defer</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> pprof.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">StopCPUProfile</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">    // ... 程序逻辑 ...</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 或通过 HTTP 端点动态采集</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> _ </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"</span><span style="color:#6F42C1;--shiki-dark:#B392F0">net/http/pprof</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// GET /debug/pprof/profile?seconds=30</span></span></code></pre></div><div class="code-block-wrapper" data-lang="python" data-code="# Python: cProfile 和 py-spy
+import cProfile
+import pstats
+
+# 方式 1: cProfile（插桩型，有一定开销）
+profiler = cProfile.Profile()
+profiler.enable()
+result = expensive_function()
+profiler.disable()
+
+stats = pstats.Stats(profiler)
+stats.sort_stats('cumulative')
+stats.print_stats(20)  # 打印 top 20 函数
+
+# 方式 2: py-spy（采样型，生产可用）
+# pip install py-spy
+# py-spy record -o profile.svg --pid 12345
+# py-spy top --pid 12345  # 实时 top 视图"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># Python: cProfile 和 py-spy</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> cProfile</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> pstats</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 方式 1: cProfile（插桩型，有一定开销）</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">profiler </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> cProfile.Profile()</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">profiler.enable()</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">result </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> expensive_function()</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">profiler.disable()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">stats </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> pstats.Stats(profiler)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">stats.sort_stats(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'cumulative'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">stats.print_stats(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">20</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)  </span><span style="color:#6A737D;--shiki-dark:#6A737D"># 打印 top 20 函数</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 方式 2: py-spy（采样型，生产可用）</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># pip install py-spy</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># py-spy record -o profile.svg --pid 12345</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># py-spy top --pid 12345  # 实时 top 视图</span></span></code></pre></div><h3 id="内存-profiling-技术">内存 Profiling 技术</h3><div class="code-block-wrapper" data-lang="go" data-code="// Go: Heap profiling
+import &quot;runtime/pprof&quot;
+
+func analyzeMemory() {
+    // 获取当前 heap profile
+    f, _ := os.Create(&quot;mem.prof&quot;)
+    runtime.GC()  // 先 GC 以获得准确快照
+    pprof.WriteHeapProfile(f)
+    f.Close()
+}
+
+// 分析命令
+// go tool pprof mem.prof
+// (pprof) top          → 内存占用最大的函数
+// (pprof) list funcName → 逐行内存分配
+// (pprof) web          → 可视化调用图"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// Go: Heap profiling</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "</span><span style="color:#6F42C1;--shiki-dark:#B392F0">runtime/pprof</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">func</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> analyzeMemory</span><span style="color:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">    // 获取当前 heap profile</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    f, _ </span><span style="color:#D73A49;--shiki-dark:#F97583">:=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> os.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Create</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"mem.prof"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    runtime.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">GC</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()  </span><span style="color:#6A737D;--shiki-dark:#6A737D">// 先 GC 以获得准确快照</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    pprof.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">WriteHeapProfile</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(f)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    f.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Close</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 分析命令</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// go tool pprof mem.prof</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// (pprof) top          → 内存占用最大的函数</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// (pprof) list funcName → 逐行内存分配</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// (pprof) web          → 可视化调用图</span></span></code></pre></div><div class="code-block-wrapper" data-lang="java" data-code="// Java: JVM 内存分析
+// 方式 1: jmap + jhat
+// jmap -dump:format=b,file=heap.hprof &lt;pid&gt;
+// jhat heap.hprof  → 浏览器查看
+
+// 方式 2: async-profiler (推荐, 低开销)
+// ./asprof -e alloc -d 30 -f alloc.jfr &lt;pid&gt;
+// 采集 30 秒内存分配热点
+
+// 方式 3: JFR (Java Flight Recorder)
+// -XX:StartFlightRecording=duration=60s,filename=recording.jfr"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// Java: JVM 内存分析</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 方式 1: jmap + jhat</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// jmap -dump:format=b,file=heap.hprof &#x3C;pid></span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// jhat heap.hprof  → 浏览器查看</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 方式 2: async-profiler (推荐, 低开销)</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// ./asprof -e alloc -d 30 -f alloc.jfr &#x3C;pid></span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 采集 30 秒内存分配热点</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 方式 3: JFR (Java Flight Recorder)</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// -XX:StartFlightRecording=duration=60s,filename=recording.jfr</span></span></code></pre></div><h3 id="内存泄漏检测">内存泄漏检测</h3><div class="code-block-wrapper" data-lang="python" data-code="# Python: 使用 tracemalloc 追踪内存分配
+import tracemalloc
+
+tracemalloc.start()
+
+# ... 执行可疑代码 ...
+
+snapshot1 = tracemalloc.take_snapshot()
+# ... 继续执行 ...
+snapshot2 = tracemalloc.take_snapshot()
+
+# 对比两个快照，找到增长的分配
+top_stats = snapshot2.compare_to(snapshot1, 'lineno')
+print(&quot;[ Top 10 memory increases ]&quot;)
+for stat in top_stats[:10]:
+    print(stat)"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># Python: 使用 tracemalloc 追踪内存分配</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> tracemalloc</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">tracemalloc.start()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># ... 执行可疑代码 ...</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">snapshot1 </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> tracemalloc.take_snapshot()</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># ... 继续执行 ...</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">snapshot2 </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> tracemalloc.take_snapshot()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 对比两个快照，找到增长的分配</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">top_stats </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> snapshot2.compare_to(snapshot1, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'lineno'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">print</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"[ Top 10 memory increases ]"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> stat </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> top_stats[:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">10</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    print</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(stat)</span></span></code></pre></div><div class="code-block-wrapper" data-lang="go" data-code="// Go: 对比两个时间点的 heap profile
+// curl http://localhost:6060/debug/pprof/heap &gt; t0.prof
+// (等待一段时间)
+// curl http://localhost:6060/debug/pprof/heap &gt; t1.prof
+
+// go tool pprof -base t0.prof t1.prof
+// (pprof) top
+// 显示 t1 相对于 t0 的增量分配 → 泄漏位置"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// Go: 对比两个时间点的 heap profile</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// curl http://localhost:6060/debug/pprof/heap > t0.prof</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// (等待一段时间)</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// curl http://localhost:6060/debug/pprof/heap > t1.prof</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// go tool pprof -base t0.prof t1.prof</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// (pprof) top</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 显示 t1 相对于 t0 的增量分配 → 泄漏位置</span></span></code></pre></div><h2 id="实战指南">实战指南</h2><h3 id="案例一-go-服务-cpu-占用过高">案例一：Go 服务 CPU 占用过高</h3><div class="code-block-wrapper" data-lang="bash" data-code="# 步骤 1: 获取 CPU profile
+curl -o cpu.prof &quot;http://service:6060/debug/pprof/profile?seconds=30&quot;
+
+# 步骤 2: 交互式分析
+go tool pprof -http=:8080 cpu.prof
+# 浏览器打开 http://localhost:8080
+# 查看 Graph 视图和 Flame Graph 视图
+
+# 步骤 3: 命令行快速定位
+go tool pprof cpu.prof
+# (pprof) top10
+# Showing top 10 nodes out of 150
+#       flat  flat%   sum%        cum   cum%
+#     4.52s 30.13%  30.13%      4.52s 30.13%  encoding/json.(*decodeState).scanWhile
+#     2.10s 14.00%  44.13%      2.10s 14.00%  runtime.memmove
+#     1.80s 12.00%  56.13%      6.32s 42.13%  encoding/json.Unmarshal"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 步骤 1: 获取 CPU profile</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">curl</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> -o</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> cpu.prof</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "http://service:6060/debug/pprof/profile?seconds=30"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 步骤 2: 交互式分析</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">go</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> tool</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> pprof</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> -http=:8080</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> cpu.prof</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 浏览器打开 http://localhost:8080</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 查看 Graph 视图和 Flame Graph 视图</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 步骤 3: 命令行快速定位</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">go</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> tool</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> pprof</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> cpu.prof</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># (pprof) top10</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># Showing top 10 nodes out of 150</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">#       flat  flat%   sum%        cum   cum%</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">#     4.52s 30.13%  30.13%      4.52s 30.13%  encoding/json.(*decodeState).scanWhile</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">#     2.10s 14.00%  44.13%      2.10s 14.00%  runtime.memmove</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">#     1.80s 12.00%  56.13%      6.32s 42.13%  encoding/json.Unmarshal</span></span></code></pre></div><h3 id="案例二-node-js-内存泄漏">案例二：Node.js 内存泄漏</h3><div class="code-block-wrapper" data-lang="javascript" data-code="// 步骤 1: 启用 heap snapshot
+// --inspect 启动后在 Chrome DevTools 中操作
+// 或使用 v8.writeHeapSnapshot()
+
+const v8 = require('v8');
+
+// 定期生成 heap snapshot 对比
+setInterval(() =&gt; {
+  const filename = v8.writeHeapSnapshot();
+  console.log(`Heap snapshot written to ${filename}`);
+}, 60_000);
+
+// 步骤 2: 使用 clinic.js 自动诊断
+// npx clinic doctor -- node app.js
+// npx clinic flame -- node app.js
+// npx clinic heap -- node app.js"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 步骤 1: 启用 heap snapshot</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// --inspect 启动后在 Chrome DevTools 中操作</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 或使用 v8.writeHeapSnapshot()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> v8</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> require</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'v8'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 定期生成 heap snapshot 对比</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">setInterval</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(() </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> filename</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> v8.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">writeHeapSnapshot</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  console.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">log</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`Heap snapshot written to ${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">filename</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">60_000</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// 步骤 2: 使用 clinic.js 自动诊断</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// npx clinic doctor -- node app.js</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// npx clinic flame -- node app.js</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">// npx clinic heap -- node app.js</span></span></code></pre></div><h3 id="案例三-java-gc-压力诊断">案例三：Java GC 压力诊断</h3><div class="code-block-wrapper" data-lang="bash" data-code="# 步骤 1: 观察 GC 行为
+# -Xlog:gc*:file=gc.log:time,uptime,level,tags
+
+# 步骤 2: 使用 async-profiler 分析分配热点
+./asprof -e alloc -d 60 -f alloc.html $(pidof java)
+# 生成内存分配火焰图，显示哪些代码路径分配最多对象
+
+# 步骤 3: 分析 GC 日志
+# 关注: Allocation Rate, Promotion Rate, Pause Time
+# 工具: GCViewer, GCEasy.io"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 步骤 1: 观察 GC 行为</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># -Xlog:gc*:file=gc.log:time,uptime,level,tags</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 步骤 2: 使用 async-profiler 分析分配热点</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">./asprof</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> -e</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> alloc</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> -d</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 60</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> -f</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> alloc.html</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> $(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">pidof</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> java</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 生成内存分配火焰图，显示哪些代码路径分配最多对象</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 步骤 3: 分析 GC 日志</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 关注: Allocation Rate, Promotion Rate, Pause Time</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 工具: GCViewer, GCEasy.io</span></span></code></pre></div><h2 id="最佳实践">最佳实践</h2><h3 id="profiling-工作流">Profiling 工作流</h3><pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TD&#10;    A[&quot;建立基准 baseline&quot;] --&gt; B[&quot;识别瓶颈&quot;]&#10;    B --&gt; C[&quot;形成优化假设&quot;]&#10;    C --&gt; D[&quot;实施优化&quot;]&#10;    D --&gt; E[&quot;验证效果&quot;]&#10;    E --&gt; F{&quot;达到目标?&quot;}&#10;    F --&gt;|&quot;否&quot;| B&#10;    F --&gt;|&quot;是&quot;| G[&quot;记录优化方案&quot;]"></pre><h3 id="各语言推荐工具链">各语言推荐工具链</h3><table>
+<thead>
+<tr>
+<th>语言</th>
+<th>CPU Profiler</th>
+<th>Memory Profiler</th>
+<th>推荐场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Go</td>
+<td>pprof (内置)</td>
+<td>pprof heap</td>
+<td>HTTP 端点 + go tool pprof</td>
+</tr>
+<tr>
+<td>Java/JVM</td>
+<td>async-profiler</td>
+<td>JFR + MAT</td>
+<td>生产采集 + 离线分析</td>
+</tr>
+<tr>
+<td>Python</td>
+<td>py-spy</td>
+<td>tracemalloc</td>
+<td>外挂进程 + 内置追踪</td>
+</tr>
+<tr>
+<td>Node.js</td>
+<td>clinic flame</td>
+<td>clinic heap</td>
+<td>一键诊断工具包</td>
+</tr>
+<tr>
+<td>Rust</td>
+<td>perf + flamegraph</td>
+<td>DHAT (Valgrind)</td>
+<td>系统级采集</td>
+</tr>
+<tr>
+<td>C/C++</td>
+<td>perf, Instruments</td>
+<td>Valgrind, ASan</td>
+<td>最底层工具</td>
+</tr>
+</tbody></table>
+<h3 id="生产环境-profiling-安全守则">生产环境 Profiling 安全守则</h3><table>
+<thead>
+<tr>
+<th>规则</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>采样频率不超过 99-199Hz</td>
+<td>更高频率影响性能</td>
+</tr>
+<tr>
+<td>单次采集不超过 60s</td>
+<td>避免数据量过大</td>
+</tr>
+<tr>
+<td>先在 staging 验证</td>
+<td>确认 profiler 不影响稳定性</td>
+</tr>
+<tr>
+<td>限制并发 profile 数</td>
+<td>多个 profile 叠加开销</td>
+</tr>
+<tr>
+<td>敏感数据注意脱敏</td>
+<td>profile 可能包含函数参数</td>
+</tr>
+<tr>
+<td>结果存储在安全位置</td>
+<td>profile 数据可能包含业务逻辑</td>
+</tr>
+</tbody></table>
+<h2 id="工具与生态">工具与生态</h2><h3 id="持续-profiling-平台-2026-趋势">持续 Profiling 平台（2026 趋势）</h3><p>持续 Profiling 将采样分析从&quot;按需手动&quot;升级为&quot;always-on 自动&quot;：</p>
+<table>
+<thead>
+<tr>
+<th>平台</th>
+<th>特点</th>
+<th>存储</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Pyroscope (Grafana)</td>
+<td>开源, 多语言</td>
+<td>本地/云</td>
+</tr>
+<tr>
+<td>Parca</td>
+<td>开源, eBPF 支持</td>
+<td>对象存储</td>
+</tr>
+<tr>
+<td>Datadog Profiling</td>
+<td>商业, APM 集成</td>
+<td>SaaS</td>
+</tr>
+<tr>
+<td>Google Cloud Profiler</td>
+<td>商业, GCP 集成</td>
+<td>SaaS</td>
+</tr>
+</tbody></table>
+<div class="code-block-wrapper" data-lang="yaml" data-code="# Pyroscope 部署配置示例
+# docker run -p 4040:4040 grafana/pyroscope
+
+# Go 集成
+# import &quot;github.com/grafana/pyroscope-go&quot;
+# pyroscope.Start(pyroscope.Config{
+#     ApplicationName: &quot;order-service&quot;,
+#     ServerAddress:   &quot;http://pyroscope:4040&quot;,
+#     ProfileTypes: []pyroscope.ProfileType{
+#         pyroscope.ProfileCPU,
+#         pyroscope.ProfileAllocObjects,
+#         pyroscope.ProfileAllocSpace,
+#         pyroscope.ProfileGoroutines,
+#     },
+# })"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># Pyroscope 部署配置示例</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># docker run -p 4040:4040 grafana/pyroscope</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># Go 集成</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># import "github.com/grafana/pyroscope-go"</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># pyroscope.Start(pyroscope.Config{</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">#     ApplicationName: "order-service",</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">#     ServerAddress:   "http://pyroscope:4040",</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">#     ProfileTypes: []pyroscope.ProfileType{</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">#         pyroscope.ProfileCPU,</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">#         pyroscope.ProfileAllocObjects,</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">#         pyroscope.ProfileAllocSpace,</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">#         pyroscope.ProfileGoroutines,</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D">#     },</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># })</span></span></code></pre></div><h2 id="总结">总结</h2><p>CPU 和内存 Profiling 是性能优化的&quot;显微镜&quot;——它让你看到程序内部的资源消耗分布，用数据而非直觉指导优化。关键实践：选择采样型工具用于生产、建立优化前后的量化对比、将持续 Profiling 集成到监控体系中。记住：未经测量的优化是过早优化。</p>
+</article>
+    <nav class="pager"><a class="prev" href="../../../cs-fundamentals/debugging-troubleshooting/performance-profiling/index.html"><span class="label">Previous</span>性能分析 简介</a><a class="next" href="../../../cs-fundamentals/debugging-troubleshooting/performance-profiling/flame-graph-analysis.html"><span class="label">Next</span>火焰图解读与实战</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#概述" data-outline-link="概述">概述</a></li><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-3"><a href="#profiling-的两种模式" data-outline-link="profiling-的两种模式">Profiling 的两种模式</a></li><li class="depth-3"><a href="#cpu-profiling-工作原理" data-outline-link="cpu-profiling-工作原理">CPU Profiling 工作原理</a></li><li class="depth-3"><a href="#内存-profiling-技术" data-outline-link="内存-profiling-技术">内存 Profiling 技术</a></li><li class="depth-3"><a href="#内存泄漏检测" data-outline-link="内存泄漏检测">内存泄漏检测</a></li><li class="depth-2"><a href="#实战指南" data-outline-link="实战指南">实战指南</a></li><li class="depth-3"><a href="#案例一-go-服务-cpu-占用过高" data-outline-link="案例一-go-服务-cpu-占用过高">案例一：Go 服务 CPU 占用过高</a></li><li class="depth-3"><a href="#案例二-node-js-内存泄漏" data-outline-link="案例二-node-js-内存泄漏">案例二：Node.js 内存泄漏</a></li><li class="depth-3"><a href="#案例三-java-gc-压力诊断" data-outline-link="案例三-java-gc-压力诊断">案例三：Java GC 压力诊断</a></li><li class="depth-2"><a href="#最佳实践" data-outline-link="最佳实践">最佳实践</a></li><li class="depth-3"><a href="#profiling-工作流" data-outline-link="profiling-工作流">Profiling 工作流</a></li><li class="depth-3"><a href="#各语言推荐工具链" data-outline-link="各语言推荐工具链">各语言推荐工具链</a></li><li class="depth-3"><a href="#生产环境-profiling-安全守则" data-outline-link="生产环境-profiling-安全守则">生产环境 Profiling 安全守则</a></li><li class="depth-2"><a href="#工具与生态" data-outline-link="工具与生态">工具与生态</a></li><li class="depth-3"><a href="#持续-profiling-平台-2026-趋势" data-outline-link="持续-profiling-平台-2026-趋势">持续 Profiling 平台（2026 趋势）</a></li><li class="depth-2"><a href="#总结" data-outline-link="总结">总结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

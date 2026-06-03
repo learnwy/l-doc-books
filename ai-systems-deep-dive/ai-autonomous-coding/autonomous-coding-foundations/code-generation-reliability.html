@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>代码生成的可靠性与正确性保证 · AI 系统深度剖析</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:AI 系统深度剖析" data-pagefind-meta="slug:ai-systems-deep-dive">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">AI 系统深度剖析</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item active" href="../../../ai-systems-deep-dive/index.html" aria-current="page" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../ai-systems-deep-dive/index.html">AI 系统深度剖析</a><a class="back-to-hubs" href="../../../ai-systems-deep-dive/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/index.html">AI 自主编程与智能编码自动化 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="ai-systems-deep-dive"><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:ai-autonomous-coding/autonomous-coding-foundations" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/autonomous-coding-foundations/index.html">自主编程基础 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/autonomous-coding-foundations/assisted-to-autonomous.html">从辅助编程到自主开发的演进</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/autonomous-coding-foundations/ai-agent-coding-architecture.html">AI 编码 Agent 的核心架构</a></li><li class="leaf"><a class="leaf-title active" href="../../../ai-systems-deep-dive/ai-autonomous-coding/autonomous-coding-foundations/code-generation-reliability.html">代码生成的可靠性与正确性保证</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/autonomous-coding-foundations/autonomous-coding-landscape.html">自主编码工具与平台全景</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:ai-autonomous-coding/intelligent-coding-workflows"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/intelligent-coding-workflows/index.html">智能编码工作流 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/intelligent-coding-workflows/task-decomposition-planning.html">任务分解与自主规划策略</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/intelligent-coding-workflows/context-aware-generation.html">上下文感知的代码生成</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/intelligent-coding-workflows/test-driven-ai-coding.html">测试驱动的 AI 编码循环</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/intelligent-coding-workflows/multi-agent-coding-pipelines.html">多 Agent 编码流水线</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:ai-autonomous-coding/harness-and-orchestration"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/harness-and-orchestration/index.html">Harness 与编排引擎 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/harness-and-orchestration/coding-agent-harness.html">编码 Agent Harness 设计</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/harness-and-orchestration/execution-sandboxing.html">执行沙箱与安全隔离</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/harness-and-orchestration/feedback-loop-self-repair.html">反馈循环与自修复机制</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/harness-and-orchestration/observability-debugging.html">可观测性与 Agent 调试</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="ai-systems-deep-dive:folder:ai-autonomous-coding/scaling-and-production"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/scaling-and-production/index.html">规模化与生产实践 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/scaling-and-production/enterprise-ai-coding.html">企业级 AI 编码平台架构</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/scaling-and-production/quality-assurance-at-scale.html">规模化质量保障体系</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/scaling-and-production/cost-optimization-strategy.html">成本优化与资源调度策略</a></li><li class="leaf"><a class="leaf-title" href="../../../ai-systems-deep-dive/ai-autonomous-coding/scaling-and-production/future-autonomous-development.html">自主开发的未来趋势</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part VI · 微调与自主 (Fine-tuning &amp; Autonomy)</span><span>AI 自主编程与智能编码自动化 简介</span><span>自主编程基础 简介</span><span>代码生成的可靠性与正确性保证</span></nav>
+    <article class="content prose"><h1 id="代码生成的可靠性与正确性保证">代码生成的可靠性与正确性保证</h1><h2 id="核心概念">核心概念</h2><p>AI 生成的代码面临一个根本性的信任困境：它看起来总是&quot;自信而流畅&quot;的，但这种自信并不等于正确性。代码幻觉（Code Hallucination）——生成不存在的 API、错误的参数签名、语法正确但语义错误的逻辑——是自主编码走向生产的最大障碍。可靠性保证的本质是在 AI 生成代码之后，通过多层次的自动化验证机制来逼近&quot;人类审查&quot;级别的质量把关。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TB&#10;    A[AI 生成代码] --&gt; B[静态分析]&#10;    B --&gt; C[类型检查]&#10;    C --&gt; D[Lint 规则]&#10;    D --&gt; E[单元测试]&#10;    E --&gt; F[集成测试]&#10;    F --&gt; G{全部通过?}&#10;    G --&gt;|否| H[错误分析]&#10;    H --&gt; I[自修复生成]&#10;    I --&gt; A&#10;    G --&gt;|是| J[置信度评分]&#10;    J --&gt; K{分数 &gt; 阈值?}&#10;    K --&gt;|是| L[自动合并]&#10;    K --&gt;|否| M[人类审查]"></pre><table>
+<thead>
+<tr>
+<th>验证层</th>
+<th>检测目标</th>
+<th>检测时机</th>
+<th>典型工具</th>
+<th>覆盖率</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>静态分析</td>
+<td>语法错误、代码风格</td>
+<td>生成后即时</td>
+<td>ESLint, Biome, Ruff</td>
+<td>语法 100%, 语义 ~30%</td>
+</tr>
+<tr>
+<td>类型检查</td>
+<td>类型不匹配、接口违规</td>
+<td>生成后即时</td>
+<td>TypeScript tsc, mypy</td>
+<td>~50% 的语义错误</td>
+</tr>
+<tr>
+<td>单元测试</td>
+<td>函数级逻辑正确性</td>
+<td>编辑后自动触发</td>
+<td>Vitest, pytest, Jest</td>
+<td>取决于已有测试覆盖</td>
+</tr>
+<tr>
+<td>集成测试</td>
+<td>模块交互正确性</td>
+<td>任务完成后</td>
+<td>Playwright, Cypress</td>
+<td>端到端行为</td>
+</tr>
+<tr>
+<td>形式化验证</td>
+<td>数学级正确性证明</td>
+<td>关键路径</td>
+<td>TLA+, Alloy</td>
+<td>理论上 100%</td>
+</tr>
+</tbody></table>
+<h2 id="代码幻觉的分类与成因">代码幻觉的分类与成因</h2><p>代码幻觉与自然语言幻觉有本质区别：自然语言的幻觉可能只是&quot;信息不准确&quot;，但代码的幻觉直接导致程序崩溃、数据损坏或安全漏洞。理解幻觉的分类和成因，是设计可靠性保障机制的前提。</p>
+<p><strong>API 幻觉</strong>是最常见的代码幻觉类型。模型生成了不存在的函数名、错误的参数顺序或已废弃的 API 调用。根本原因是训练数据中的 API 版本滞后，以及模型无法区分不同版本的 API 签名。</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="fs.readFile('data.json', 'utf-8', (err, data) =&gt; {
+  const parsed = JSON.parse(data);
+  const result = parsed.flatMap((item) =&gt; item.tags.toSorted());
+});"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">fs.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">readFile</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">'data.json'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">'utf-8'</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, (</span><span style="color:#E36209;--shiki-dark:#FFAB70">err</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">data</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> parsed</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> JSON</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">parse</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(data);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> result</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> parsed.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">flatMap</span><span style="color:#24292E;--shiki-dark:#E1E4E8">((</span><span style="color:#E36209;--shiki-dark:#FFAB70">item</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">=></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> item.tags.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">toSorted</span><span style="color:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">});</span></span></code></pre></div><p>上面的代码看起来合理，但 <code>Array.prototype.toSorted()</code> 是 ES2023 引入的方法，在 Node.js 18 之前不可用。模型不了解目标运行时环境的 API 兼容性，就会生成这类&quot;看起来正确但运行时出错&quot;的代码。</p>
+<p><strong>逻辑幻觉</strong>指代码语法正确、类型检查通过，但业务逻辑有误。例如在实现分页时使用 <code>offset</code> 而非 <code>cursor</code> 方式，虽然功能上&quot;能用&quot;，但在高并发场景下会导致数据重复或遗漏。这类错误最难被自动检测，通常需要领域知识才能发现。</p>
+<p><strong>依赖幻觉</strong>指模型引入了项目中未安装的 npm 包，或者引用了不存在的内部模块路径。</p>
+<p><strong>上下文幻觉</strong>指模型忽略了已有代码的约束，生成了与项目风格不一致或与已有逻辑冲突的代码。例如项目使用 <code>camelCase</code> 命名但生成了 <code>snake_case</code>，或者项目已有一个 <code>formatDate</code> 工具函数但模型又写了一个功能重复的实现。</p>
+<table>
+<thead>
+<tr>
+<th>幻觉类型</th>
+<th>发生频率</th>
+<th>危害程度</th>
+<th>可自动检测性</th>
+<th>主要检测手段</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>API 幻觉</td>
+<td>高</td>
+<td>中（运行时崩溃）</td>
+<td>高</td>
+<td>类型检查 + 构建</td>
+</tr>
+<tr>
+<td>逻辑幻觉</td>
+<td>中</td>
+<td>高（隐蔽 bug）</td>
+<td>低</td>
+<td>测试 + 人工审查</td>
+</tr>
+<tr>
+<td>依赖幻觉</td>
+<td>中</td>
+<td>低（构建失败）</td>
+<td>高</td>
+<td>包管理器 + import 分析</td>
+</tr>
+<tr>
+<td>上下文幻觉</td>
+<td>高</td>
+<td>中（技术债）</td>
+<td>中</td>
+<td>Lint 规则 + AST 分析</td>
+</tr>
+</tbody></table>
+<h2 id="多层验证防线">多层验证防线</h2><p>可靠的自主编码系统不依赖单一验证手段，而是构建多层防线，让不同类型的错误在不同层被拦截。</p>
+<p><strong>第一层：静态分析与格式化</strong>。在代码生成后立即运行 Lint 工具和格式化器。这一层的成本极低（毫秒级），能捕获语法错误、未使用变量、格式不一致等表面问题。ESLint 配合 TypeScript 插件能检测到部分类型相关的问题。</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="interface VerificationPipeline {
+  layers: VerificationLayer[];
+
+  run(generatedCode: string, context: CodeContext): Promise&lt;VerificationResult&gt;;
+}
+
+interface VerificationLayer {
+  name: string;
+  priority: number;
+  timeout: number;
+  run(code: string): Promise&lt;LayerResult&gt;;
+}
+
+interface LayerResult {
+  passed: boolean;
+  errors: DiagnosticError[];
+  fixSuggestions: FixSuggestion[];
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> VerificationPipeline</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  layers</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> VerificationLayer</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  run</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">generatedCode</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#E36209;--shiki-dark:#FFAB70">context</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> CodeContext</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">VerificationResult</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> VerificationLayer</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  name</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  priority</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  timeout</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">  run</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">code</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">LayerResult</span><span style="color:#24292E;--shiki-dark:#E1E4E8">>;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> LayerResult</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  passed</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> boolean</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  errors</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> DiagnosticError</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  fixSuggestions</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> FixSuggestion</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><p><strong>第二层：类型检查</strong>。运行 TypeScript 编译器（<code>tsc --noEmit</code>）或 mypy 对生成代码进行完整的类型检查。这一层能捕获 API 幻觉的大部分——如果调用了不存在的方法或传递了错误类型的参数，类型检查器会报错。在强类型项目中，类型检查是性价比最高的验证层。</p>
+<p><strong>第三层：测试执行</strong>。运行项目已有的测试套件，验证生成的代码没有破坏已有功能（回归测试）。如果 Agent 同时生成了新的测试用例，还会运行新测试来验证新功能的正确性。</p>
+<p><strong>第四层：构建验证</strong>。执行完整的项目构建流程，验证生成的代码能够通过编译、打包和产物生成。这一层能捕获模块依赖错误、循环引用等结构性问题。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    subgraph &quot;验证防线&quot;&#10;        L1[静态分析&lt;br/&gt;成本: 极低&lt;br/&gt;耗时: &lt;1s] --&gt; L2[类型检查&lt;br/&gt;成本: 低&lt;br/&gt;耗时: 2-10s]&#10;        L2 --&gt; L3[测试执行&lt;br/&gt;成本: 中&lt;br/&gt;耗时: 10-60s]&#10;        L3 --&gt; L4[构建验证&lt;br/&gt;成本: 高&lt;br/&gt;耗时: 30-120s]&#10;    end"></pre><h2 id="write-test-fix-循环">Write-Test-Fix 循环</h2><p>Write-Test-Fix（写—测—修）循环是当前自主编码系统实现可靠性的核心模式。其本质是将&quot;试错&quot;过程自动化：AI 生成代码后，通过运行测试获取具体的错误反馈，然后基于错误信息修复代码，直到所有验证通过。</p>
+<p>一个典型的 Write-Test-Fix 循环包含以下步骤：</p>
+<ol>
+<li><strong>Write</strong>：Agent 根据任务需求生成代码变更</li>
+<li><strong>Test</strong>：自动运行验证管线（lint → 类型检查 → 测试 → 构建）</li>
+<li><strong>Analyze</strong>：如果验证失败，解析错误信息，定位失败原因</li>
+<li><strong>Fix</strong>：基于错误分析生成修复补丁</li>
+<li><strong>Re-Test</strong>：重新运行验证管线，检查修复是否有效</li>
+<li><strong>Iterate</strong>：如果仍有失败，重复 3-5 步，直到通过或达到最大重试次数</li>
+</ol>
+<div class="code-block-wrapper" data-lang="typescript" data-code="interface WriteTestFixLoop {
+  maxRetries: number
+  currentAttempt: number
+
+  async execute(task: CodingTask): Promise&lt;LoopResult&gt; {
+    let code = await this.generate(task)
+
+    for (let i = 0; i &lt; this.maxRetries; i++) {
+      const result = await this.verify(code)
+      if (result.allPassed) return { success: true, code, attempts: i + 1 }
+
+      const analysis = await this.analyzeFailure(result.errors)
+      code = await this.fix(code, analysis)
+    }
+
+    return { success: false, code, attempts: this.maxRetries }
+  }
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> WriteTestFixLoop</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  maxRetries</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  currentAttempt</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  async</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> execute</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">task</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> CodingTask</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#6F42C1;--shiki-dark:#B392F0">LoopResult</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    let</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> code </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">generate</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(task)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">let</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> i </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; i </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.maxRetries; i</span><span style="color:#D73A49;--shiki-dark:#F97583">++</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> result</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">verify</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(code)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (result.allPassed) </span><span style="color:#D73A49;--shiki-dark:#F97583">return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { success: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">true</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, code, attempts: i </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">      const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> analysis</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">analyzeFailure</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(result.errors)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">      code </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">fix</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(code, analysis)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { success: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">false</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, code, attempts: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">this</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.maxRetries }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><p>这一循环的关键参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>推荐值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>最大重试次数</td>
+<td>3-5</td>
+<td>超过 5 次通常说明方案有根本性问题</td>
+</tr>
+<tr>
+<td>单次修复范围</td>
+<td>≤3 个文件</td>
+<td>避免&quot;修一个 bug 引入三个 bug&quot;</td>
+</tr>
+<tr>
+<td>超时时间</td>
+<td>120-300s</td>
+<td>包含所有验证步骤的总时间</td>
+</tr>
+<tr>
+<td>回退策略</td>
+<td>Git stash</td>
+<td>重试失败后回退到初始状态</td>
+</tr>
+<tr>
+<td>升级策略</td>
+<td>切换模型/人类介入</td>
+<td>连续失败 3 次后升级处理</td>
+</tr>
+</tbody></table>
+<h2 id="基准测试与评估体系">基准测试与评估体系</h2><p>评估 AI 编码系统的可靠性需要标准化的基准测试。目前业界主要有以下几个基准：</p>
+<p><strong>HumanEval</strong> 是 OpenAI 提出的代码生成基准，包含 164 个 Python 编程问题。每个问题有函数签名、docstring 和测试用例，模型需要生成函数体。评估指标是 pass@k（k 个候选中至少一个通过全部测试的概率）。HumanEval 的问题相对简单，主要测试算法和数据结构能力。</p>
+<p><strong>SWE-bench</strong> 是目前最权威的自主编码基准。它从 12 个流行的 Python 开源项目（如 Django、scikit-learn、sympy）中提取真实的 GitHub Issue 和对应的 Pull Request，要求 Agent 自主修复 Issue。评估标准是修复后是否通过相关测试。SWE-bench 的挑战在于：Agent 需要理解真实项目的代码库结构、定位问题文件、理解上下文并生成正确的补丁。</p>
+<p><strong>SWE-bench Verified</strong> 是 SWE-bench 的高质量子集，由人工验证确保每个问题确实是可复现且有明确解决方案的。消除了原始数据集中模糊或多解的问题。</p>
+<table>
+<thead>
+<tr>
+<th>基准测试</th>
+<th>任务类型</th>
+<th>规模</th>
+<th>难度</th>
+<th>评估指标</th>
+<th>当前最佳</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>HumanEval</td>
+<td>函数生成</td>
+<td>164 题</td>
+<td>简单</td>
+<td>pass@1</td>
+<td>~95%</td>
+</tr>
+<tr>
+<td>MBPP</td>
+<td>函数生成</td>
+<td>974 题</td>
+<td>简单-中等</td>
+<td>pass@1</td>
+<td>~90%</td>
+</tr>
+<tr>
+<td>SWE-bench</td>
+<td>Issue 修复</td>
+<td>2294 题</td>
+<td>困难</td>
+<td>解决率</td>
+<td>~50%</td>
+</tr>
+<tr>
+<td>SWE-bench Verified</td>
+<td>Issue 修复</td>
+<td>500 题</td>
+<td>困难（标准化）</td>
+<td>解决率</td>
+<td>~65%</td>
+</tr>
+<tr>
+<td>Aider Polyglot</td>
+<td>多语言编辑</td>
+<td>225 题</td>
+<td>中等</td>
+<td>编辑正确率</td>
+<td>~75%</td>
+</tr>
+</tbody></table>
+<h2 id="置信度评分与自动化决策">置信度评分与自动化决策</h2><p>不是所有 AI 生成的代码都需要同等程度的人类审查。置信度评分系统根据生成过程的各项指标，为每次代码变更分配一个可信度分数，用于自动化决策：高置信度的变更可以自动合并，低置信度的变更需要人类审查。</p>
+<p>置信度的计算因子包括：</p>
+<p><strong>验证通过率</strong>：通过了多少层验证、测试覆盖率是多少。全部验证通过且测试覆盖率 &gt; 80% 给予高分。</p>
+<p><strong>修复次数</strong>：一次生成就通过验证的代码，其可信度远高于经过 3 次 Write-Test-Fix 循环才通过的代码。</p>
+<p><strong>变更规模</strong>：小范围的局部修改（如修复一个 typo、添加一个字段）比大规模的跨文件重构更可信。</p>
+<p><strong>模式匹配</strong>：变更是否符合常见的编码模式（如添加 CRUD 接口、实现标准接口）。模式化的变更更可信。</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="interface ConfidenceScore {
+  overall: number;
+  factors: {
+    verificationPass: number;
+    fixAttempts: number;
+    changeScope: number;
+    patternMatch: number;
+    modelConfidence: number;
+  };
+}
+
+function calculateConfidence(context: GenerationContext): ConfidenceScore {
+  const verificationPass = context.allTestsPassed ? 0.9 : 0.3;
+  const fixAttempts = Math.max(0, 1 - context.retryCount * 0.2);
+  const changeScope = context.filesChanged &lt;= 2 ? 0.8 : 0.5;
+  const patternMatch = context.isCommonPattern ? 0.85 : 0.6;
+  const modelConfidence = context.modelLogProb;
+
+  const overall =
+    verificationPass * 0.35 + fixAttempts * 0.2 + changeScope * 0.15 + patternMatch * 0.15 + modelConfidence * 0.15;
+
+  return { overall, factors: { verificationPass, fixAttempts, changeScope, patternMatch, modelConfidence } };
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">interface</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ConfidenceScore</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  overall</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">  factors</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    verificationPass</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    fixAttempts</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    changeScope</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    patternMatch</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">    modelConfidence</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> number</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> calculateConfidence</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">context</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> GenerationContext</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> ConfidenceScore</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> verificationPass</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> context.allTestsPassed </span><span style="color:#D73A49;--shiki-dark:#F97583">?</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.9</span><span style="color:#D73A49;--shiki-dark:#F97583"> :</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> fixAttempts</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Math.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">max</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span><span style="color:#D73A49;--shiki-dark:#F97583"> -</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> context.retryCount </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> changeScope</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> context.filesChanged </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#D73A49;--shiki-dark:#F97583"> ?</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.8</span><span style="color:#D73A49;--shiki-dark:#F97583"> :</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.5</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> patternMatch</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> context.isCommonPattern </span><span style="color:#D73A49;--shiki-dark:#F97583">?</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.85</span><span style="color:#D73A49;--shiki-dark:#F97583"> :</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.6</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> modelConfidence</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> context.modelLogProb;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> overall</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    verificationPass </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.35</span><span style="color:#D73A49;--shiki-dark:#F97583"> +</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> fixAttempts </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.2</span><span style="color:#D73A49;--shiki-dark:#F97583"> +</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> changeScope </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.15</span><span style="color:#D73A49;--shiki-dark:#F97583"> +</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> patternMatch </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.15</span><span style="color:#D73A49;--shiki-dark:#F97583"> +</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> modelConfidence </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.15</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> { overall, factors: { verificationPass, fixAttempts, changeScope, patternMatch, modelConfidence } };</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><table>
+<thead>
+<tr>
+<th>置信度范围</th>
+<th>处理策略</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0.9 - 1.0</td>
+<td>自动合并</td>
+<td>简单修复、格式化、类型修正</td>
+</tr>
+<tr>
+<td>0.7 - 0.9</td>
+<td>快速审查（仅看 diff）</td>
+<td>中等复杂度变更</td>
+</tr>
+<tr>
+<td>0.5 - 0.7</td>
+<td>详细审查（看 diff + 上下文）</td>
+<td>复杂变更或新功能</td>
+</tr>
+<tr>
+<td>0.0 - 0.5</td>
+<td>人类重写或拒绝</td>
+<td>大规模重构、安全相关</td>
+</tr>
+</tbody></table>
+<h2 id="形式化验证的前景">形式化验证的前景</h2><p>形式化验证是可靠性保证的终极形态——通过数学证明来确保代码的正确性，而非依赖有限的测试用例。虽然目前形式化验证在通用软件开发中的应用仍然有限，但 AI 的介入正在降低其门槛。</p>
+<p><strong>AI 辅助的不变式生成</strong>：Agent 可以分析代码逻辑，自动生成循环不变式和前后置条件。这些不变式可以被形式化验证工具（如 Dafny、SPARK Ada）检查。</p>
+<p>**基于属性的测试（Property-Based Testing）**是形式化验证的轻量替代。通过定义代码应满足的属性（如&quot;排序后的数组是递增的&quot;），自动生成大量随机测试用例进行验证。</p>
+<p><strong>合约式编程</strong>在 AI 编码场景下重获生机。Agent 可以为生成的每个函数附加前置条件、后置条件和不变式，运行时自动检查。</p>
+<p>当前阶段，形式化验证最适合应用于<strong>关键路径代码</strong>——金融计算、权限控制、数据一致性等领域，而非所有生成代码。随着 AI 在形式化推理方面的能力提升，这一技术有望从&quot;专家工具&quot;演变为&quot;默认验证层&quot;。</p>
+<h2 id="小结">小结</h2><ul>
+<li><strong>代码幻觉是自主编码的核心挑战</strong>，包括 API 幻觉、逻辑幻觉、依赖幻觉和上下文幻觉四类。</li>
+<li><strong>多层验证防线</strong>（静态分析→类型检查→测试→构建）是当前最有效的质量保障体系，不同层拦截不同类型的错误。</li>
+<li><strong>Write-Test-Fix 循环</strong>将试错过程自动化，通过迭代修复逼近正确实现，是当前自主编码可靠性的核心模式。</li>
+<li><strong>SWE-bench</strong> 是评估自主编码可靠性的权威基准，当前最佳系统的解决率约 50-65%。</li>
+<li><strong>置信度评分</strong>为每次代码变更分配可信度分数，实现分级审查策略，平衡效率与安全。</li>
+<li><strong>形式化验证</strong>是可靠性的终极形态，AI 辅助的不变式生成正在降低其应用门槛。</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../ai-systems-deep-dive/ai-autonomous-coding/autonomous-coding-foundations/ai-agent-coding-architecture.html"><span class="label">Previous</span>AI 编码 Agent 的核心架构</a><a class="next" href="../../../ai-systems-deep-dive/ai-autonomous-coding/autonomous-coding-foundations/autonomous-coding-landscape.html"><span class="label">Next</span>自主编码工具与平台全景</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#代码幻觉的分类与成因" data-outline-link="代码幻觉的分类与成因">代码幻觉的分类与成因</a></li><li class="depth-2"><a href="#多层验证防线" data-outline-link="多层验证防线">多层验证防线</a></li><li class="depth-2"><a href="#write-test-fix-循环" data-outline-link="write-test-fix-循环">Write-Test-Fix 循环</a></li><li class="depth-2"><a href="#基准测试与评估体系" data-outline-link="基准测试与评估体系">基准测试与评估体系</a></li><li class="depth-2"><a href="#置信度评分与自动化决策" data-outline-link="置信度评分与自动化决策">置信度评分与自动化决策</a></li><li class="depth-2"><a href="#形式化验证的前景" data-outline-link="形式化验证的前景">形式化验证的前景</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

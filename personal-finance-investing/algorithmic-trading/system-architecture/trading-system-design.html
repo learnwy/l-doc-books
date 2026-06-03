@@ -1,0 +1,863 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>交易系统架构设计 · 个人理财与量化投资</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:个人理财与量化投资" data-pagefind-meta="slug:personal-finance-investing">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">个人理财与量化投资</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item" href="../../../cs-fundamentals/index.html" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item active" href="../../../personal-finance-investing/index.html" aria-current="page" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../personal-finance-investing/index.html">个人理财与量化投资</a><a class="back-to-hubs" href="../../../personal-finance-investing/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../personal-finance-investing/algorithmic-trading/index.html">算法交易系统</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="personal-finance-investing"><li class="chapter"><details class="folder-collapse" data-sb-key="personal-finance-investing:folder:algorithmic-trading/trading-strategies"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../personal-finance-investing/algorithmic-trading/trading-strategies/index.html">交易策略</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../personal-finance-investing/algorithmic-trading/trading-strategies/momentum-strategies.html">动量与趋势跟踪策略</a></li><li class="leaf"><a class="leaf-title" href="../../../personal-finance-investing/algorithmic-trading/trading-strategies/mean-reversion.html">均值回归策略</a></li><li class="leaf"><a class="leaf-title" href="../../../personal-finance-investing/algorithmic-trading/trading-strategies/statistical-arbitrage.html">统计套利与配对交易</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="personal-finance-investing:folder:algorithmic-trading/execution-algorithms"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../personal-finance-investing/algorithmic-trading/execution-algorithms/index.html">执行算法</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../personal-finance-investing/algorithmic-trading/execution-algorithms/twap-vwap.html">TWAP/VWAP 算法与变体</a></li><li class="leaf"><a class="leaf-title" href="../../../personal-finance-investing/algorithmic-trading/execution-algorithms/implementation-shortfall.html">实施缺口与最优执行</a></li><li class="leaf"><a class="leaf-title" href="../../../personal-finance-investing/algorithmic-trading/execution-algorithms/smart-order-routing.html">智能订单路由</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="personal-finance-investing:folder:algorithmic-trading/system-architecture" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../personal-finance-investing/algorithmic-trading/system-architecture/index.html">系统架构</a></summary><ul><li class="leaf"><a class="leaf-title active" href="../../../personal-finance-investing/algorithmic-trading/system-architecture/trading-system-design.html">交易系统架构设计</a></li><li class="leaf"><a class="leaf-title" href="../../../personal-finance-investing/algorithmic-trading/system-architecture/backtesting-framework.html">回测框架与偏差控制</a></li><li class="leaf"><a class="leaf-title" href="../../../personal-finance-investing/algorithmic-trading/system-architecture/risk-controls.html">实时风控与熔断机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="personal-finance-investing:folder:algorithmic-trading/advanced-trading"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../personal-finance-investing/algorithmic-trading/advanced-trading/index.html">高级交易</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../personal-finance-investing/algorithmic-trading/advanced-trading/reinforcement-learning-trading.html">强化学习在交易中的应用</a></li><li class="leaf"><a class="leaf-title" href="../../../personal-finance-investing/algorithmic-trading/advanced-trading/market-making.html">做市策略与库存管理</a></li><li class="leaf"><a class="leaf-title" href="../../../personal-finance-investing/algorithmic-trading/advanced-trading/crypto-quant.html">加密货币量化交易</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part III · 量化与市场结构</span><span>算法交易系统</span><span>系统架构</span><span>交易系统架构设计</span></nav>
+    <article class="content prose"><h1 id="交易系统架构设计">交易系统架构设计</h1><h2 id="概述">概述</h2><p>一个生产级算法交易系统是高度复杂的分布式实时系统。它需要在微秒到毫秒级的时间窗口内完成市场数据接收、策略信号计算、风控检查和订单发送的全链路处理。系统架构的设计直接决定了策略的执行质量和运营可靠性。本文梳理交易系统的核心架构模式，从整体分层设计到关键子系统的实现细节。</p>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TB&#10;    subgraph 交易系统分层架构&#10;        A[市场数据层] --&gt; B[策略引擎层]&#10;        B --&gt; C[风控层]&#10;        C --&gt; D[订单管理层]&#10;        D --&gt; E[连接层]&#10;        E --&gt; F[交易所/经纪商]&#10;&#10;        G[监控与运维] --&gt; A&#10;        G --&gt; B&#10;        G --&gt; C&#10;        G --&gt; D&#10;        G --&gt; E&#10;    end"></pre><h2 id="事件驱动架构">事件驱动架构</h2><h3 id="核心设计模式">核心设计模式</h3><p>现代交易系统几乎普遍采用事件驱动架构（Event-Driven Architecture, EDA）。相比传统的轮询模式，事件驱动架构在延迟、吞吐量和可扩展性方面都有显著优势。</p>
+<div class="code-block-wrapper" data-lang="python" data-code="from dataclasses import dataclass, field
+from enum import Enum
+from typing import Callable
+from collections import defaultdict
+import time
+
+class EventType(Enum):
+    TICK = &quot;tick&quot;
+    BAR = &quot;bar&quot;
+    ORDER_UPDATE = &quot;order_update&quot;
+    FILL = &quot;fill&quot;
+    SIGNAL = &quot;signal&quot;
+    RISK_ALERT = &quot;risk_alert&quot;
+    TIMER = &quot;timer&quot;
+    SYSTEM = &quot;system&quot;
+
+@dataclass
+class Event:
+    event_type: EventType
+    timestamp: float
+    data: dict
+    source: str = &quot;&quot;
+    priority: int = 0
+
+class EventBus:
+    &quot;&quot;&quot;事件总线&quot;&quot;&quot;
+
+    def __init__(self):
+        self._handlers: dict[EventType, list[Callable]] = defaultdict(list)
+        self._event_queue: list[Event] = []
+        self._metrics = {&quot;total_events&quot;: 0, &quot;total_latency_us&quot;: 0}
+
+    def subscribe(self, event_type: EventType, handler: Callable):
+        self._handlers[event_type].append(handler)
+
+    def publish(self, event: Event):
+        self._event_queue.append(event)
+        self._metrics[&quot;total_events&quot;] += 1
+
+    def process(self):
+        while self._event_queue:
+            event = self._event_queue.pop(0)
+            start = time.perf_counter_ns()
+            for handler in self._handlers.get(event.event_type, []):
+                handler(event)
+            elapsed_us = (time.perf_counter_ns() - start) / 1000
+            self._metrics[&quot;total_latency_us&quot;] += elapsed_us"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> dataclasses </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> dataclass, field</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> enum </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Enum</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> typing </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Callable</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> collections </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> defaultdict</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> time</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> EventType</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Enum</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    TICK</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "tick"</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    BAR</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "bar"</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    ORDER_UPDATE</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "order_update"</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    FILL</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "fill"</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    SIGNAL</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "signal"</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    RISK_ALERT</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "risk_alert"</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    TIMER</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "timer"</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    SYSTEM</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "system"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">@dataclass</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Event</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    event_type: EventType</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    timestamp: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">float</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    data: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">dict</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    source: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> ""</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    priority: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">int</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> EventBus</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">    """事件总线"""</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._handlers: dict[EventType, list[Callable]] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> defaultdict(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">list</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._event_queue: list[Event] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> []</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._metrics </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"total_events"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"total_latency_us"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> subscribe</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, event_type: EventType, handler: Callable):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._handlers[event_type].append(handler)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> publish</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, event: Event):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._event_queue.append(event)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._metrics[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"total_events"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">+=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> process</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        while</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._event_queue:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            event </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._event_queue.pop(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            start </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> time.perf_counter_ns()</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> handler </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._handlers.get(event.event_type, []):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                handler(event)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            elapsed_us </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (time.perf_counter_ns() </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> start) </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1000</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._metrics[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"total_latency_us"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">+=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> elapsed_us</span></span></code></pre></div><h3 id="事件处理管线">事件处理管线</h3><pre class="mermaid" data-diagram-type="graph" data-source="graph LR&#10;    A[市场数据 Feed] --&gt;|Tick 事件| B[数据标准化]&#10;    B --&gt;|标准化事件| C[策略引擎]&#10;    C --&gt;|信号事件| D[风控检查]&#10;    D --&gt;|通过| E[订单管理]&#10;    D --&gt;|拒绝| F[告警]&#10;    E --&gt;|订单事件| G[执行引擎]&#10;    G --&gt;|成交事件| H[持仓更新]&#10;    H --&gt;|持仓事件| C"></pre><h2 id="市场数据子系统">市场数据子系统</h2><h3 id="数据-feed-处理">数据 Feed 处理</h3><div class="code-block-wrapper" data-lang="python" data-code="from collections import deque
+
+@dataclass
+class MarketTick:
+    symbol: str
+    timestamp: float
+    bid: float
+    ask: float
+    bid_size: int
+    ask_size: int
+    last_price: float
+    last_size: int
+    exchange: str
+
+class MarketDataHandler:
+    &quot;&quot;&quot;市场数据处理器&quot;&quot;&quot;
+
+    def __init__(self, max_symbols: int = 10000):
+        self._latest: dict[str, MarketTick] = {}
+        self._tick_buffers: dict[str, deque] = defaultdict(lambda: deque(maxlen=10000))
+        self._bar_builders: dict[str, dict] = {}
+        self._subscribers: list[Callable] = []
+
+    def on_tick(self, tick: MarketTick):
+        self._latest[tick.symbol] = tick
+        self._tick_buffers[tick.symbol].append(tick)
+        self._update_bar(tick)
+        for subscriber in self._subscribers:
+            subscriber(tick)
+
+    def _update_bar(self, tick: MarketTick):
+        symbol = tick.symbol
+        if symbol not in self._bar_builders:
+            self._bar_builders[symbol] = {
+                &quot;open&quot;: tick.last_price,
+                &quot;high&quot;: tick.last_price,
+                &quot;low&quot;: tick.last_price,
+                &quot;close&quot;: tick.last_price,
+                &quot;volume&quot;: tick.last_size,
+                &quot;start_time&quot;: tick.timestamp,
+            }
+        else:
+            bar = self._bar_builders[symbol]
+            bar[&quot;high&quot;] = max(bar[&quot;high&quot;], tick.last_price)
+            bar[&quot;low&quot;] = min(bar[&quot;low&quot;], tick.last_price)
+            bar[&quot;close&quot;] = tick.last_price
+            bar[&quot;volume&quot;] += tick.last_size
+
+    def get_snapshot(self, symbol: str) -&gt; dict:
+        tick = self._latest.get(symbol)
+        if not tick:
+            return None
+        return {
+            &quot;symbol&quot;: symbol,
+            &quot;bid&quot;: tick.bid,
+            &quot;ask&quot;: tick.ask,
+            &quot;mid&quot;: (tick.bid + tick.ask) / 2,
+            &quot;spread&quot;: tick.ask - tick.bid,
+            &quot;last&quot;: tick.last_price,
+        }"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> collections </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> deque</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">@dataclass</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> MarketTick</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    symbol: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    timestamp: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">float</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    bid: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">float</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    ask: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">float</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    bid_size: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">int</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    ask_size: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">int</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    last_price: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">float</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    last_size: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">int</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    exchange: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> MarketDataHandler</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">    """市场数据处理器"""</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, max_symbols: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">int</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 10000</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._latest: dict[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, MarketTick] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {}</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._tick_buffers: dict[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, deque] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> defaultdict(</span><span style="color:#D73A49;--shiki-dark:#F97583">lambda</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: deque(</span><span style="color:#E36209;--shiki-dark:#FFAB70">maxlen</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">10000</span><span style="color:#24292E;--shiki-dark:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._bar_builders: dict[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">dict</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {}</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._subscribers: list[Callable] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> []</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> on_tick</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, tick: MarketTick):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._latest[tick.symbol] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> tick</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._tick_buffers[tick.symbol].append(tick)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._update_bar(tick)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> subscriber </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._subscribers:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            subscriber(tick)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> _update_bar</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, tick: MarketTick):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        symbol </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> tick.symbol</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> symbol </span><span style="color:#D73A49;--shiki-dark:#F97583">not</span><span style="color:#D73A49;--shiki-dark:#F97583"> in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._bar_builders:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._bar_builders[symbol] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">                "open"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: tick.last_price,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">                "high"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: tick.last_price,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">                "low"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: tick.last_price,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">                "close"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: tick.last_price,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">                "volume"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: tick.last_size,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">                "start_time"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: tick.timestamp,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        else</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            bar </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._bar_builders[symbol]</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            bar[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"high"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> max</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(bar[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"high"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">], tick.last_price)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            bar[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"low"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> min</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(bar[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"low"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">], tick.last_price)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            bar[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"close"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> tick.last_price</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            bar[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"volume"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">+=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> tick.last_size</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> get_snapshot</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, symbol: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) -> </span><span style="color:#005CC5;--shiki-dark:#79B8FF">dict</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        tick </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._latest.get(symbol)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#D73A49;--shiki-dark:#F97583"> not</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> tick:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> None</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            "symbol"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: symbol,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            "bid"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: tick.bid,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            "ask"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: tick.ask,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            "mid"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: (tick.bid </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> tick.ask) </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            "spread"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: tick.ask </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> tick.bid,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            "last"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: tick.last_price,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        }</span></span></code></pre></div><h3 id="数据质量控制">数据质量控制</h3><table>
+<thead>
+<tr>
+<th>检查项</th>
+<th>描述</th>
+<th>处理方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>时间戳顺序</td>
+<td>确保数据时间单调递增</td>
+<td>丢弃乱序数据或重排序</td>
+</tr>
+<tr>
+<td>价格合理性</td>
+<td>价格在合理范围内</td>
+<td>过滤异常值</td>
+</tr>
+<tr>
+<td>买卖价差</td>
+<td>买价不高于卖价</td>
+<td>标记为异常</td>
+</tr>
+<tr>
+<td>数据缺失</td>
+<td>检测 Feed 中断</td>
+<td>切换备用源</td>
+</tr>
+<tr>
+<td>重复数据</td>
+<td>检测重复 Tick</td>
+<td>去重</td>
+</tr>
+</tbody></table>
+<div class="code-block-wrapper" data-lang="python" data-code="class DataQualityChecker:
+    &quot;&quot;&quot;数据质量检查&quot;&quot;&quot;
+
+    def __init__(self, max_spread_bps: float = 500, max_price_change_pct: float = 10):
+        self.max_spread_bps = max_spread_bps
+        self.max_price_change = max_price_change_pct / 100
+        self._last_prices: dict[str, float] = {}
+
+    def validate_tick(self, tick: MarketTick) -&gt; tuple[bool, str]:
+        if tick.bid &gt; tick.ask:
+            return False, &quot;crossed_market&quot;
+
+        spread_bps = (tick.ask - tick.bid) / tick.mid_price * 10000 if tick.bid &gt; 0 else 0
+        if spread_bps &gt; self.max_spread_bps:
+            return False, &quot;excessive_spread&quot;
+
+        if tick.symbol in self._last_prices:
+            last = self._last_prices[tick.symbol]
+            change = abs(tick.last_price - last) / last
+            if change &gt; self.max_price_change:
+                return False, &quot;excessive_price_change&quot;
+
+        self._last_prices[tick.symbol] = tick.last_price
+        return True, &quot;ok&quot;"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> DataQualityChecker</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">    """数据质量检查"""</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, max_spread_bps: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">float</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 500</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, max_price_change_pct: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">float</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 10</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.max_spread_bps </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> max_spread_bps</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.max_price_change </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> max_price_change_pct </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 100</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._last_prices: dict[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">float</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> validate_tick</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, tick: MarketTick) -> tuple[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">bool</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> tick.bid </span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> tick.ask:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> False</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"crossed_market"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        spread_bps </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (tick.ask </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> tick.bid) </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> tick.mid_price </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 10000</span><span style="color:#D73A49;--shiki-dark:#F97583"> if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> tick.bid </span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#D73A49;--shiki-dark:#F97583"> else</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> spread_bps </span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.max_spread_bps:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> False</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"excessive_spread"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> tick.symbol </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._last_prices:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            last </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._last_prices[tick.symbol]</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            change </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> abs</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(tick.last_price </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> last) </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> last</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> change </span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.max_price_change:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">                return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> False</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"excessive_price_change"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._last_prices[tick.symbol] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> tick.last_price</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> True</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"ok"</span></span></code></pre></div><h2 id="订单管理系统-oms">订单管理系统（OMS）</h2><h3 id="oms-核心设计">OMS 核心设计</h3><div class="code-block-wrapper" data-lang="python" data-code="from enum import Enum
+import uuid
+
+class OrderStatus(Enum):
+    PENDING = &quot;pending&quot;
+    SUBMITTED = &quot;submitted&quot;
+    PARTIALLY_FILLED = &quot;partially_filled&quot;
+    FILLED = &quot;filled&quot;
+    CANCELLED = &quot;cancelled&quot;
+    REJECTED = &quot;rejected&quot;
+
+@dataclass
+class Order:
+    order_id: str = field(default_factory=lambda: str(uuid.uuid4())[:8])
+    symbol: str = &quot;&quot;
+    side: str = &quot;&quot;
+    quantity: int = 0
+    order_type: str = &quot;limit&quot;
+    price: float = 0.0
+    status: OrderStatus = OrderStatus.PENDING
+    filled_quantity: int = 0
+    avg_fill_price: float = 0.0
+    created_at: float = 0.0
+    updated_at: float = 0.0
+    strategy_id: str = &quot;&quot;
+    parent_order_id: str = &quot;&quot;
+
+class OrderManagementSystem:
+    &quot;&quot;&quot;订单管理系统&quot;&quot;&quot;
+
+    def __init__(self):
+        self._orders: dict[str, Order] = {}
+        self._active_orders: dict[str, Order] = {}
+        self._positions: dict[str, dict] = defaultdict(lambda: {&quot;quantity&quot;: 0, &quot;avg_price&quot;: 0.0})
+
+    def submit_order(self, order: Order) -&gt; str:
+        order.created_at = time.time()
+        order.status = OrderStatus.SUBMITTED
+        self._orders[order.order_id] = order
+        self._active_orders[order.order_id] = order
+        return order.order_id
+
+    def on_fill(self, order_id: str, fill_qty: int, fill_price: float):
+        order = self._orders.get(order_id)
+        if not order:
+            return
+
+        total_filled = order.filled_quantity + fill_qty
+        order.avg_fill_price = (
+            (order.avg_fill_price * order.filled_quantity + fill_price * fill_qty) / total_filled
+        )
+        order.filled_quantity = total_filled
+        order.updated_at = time.time()
+
+        if total_filled &gt;= order.quantity:
+            order.status = OrderStatus.FILLED
+            self._active_orders.pop(order_id, None)
+        else:
+            order.status = OrderStatus.PARTIALLY_FILLED
+
+        self._update_position(order.symbol, order.side, fill_qty, fill_price)
+
+    def _update_position(self, symbol: str, side: str, qty: int, price: float):
+        pos = self._positions[symbol]
+        direction = 1 if side == &quot;buy&quot; else -1
+        new_qty = pos[&quot;quantity&quot;] + direction * qty
+
+        if pos[&quot;quantity&quot;] == 0:
+            pos[&quot;avg_price&quot;] = price
+        elif (pos[&quot;quantity&quot;] &gt; 0 and side == &quot;buy&quot;) or (pos[&quot;quantity&quot;] &lt; 0 and side == &quot;sell&quot;):
+            total_cost = pos[&quot;avg_price&quot;] * abs(pos[&quot;quantity&quot;]) + price * qty
+            pos[&quot;avg_price&quot;] = total_cost / (abs(pos[&quot;quantity&quot;]) + qty)
+
+        pos[&quot;quantity&quot;] = new_qty
+
+    def cancel_order(self, order_id: str) -&gt; bool:
+        order = self._active_orders.get(order_id)
+        if not order:
+            return False
+        order.status = OrderStatus.CANCELLED
+        order.updated_at = time.time()
+        self._active_orders.pop(order_id, None)
+        return True
+
+    def get_active_orders(self, symbol: str = None) -&gt; list[Order]:
+        if symbol:
+            return [o for o in self._active_orders.values() if o.symbol == symbol]
+        return list(self._active_orders.values())"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> enum </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Enum</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> uuid</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> OrderStatus</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#6F42C1;--shiki-dark:#B392F0">Enum</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    PENDING</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "pending"</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    SUBMITTED</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "submitted"</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    PARTIALLY_FILLED</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "partially_filled"</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    FILLED</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "filled"</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    CANCELLED</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "cancelled"</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">    REJECTED</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "rejected"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">@dataclass</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Order</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    order_id: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> field(</span><span style="color:#E36209;--shiki-dark:#FFAB70">default_factory</span><span style="color:#D73A49;--shiki-dark:#F97583">=lambda</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(uuid.uuid4())[:</span><span style="color:#005CC5;--shiki-dark:#79B8FF">8</span><span style="color:#24292E;--shiki-dark:#E1E4E8">])</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    symbol: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> ""</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    side: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> ""</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    quantity: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">int</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    order_type: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "limit"</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    price: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">float</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.0</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    status: OrderStatus </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> OrderStatus.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">PENDING</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    filled_quantity: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">int</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    avg_fill_price: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">float</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.0</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    created_at: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">float</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.0</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    updated_at: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">float</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.0</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    strategy_id: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> ""</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    parent_order_id: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> ""</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> OrderManagementSystem</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">    """订单管理系统"""</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._orders: dict[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, Order] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {}</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._active_orders: dict[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, Order] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {}</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._positions: dict[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">dict</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> defaultdict(</span><span style="color:#D73A49;--shiki-dark:#F97583">lambda</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: {</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"quantity"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"avg_price"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0.0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">})</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> submit_order</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, order: Order) -> </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        order.created_at </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> time.time()</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        order.status </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> OrderStatus.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">SUBMITTED</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._orders[order.order_id] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> order</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._active_orders[order.order_id] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> order</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> order.order_id</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> on_fill</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, order_id: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, fill_qty: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">int</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, fill_price: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">float</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        order </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._orders.get(order_id)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#D73A49;--shiki-dark:#F97583"> not</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> order:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            return</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        total_filled </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> order.filled_quantity </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> fill_qty</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        order.avg_fill_price </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            (order.avg_fill_price </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> order.filled_quantity </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> fill_price </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> fill_qty) </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> total_filled</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        )</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        order.filled_quantity </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> total_filled</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        order.updated_at </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> time.time()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> total_filled </span><span style="color:#D73A49;--shiki-dark:#F97583">>=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> order.quantity:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            order.status </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> OrderStatus.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">FILLED</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._active_orders.pop(order_id, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">None</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        else</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            order.status </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> OrderStatus.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">PARTIALLY_FILLED</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._update_position(order.symbol, order.side, fill_qty, fill_price)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> _update_position</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, symbol: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, side: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, qty: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">int</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, price: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">float</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        pos </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._positions[symbol]</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        direction </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="color:#D73A49;--shiki-dark:#F97583"> if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> side </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "buy"</span><span style="color:#D73A49;--shiki-dark:#F97583"> else</span><span style="color:#D73A49;--shiki-dark:#F97583"> -</span><span style="color:#005CC5;--shiki-dark:#79B8FF">1</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        new_qty </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> pos[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"quantity"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> direction </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> qty</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> pos[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"quantity"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            pos[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"avg_price"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> price</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        elif</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (pos[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"quantity"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#D73A49;--shiki-dark:#F97583"> and</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> side </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "buy"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) </span><span style="color:#D73A49;--shiki-dark:#F97583">or</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (pos[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"quantity"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">&#x3C;</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="color:#D73A49;--shiki-dark:#F97583"> and</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> side </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "sell"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            total_cost </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> pos[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"avg_price"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> abs</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(pos[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"quantity"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]) </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> price </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> qty</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            pos[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"avg_price"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> total_cost </span><span style="color:#D73A49;--shiki-dark:#F97583">/</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#005CC5;--shiki-dark:#79B8FF">abs</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(pos[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"quantity"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]) </span><span style="color:#D73A49;--shiki-dark:#F97583">+</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> qty)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        pos[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"quantity"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> new_qty</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> cancel_order</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, order_id: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) -> </span><span style="color:#005CC5;--shiki-dark:#79B8FF">bool</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        order </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._active_orders.get(order_id)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#D73A49;--shiki-dark:#F97583"> not</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> order:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> False</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        order.status </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> OrderStatus.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">CANCELLED</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        order.updated_at </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> time.time()</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._active_orders.pop(order_id, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">None</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> True</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> get_active_orders</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, symbol: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> None</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) -> list[Order]:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> symbol:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [o </span><span style="color:#D73A49;--shiki-dark:#F97583">for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> o </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._active_orders.values() </span><span style="color:#D73A49;--shiki-dark:#F97583">if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> o.symbol </span><span style="color:#D73A49;--shiki-dark:#F97583">==</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> symbol]</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> list</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._active_orders.values())</span></span></code></pre></div><h2 id="策略引擎">策略引擎</h2><h3 id="策略框架设计">策略框架设计</h3><div class="code-block-wrapper" data-lang="python" data-code="from abc import ABC, abstractmethod
+
+class StrategyBase(ABC):
+    &quot;&quot;&quot;策略基类&quot;&quot;&quot;
+
+    def __init__(self, strategy_id: str, universe: list[str]):
+        self.strategy_id = strategy_id
+        self.universe = universe
+        self._oms: OrderManagementSystem = None
+        self._data: MarketDataHandler = None
+
+    def attach(self, oms: OrderManagementSystem, data: MarketDataHandler):
+        self._oms = oms
+        self._data = data
+
+    @abstractmethod
+    def on_tick(self, tick: MarketTick):
+        pass
+
+    @abstractmethod
+    def on_bar(self, symbol: str, bar: dict):
+        pass
+
+    @abstractmethod
+    def on_fill(self, order: Order, fill_qty: int, fill_price: float):
+        pass
+
+    def place_order(self, symbol: str, side: str, quantity: int,
+                    order_type: str = &quot;limit&quot;, price: float = 0.0) -&gt; str:
+        order = Order(
+            symbol=symbol, side=side, quantity=quantity,
+            order_type=order_type, price=price, strategy_id=self.strategy_id,
+        )
+        return self._oms.submit_order(order)
+
+class StrategyEngine:
+    &quot;&quot;&quot;策略引擎&quot;&quot;&quot;
+
+    def __init__(self, event_bus: EventBus, oms: OrderManagementSystem,
+                 data: MarketDataHandler):
+        self.event_bus = event_bus
+        self.oms = oms
+        self.data = data
+        self._strategies: dict[str, StrategyBase] = {}
+
+    def register_strategy(self, strategy: StrategyBase):
+        strategy.attach(self.oms, self.data)
+        self._strategies[strategy.strategy_id] = strategy
+        self.event_bus.subscribe(EventType.TICK, lambda e: strategy.on_tick(e.data))
+        self.event_bus.subscribe(EventType.BAR, lambda e: strategy.on_bar(e.data[&quot;symbol&quot;], e.data))"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> abc </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> ABC</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, abstractmethod</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> StrategyBase</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">ABC</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">    """策略基类"""</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, strategy_id: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, universe: list[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.strategy_id </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> strategy_id</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.universe </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> universe</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._oms: OrderManagementSystem </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> None</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._data: MarketDataHandler </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> None</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> attach</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, oms: OrderManagementSystem, data: MarketDataHandler):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._oms </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> oms</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._data </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> data</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">    @abstractmethod</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> on_tick</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, tick: MarketTick):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        pass</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">    @abstractmethod</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> on_bar</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, symbol: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, bar: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">dict</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        pass</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">    @abstractmethod</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> on_fill</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, order: Order, fill_qty: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">int</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, fill_price: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">float</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        pass</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> place_order</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, symbol: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, side: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, quantity: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">int</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                    order_type: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "limit"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, price: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">float</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) -> </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        order </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Order(</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">            symbol</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">symbol, </span><span style="color:#E36209;--shiki-dark:#FFAB70">side</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">side, </span><span style="color:#E36209;--shiki-dark:#FFAB70">quantity</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">quantity,</span></span>
+<span class="line"><span style="color:#E36209;--shiki-dark:#FFAB70">            order_type</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">order_type, </span><span style="color:#E36209;--shiki-dark:#FFAB70">price</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8">price, </span><span style="color:#E36209;--shiki-dark:#FFAB70">strategy_id</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.strategy_id,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        )</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._oms.submit_order(order)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> StrategyEngine</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">    """策略引擎"""</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, event_bus: EventBus, oms: OrderManagementSystem,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                 data: MarketDataHandler):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.event_bus </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> event_bus</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.oms </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> oms</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.data </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> data</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._strategies: dict[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, StrategyBase] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> register_strategy</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, strategy: StrategyBase):</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        strategy.attach(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.oms, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.data)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._strategies[strategy.strategy_id] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> strategy</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.event_bus.subscribe(EventType.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">TICK</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">lambda</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> e: strategy.on_tick(e.data))</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">.event_bus.subscribe(EventType.</span><span style="color:#005CC5;--shiki-dark:#79B8FF">BAR</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#D73A49;--shiki-dark:#F97583">lambda</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> e: strategy.on_bar(e.data[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"symbol"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">], e.data))</span></span></code></pre></div><h2 id="低延迟优化">低延迟优化</h2><h3 id="系统延迟分解">系统延迟分解</h3><table>
+<thead>
+<tr>
+<th>环节</th>
+<th>典型延迟</th>
+<th>优化手段</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>网络传输</td>
+<td>10-500μs</td>
+<td>共置（Co-location）、直连</td>
+</tr>
+<tr>
+<td>数据解析</td>
+<td>1-10μs</td>
+<td>零拷贝解析、FPGA 加速</td>
+</tr>
+<tr>
+<td>策略计算</td>
+<td>1-100μs</td>
+<td>预计算、缓存、SIMD</td>
+</tr>
+<tr>
+<td>风控检查</td>
+<td>1-5μs</td>
+<td>查表法、位运算</td>
+</tr>
+<tr>
+<td>订单编码</td>
+<td>1-5μs</td>
+<td>预分配缓冲区</td>
+</tr>
+<tr>
+<td>内核网络栈</td>
+<td>5-50μs</td>
+<td>Kernel Bypass（DPDK）</td>
+</tr>
+</tbody></table>
+<h3 id="内存管理">内存管理</h3><div class="code-block-wrapper" data-lang="python" data-code="class PreallocatedPool:
+    &quot;&quot;&quot;预分配对象池&quot;&quot;&quot;
+
+    def __init__(self, factory: Callable, size: int = 10000):
+        self._pool = [factory() for _ in range(size)]
+        self._available = list(range(size))
+        self._in_use = set()
+
+    def acquire(self):
+        if not self._available:
+            raise RuntimeError(&quot;对象池耗尽&quot;)
+        idx = self._available.pop()
+        self._in_use.add(idx)
+        return self._pool[idx]
+
+    def release(self, obj):
+        for idx, pooled in enumerate(self._pool):
+            if pooled is obj and idx in self._in_use:
+                self._in_use.remove(idx)
+                self._available.append(idx)
+                return"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> PreallocatedPool</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">    """预分配对象池"""</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, factory: Callable, size: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">int</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 10000</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._pool </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [factory() </span><span style="color:#D73A49;--shiki-dark:#F97583">for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> _ </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> range</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(size)]</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._available </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> list</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">range</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(size))</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._in_use </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> set</span><span style="color:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> acquire</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#D73A49;--shiki-dark:#F97583"> not</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._available:</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            raise</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> RuntimeError</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"对象池耗尽"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        idx </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._available.pop()</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._in_use.add(idx)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._pool[idx]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> release</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, obj):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> idx, pooled </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> enumerate</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#005CC5;--shiki-dark:#79B8FF">self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._pool):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> pooled </span><span style="color:#D73A49;--shiki-dark:#F97583">is</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> obj </span><span style="color:#D73A49;--shiki-dark:#F97583">and</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> idx </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._in_use:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">                self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._in_use.remove(idx)</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">                self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._available.append(idx)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">                return</span></span></code></pre></div><pre class="mermaid" data-diagram-type="graph" data-source="graph TB&#10;    subgraph &quot;延迟优化层次&quot;&#10;        A[Level 1: 算法优化] --&gt;|&quot;O(n)→O(1)&quot;| B[&quot;查表/预计算&quot;]&#10;        C[Level 2: 语言优化] --&gt;|&quot;Python→C++/Rust&quot;| D[&quot;零 GC/零分配&quot;]&#10;        E[Level 3: 系统优化] --&gt;|内核旁路| F[&quot;DPDK/Solarflare&quot;]&#10;        G[Level 4: 硬件优化] --&gt;|&quot;FPGA/ASIC&quot;| H[纳秒级处理]&#10;    end"></pre><h2 id="高可用与容灾">高可用与容灾</h2><h3 id="故障模式与恢复">故障模式与恢复</h3><table>
+<thead>
+<tr>
+<th>故障类型</th>
+<th>检测方法</th>
+<th>恢复策略</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>网络中断</td>
+<td>心跳超时</td>
+<td>自动重连 + 状态同步</td>
+</tr>
+<tr>
+<td>进程崩溃</td>
+<td>Watchdog 监控</td>
+<td>自动重启 + 恢复持仓</td>
+</tr>
+<tr>
+<td>数据源故障</td>
+<td>数据超时/异常检测</td>
+<td>切换备用数据源</td>
+</tr>
+<tr>
+<td>交易所故障</td>
+<td>连接状态监控</td>
+<td>暂停策略 + 通知运维</td>
+</tr>
+<tr>
+<td>硬件故障</td>
+<td>双机热备</td>
+<td>自动切换到备份节点</td>
+</tr>
+</tbody></table>
+<div class="code-block-wrapper" data-lang="python" data-code="class HealthMonitor:
+    &quot;&quot;&quot;系统健康监控&quot;&quot;&quot;
+
+    def __init__(self):
+        self._component_status: dict[str, dict] = {}
+        self._heartbeat_intervals: dict[str, float] = {}
+        self._alert_handlers: list[Callable] = []
+
+    def register_component(self, name: str, heartbeat_interval: float = 5.0):
+        self._component_status[name] = {
+            &quot;status&quot;: &quot;healthy&quot;,
+            &quot;last_heartbeat&quot;: time.time(),
+            &quot;error_count&quot;: 0,
+        }
+        self._heartbeat_intervals[name] = heartbeat_interval
+
+    def heartbeat(self, name: str):
+        if name in self._component_status:
+            self._component_status[name][&quot;last_heartbeat&quot;] = time.time()
+            self._component_status[name][&quot;status&quot;] = &quot;healthy&quot;
+            self._component_status[name][&quot;error_count&quot;] = 0
+
+    def check_health(self) -&gt; dict:
+        now = time.time()
+        report = {}
+        for name, status in self._component_status.items():
+            interval = self._heartbeat_intervals[name]
+            elapsed = now - status[&quot;last_heartbeat&quot;]
+            if elapsed &gt; interval * 3:
+                status[&quot;status&quot;] = &quot;critical&quot;
+                self._trigger_alert(name, &quot;critical&quot;)
+            elif elapsed &gt; interval * 2:
+                status[&quot;status&quot;] = &quot;warning&quot;
+            report[name] = status.copy()
+        return report
+
+    def _trigger_alert(self, component: str, severity: str):
+        for handler in self._alert_handlers:
+            handler(component, severity)"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">class</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> HealthMonitor</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">    """系统健康监控"""</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> __init__</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._component_status: dict[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">dict</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {}</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._heartbeat_intervals: dict[</span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, </span><span style="color:#005CC5;--shiki-dark:#79B8FF">float</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {}</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._alert_handlers: list[Callable] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> []</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> register_component</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, name: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, heartbeat_interval: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">float</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 5.0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._component_status[name] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            "status"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"healthy"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            "last_heartbeat"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: time.time(),</span></span>
+<span class="line"><span style="color:#032F62;--shiki-dark:#9ECBFF">            "error_count"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">0</span><span style="color:#24292E;--shiki-dark:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">        self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._heartbeat_intervals[name] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> heartbeat_interval</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> heartbeat</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, name: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> name </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._component_status:</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._component_status[name][</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"last_heartbeat"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> time.time()</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._component_status[name][</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"status"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "healthy"</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">            self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._component_status[name][</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"error_count"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> check_health</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self) -> </span><span style="color:#005CC5;--shiki-dark:#79B8FF">dict</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        now </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> time.time()</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">        report </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> {}</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> name, status </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._component_status.items():</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            interval </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._heartbeat_intervals[name]</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            elapsed </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> now </span><span style="color:#D73A49;--shiki-dark:#F97583">-</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> status[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"last_heartbeat"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            if</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> elapsed </span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> interval </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 3</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                status[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"status"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "critical"</span></span>
+<span class="line"><span style="color:#005CC5;--shiki-dark:#79B8FF">                self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._trigger_alert(name, </span><span style="color:#032F62;--shiki-dark:#9ECBFF">"critical"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">            elif</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> elapsed </span><span style="color:#D73A49;--shiki-dark:#F97583">></span><span style="color:#24292E;--shiki-dark:#E1E4E8"> interval </span><span style="color:#D73A49;--shiki-dark:#F97583">*</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="color:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">                status[</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"status"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> "warning"</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            report[name] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> status.copy()</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> report</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    def</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> _trigger_alert</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(self, component: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">, severity: </span><span style="color:#005CC5;--shiki-dark:#79B8FF">str</span><span style="color:#24292E;--shiki-dark:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">        for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> handler </span><span style="color:#D73A49;--shiki-dark:#F97583">in</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> self</span><span style="color:#24292E;--shiki-dark:#E1E4E8">._alert_handlers:</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">            handler(component, severity)</span></span></code></pre></div><h2 id="部署架构">部署架构</h2><h3 id="典型部署拓扑">典型部署拓扑</h3><pre class="mermaid" data-diagram-type="graph" data-source="graph TB&#10;    subgraph 生产环境&#10;        A[主交易服务器] --&gt; B[交易所网关 1]&#10;        A --&gt; C[交易所网关 2]&#10;        D[备份交易服务器] -.-&gt;|热备| A&#10;        E[市场数据服务器] --&gt; A&#10;        E --&gt; D&#10;        F[风控服务器] --&gt; A&#10;        G[监控仪表盘] --&gt; A&#10;        G --&gt; D&#10;        G --&gt; E&#10;        G --&gt; F&#10;    end&#10;&#10;    subgraph 研究环境&#10;        H[回测集群] -.-&gt;|策略部署| A&#10;        I[数据仓库] --&gt; H&#10;    end"></pre><h3 id="研究到生产的部署流程">研究到生产的部署流程</h3><table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>环境</th>
+<th>验证内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>开发</td>
+<td>本地/沙箱</td>
+<td>策略逻辑正确性</td>
+</tr>
+<tr>
+<td>回测</td>
+<td>回测集群</td>
+<td>历史表现验证</td>
+</tr>
+<tr>
+<td>模拟</td>
+<td>仿真环境</td>
+<td>实时数据 + 模拟执行</td>
+</tr>
+<tr>
+<td>灰度</td>
+<td>生产环境（小仓位）</td>
+<td>实盘验证</td>
+</tr>
+<tr>
+<td>全量</td>
+<td>生产环境</td>
+<td>正式运行</td>
+</tr>
+</tbody></table>
+<h2 id="总结">总结</h2><p>交易系统架构设计是将量化策略从研究推向生产的工程核心。事件驱动架构提供了高效、可扩展的消息处理模式；市场数据子系统确保策略获得高质量、低延迟的输入；订单管理系统维护从订单创建到成交的全生命周期状态；策略引擎提供标准化的策略开发框架。在性能方面，延迟优化需要从算法、语言、系统和硬件四个层次综合考虑。在可靠性方面，健康监控、故障检测和自动恢复机制保障系统的持续运行。一个好的交易系统架构应该让策略开发者专注于策略逻辑，而将延迟优化、可靠性保障等基础设施关注点封装在框架层。</p>
+</article>
+    <nav class="pager"><a class="prev" href="../../../personal-finance-investing/algorithmic-trading/system-architecture/index.html"><span class="label">Previous</span>系统架构</a><a class="next" href="../../../personal-finance-investing/algorithmic-trading/system-architecture/backtesting-framework.html"><span class="label">Next</span>回测框架与偏差控制</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#概述" data-outline-link="概述">概述</a></li><li class="depth-2"><a href="#事件驱动架构" data-outline-link="事件驱动架构">事件驱动架构</a></li><li class="depth-3"><a href="#核心设计模式" data-outline-link="核心设计模式">核心设计模式</a></li><li class="depth-3"><a href="#事件处理管线" data-outline-link="事件处理管线">事件处理管线</a></li><li class="depth-2"><a href="#市场数据子系统" data-outline-link="市场数据子系统">市场数据子系统</a></li><li class="depth-3"><a href="#数据-feed-处理" data-outline-link="数据-feed-处理">数据 Feed 处理</a></li><li class="depth-3"><a href="#数据质量控制" data-outline-link="数据质量控制">数据质量控制</a></li><li class="depth-2"><a href="#订单管理系统-oms" data-outline-link="订单管理系统-oms">订单管理系统（OMS）</a></li><li class="depth-3"><a href="#oms-核心设计" data-outline-link="oms-核心设计">OMS 核心设计</a></li><li class="depth-2"><a href="#策略引擎" data-outline-link="策略引擎">策略引擎</a></li><li class="depth-3"><a href="#策略框架设计" data-outline-link="策略框架设计">策略框架设计</a></li><li class="depth-2"><a href="#低延迟优化" data-outline-link="低延迟优化">低延迟优化</a></li><li class="depth-3"><a href="#系统延迟分解" data-outline-link="系统延迟分解">系统延迟分解</a></li><li class="depth-3"><a href="#内存管理" data-outline-link="内存管理">内存管理</a></li><li class="depth-2"><a href="#高可用与容灾" data-outline-link="高可用与容灾">高可用与容灾</a></li><li class="depth-3"><a href="#故障模式与恢复" data-outline-link="故障模式与恢复">故障模式与恢复</a></li><li class="depth-2"><a href="#部署架构" data-outline-link="部署架构">部署架构</a></li><li class="depth-3"><a href="#典型部署拓扑" data-outline-link="典型部署拓扑">典型部署拓扑</a></li><li class="depth-3"><a href="#研究到生产的部署流程" data-outline-link="研究到生产的部署流程">研究到生产的部署流程</a></li><li class="depth-2"><a href="#总结" data-outline-link="总结">总结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

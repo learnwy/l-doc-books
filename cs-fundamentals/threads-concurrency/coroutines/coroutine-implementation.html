@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>协程的实现机制 · 计算机科学基础</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:计算机科学基础" data-pagefind-meta="slug:cs-fundamentals">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">计算机科学基础</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item active" href="../../../cs-fundamentals/index.html" aria-current="page" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../cs-fundamentals/index.html">计算机科学基础</a><a class="back-to-hubs" href="../../../cs-fundamentals/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../cs-fundamentals/threads-concurrency/index.html">线程与并发 简介</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="cs-fundamentals"><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/processes"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/processes/index.html">进程 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/processes/process-definition-and-concepts.html">进程的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/processes/process-core-ideas.html">进程的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/processes/process-implementation.html">进程的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/threads"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/threads/index.html">线程 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/threads/thread-definition-and-concepts.html">线程的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/threads/thread-core-ideas.html">线程的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/threads/thread-implementation.html">线程的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/coroutines" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/coroutines/index.html">协程 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/coroutines/coroutine-definition-and-concepts.html">协程的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/coroutines/coroutine-core-ideas.html">协程的核心思想</a></li><li class="leaf"><a class="leaf-title active" href="../../../cs-fundamentals/threads-concurrency/coroutines/coroutine-implementation.html">协程的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/concurrency-and-parallelism"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/index.html">并发与并行 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/concurrency-parallelism-concepts.html">并发与并行的核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/concurrency-parallelism-ideas.html">并发与并行的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/concurrency-parallelism-implementation.html">并发与并行的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/atomic-operations"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/atomic-operations/index.html">原子操作 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/atomic-operations/atomic-definition-and-concepts.html">原子操作的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/atomic-operations/atomic-core-ideas.html">原子操作的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/atomic-operations/atomic-implementation.html">原子操作的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/locks"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/locks/index.html">锁 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/locks/lock-definition-and-concepts.html">锁的定义与核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/locks/lock-core-ideas.html">锁的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/locks/lock-implementation.html">锁的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/actor-model"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/actor-model/index.html">Actor 模型 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/actor-model/actor-model-concepts.html">Actor 模型的核心概念</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/actor-model/actor-model-ideas.html">Actor 模型的核心思想</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/actor-model/actor-model-implementation.html">Actor 模型的实现机制</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:threads-concurrency/supplementary"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/index.html">补充主题 简介</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/race-conditions.html">竞态条件</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/deadlock-livelock-starvation.html">死锁、活锁与饥饿</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/semaphores-and-conditions.html">信号量与条件变量</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/thread-pools.html">线程池与任务调度</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/threads-concurrency/supplementary/message-passing.html">消息传递</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part III · 系统 (Systems)</span><span>线程与并发 简介</span><span>协程 简介</span><span>协程的实现机制</span></nav>
+    <article class="content prose"><h1 id="协程的实现机制">协程的实现机制</h1><h2 id="概述">概述</h2><p>协程的实现方式主要分为两大类：<strong>无栈协程（Stackless Coroutine）</strong> 和 <strong>有栈协程（Stackful Coroutine）</strong>。两者在内存模型、灵活性和性能上各有取舍。此外，协程的运行离不开调度机制，常见的有<strong>事件循环（Event Loop）<strong>和</strong>多线程协程调度器</strong>（如 GMP 模型）。</p>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TB&#10;    A[&quot;Coroutine Implementation Mechanisms&quot;] --&gt; B[&quot;By Stack Model&quot;]&#10;    A --&gt; C[&quot;By Scheduling Model&quot;]&#10;    B --&gt; B1[&quot;Stackless Coroutine&lt;br/&gt;State Machine Implementation&quot;]&#10;    B --&gt; B2[&quot;Stackful Coroutine&lt;br/&gt;Independent Stack Implementation&quot;]&#10;    C --&gt; C1[&quot;Event Loop&lt;br/&gt;Single-threaded Scheduling&quot;]&#10;    C --&gt; C2[&quot;Multi-threaded Scheduler&lt;br/&gt;M:N Mapping&quot;]"></pre><h2 id="无栈协程-状态机实现">无栈协程：状态机实现</h2><p>无栈协程没有独立的调用栈，编译器将协程函数转换为一个<strong>状态机（State Machine）</strong>。每次 <code>yield</code> 或 <code>await</code> 对应状态机的一个状态转换，协程的局部变量被提升为状态机对象的字段。</p>
+<h3 id="转换原理">转换原理</h3><p>一个包含多个 <code>await</code> 点的异步函数，会被编译器拆分为多个状态：</p>
+<div class="code-block-wrapper" data-lang="pseudocode" data-code="// 原始协程代码
+协程 fetchAndProcess():
+    data = await 读取网络数据()     // 挂起点 1
+    parsed = 解析数据(data)
+    result = await 写入数据库(parsed) // 挂起点 2
+    return result"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>// 原始协程代码</span></span>
+<span class="line"><span>协程 fetchAndProcess():</span></span>
+<span class="line"><span>    data = await 读取网络数据()     // 挂起点 1</span></span>
+<span class="line"><span>    parsed = 解析数据(data)</span></span>
+<span class="line"><span>    result = await 写入数据库(parsed) // 挂起点 2</span></span>
+<span class="line"><span>    return result</span></span></code></pre></div><p>编译器将其转换为：</p>
+<div class="code-block-wrapper" data-lang="pseudocode" data-code="// 编译器生成的状态机
+类 FetchAndProcess_StateMachine:
+    state = 0
+    data = null
+    parsed = null
+    result = null
+
+    函数 resume():
+        switch this.state:
+            case 0:
+                启动异步读取网络数据()
+                this.state = 1
+                return PENDING
+            case 1:
+                this.data = 获取异步结果()
+                this.parsed = 解析数据(this.data)
+                启动异步写入数据库(this.parsed)
+                this.state = 2
+                return PENDING
+            case 2:
+                this.result = 获取异步结果()
+                return COMPLETE(this.result)"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>// 编译器生成的状态机</span></span>
+<span class="line"><span>类 FetchAndProcess_StateMachine:</span></span>
+<span class="line"><span>    state = 0</span></span>
+<span class="line"><span>    data = null</span></span>
+<span class="line"><span>    parsed = null</span></span>
+<span class="line"><span>    result = null</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    函数 resume():</span></span>
+<span class="line"><span>        switch this.state:</span></span>
+<span class="line"><span>            case 0:</span></span>
+<span class="line"><span>                启动异步读取网络数据()</span></span>
+<span class="line"><span>                this.state = 1</span></span>
+<span class="line"><span>                return PENDING</span></span>
+<span class="line"><span>            case 1:</span></span>
+<span class="line"><span>                this.data = 获取异步结果()</span></span>
+<span class="line"><span>                this.parsed = 解析数据(this.data)</span></span>
+<span class="line"><span>                启动异步写入数据库(this.parsed)</span></span>
+<span class="line"><span>                this.state = 2</span></span>
+<span class="line"><span>                return PENDING</span></span>
+<span class="line"><span>            case 2:</span></span>
+<span class="line"><span>                this.result = 获取异步结果()</span></span>
+<span class="line"><span>                return COMPLETE(this.result)</span></span></code></pre></div><pre class="mermaid" data-diagram-type="stateDiagram-v2" data-source="stateDiagram-v2&#10;    [*] --&gt; State0: Create Coroutine&#10;    State0 --&gt; State1: await Read Network Data&#10;    State1 --&gt; State2: await Write to Database&#10;    State2 --&gt; [*]: return result&#10;&#10;    state State0 {&#10;        [*] --&gt; InitiateNetworkRequest&#10;    }&#10;    state State1 {&#10;        [*] --&gt; ParseData&#10;        ParseData --&gt; InitiateDatabaseWrite&#10;    }&#10;    state State2 {&#10;        [*] --&gt; GetWriteResult&#10;    }"></pre><h3 id="无栈协程的内存布局">无栈协程的内存布局</h3><p>无栈协程的所有状态存储在一个堆上分配的对象中，不需要独立的栈空间：</p>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TB&#10;    subgraph 无栈协程状态机对象[&quot;无栈协程状态机对象 (数十到数百字节)&quot;]&#10;        direction TB&#10;        F1[&quot;state: number (当前状态)&quot;]&#10;        F2[&quot;local_a: any (局部变量 a)&quot;]&#10;        F3[&quot;local_b: any (局部变量 b)&quot;]&#10;        F4[&quot;temp: any (临时变量)&quot;]&#10;        F5[&quot;result_slot: any (返回值)&quot;]&#10;    end"></pre><h3 id="typescript-中的无栈协程">TypeScript 中的无栈协程</h3><p>TypeScript/JavaScript 的 <code>async/await</code> 和 <code>Generator</code> 都是无栈协程的典型实现：</p>
+<div class="code-block-wrapper" data-lang="typescript" data-code="async function processItems(items: string[]): Promise&lt;string[]&gt; {
+  const results: string[] = [];
+  for (const item of items) {
+    const processed = await transformItem(item);
+    results.push(processed);
+  }
+  return results;
+}
+
+async function transformItem(item: string): Promise&lt;string&gt; {
+  const response = await fetch(`/api/transform?input=${item}`);
+  const data = await response.json();
+  return data.result;
+}"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">async</span><span style="color:#D73A49;--shiki-dark:#F97583"> function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> processItems</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">items</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[])</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#005CC5;--shiki-dark:#79B8FF">string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[]> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> results</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> [];</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  for</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="color:#D73A49;--shiki-dark:#F97583">const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> item</span><span style="color:#D73A49;--shiki-dark:#F97583"> of</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> items) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">    const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> processed</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> transformItem</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(item);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">    results.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">push</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(processed);</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> results;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">async</span><span style="color:#D73A49;--shiki-dark:#F97583"> function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> transformItem</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">item</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> Promise</span><span style="color:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="color:#005CC5;--shiki-dark:#79B8FF">string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">> {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> response</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> fetch</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#032F62;--shiki-dark:#9ECBFF">`/api/transform?input=${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">item</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  const</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> data</span><span style="color:#D73A49;--shiki-dark:#F97583"> =</span><span style="color:#D73A49;--shiki-dark:#F97583"> await</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> response.</span><span style="color:#6F42C1;--shiki-dark:#B392F0">json</span><span style="color:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> data.result;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre></div><p>引擎在底层将上述代码转换为状态机。每个 <code>await</code> 点将函数执行切分为若干段，只有当异步操作完成时，状态机才推进到下一个状态。</p>
+<h2 id="有栈协程-独立栈实现">有栈协程：独立栈实现</h2><p>有栈协程为每个协程分配一块<strong>独立的栈空间</strong>，使其拥有完整的调用栈。这意味着有栈协程可以在<strong>任意嵌套调用深度</strong>处挂起和恢复，灵活性远超无栈协程。</p>
+<h3 id="栈切换原理">栈切换原理</h3><p>有栈协程的切换本质是<strong>栈指针的切换</strong>：保存当前协程的栈指针和寄存器，然后恢复目标协程的栈指针和寄存器。</p>
+<div class="code-block-wrapper" data-lang="pseudocode" data-code="函数 switch_coroutine(from, to):
+    // 1. 保存当前协程的 CPU 状态
+    from.saved_sp = 当前栈指针
+    from.saved_pc = 当前程序计数器
+    from.saved_registers = 当前寄存器组
+
+    // 2. 恢复目标协程的 CPU 状态
+    设置栈指针(to.saved_sp)
+    设置寄存器组(to.saved_registers)
+    跳转到(to.saved_pc)
+    // 从目标协程上次挂起的位置继续执行"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>函数 switch_coroutine(from, to):</span></span>
+<span class="line"><span>    // 1. 保存当前协程的 CPU 状态</span></span>
+<span class="line"><span>    from.saved_sp = 当前栈指针</span></span>
+<span class="line"><span>    from.saved_pc = 当前程序计数器</span></span>
+<span class="line"><span>    from.saved_registers = 当前寄存器组</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    // 2. 恢复目标协程的 CPU 状态</span></span>
+<span class="line"><span>    设置栈指针(to.saved_sp)</span></span>
+<span class="line"><span>    设置寄存器组(to.saved_registers)</span></span>
+<span class="line"><span>    跳转到(to.saved_pc)</span></span>
+<span class="line"><span>    // 从目标协程上次挂起的位置继续执行</span></span></code></pre></div><pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart LR&#10;    subgraph Coroutine A Stack Space&#10;        direction TB&#10;        A1[&quot;main()&quot;] --&gt; A2[&quot;funcA()&quot;]&#10;        A2 --&gt; A3[&quot;funcB()&quot;]&#10;        A3 --&gt; A4[&quot;← SP_A Stack Top&quot;]&#10;    end&#10;    subgraph Coroutine B Stack Space&#10;        direction TB&#10;        B1[&quot;main()&quot;] --&gt; B2[&quot;funcX()&quot;]&#10;        B2 --&gt; B3[&quot;← SP_B Stack Top&quot;]&#10;    end&#10;    subgraph Switching Process&#10;        direction TB&#10;        SW1[&quot;Save SP_A&quot;] --&gt; SW2[&quot;Restore SP_B&quot;]&#10;        SW2 --&gt; SW3[&quot;Jump to Coroutine B&lt;br/&gt;Last Suspended Position&quot;]&#10;    end"></pre><h3 id="有栈协程的内存布局">有栈协程的内存布局</h3><pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TB&#10;    subgraph 协程A栈[&quot;协程 A 的独立栈 (通常 2KB ~ 1MB)&quot;]&#10;        direction TB&#10;        S1[&quot;函数 main() 的栈帧&quot;]&#10;        S2[&quot;函数 funcA() 的栈帧&quot;]&#10;        S3[&quot;函数 funcB() 的栈帧&quot;]&#10;        S4[&quot;← 栈顶指针 SP&quot;]&#10;        S5[&quot;(未使用的栈空间)&quot;]&#10;    end"></pre><h2 id="无栈-vs-有栈协程对比">无栈 vs 有栈协程对比</h2><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>无栈协程</th>
+<th>有栈协程</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>实现原理</td>
+<td>编译器转换为状态机</td>
+<td>为每个协程分配独立栈</td>
+</tr>
+<tr>
+<td>挂起限制</td>
+<td>只能在顶层函数的 yield/await 点挂起</td>
+<td>可在任意嵌套调用处挂起</td>
+</tr>
+<tr>
+<td>内存占用</td>
+<td>极小（数十~数百字节）</td>
+<td>较大（2KB~1MB 栈空间）</td>
+</tr>
+<tr>
+<td>创建速度</td>
+<td>极快（分配一个小对象）</td>
+<td>较快（需分配栈空间）</td>
+</tr>
+<tr>
+<td>切换速度</td>
+<td>极快（状态机推进）</td>
+<td>快（栈指针切换）</td>
+</tr>
+<tr>
+<td>嵌套灵活性</td>
+<td>低（async 具有传染性）</td>
+<td>高（透明挂起）</td>
+</tr>
+<tr>
+<td>栈溢出风险</td>
+<td>无（使用堆内存）</td>
+<td>有（栈空间固定）</td>
+</tr>
+<tr>
+<td>典型代表</td>
+<td>async/await、Generator</td>
+<td>Goroutine、Lua coroutine</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>异步 I/O、事件驱动编程</td>
+<td>需要深层嵌套挂起的通用并发</td>
+</tr>
+</tbody></table>
+<h2 id="调度机制一-事件循环">调度机制一：事件循环</h2><p>事件循环（Event Loop）是单线程环境下调度协程的核心机制。它维护一个任务队列，不断从中取出就绪的协程并执行，直到协程遇到下一个挂起点。</p>
+<h3 id="事件循环的工作流程">事件循环的工作流程</h3><pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TD&#10;    A[&quot;Event Loop Starts&quot;] --&gt; B[&quot;Dequeue a Task from Ready Queue&quot;]&#10;    B --&gt; C{&quot;Is the Queue Empty?&quot;}&#10;    C --&gt;|&quot;Yes&quot;| D[&quot;Check I/O Events&lt;br/&gt;(epoll / kqueue)&quot;]&#10;    D --&gt; E{&quot;Any Ready I/O Events?&quot;}&#10;    E --&gt;|&quot;Yes&quot;| F[&quot;Add Corresponding Coroutine to Ready Queue&quot;]&#10;    F --&gt; B&#10;    E --&gt;|&quot;No&quot;| G[&quot;Wait Until an Event Occurs&quot;]&#10;    G --&gt; D&#10;    C --&gt;|&quot;No&quot;| H[&quot;Execute the Coroutine/Task&quot;]&#10;    H --&gt; I{&quot;Is Coroutine Suspended?&quot;}&#10;    I --&gt;|&quot;Yes (await I/O)&quot;| J[&quot;Register I/O Callback&lt;br/&gt;Remove Coroutine from Ready Queue&quot;]&#10;    J --&gt; B&#10;    I --&gt;|&quot;No (Execution Complete)&quot;| K[&quot;Clean Up Coroutine Resources&quot;]&#10;    K --&gt; B"></pre><h3 id="事件循环伪代码">事件循环伪代码</h3><div class="code-block-wrapper" data-lang="pseudocode" data-code="类 EventLoop:
+    ready_queue = []        // 就绪队列
+    io_watcher = 创建IO监视器()  // epoll / kqueue
+
+    函数 run():
+        while true:
+            // 1. 执行所有就绪的协程
+            while ready_queue 非空:
+                task = ready_queue.取出()
+                result = task.resume()
+                if result == PENDING:
+                    // 协程挂起，等待 I/O
+                    io_watcher.注册(task.等待的fd, task)
+                else:
+                    // 协程完成
+                    task.完成回调(result)
+
+            // 2. 等待 I/O 事件
+            events = io_watcher.等待事件()
+            for event in events:
+                ready_queue.加入(event.对应的协程)
+
+    函数 spawn(协程):
+        ready_queue.加入(协程)"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>类 EventLoop:</span></span>
+<span class="line"><span>    ready_queue = []        // 就绪队列</span></span>
+<span class="line"><span>    io_watcher = 创建IO监视器()  // epoll / kqueue</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    函数 run():</span></span>
+<span class="line"><span>        while true:</span></span>
+<span class="line"><span>            // 1. 执行所有就绪的协程</span></span>
+<span class="line"><span>            while ready_queue 非空:</span></span>
+<span class="line"><span>                task = ready_queue.取出()</span></span>
+<span class="line"><span>                result = task.resume()</span></span>
+<span class="line"><span>                if result == PENDING:</span></span>
+<span class="line"><span>                    // 协程挂起，等待 I/O</span></span>
+<span class="line"><span>                    io_watcher.注册(task.等待的fd, task)</span></span>
+<span class="line"><span>                else:</span></span>
+<span class="line"><span>                    // 协程完成</span></span>
+<span class="line"><span>                    task.完成回调(result)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>            // 2. 等待 I/O 事件</span></span>
+<span class="line"><span>            events = io_watcher.等待事件()</span></span>
+<span class="line"><span>            for event in events:</span></span>
+<span class="line"><span>                ready_queue.加入(event.对应的协程)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    函数 spawn(协程):</span></span>
+<span class="line"><span>        ready_queue.加入(协程)</span></span></code></pre></div><p>事件循环在 Node.js、浏览器 JavaScript 运行时中是核心调度机制——所有 <code>async/await</code> 的调度都依赖事件循环。</p>
+<h2 id="调度机制二-gmp-模型">调度机制二：GMP 模型</h2><p>对于需要利用多核 CPU 的场景，单线程事件循环就不够了。GMP 模型是一种经典的<strong>多线程协程调度模型</strong>，将大量协程（M 个）映射到少量操作系统线程（N 个）上，实现 <strong>M:N 调度</strong>。</p>
+<h3 id="gmp-的三个核心组件">GMP 的三个核心组件</h3><table>
+<thead>
+<tr>
+<th>组件</th>
+<th>全称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>G</strong></td>
+<td>Goroutine</td>
+<td>协程，用户级的轻量执行单元</td>
+</tr>
+<tr>
+<td><strong>M</strong></td>
+<td>Machine</td>
+<td>操作系统线程，实际执行代码的载体</td>
+</tr>
+<tr>
+<td><strong>P</strong></td>
+<td>Processor</td>
+<td>逻辑处理器，绑定 M 与 G 的桥梁，管理本地运行队列</td>
+</tr>
+</tbody></table>
+<h3 id="gmp-调度流程">GMP 调度流程</h3><pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart TB&#10;    subgraph Global Queue&#10;        GQ[Global G Queue&lt;br/&gt;[G5, G6, G7, ...]&quot;]&#10;    end&#10;    subgraph P1[&quot;P1 Logical Processor&quot;]&#10;        LQ1[Local Queue: [G1, G2]&quot;]&#10;    end&#10;    subgraph P2[&quot;P2 Logical Processor&quot;]&#10;        LQ2[Local Queue: [G3, G4]&quot;]&#10;    end&#10;    subgraph OS Threads&#10;        M1[&quot;M1 Thread&quot;]&#10;        M2[&quot;M2 Thread&quot;]&#10;    end&#10;&#10;    P1 --&gt;|&quot;Bind to&quot;| M1&#10;    P2 --&gt;|&quot;Bind to&quot;| M2&#10;    M1 --&gt;|&quot;Execute&quot;| G1R[&quot;Currently Running: G1&quot;]&#10;    M2 --&gt;|&quot;Execute&quot;| G3R[&quot;Currently Running: G3&quot;]&#10;    GQ -.-&gt;|&quot;When Local Queue Empty&lt;br/&gt;Fetch from Global Queue&quot;| P1&#10;    GQ -.-&gt;|&quot;When Local Queue Empty&lt;br/&gt;Fetch from Global Queue&quot;| P2&#10;    P1 -.-&gt;|&quot;Work Stealing&quot;| P2"></pre><h3 id="gmp-调度策略">GMP 调度策略</h3><div class="code-block-wrapper" data-lang="pseudocode" data-code="函数 schedule(P):
+    while true:
+        // 1. 优先从本地队列取 G
+        g = P.本地队列.取出()
+
+        // 2. 本地队列为空，从全局队列取一批
+        if g == null:
+            g = 全局队列.取出一批(P)
+
+        // 3. 全局队列也为空，从其他 P 偷取一半
+        if g == null:
+            g = 从其他P偷取(P)
+
+        // 4. 执行协程
+        if g != null:
+            执行(g)
+            if g.状态 == 挂起:
+                P.本地队列.加入(g)  // 放回本地队列等待恢复"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>函数 schedule(P):</span></span>
+<span class="line"><span>    while true:</span></span>
+<span class="line"><span>        // 1. 优先从本地队列取 G</span></span>
+<span class="line"><span>        g = P.本地队列.取出()</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>        // 2. 本地队列为空，从全局队列取一批</span></span>
+<span class="line"><span>        if g == null:</span></span>
+<span class="line"><span>            g = 全局队列.取出一批(P)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>        // 3. 全局队列也为空，从其他 P 偷取一半</span></span>
+<span class="line"><span>        if g == null:</span></span>
+<span class="line"><span>            g = 从其他P偷取(P)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>        // 4. 执行协程</span></span>
+<span class="line"><span>        if g != null:</span></span>
+<span class="line"><span>            执行(g)</span></span>
+<span class="line"><span>            if g.状态 == 挂起:</span></span>
+<span class="line"><span>                P.本地队列.加入(g)  // 放回本地队列等待恢复</span></span></code></pre></div><h3 id="工作窃取-work-stealing">工作窃取（Work Stealing）</h3><p>GMP 模型中的核心优化策略是<strong>工作窃取</strong>：当某个 P 的本地队列为空时，它会尝试从其他 P 的本地队列中偷取一半的 G，实现负载均衡。</p>
+<pre class="mermaid" data-diagram-type="sequenceDiagram" data-source="sequenceDiagram&#10;    participant P1 as P1 (Queue Empty)&#10;    participant P2 as P2 (Queue Full)&#10;    participant GQ as Global Queue&#10;&#10;    P1-&gt;&gt;P1: Local queue is empty&#10;    P1-&gt;&gt;GQ: Try to fetch from global queue&#10;    GQ--&gt;&gt;P1: Global queue is also empty&#10;    P1-&gt;&gt;P2: Try to steal half of the tasks&#10;    P2--&gt;&gt;P1: Transfer [G5, G6, G7]&#10;    P1-&gt;&gt;P1: Start executing G5"></pre><h2 id="事件循环-vs-gmp-模型对比">事件循环 vs GMP 模型对比</h2><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>事件循环</th>
+<th>GMP 模型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>线程数</td>
+<td>单线程</td>
+<td>多线程（M 个 OS 线程）</td>
+</tr>
+<tr>
+<td>并行能力</td>
+<td>无真正并行</td>
+<td>支持多核并行</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>I/O 密集型</td>
+<td>I/O + CPU 密集型混合</td>
+</tr>
+<tr>
+<td>实现复杂度</td>
+<td>简单</td>
+<td>复杂（需要工作窃取等策略）</td>
+</tr>
+<tr>
+<td>数据竞争</td>
+<td>天然无竞争（单线程）</td>
+<td>需要处理跨线程竞争</td>
+</tr>
+<tr>
+<td>典型代表</td>
+<td>Node.js、浏览器 JS</td>
+<td>Goroutine 运行时</td>
+</tr>
+<tr>
+<td>扩展性</td>
+<td>受限于单核</td>
+<td>可扩展到多核</td>
+</tr>
+</tbody></table>
+<pre class="mermaid" data-diagram-type="flowchart" data-source="flowchart LR&#10;    subgraph Event Loop Model&#10;        direction TB&#10;        EL[&quot;Event Loop&lt;br/&gt;(Single Thread)&quot;] --&gt; EG1[&quot;Coroutine 1&quot;]&#10;        EL --&gt; EG2[&quot;Coroutine 2&quot;]&#10;        EL --&gt; EG3[&quot;Coroutine 3&quot;]&#10;        EL --&gt; EG4[&quot;Coroutine ...&quot;]&#10;    end&#10;    subgraph GMP Model&#10;        direction TB&#10;        GM1[&quot;Thread M1&quot;] --&gt; GP1[&quot;P1&quot;]&#10;        GM2[&quot;Thread M2&quot;] --&gt; GP2[&quot;P2&quot;]&#10;        GP1 --&gt; GG1[&quot;G1, G2, G3&quot;]&#10;        GP2 --&gt; GG2[&quot;G4, G5, G6&quot;]&#10;    end"></pre><h2 id="小结">小结</h2><ul>
+<li>无栈协程通过<strong>编译器将协程转换为状态机</strong>实现，每个 await 点对应一个状态，局部变量提升为状态对象的字段，内存占用极小。</li>
+<li>有栈协程为每个协程分配<strong>独立的栈空间</strong>，通过栈指针切换实现挂起/恢复，可在任意嵌套调用处挂起，灵活性更高。</li>
+<li><strong>事件循环</strong>是单线程协程调度的核心机制，通过就绪队列和 I/O 事件监听不断驱动协程执行，适合 I/O 密集型场景。</li>
+<li><strong>GMP 模型</strong>是多线程协程调度的经典方案，通过 G（协程）、M（线程）、P（逻辑处理器）三层结构实现 M:N 映射，配合工作窃取策略实现负载均衡。</li>
+<li>选择哪种实现取决于具体需求：单线程异步选事件循环，多核并行选 GMP 类调度器，轻量 I/O 选无栈协程，深层嵌套选有栈协程。</li>
+</ul>
+</article>
+    <nav class="pager"><a class="prev" href="../../../cs-fundamentals/threads-concurrency/coroutines/coroutine-core-ideas.html"><span class="label">Previous</span>协程的核心思想</a><a class="next" href="../../../cs-fundamentals/threads-concurrency/concurrency-and-parallelism/index.html"><span class="label">Next</span>并发与并行 简介</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#概述" data-outline-link="概述">概述</a></li><li class="depth-2"><a href="#无栈协程-状态机实现" data-outline-link="无栈协程-状态机实现">无栈协程：状态机实现</a></li><li class="depth-3"><a href="#转换原理" data-outline-link="转换原理">转换原理</a></li><li class="depth-3"><a href="#无栈协程的内存布局" data-outline-link="无栈协程的内存布局">无栈协程的内存布局</a></li><li class="depth-3"><a href="#typescript-中的无栈协程" data-outline-link="typescript-中的无栈协程">TypeScript 中的无栈协程</a></li><li class="depth-2"><a href="#有栈协程-独立栈实现" data-outline-link="有栈协程-独立栈实现">有栈协程：独立栈实现</a></li><li class="depth-3"><a href="#栈切换原理" data-outline-link="栈切换原理">栈切换原理</a></li><li class="depth-3"><a href="#有栈协程的内存布局" data-outline-link="有栈协程的内存布局">有栈协程的内存布局</a></li><li class="depth-2"><a href="#无栈-vs-有栈协程对比" data-outline-link="无栈-vs-有栈协程对比">无栈 vs 有栈协程对比</a></li><li class="depth-2"><a href="#调度机制一-事件循环" data-outline-link="调度机制一-事件循环">调度机制一：事件循环</a></li><li class="depth-3"><a href="#事件循环的工作流程" data-outline-link="事件循环的工作流程">事件循环的工作流程</a></li><li class="depth-3"><a href="#事件循环伪代码" data-outline-link="事件循环伪代码">事件循环伪代码</a></li><li class="depth-2"><a href="#调度机制二-gmp-模型" data-outline-link="调度机制二-gmp-模型">调度机制二：GMP 模型</a></li><li class="depth-3"><a href="#gmp-的三个核心组件" data-outline-link="gmp-的三个核心组件">GMP 的三个核心组件</a></li><li class="depth-3"><a href="#gmp-调度流程" data-outline-link="gmp-调度流程">GMP 调度流程</a></li><li class="depth-3"><a href="#gmp-调度策略" data-outline-link="gmp-调度策略">GMP 调度策略</a></li><li class="depth-3"><a href="#工作窃取-work-stealing" data-outline-link="工作窃取-work-stealing">工作窃取（Work Stealing）</a></li><li class="depth-2"><a href="#事件循环-vs-gmp-模型对比" data-outline-link="事件循环-vs-gmp-模型对比">事件循环 vs GMP 模型对比</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>

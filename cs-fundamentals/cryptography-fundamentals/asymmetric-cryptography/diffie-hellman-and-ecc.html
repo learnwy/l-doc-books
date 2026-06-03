@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Diffie-Hellman 与椭圆曲线密码 · 计算机科学基础</title>
+<script>(function(){try{var m=localStorage.getItem('theme');if(m!=='light'&&m!=='dark'&&m!=='auto')m='auto';var d=m==='dark'||(m==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="../../../assets/app.css" />
+</head>
+<body data-pagefind-meta="book:计算机科学基础" data-pagefind-meta="slug:cs-fundamentals">
+<header class="topbar">
+  <a class="library-link" href="../../../index.html">📚 Library</a>
+  <span class="topbar-sep">/</span>
+  <details class="book-switcher" data-book-switcher>
+    <summary><span class="book-name">计算机科学基础</span><span class="caret" aria-hidden="true">▾</span></summary>
+    <div class="book-list" role="menu">
+      <input class="book-list-filter" type="search"
+             placeholder="Filter books…"
+             aria-label="Filter books in switcher"
+             data-switcher-filter />
+      <div class="book-list-scroll" data-switcher-scroll><div class="book-list-group" data-shelf="software-engineering">
+  <div class="book-list-group-title">🖥 Software Engineering</div>
+  <a class="book-list-item" href="../../../cloud-and-devops/index.html" data-search="云与 devops 工程 cloud &amp; devops — tooling, platforms, infrastructure, scaling cloud-and-devops">云与 DevOps 工程</a><a class="book-list-item" href="../../../frontend-engineering/index.html" data-search="前端工程化全景 frontend engineering — tooling, frameworks, style, performance, architecture frontend-engineering">前端工程化全景</a><a class="book-list-item" href="../../../developer-craft-toolkit/index.html" data-search="开发者工具与个人系统工程 developer craft — toolbox, automation, personal data, quantified self developer-craft-toolkit">开发者工具与个人系统工程</a><a class="book-list-item" href="../../../data-science-and-engineering/index.html" data-search="数据科学与工程 data science &amp; engineering — foundations, stats, causal, privacy data-science-and-engineering">数据科学与工程</a><a class="book-list-item" href="../../../game-development/index.html" data-search="游戏开发实战 game development — engines, physics, ai, graphics, networking, design game-development">游戏开发实战</a><a class="book-list-item" href="../../../hardware-and-systems/index.html" data-search="硬件、机器人与安全工程 hardware, robotics &amp; applied security — from pcb to red team hardware-and-systems">硬件、机器人与安全工程</a><a class="book-list-item" href="../../../mobile-development/index.html" data-search="移动端开发全景 mobile development — ios, android, harmonyos, cross-platform mobile-development">移动端开发全景</a><a class="book-list-item" href="../../../languages-and-paradigms/index.html" data-search="编程语言与范式 programming languages &amp; paradigms — web, system, mobile, data languages-and-paradigms">编程语言与范式</a><a class="book-list-item active" href="../../../cs-fundamentals/index.html" aria-current="page" data-search="计算机科学基础 computer science fundamentals — theory, systems, networks, security cs-fundamentals">计算机科学基础</a><a class="book-list-item" href="../../../cross-discipline-craft/index.html" data-search="跨学科工程师之道 cross-discipline craft — roles, architecture, communication cross-discipline-craft">跨学科工程师之道</a>
+</div><div class="book-list-group" data-shelf="ai-intelligent-systems">
+  <div class="book-list-group-title">🧠 AI &amp; Intelligent Systems</div>
+  <a class="book-list-item" href="../../../ai-engineering-l3/index.html" data-search="ai 工程师 l2 → l3+ 路线 from wiring api calls to orchestrating evaluable agents ai-engineering-l3">AI 工程师 L2 → L3+ 路线</a><a class="book-list-item" href="../../../ai-coding-tools-handbook/index.html" data-search="ai 智能体工具完整手册 2026 五款主流工具横向参考：opencode / codex / claude code / openclaw / hermes ai-coding-tools-handbook">AI 智能体工具完整手册</a><a class="book-list-item" href="../../../ai-systems-deep-dive/index.html" data-search="ai 系统深度剖析 ai systems deep dive — ml, vision, language, generative, multimodal, governance ai-systems-deep-dive">AI 系统深度剖析</a>
+</div><div class="book-list-group" data-shelf="writing-communication">
+  <div class="book-list-group-title">📖 Writing &amp; Communication</div>
+  <a class="book-list-item" href="../../../communication-and-narrative/index.html" data-search="传播、谈判与叙事 communication, negotiation &amp; narrative — media, persuasion, story, systems communication-and-narrative">传播、谈判与叙事</a><a class="book-list-item" href="../../../creative-writing/index.html" data-search="创意写作 creative writing — chinese, fiction, media, speech, style, screen creative-writing">创意写作</a><a class="book-list-item" href="../../../technical-writing/index.html" data-search="技术与专业写作 technical &amp; professional writing — foundations, process, domains technical-writing">技术与专业写作</a><a class="book-list-item" href="../../../english-improvement/index.html" data-search="英语提升：以程序员英文产出为锚 embed english output into your daily craft english-improvement">英语提升：以程序员英文产出为锚</a><a class="book-list-item" href="../../../english-mastery/index.html" data-search="英语精通：从词汇到母语思维 english mastery — vocabulary, grammar, reading, listening, speaking, writing english-mastery">英语精通：从词汇到母语思维</a><a class="book-list-item" href="../../../english-for-software-engineers/index.html" data-search="面向软件工程师的英语 english for software engineers — a profile-aligned path english-for-software-engineers">面向软件工程师的英语</a>
+</div><div class="book-list-group" data-shelf="people-leadership">
+  <div class="book-list-group-title">👥 People &amp; Leadership</div>
+  <a class="book-list-item" href="../../../china-platform-management/index.html" data-search="中国平台、生命科学与传统制造：管理与文化 china platforms, biotech &amp; heritage manufacturing — management &amp; culture china-platform-management">中国平台、生命科学与传统制造：管理与文化</a><a class="book-list-item" href="../../../engineering-management/index.html" data-search="工程师管理与领导力 engineering management &amp; leadership — self, craft, communication, leading, career engineering-management">工程师管理与领导力</a><a class="book-list-item" href="../../../psychology-essentials/index.html" data-search="心理学要义 psychology essentials — mind, behavior, society, application psychology-essentials">心理学要义</a><a class="book-list-item" href="../../../hardware-auto-management/index.html" data-search="硬件、汽车与航天：管理与文化 hardware, auto &amp; aerospace — management philosophy &amp; culture hardware-auto-management">硬件、汽车与航天：管理与文化</a><a class="book-list-item" href="../../../tech-giants-management/index.html" data-search="科技巨头：管理与文化 tech giants — management philosophy &amp; organizational culture tech-giants-management">科技巨头：管理与文化</a><a class="book-list-item" href="../../../finance-consumer-management/index.html" data-search="金融与消费：管理与文化 finance &amp; consumer — management philosophy &amp; culture finance-consumer-management">金融与消费：管理与文化</a>
+</div><div class="book-list-group" data-shelf="business-economics">
+  <div class="book-list-group-title">💰 Business &amp; Economics</div>
+  <a class="book-list-item" href="../../../personal-finance-investing/index.html" data-search="个人理财与量化投资 personal finance &amp; quantitative investing personal-finance-investing">个人理财与量化投资</a><a class="book-list-item" href="../../../law-and-regulation/index.html" data-search="法律基础与监管 legal foundations &amp; regulation — contracts, ip, labor, privacy, ai law-and-regulation">法律基础与监管</a><a class="book-list-item" href="../../../ecommerce-and-global/index.html" data-search="电商：本土与全球 e-commerce — domestic operations &amp; global cross-border ecommerce-and-global">电商：本土与全球</a><a class="book-list-item" href="../../../economics-and-finance/index.html" data-search="经济学与金融 economics &amp; finance — theory, markets, behavior, policy economics-and-finance">经济学与金融</a>
+</div><div class="book-list-group" data-shelf="knowledge-society">
+  <div class="book-list-group-title">📚 Knowledge &amp; Society</div>
+  <a class="book-list-item" href="../../../chinese-political-thought/index.html" data-search="中国当代政治思想 contemporary chinese political thought — marxism, deng, xi, lineage chinese-political-thought">中国当代政治思想</a><a class="book-list-item" href="../../../life-and-wellness/index.html" data-search="健康、烹饪与气候转型 life &amp; wellness — health, cooking science, climate transition life-and-wellness">健康、烹饪与气候转型</a><a class="book-list-item" href="../../../history-and-geography/index.html" data-search="历史与地理 history &amp; geography — civilizations, regions, geopolitics, gis history-and-geography">历史与地理</a><a class="book-list-item" href="../../../learning-and-education/index.html" data-search="学习方法与教育 learning &amp; education — methodology, cognition, practice, teaching learning-and-education">学习方法与教育</a><a class="book-list-item" href="../../../mathematics-and-logic/index.html" data-search="数学与逻辑 mathematics &amp; logic — from algebra to logic and philosophy of science mathematics-and-logic">数学与逻辑</a><a class="book-list-item" href="../../../mao-zedong-thought/index.html" data-search="毛泽东思想精读 mao zedong thought — selected works and military / party-building doctrine mao-zedong-thought">毛泽东思想精读</a><a class="book-list-item" href="../../../social-sciences-essentials/index.html" data-search="社会科学要义 social sciences — anthropology, sociology, political science, political economy social-sciences-essentials">社会科学要义</a><a class="book-list-item" href="../../../natural-sciences/index.html" data-search="自然科学速览 natural sciences — biology, environment, astronomy, chemistry natural-sciences">自然科学速览</a><a class="book-list-item" href="../../../arts-and-design/index.html" data-search="艺术与设计 arts &amp; design — visual, audio, spatial, methodological arts-and-design">艺术与设计</a>
+</div><div class="book-list-group" data-shelf="education-curriculum">
+  <div class="book-list-group-title">🎓 Education Curriculum</div>
+  <a class="book-list-item" href="../../../middle-school/index.html" data-search="初中：三年学科全景 middle school — grades 7-9, core curriculum including physics, chemistry, biology middle-school">初中：三年学科全景</a><a class="book-list-item" href="../../../phd-research/index.html" data-search="博士：研究范式与前沿议题 phd research — inquiry paradigms &amp; frontier topics across 12 disciplines phd-research">博士：研究范式与前沿议题</a><a class="book-list-item" href="../../../university-studies/index.html" data-search="大学：十四大学科门类 university — 14 disciplines from philosophy to interdisciplinary ai/quantum university-studies">大学：十四大学科门类</a><a class="book-list-item" href="../../../preschool-readiness/index.html" data-search="学前教育：综合素养 preschool readiness — junior, middle, senior class fundamentals preschool-readiness">学前教育：综合素养</a><a class="book-list-item" href="../../../primary-school/index.html" data-search="小学：六年学科全景 primary school — six grades, core subjects (chinese, math, english, science, arts...) primary-school">小学：六年学科全景</a><a class="book-list-item" href="../../../graduate-studies/index.html" data-search="研究生：方法论与学科前沿 graduate studies — research methodology &amp; discipline-specific advanced topics graduate-studies">研究生：方法论与学科前沿</a><a class="book-list-item" href="../../../vocational-training/index.html" data-search="职业教育：从中职到职业本科 vocational training — secondary, higher, and bachelor-level vocational programs vocational-training">职业教育：从中职到职业本科</a><a class="book-list-item" href="../../../high-school/index.html" data-search="高中：三年学科与文理分科 high school — years 1-3 plus science/humanities track specialization high-school">高中：三年学科与文理分科</a>
+</div></div>
+    </div>
+  </details>
+  <div class="topbar-actions">
+    <button type="button" class="search-trigger" data-search-trigger data-base-href="../../../" title="Search (⌘K)">
+      <span>🔍 Search</span><kbd>⌘K</kbd>
+    </button>
+    <button type="button" data-theme-toggle title="Theme">◐</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><a class="book-title" href="../../../cs-fundamentals/index.html">计算机科学基础</a><a class="back-to-hubs" href="../../../cs-fundamentals/index.html">← All hubs</a><div class="sidebar-current-hub"><a class="hub-title" href="../../../cs-fundamentals/cryptography-fundamentals/index.html">密码学基础</a></div><ul class="sidebar-hub-list" data-sidebar-root data-book-slug="cs-fundamentals"><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:cryptography-fundamentals/classical-cryptography"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/cryptography-fundamentals/classical-cryptography/index.html">古典密码学</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/classical-cryptography/caesar-and-substitution.html">Caesar 与 Substitution Cipher</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/classical-cryptography/vigenere-cipher.html">Vigenère Cipher 维吉尼亚密码</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/classical-cryptography/frequency-analysis.html">频率分析</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/classical-cryptography/one-time-pad.html">One-Time Pad 一次性密码本</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:cryptography-fundamentals/symmetric-cryptography"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/cryptography-fundamentals/symmetric-cryptography/index.html">对称密码学</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/symmetric-cryptography/block-ciphers-aes.html">Block Cipher 与 AES</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/symmetric-cryptography/stream-ciphers.html">流密码</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/symmetric-cryptography/modes-of-operation.html">运行模式</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/symmetric-cryptography/hash-functions-and-mac.html">Hash 函数与 MAC</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:cryptography-fundamentals/asymmetric-cryptography" open><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/cryptography-fundamentals/asymmetric-cryptography/index.html">非对称密码学</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/asymmetric-cryptography/rsa-fundamentals.html">RSA 基础</a></li><li class="leaf"><a class="leaf-title active" href="../../../cs-fundamentals/cryptography-fundamentals/asymmetric-cryptography/diffie-hellman-and-ecc.html">Diffie-Hellman 与椭圆曲线密码</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/asymmetric-cryptography/digital-signatures.html">数字签名</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/asymmetric-cryptography/public-key-infrastructure.html">公钥基础设施（PKI）</a></li></ul></details></li><li class="chapter"><details class="folder-collapse" data-sb-key="cs-fundamentals:folder:cryptography-fundamentals/applied-cryptography"><summary><span class="chevron" aria-hidden="true">▸</span><a class="chapter-title" href="../../../cs-fundamentals/cryptography-fundamentals/applied-cryptography/index.html">应用密码学</a></summary><ul><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/applied-cryptography/tls-and-https.html">TLS 与 HTTPS</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/applied-cryptography/password-hashing.html">密码 Hash 与存储</a></li><li class="leaf"><a class="leaf-title" href="../../../cs-fundamentals/cryptography-fundamentals/applied-cryptography/modern-protocols-and-zkp.html">现代协议与零知识证明</a></li></ul></details></li></ul></aside>
+  <main>
+    <nav class="breadcrumb"><span>Part V · 安全与密码学 (Security &amp; Cryptography)</span><span>密码学基础</span><span>非对称密码学</span><span>Diffie-Hellman 与椭圆曲线密码</span></nav>
+    <article class="content prose"><h1 id="diffie-hellman-与椭圆曲线密码">Diffie-Hellman 与椭圆曲线密码</h1><h2 id="核心概念">核心概念</h2><p>Diffie-Hellman（DH，1976）是公钥密码学的&quot;原初论文&quot;——比 RSA 早 1 年——解决了 key exchange 问题：双方在公开信道上协商出共享 secret，即使被动监听也无法还原。它的安全性依赖<strong>离散对数问题</strong>（Discrete Logarithm Problem，DLP）的困难——给 g, p, g^a mod p，难以求 a。Elliptic Curve Cryptography（ECC，1985 Miller / Koblitz 各自独立提出）把 DH 与签名搬到 elliptic curve 群上——同等安全级别下 key 短得多（256 bit ECC ≈ 3072 bit RSA），让公钥密码进入移动 / IoT / 区块链时代。本节介绍 DH 协议、DLP 困难、ECC 数学基础、X25519 / Ed25519、为什么 ECC 取代 RSA。</p>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>Key size</th>
+<th>等价 RSA</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DH（mod p）</td>
+<td>2048 bit</td>
+<td>2048 bit</td>
+<td>Key exchange</td>
+</tr>
+<tr>
+<td>ECDH（P-256）</td>
+<td>256 bit</td>
+<td>3072 bit</td>
+<td>Key exchange</td>
+</tr>
+<tr>
+<td>ECDH（X25519）</td>
+<td>256 bit</td>
+<td>3072 bit</td>
+<td>Key exchange</td>
+</tr>
+<tr>
+<td>ECDSA（P-256）</td>
+<td>256 bit</td>
+<td>3072 bit</td>
+<td>签名</td>
+</tr>
+<tr>
+<td>Ed25519</td>
+<td>256 bit</td>
+<td>3072 bit</td>
+<td>签名</td>
+</tr>
+<tr>
+<td>ECDSA（P-521）</td>
+<td>521 bit</td>
+<td>15360 bit</td>
+<td>高安全签名</td>
+</tr>
+</tbody></table>
+<h2 id="diffie-hellman-key-exchange">Diffie-Hellman Key Exchange</h2><p><strong>协议</strong>：</p>
+<div class="code-block-wrapper" data-lang="text" data-code="公开参数：大素数 p、生成元 g (g 在 Z_p* 中阶大)。
+
+Alice：选私钥 a，发送 A = g^a mod p。
+Bob：  选私钥 b，发送 B = g^b mod p。
+
+Alice 计算 K = B^a mod p。
+Bob   计算 K = A^b mod p。
+
+K = g^(ab) mod p（两边等）。"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>公开参数：大素数 p、生成元 g (g 在 Z_p* 中阶大)。</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Alice：选私钥 a，发送 A = g^a mod p。</span></span>
+<span class="line"><span>Bob：  选私钥 b，发送 B = g^b mod p。</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Alice 计算 K = B^a mod p。</span></span>
+<span class="line"><span>Bob   计算 K = A^b mod p。</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>K = g^(ab) mod p（两边等）。</span></span></code></pre></div><p><strong>安全性</strong>：被动攻击者看到 g, p, A, B，要还原 K = g^(ab) 需要解 DLP（从 g^a 求 a 或从 g^b 求 b）——困难。</p>
+<p><strong>Diffie-Hellman 假设（DDH / CDH）</strong>：</p>
+<ul>
+<li><strong>CDH</strong>（Computational DH）：给 g^a, g^b，难以计算 g^(ab)。</li>
+<li><strong>DDH</strong>（Decisional DH）：给 g^a, g^b, g^c，难以判断 c = ab 还是随机。</li>
+</ul>
+<p>DDH 比 CDH 强。某些群（如普通 elliptic curve）DDH 不成立但 CDH 成立——影响协议设计。</p>
+<h2 id="dh-的弱点-mitm">DH 的弱点：MITM</h2><p><strong>纯 DH 不抵抗主动攻击</strong>：</p>
+<ul>
+<li>攻击者 Eve 拦截 A、B，自己生成 e。</li>
+<li>与 Alice 协商 g^(ae)，与 Bob 协商 g^(be)。</li>
+<li>Eve 同时与双方有 secret，转发并 monitor 流量。</li>
+</ul>
+<p><strong>防御</strong>：DH + 认证——签名 DH（如 TLS handshake）或 PKI 验证身份。</p>
+<h2 id="离散对数问题">离散对数问题</h2><p><strong>DLP</strong>：给 g, p, h = g^x mod p，求 x。</p>
+<p><strong>最佳已知算法</strong>：</p>
+<ul>
+<li>暴力穷举：O(p)——p 大时不可行。</li>
+<li>Baby-step Giant-step：O(√p)。</li>
+<li>Pollard rho：O(√p)，内存 O(1)。</li>
+<li>Index calculus：O(exp(√(ln p · ln ln p)))——亚指数但仍困难。</li>
+</ul>
+<p><strong>1024 bit p 的 DLP</strong> ≈ 2009-2012 已破。</p>
+<p><strong>2048 bit p</strong> 仍安全到 2030。</p>
+<h2 id="ecc-数学基础">ECC 数学基础</h2><p><strong>Elliptic Curve</strong>（在素数域 F_p 上）：</p>
+<div class="code-block-wrapper" data-lang="text" data-code="y² = x³ + ax + b (mod p)"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>y² = x³ + ax + b (mod p)</span></span></code></pre></div><p>满足 4a³ + 27b² ≠ 0（避免奇点）。</p>
+<p><strong>点加法</strong>：在曲线上定义&quot;加法&quot;——两点 P + Q 的几何意义是连两点的直线与曲线第三交点的对称：</p>
+<ul>
+<li>P + Q 几何：连 P-Q 直线与曲线交第三点 R&#39;，R = -R&#39;。</li>
+<li>P + P（doubling）：P 处切线与曲线交点。</li>
+<li>单位元 O：无穷远点（P + O = P）。</li>
+</ul>
+<p><strong>标量乘法</strong>：k · P = P + P + ... + P（k 次）——用 double-and-add 算法 O(log k)。</p>
+<p><strong>ECDLP</strong>（Elliptic Curve Discrete Log）：</p>
+<ul>
+<li>给定 P, Q = k · P，求 k。</li>
+<li>最佳已知算法是 Pollard rho，O(√n)。</li>
+<li>不存在亚指数算法（与普通 DLP 不同）。</li>
+</ul>
+<p><strong>这就是 ECC 的关键</strong>——同样安全级别下 key 短得多：</p>
+<ul>
+<li>DLP 在 2048 bit 群——亚指数攻击让等价对称强度仅 112 bit。</li>
+<li>ECDLP 在 256 bit 群——指数攻击让等价对称强度 128 bit。</li>
+</ul>
+<h2 id="标准-curve">标准 Curve</h2><p><strong>NIST P 曲线</strong>（FIPS 186-4）：</p>
+<ul>
+<li>P-256（256 bit）：最常用。</li>
+<li>P-384、P-521：高安全。</li>
+<li>历史问题：曲线参数选择被怀疑（NSA 的 Dual_EC_DRBG 后门疑虑）。</li>
+</ul>
+<p><strong>Curve25519</strong>（Bernstein 2005）：</p>
+<ul>
+<li>256 bit。</li>
+<li>设计 transparent，参数公开理性。</li>
+<li>X25519（DH on Curve25519）速度极快。</li>
+<li>TLS 1.3 推荐。</li>
+</ul>
+<p><strong>Edwards25519</strong>（Ed25519 签名）：</p>
+<ul>
+<li>同 Curve25519 数学基础。</li>
+<li>设计 deterministic（无需 RNG）。</li>
+<li>极快验证。</li>
+</ul>
+<p><strong>brainpool 曲线</strong>：</p>
+<ul>
+<li>欧洲设计，参数 verifiable。</li>
+<li>部分场景使用。</li>
+</ul>
+<pre class="mermaid" data-diagram-type="graph" data-source="graph TD&#10;    A[ECC 应用] --&gt; B[ECDH key 交换]&#10;    A --&gt; C[ECDSA 签名]&#10;    A --&gt; D[EdDSA 签名]&#10;    B --&gt; E[X25519 TLS 1.3]&#10;    B --&gt; F[P-256 ECDH]&#10;    C --&gt; G[P-256 ECDSA Bitcoin]&#10;    D --&gt; H[Ed25519 SSH GitHub]"></pre><h2 id="x25519-现代-ecdh">X25519：现代 ECDH</h2><p><strong>算法</strong>：在 Curve25519 上做 ECDH。</p>
+<p><strong>速度</strong>：~ 100k operations / second（软件，无硬件加速）。</p>
+<p><strong>TLS 1.3 默认</strong>：</p>
+<ul>
+<li>ClientHello 包含 X25519 public key。</li>
+<li>ServerHello 返回 X25519 public key。</li>
+<li>双方 derive shared secret。</li>
+</ul>
+<p><strong>X25519 vs P-256</strong>：</p>
+<ul>
+<li>相近安全。</li>
+<li>X25519 速度略快、设计更 transparent。</li>
+<li>TLS 1.3 默认 X25519，向后兼容 P-256。</li>
+</ul>
+<h2 id="ed25519-现代签名">Ed25519：现代签名</h2><p><strong>算法</strong>：在 Curve25519（Edwards form）上签名。</p>
+<p><strong>优势</strong>：</p>
+<ul>
+<li><strong>Deterministic</strong>：签名无需 RNG（避免 Sony PS3 那种 RNG 失败 → 私钥泄露）。</li>
+<li><strong>极快</strong>：~ 100k sign / 100k verify / second。</li>
+<li><strong>小</strong>：64 byte 签名 + 32 byte 公钥。</li>
+<li><strong>Constant-time</strong>：防 side channel。</li>
+</ul>
+<p><strong>部署</strong>：</p>
+<ul>
+<li>SSH（GitHub 默认）。</li>
+<li>Tor（v3 onion service）。</li>
+<li>区块链（Solana、Cardano）。</li>
+<li>WireGuard。</li>
+</ul>
+<p><strong>Bitcoin / Ethereum</strong>：用 secp256k1 + ECDSA（不是 Ed25519）——历史选择，未来可能转 Schnorr / BLS。</p>
+<h2 id="ecdsa-与历史风险">ECDSA 与历史风险</h2><p><strong>ECDSA</strong>（FIPS 186-4）：用 ECC 实现的 DSA 签名：</p>
+<div class="code-block-wrapper" data-lang="text" data-code="1. 选随机 nonce k。
+2. (x, y) = k · G。
+3. r = x mod n。
+4. s = k⁻¹ · (z + r · d) mod n（z 是 hash，d 是私钥）。
+5. 签名 = (r, s)。"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span>1. 选随机 nonce k。</span></span>
+<span class="line"><span>2. (x, y) = k · G。</span></span>
+<span class="line"><span>3. r = x mod n。</span></span>
+<span class="line"><span>4. s = k⁻¹ · (z + r · d) mod n（z 是 hash，d 是私钥）。</span></span>
+<span class="line"><span>5. 签名 = (r, s)。</span></span></code></pre></div><p><strong>致命弱点</strong>：k 必须每次随机不同——k 重用 / 可预测 → 私钥被还原。</p>
+<p><strong>历史案例</strong>：</p>
+<ul>
+<li><strong>Sony PS3（2010）</strong>：硬编码 k → 私钥泄露 → 自由签名固件。</li>
+<li><strong>Bitcoin 钱包（2013）</strong>：Android Java RNG bug → 多 transaction 用同 k → 私钥被推断 → 资金被盗。</li>
+</ul>
+<p><strong>Ed25519 防御</strong>：deterministic（k 由 hash(privkey, message) derived）——天然无 RNG 风险。</p>
+<h2 id="ecc-的-quantum-风险">ECC 的 quantum 风险</h2><p><strong>Shor 算法</strong>对 ECC 同 RSA：</p>
+<ul>
+<li>Quantum 多项式时间破 ECDLP。</li>
+<li>256 bit ECC 与 2048 bit RSA 在 quantum 下都会失效。</li>
+<li>需 ~ 2000-3000 logical qubits 破 ECC。</li>
+</ul>
+<p><strong>Post-Quantum 替代</strong>：</p>
+<ul>
+<li>NIST 2024 年标准化 ML-KEM（key exchange）、ML-DSA（签名）。</li>
+<li>基于 lattice。</li>
+<li>Key 比 ECC 大（~ 1KB vs 32 byte）。</li>
+</ul>
+<p><strong>Hybrid 部署</strong>：</p>
+<ul>
+<li>TLS 现代部署用 X25519 + ML-KEM 双重 key exchange。</li>
+<li>任一安全则整体安全。</li>
+</ul>
+<h2 id="ecc-实战">ECC 实战</h2><p><strong>Python（cryptography）</strong>：</p>
+<div class="code-block-wrapper" data-lang="python" data-code="from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+
+# X25519 ECDH
+alice = X25519PrivateKey.generate()
+bob = X25519PrivateKey.generate()
+alice_shared = alice.exchange(bob.public_key())
+bob_shared = bob.exchange(alice.public_key())
+# alice_shared == bob_shared
+
+# Ed25519 签名
+sk = Ed25519PrivateKey.generate()
+signature = sk.sign(b&quot;message&quot;)
+sk.public_key().verify(signature, b&quot;message&quot;)"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> cryptography.hazmat.primitives.asymmetric.x25519 </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> X25519PrivateKey</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">from</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> cryptography.hazmat.primitives.asymmetric.ed25519 </span><span style="color:#D73A49;--shiki-dark:#F97583">import</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Ed25519PrivateKey</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># X25519 ECDH</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">alice </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> X25519PrivateKey.generate()</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">bob </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> X25519PrivateKey.generate()</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">alice_shared </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> alice.exchange(bob.public_key())</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">bob_shared </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> bob.exchange(alice.public_key())</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># alice_shared == bob_shared</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># Ed25519 签名</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">sk </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> Ed25519PrivateKey.generate()</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">signature </span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> sk.sign(</span><span style="color:#D73A49;--shiki-dark:#F97583">b</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"message"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">sk.public_key().verify(signature, </span><span style="color:#D73A49;--shiki-dark:#F97583">b</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"message"</span><span style="color:#24292E;--shiki-dark:#E1E4E8">)</span></span></code></pre></div><p><strong>OpenSSH</strong>：</p>
+<div class="code-block-wrapper" data-lang="bash" data-code="ssh-keygen -t ed25519
+# 生成 Ed25519 keypair"><pre class="shiki shiki-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">ssh-keygen</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> -t</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> ed25519</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># 生成 Ed25519 keypair</span></span></code></pre></div><h2 id="ecc-的常见攻击">ECC 的常见攻击</h2><p><strong>1. 弱 curve</strong>：</p>
+<ul>
+<li>小余因子、奇异曲线、anomalous curve。</li>
+<li>用标准曲线（P-256、X25519）规避。</li>
+</ul>
+<p><strong>2. Invalid curve attack</strong>：</p>
+<ul>
+<li>攻击者发送不在曲线上的点。</li>
+<li>实现必须验证 point on curve。</li>
+</ul>
+<p><strong>3. Side channel</strong>：</p>
+<ul>
+<li>Timing、power analysis。</li>
+<li>现代实现 constant-time。</li>
+</ul>
+<p><strong>4. ECDSA k 重用 / 可预测</strong>：</p>
+<ul>
+<li>Sony / Bitcoin 案例。</li>
+<li>用 RFC 6979 deterministic k 或转 Ed25519。</li>
+</ul>
+<p><strong>5. Twist attack</strong>：</p>
+<ul>
+<li>攻击者用 twist of curve。</li>
+<li>Curve25519 设计天然 twist-secure。</li>
+</ul>
+<h2 id="选择推荐">选择推荐</h2><p><strong>Key exchange</strong>：X25519（TLS 1.3 默认）或 P-256。</p>
+<p><strong>签名</strong>：Ed25519（新部署）或 ECDSA P-256（兼容）。</p>
+<p><strong>避免</strong>：自定义曲线、参数不透明的曲线、ECDSA 不当 RNG。</p>
+<h2 id="小结">小结</h2><p>Diffie-Hellman 1976 是公钥密码学第一篇论文——双方公开信道协商共享 secret，K = g^(ab) mod p，安全依赖 DLP。CDH（计算）vs DDH（决策）假设。纯 DH 不抗 MITM——需 + 认证（签名 DH 或 PKI）。Elliptic Curve（1985）把 DH 与签名搬到 elliptic curve 群——同等安全级别 key 短得多（256 bit ECC ≈ 3072 bit RSA），因为 ECDLP 没有亚指数算法。曲线方程 y² = x³ + ax + b (mod p)，定义点加法与标量乘法。标准曲线——NIST P-256/384/521、Curve25519（X25519 / Ed25519，Bernstein 设计 transparent）、brainpool。X25519 是 TLS 1.3 默认 ECDH。Ed25519 是现代签名——deterministic（无 RNG 风险）、极快、64 byte。ECDSA 致命弱点是 k 重用 / 可预测——Sony PS3 与 Bitcoin Android RNG bug 历史案例。Quantum 威胁——Shor 算法破 ECC，需 ~ 2000-3000 logical qubits，post-quantum hybrid（X25519 + ML-KEM）已部署。常见攻击——弱 curve、invalid curve、side channel、ECDSA RNG 失败、twist。选择推荐——X25519 + Ed25519 现代默认，P-256 / ECDSA 兼容。一个简单的检验：你能解释为什么 256 bit ECC ≈ 3072 bit RSA？如果不能，DLP 与 ECDLP 算法复杂度差异还需巩固。ECC 让公钥密码进入移动 / IoT / 区块链时代——key 短、签名快、移动设备友好，是 RSA 的现代继承者，直到 post-quantum 时代再次变革。</p>
+</article>
+    <nav class="pager"><a class="prev" href="../../../cs-fundamentals/cryptography-fundamentals/asymmetric-cryptography/rsa-fundamentals.html"><span class="label">Previous</span>RSA 基础</a><a class="next" href="../../../cs-fundamentals/cryptography-fundamentals/asymmetric-cryptography/digital-signatures.html"><span class="label">Next</span>数字签名</a></nav>
+  </main>
+  <nav class="outline"><div class="label">On this page</div><ol><li class="depth-2"><a href="#核心概念" data-outline-link="核心概念">核心概念</a></li><li class="depth-2"><a href="#diffie-hellman-key-exchange" data-outline-link="diffie-hellman-key-exchange">Diffie-Hellman Key Exchange</a></li><li class="depth-2"><a href="#dh-的弱点-mitm" data-outline-link="dh-的弱点-mitm">DH 的弱点：MITM</a></li><li class="depth-2"><a href="#离散对数问题" data-outline-link="离散对数问题">离散对数问题</a></li><li class="depth-2"><a href="#ecc-数学基础" data-outline-link="ecc-数学基础">ECC 数学基础</a></li><li class="depth-2"><a href="#标准-curve" data-outline-link="标准-curve">标准 Curve</a></li><li class="depth-2"><a href="#x25519-现代-ecdh" data-outline-link="x25519-现代-ecdh">X25519：现代 ECDH</a></li><li class="depth-2"><a href="#ed25519-现代签名" data-outline-link="ed25519-现代签名">Ed25519：现代签名</a></li><li class="depth-2"><a href="#ecdsa-与历史风险" data-outline-link="ecdsa-与历史风险">ECDSA 与历史风险</a></li><li class="depth-2"><a href="#ecc-的-quantum-风险" data-outline-link="ecc-的-quantum-风险">ECC 的 quantum 风险</a></li><li class="depth-2"><a href="#ecc-实战" data-outline-link="ecc-实战">ECC 实战</a></li><li class="depth-2"><a href="#ecc-的常见攻击" data-outline-link="ecc-的常见攻击">ECC 的常见攻击</a></li><li class="depth-2"><a href="#选择推荐" data-outline-link="选择推荐">选择推荐</a></li><li class="depth-2"><a href="#小结" data-outline-link="小结">小结</a></li></ol></nav>
+</div>
+<div class="search-modal" data-search-modal aria-hidden="true">
+  <div class="search-modal-inner">
+    <link rel="stylesheet" href="../../../pagefind/pagefind-ui.css" />
+    <div id="search-ui"><div class="pagefind-not-ready">Loading search…</div></div>
+  </div>
+</div>
+<div class="cheatsheet-modal" data-cheatsheet hidden aria-hidden="true">
+  <div class="cheatsheet-inner">
+    <div class="cheatsheet-title">Keyboard shortcuts</div>
+    <table class="cheatsheet"><tbody><tr><th><kbd>←&nbsp;&nbsp;→</kbd></th><td>Previous / Next chapter</td></tr><tr><th><kbd>⌘K&nbsp;&nbsp;Ctrl+K&nbsp;&nbsp;/</kbd></th><td>Open search</td></tr><tr><th><kbd>g&nbsp;h</kbd></th><td>Go to library home</td></tr><tr><th><kbd>?</kbd></th><td>Toggle this cheatsheet</td></tr><tr><th><kbd>Esc</kbd></th><td>Close modal</td></tr></tbody></table>
+  </div>
+</div>
+<script src="../../../assets/app.js" type="module"></script>
+</body>
+</html>
