@@ -1,0 +1,1 @@
+function e(e){return`${e.category}/${e.slug}`}export{e as t};
