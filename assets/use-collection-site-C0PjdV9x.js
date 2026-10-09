@@ -1,0 +1,1 @@
+import{t as e}from"./use-i18n-K5S4zNOc.js";import{l as t,s as n}from"./index-Csjo96kp.js";function r(r){let{locale:i}=e(),a=t(),{data:o,loading:s,error:c}=n(`c:site:${r}:${i}`,()=>a.getCollectionSite(r??``,i),{enabled:!!r});return{data:o,loading:s,error:c}}export{r as t};

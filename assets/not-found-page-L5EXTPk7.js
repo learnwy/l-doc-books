@@ -1,1 +1,0 @@
-import{d as e}from"./vendor-react-BPRsdgJX.js";import{t}from"./use-i18n-K5S4zNOc.js";import{S as n}from"./index-CCdlpPry.js";var r=e(),i=()=>{let{t:e}=t();return(0,r.jsx)(n,{className:`flex-1 overflow-y-auto`,variant:`not-found`,title:e(`error.notFound`),backLabel:e(`error.goBack`),homeLabel:e(`error.backHome`)})};export{i as NotFoundPage};

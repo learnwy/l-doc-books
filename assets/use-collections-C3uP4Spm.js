@@ -1,0 +1,1 @@
+import{l as e,s as t}from"./index-Csjo96kp.js";function n(){let n=e(),{data:r,loading:i,error:a}=t(`collections`,()=>n.getCollections());return{data:r,loading:i,error:a}}export{n as t};
