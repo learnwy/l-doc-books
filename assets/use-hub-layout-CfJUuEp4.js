@@ -1,1 +1,0 @@
-import{c as e}from"./vendor-react-Dxy_qKx2.js";function t(){return e()}export{t};

@@ -1,0 +1,1 @@
+import{c as e}from"./vendor-react-BPRsdgJX.js";function t(){return e()}export{t};

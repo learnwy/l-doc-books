@@ -1,0 +1,1 @@
+import{s as e}from"./rolldown-runtime-C5c2KzVm.js";import{h as t}from"./vendor-react-BPRsdgJX.js";var n=e(t(),1),r=(0,n.createContext)(null);function i(){let e=(0,n.useContext)(r);if(!e)throw Error(`useTheme must be used within ThemeProvider`);return e}export{r as n,i as t};
