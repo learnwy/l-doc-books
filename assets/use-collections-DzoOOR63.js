@@ -1,0 +1,1 @@
+import{t as e}from"./use-index-D-3vamCl.js";var t={kind:`collections`};function n(){return e(t)}export{n as t};
