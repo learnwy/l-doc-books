@@ -1,0 +1,1 @@
+import{d as e}from"./vendor-react-BJQH8yKz.js";var t=e(),n={sm:`h-4 w-4 border-2`,md:`h-8 w-8 border-3`,lg:`h-12 w-12 border-4`},r=({className:e=``,size:r=`md`})=>(0,t.jsx)(`div`,{role:`status`,"aria-label":`Loading`,className:`animate-spin rounded-full border-border-primary border-t-accent ${n[r]} ${e}`});export{r as t};

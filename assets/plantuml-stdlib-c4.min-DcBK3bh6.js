@@ -1,0 +1,1 @@
+var e=`/l-doc-books/assets/plantuml-stdlib-c4.min-DzQ074ME.js`;export{e as default};

@@ -1,0 +1,1 @@
+var e=e=>{try{return e===`session`?window.sessionStorage:window.localStorage}catch{return}},t=(t,n=`local`)=>{try{return e(n)?.getItem(t)??null}catch{return null}},n=(t,n,r=`local`)=>{try{let i=e(r);return i?(i.setItem(t,n),!0):!1}catch{return!1}},r=(t,n=`local`)=>{try{e(n)?.removeItem(t)}catch{}};export{r as n,n as r,t};

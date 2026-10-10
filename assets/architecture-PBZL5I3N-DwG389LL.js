@@ -1,0 +1,1 @@
+import{W as e}from"./vendor-mermaid-xhj4ejQ8.js";export{e as createArchitectureServices};

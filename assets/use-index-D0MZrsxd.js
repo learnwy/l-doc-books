@@ -1,0 +1,1 @@
+import{t as e}from"./use-i18n-DmiQ9DUy.js";import{n as t}from"./data-BnBcpxpy.js";import{a as n}from"./index-Bxw6F0Ew.js";var r={kind:`site`};function i(i){let{locale:a}=e(),o=t(),s=i??r,{data:c,loading:l,error:u}=n(`index:${JSON.stringify(s)}:${a}`,()=>o.getIndex(s,a),{enabled:i!==null});return{data:c,loading:i!==null&&l,error:u}}export{i as t};

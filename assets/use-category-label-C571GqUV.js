@@ -1,0 +1,1 @@
+import{s as e}from"./rolldown-runtime-C5c2KzVm.js";import{m as t}from"./vendor-react-BJQH8yKz.js";import{t as n}from"./use-i18n-DmiQ9DUy.js";var r=e(t(),1);function i(){let{t:e,has:t}=n();return(0,r.useCallback)((n,r)=>{let i=`category.${n}`;return t(i)?e(i):r||n},[e,t])}export{i as t};
