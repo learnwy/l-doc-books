@@ -1,1 +1,0 @@
-import{t as e}from"./use-index-D0MZrsxd.js";var t={kind:`collections`};function n(){return e(t)}export{n as t};
